@@ -9,7 +9,14 @@ Atlas was sad and in need of a friend so that's where Lil' Shrugger comes in. He
 
 Once you clone this repository down, you'll have to take a couple of steps to get started. Currently, you can only test this UI with "https://inventory.local".
 
-1. You will need to add headers to the Atlas code and restart Atlas until https://github.com/CuBoulder/atlas/pull/267/files is merged in.
+1. You will need to add headers to the Atlas code until https://github.com/CuBoulder/atlas/pull/267/files is reviewed and merged in.  To do this...
+```
+cd ~/express_local/data/code/atlas
+git fetch --all
+git checkout feature/266
+ssh inventory.local
+restartatlas
+```
 2. The URLs in "navbar.html" will need changed...I had "/vue" after my web root, so I added that. A future update will correct this. 
 2. Once you change that, the "settings.html" page will need to saved with your Identikey credentials. These creds are being saved via in-browser local storage. 
 3. Now, the root "index.html" should load with your sites listed in a table. 
