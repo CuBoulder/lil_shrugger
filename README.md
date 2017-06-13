@@ -2,6 +2,9 @@
 
 Atlas was sad and in need of a friend so that's where Lil' Shrugger comes in. He shrugs and is probably full of bugs. What a stinker!!! He will attempt to make querying and updating code via Atlas more user-friendly. 
 
+
+![Lil' Shrugger Logo](/src/images/lil_shrugger.jpg?raw=true "Lil' Shrugger")
+
 ## Getting Started
 
 Once you clone this repository down, you'll have to take a couple of steps to get started. Currently, you can only test this UI with "https://inventory.local".
