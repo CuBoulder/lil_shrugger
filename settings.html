@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Atlas Frontend</title>
+
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="src/js/require.js"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all" rel="stylesheet"/>
+  <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
+
+  <link rel="import" href="navbar.html">
+  <link rel="import" href="site-listing.html">
+</head>
+<body>
+
+<div class="atlas-navbar"></div>
+<div id="app" class="container">
+  <form id="search">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" class="form-control" name="username">
+      <label for="password">Password</label>
+      <input id="password" class="form-control" name="password">
+      <button onclick="saveCreds()" type="button" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>
+<script src="src/js/navbar.js"></script>
+<script src="src/js/settings.js"></script>
+</body>
+</html>
