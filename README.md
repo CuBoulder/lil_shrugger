@@ -19,7 +19,7 @@ ssh inventory.local
 restartatlas
 ```
 
-2. You will need to configure "config.js" to your use case. For instance, I have my site locally at "localhost/vue" where the docroot is in the "/vue" subdirectory. For "baseURL", I then need to add "/vue" for the menu to work. 
+2. You will need to configure "config.js" to your use case. First you need to copy "src/config/config.example.js" into "src/config/config.js". This is done to ignore your local config while keep a copy with default examples and comments. For instance, I have my site locally at "localhost/vue" where the docroot is in the "/vue" subdirectory. For "baseURL", I then need to add "/vue" for the menu to work. 
 
 ```
 let siteConfig = {
@@ -33,18 +33,18 @@ let siteConfig = {
 ## App Structure 
 ```
 - src
+|- config
 |- css
 |- images
 |- js
 |- partials
-config.js
-routes.js
 index.html
 ```
 ### Src
 
 This directory contains the assets needed to build the application. Other than the site config, routes, and page HTML files, every other file should be placed in this directory. 
 
+- **Config** - Here you can find JS files you'll probably want to configure for your local environment. 
 - **CSS** - Like you would think, you put CSS files in here. In the future SASS could be used to compile these into one file.
 The CSS files should be semantic in that I can know what CSS they contain by reading the file name. For instance, the "env-dropdown.css" file corresponds to the environment selector located in the navbar. 
 - **Images** - Here you would place any images that are needed for the application. 
@@ -55,9 +55,8 @@ The CSS files should be semantic in that I can know what CSS they contain by rea
 
 At the root of the application, we have the HTML files used for navigation. In the future, there will probably only be one HTML file, "index.html", that acts as a front controller and the body of the page would be loaded and swtiched via AJAX. For now, it is simpler just to have a separate HTML file per path/route. 
 
-- **config.js** - Used for site configuration like username/password and base URL of app instance. 
-- **routes.js** - A listing of the current routes that helps generate a menu structure. 
-- **index.html** - Homepage of the app which currently maps to a listing of site records. 
+- **index.html** - Homepage of the app which currently maps to a listing of site records.
+- **status.html** - Eventually will contain an overview of statuses relating to Atlas. 
 
 Then there are other HTML files for pages. For instance, the "status.html" page is intended to list a quick check of the status of things like Apache, Celery, etc. that we can use when starting to debug an issue. "code.html" will be added in the future to list out code assets. 
 
