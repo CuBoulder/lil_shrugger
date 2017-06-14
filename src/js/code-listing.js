@@ -13,26 +13,49 @@ document.querySelector('body').appendChild(el.cloneNode(true));
  *
  * @param env
  */
-function getSiteRecords(env) {
+function getCodeRecords(env) {
   // Get response of all site records.
-  let response = atlasRequest(getAtlasURL(env), 'sites');
+  let response = atlasRequest(getAtlasURL(env), 'code');
 
   // Response is a Promise object so we must resolve it to get the data out.
   response.then(function(data){
 
     // Add links.
-    data = addLinks(data);
+    data = formatCodeData(data._items);
+
+    console.log(data);
 
     // Place site data in table via site-listing template located in site-listing.html.
     let siteListing = new Vue({
-      el: '#site-listing',
+      el: '#code-listing',
       data: {
         searchQuery: '',
-        gridColumns: ['sid', 'path', 'status'],
-        gridData: data._items
+        gridColumns: ['id', 'label', 'type', 'hash'],
+        gridData: data
       }
     });
   });
+}
+
+/**
+ * Need to format data for table.
+ *
+ * @param data
+ */
+function formatCodeData(data) {
+  let formattedData = [];
+
+  data.forEach(function (element, index) {
+    console.log(element);
+    let item = [];
+    item['label'] = element.meta.label;
+    item['type'] = element.meta.code_type;
+    item['id'] = element._id;
+    item['hash'] = element.commit_hash;
+    formattedData.push(item);
+  });
+
+  return formattedData;
 }
 
 /**
@@ -40,6 +63,6 @@ function getSiteRecords(env) {
  * changes via the environment selector, the search will update.
  */
 $(document).ready(function () {
-  getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
+  getCodeRecords(document.querySelector('.env-list .selected').innerHTML);
 });
 
