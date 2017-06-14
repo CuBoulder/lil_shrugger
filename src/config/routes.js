@@ -5,5 +5,4 @@
  */
 let routes = [
   { name: 'Sites', path: siteConfig.baseURL + '/' },
-  //{ name: 'Settings', path: siteConfig.baseURL + '/settings' },
 ];

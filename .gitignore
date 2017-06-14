@@ -2,4 +2,4 @@
 *.idea
 
 # Ignore config
-config.js
+src/config/config.js
