@@ -1,2 +1,5 @@
 # IntelliJ files
 *.idea
+
+# Ignore config
+config.js

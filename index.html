@@ -7,30 +7,30 @@
   <script src="https://unpkg.com/vue"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="src/js/require.js"></script>
+  <script src="config.js"></script>
+  <script src="routes.js"></script>
 
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all" rel="stylesheet"/>
   <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
 
-  <link rel="import" href="navbar.html">
-  <link rel="import" href="site-listing.html">
+  <link rel="import" href="src/partials/navbar.html">
+  <link rel="import" href="src/partials/site-listing.html">
 </head>
 <body>
-
 <div class="atlas-navbar"></div>
 <div id="app" class="container">
-  <div id="demo" class="container">
+  <div id="listing" class="container">
     <form id="search">
       <div class="form-group">
         <label for="query">Search</label>
         <input id="query" class="form-control" name="query" v-model="searchQuery" placeholder='{"node_other":{"$ne":"null"}}'>
       </div>
     </form>
-    <demo-grid
+    <site-listing
         :data="gridData"
         :columns="gridColumns"
         :filter-key="searchQuery">
-    </demo-grid>
+    </site-listing>
   </div>
 </div>
 <script src="src/js/navbar.js"></script>
