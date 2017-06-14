@@ -10,7 +10,7 @@
  * @type {string}
  */
 let siteConfig = {
-  baseURL: '/vue',
-  username: 'alfi2595',
-  password: 'YAva1986!!'
+  baseURL: '',
+  username: '',
+  password: ''
 };
