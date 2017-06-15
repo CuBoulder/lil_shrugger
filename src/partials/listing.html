@@ -15,9 +15,8 @@
     <tbody>
     <tr v-for="(entry, index) in filteredData" scope="row">
       <td v-for="key in columns">
-        {{entry[key]}}
+        <div v-html="link(entry[key],key)"></div>
       </td>
-      <div>{{entry.key}}</div>
       <td><button class="btn btn-default" v-on:click="addEdit(entry)" :data-id="entry.id">Edit</button></td>
     </tr>
     </tbody>

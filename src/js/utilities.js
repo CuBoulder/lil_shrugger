@@ -129,7 +129,8 @@ Vue.component('listing', {
   filters: {
     capitalize: function (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
-    }
+    },
+
   },
   methods: {
     sortBy: function (key) {
@@ -141,7 +142,6 @@ Vue.component('listing', {
 
       let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
 
-
       let body = {}
 
      //atlasRequest(getAtlasURL(env), 'sites', query = '', method = 'PATCH', body)
@@ -149,6 +149,13 @@ Vue.component('listing', {
     entryId: function(entry, key) {
       console.log(entry);
       console.log(key);
+    },
+    link: function(value,key) {
+
+      if (key === 'path') {
+        return '<a href="' + siteConfig.host + value + '">' + value  + '</a>';
+      }
+      return value;
     }
   }
 });
