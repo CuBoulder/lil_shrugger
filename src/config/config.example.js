@@ -7,10 +7,13 @@
  * username/password - Your credentials that will be used to perform write operations
  *   with Atlas.
  *
+ * host - The place where you sites live, e.g. https://express.local.
+ *
  * @type {string}
  */
 let siteConfig = {
   baseURL: '',
   username: '',
-  password: ''
+  password: '',
+  host: ''
 };

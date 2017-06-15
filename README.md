@@ -19,7 +19,19 @@ ssh inventory.local
 restartatlas
 ```
 
-2. You will need to configure "config.js" to your use case. First you need to copy "src/config/config.example.js" into "src/config/config.js". This is done to ignore your local config while keep a copy with default examples and comments. For instance, I have my site locally at "localhost/vue" where the docroot is in the "/vue" subdirectory. For "baseURL", I then need to add "/vue" for the menu to work. 
+2. This app can run anywhere, but to add it to http://express.local, you'll need to clone the lil_shrgger and create a symlink.
+
+```
+cd ~/express_local/data/code
+git clone git@github.com:CuBoulder/lil_shrugger.git
+ssh express.local
+cd /data/web/express
+ln -s /express_local/data/code/lil_shrugger vue
+```
+
+Now you should be able to access this at http://express.local/vue
+
+3. You will need to configure "config.js" to your use case. First you need to copy "src/config/config.example.js" into "src/config/config.js". This is done to ignore your local config while keep a copy with default examples and comments. For instance, I have my site locally at "localhost/vue" where the docroot is in the "/vue" subdirectory. For "baseURL", I then need to add "/vue" for the menu to work. 
 
 ```
 let siteConfig = {
@@ -28,7 +40,7 @@ let siteConfig = {
   password: 'yourPassword'
 };
 ```
-3. Now, the root "index.html" should load with your sites listed in a table, if you have "https://inventory.local" up and it has site records. 
+4. Now, the root "index.html" should load with your sites listed in a table. Assuming "https://inventory.local" is running, you've approved the lack of verified SSL cert for the https connection in the browser you are using and there are site records.
 
 ## App Structure 
 ```
