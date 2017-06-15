@@ -44,7 +44,7 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
   headers.set('Authorization', 'Basic ' + auth);
 
   // The etag is only needed when doing write operations.
-  if (method !== "GET") {
+  if (method === "PATCH" || method === "PUT") {
     headers.set('If-Match', etag);
   }
 

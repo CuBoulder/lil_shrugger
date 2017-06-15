@@ -43,3 +43,29 @@ $(document).ready(function () {
   getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
 });
 
+/**
+ * Creates a site with the currently selected environment.
+ */
+let createSite = new Vue({
+  el: '#create-site',
+  computed: {
+
+  },
+  methods: {
+    createASite: function() {
+      let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+      let endpoint = 'sites';
+
+      let data = JSON.stringify({
+        "status": "pending"
+      });
+
+      let sure = confirm('Are you sure you want to create a new site?');
+
+      if (sure) {
+        atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data)
+        console.log('You clicked create site.');
+      }
+    }
+  }
+});
