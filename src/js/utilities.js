@@ -90,7 +90,8 @@ Vue.component('listing', {
   props: {
     data: Array,
     columns: Array,
-    filterKey: String
+    filterKey: String,
+    foo: []
   },
   data: function () {
     var sortOrders = {}
@@ -99,7 +100,7 @@ Vue.component('listing', {
     })
     return {
       sortKey: '',
-      sortOrders: sortOrders
+      sortOrders: sortOrders,
     }
   },
   computed: {
@@ -134,6 +135,20 @@ Vue.component('listing', {
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
+    },
+    addEdit: function (entry, index) {
+      console.log(entry);
+
+      let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
+
+
+      let body = {}
+
+     //atlasRequest(getAtlasURL(env), 'sites', query = '', method = 'PATCH', body)
+    },
+    entryId: function(entry, key) {
+      console.log(entry);
+      console.log(key);
     }
   }
 });

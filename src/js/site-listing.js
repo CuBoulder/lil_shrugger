@@ -16,23 +16,46 @@ document.querySelector('body').appendChild(el.cloneNode(true));
 function getSiteRecords(env) {
   // Get response of all site records.
   let response = atlasRequest(getAtlasURL(env), 'sites');
+  console.log(response);
 
   // Response is a Promise object so we must resolve it to get the data out.
   response.then(function(data){
 
     // Add links.
-    data = addLinks(data);
+    data = formatSiteData(data._items);
 
     // Place site data in table via site-listing template located in site-listing.html.
     let siteListing = new Vue({
       el: '#site-listing',
       data: {
         searchQuery: '',
-        gridColumns: ['sid', 'path', 'status'],
-        gridData: data._items
+        gridColumns: ['id', 'path', 'status', 'updated'],
+        gridData: data
       }
     });
   });
+}
+
+/**
+ * Need to format data for table.
+ *
+ * @param data
+ */
+function formatSiteData(data) {
+  let formattedData = [];
+
+  data.forEach(function (element, index) {
+    console.log(element);
+    let item = [];
+    item['id'] = element.sid;
+    item['path'] = element.path;
+    item['status'] = element.status;
+    item['updated'] = element._updated;
+    item['etag'] = element._etag;
+    formattedData.push(item);
+  });
+
+  return formattedData;
 }
 
 /**
