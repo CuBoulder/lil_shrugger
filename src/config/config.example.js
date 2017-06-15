@@ -12,5 +12,6 @@
 let siteConfig = {
   baseURL: '',
   username: '',
-  password: ''
+  password: '',
+  postman_token: ''
 };
