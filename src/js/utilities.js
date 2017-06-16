@@ -1,13 +1,3 @@
-/**
- * Add links to the login path of the site.
- *
- * @param data
- * @returns {*}
- */
-function addLinks(data) {
-  // @todo Actually add the links.
-  return data;
-}
 
 /**
  * Takes an environment label and matches the Atlas URL instance.
@@ -83,6 +73,16 @@ function handleErrors(response) {
 }
 
 /**
+ * Pauses execution for specified number of milliseconds.
+ *
+ * @param ms
+ * @returns {Promise}
+ */
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
  * Creates a listing component for data in a table.
  */
 Vue.component('listing', {
@@ -139,23 +139,40 @@ Vue.component('listing', {
     },
     addEdit: function (entry, index) {
       console.log(entry);
-
       let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
 
       let body = {}
 
-     //atlasRequest(getAtlasURL(env), 'sites', query = '', method = 'PATCH', body)
+      //atlasRequest(getAtlasURL(env), 'sites', query = '', method = 'PATCH', body)
     },
-    entryId: function(entry, key) {
+    entryId: function (entry, key) {
       console.log(entry);
       console.log(key);
     },
-    link: function(value,key) {
-
+    link: function (value, key) {
       if (key === 'path') {
-        return '<a href="' + siteConfig.host + value + '">' + value  + '</a>';
+        return '<a href="' + siteConfig.host + value + '">' + value + '</a>';
       }
       return value;
+    }
+  }
+});
+
+/**
+ * Creates a button component with comfirm step.
+ */
+Vue.component('confirm-button', {
+  template: '#confirm-button',
+  props: {
+    label: String,
+    callback: String,
+    params: Array,
+    confirmed: false,
+    finaled: false
+  },
+  methods: {
+    callMeMaybe: function (callback, params) {
+      window[callback](params);
     }
   }
 });
