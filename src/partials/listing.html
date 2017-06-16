@@ -13,11 +13,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="entry in filteredData">
-      <td v-for="key in columns" scope="row">
-        {{entry[key]}}
+    <tr v-for="(entry, index) in filteredData" scope="row">
+      <td v-for="key in columns">
+        <div v-html="link(entry[key],key)"></div>
       </td>
-      <td><button class="btn btn-default">Edit</button></td>
+      <td><button class="btn btn-default" v-on:click="addEdit(entry)" :data-id="entry.id">Edit</button></td>
     </tr>
     </tbody>
   </table>
