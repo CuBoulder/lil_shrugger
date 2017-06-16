@@ -38,7 +38,8 @@ let siteConfig = {
   baseURL: '/vue',
   username: 'yourIdentikey',
   password: 'yourPassword',
-  host: 'http://yourUrl/'
+  host: 'http://yourUrl/',
+  postman_token: 'from-postman-authorization-piece'
 };
 ```
 4. Now, the root "index.html" should load with your sites listed in a table. Assuming "https://inventory.local" is running, you've approved the lack of verified SSL cert for the https connection in the browser you are using and there are site records.
