@@ -25,7 +25,7 @@ function getAtlasURL(env) {
  * @param body
  * @returns {Promise.<TResult>}
  */
-function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null) {
+function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null) {
 
   // Setup headers to send to Atlas.
   let headers = new Headers();
@@ -92,6 +92,7 @@ Vue.component('listing', {
     columns: Array,
     filterKey: String,
     editKeys: Array,
+    callback: String,
     edit: false,
     editId: ''
   },
@@ -139,13 +140,10 @@ Vue.component('listing', {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    addEdit: function (entry, index) {
-      console.log(entry);
+    callMeMaybe: function (callback, entry) {
       let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
-
-      let body = {}
-
-      //atlasRequest(getAtlasURL(env), 'sites', query = '', method = 'PATCH', body)
+      window[callback](formData, entry);
+      this.cancelEdit();
     },
     link: function (value, key) {
       if (key === 'path') {

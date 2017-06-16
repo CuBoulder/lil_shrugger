@@ -40,7 +40,8 @@ function getSiteRecords(env) {
         searchQuery: '',
         gridColumns: ['id', 'path', 'status', 'updated'],
         gridData: data,
-        editKeys: ['path', 'status']
+        editKeys: ['path', 'status'],
+        callback: 'updateSiteRecord'
       }
     });
   });
@@ -61,6 +62,7 @@ function formatSiteData(data) {
     item['status'] = element.status;
     item['updated'] = element._updated;
     item['etag'] = element._etag;
+    item['_id'] = element._id;
     formattedData.push(item);
   });
 
@@ -101,4 +103,24 @@ function createSite() {
   // @todo Find a way to load site records after a delay so you don't have to guess whether it worked.
   //sleep(3000);
   //getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
+}
+
+/**
+ * Updates a site record based on user input.
+ *
+ * @param formData
+ * @param record
+ */
+function updateSiteRecord(formData, record) {
+  // Take input values from formData and put into array for comparison.
+  // Only return values that are different.
+  let formInput = {};
+  formData.forEach(function (value, index) {
+    if (value['name'] && record[value['name']] !== value['value']) {
+      formInput[value['name']] = value['value'];
+    }
+  });
+
+  let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+  atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method = 'PATCH', JSON.stringify(formInput), record['etag']);
 }
