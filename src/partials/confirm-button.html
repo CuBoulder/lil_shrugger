@@ -4,5 +4,6 @@
     <button class="btn btn-primary" v-if="!confirmed" @click="confirmed = !confirmed">{{label}}</button>
     <button class="btn btn-warning" v-if="confirmed && !finaled" @click="finaled = !finaled">Set?</button>
     <button class="btn btn-danger" v-if="finaled" @click="callMeMaybe(callback, params)">Fire!</button>
+    <button class="btn btn-default" v-if="finaled || confirmed" @click="cancel()">Cancel</button>
   </div>
 </script>

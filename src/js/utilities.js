@@ -91,7 +91,9 @@ Vue.component('listing', {
     data: Array,
     columns: Array,
     filterKey: String,
-    foo: []
+    editKeys: Array,
+    edit: false,
+    editId: ''
   },
   data: function () {
     var sortOrders = {}
@@ -145,15 +147,31 @@ Vue.component('listing', {
 
       //atlasRequest(getAtlasURL(env), 'sites', query = '', method = 'PATCH', body)
     },
-    entryId: function (entry, key) {
-      console.log(entry);
-      console.log(key);
-    },
     link: function (value, key) {
       if (key === 'path') {
         return '<a href="' + siteConfig.host + value + '">' + value + '</a>';
       }
       return value;
+    },
+    showEdit: function (entry, index = null) {
+      if (this.edit && this.editId === entry.id) {
+        return true;
+      }
+      return false;
+    },
+    showDefault: function (entry, index = null) {
+      if (!this.edit || this.editId !== entry.id) {
+        return true;
+      }
+      return false;
+    },
+    makeEdit: function (entry) {
+      this.edit = !this.edit;
+      this.editId = entry.id;
+    },
+    cancelEdit: function () {
+      this.edit = !this.edit;
+      this.editId = '';
     }
   }
 });
@@ -173,6 +191,10 @@ Vue.component('confirm-button', {
   methods: {
     callMeMaybe: function (callback, params) {
       window[callback](params);
+    },
+    cancel: function () {
+      this.confirmed = false;
+      this.finaled = false;
     }
   }
 });

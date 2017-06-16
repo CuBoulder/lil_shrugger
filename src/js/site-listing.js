@@ -39,7 +39,8 @@ function getSiteRecords(env) {
       data: {
         searchQuery: '',
         gridColumns: ['id', 'path', 'status', 'updated'],
-        gridData: data
+        gridData: data,
+        editKeys: ['path', 'status']
       }
     });
   });
@@ -79,17 +80,14 @@ $(document).ready(function () {
     data: {
       label: 'Create A Site',
       callback: 'createSite',
-      params: ['goofy', 'doc']
     }
   });
 });
 
 /**
- *
- * @param paramas
+ * Creates a site record.
  */
 function createSite() {
-  console.log('got here');
   let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
   let endpoint = 'sites';
 
@@ -97,10 +95,10 @@ function createSite() {
     "status": "pending"
   });
 
-  atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data)
-  console.log('You clicked create site.');
+  // @todo somehow provide a message to users whether this operation succeeded or failed.
+  atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data);
 
-  sleep(3000);
-
-  getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
+  // @todo Find a way to load site records after a delay so you don't have to guess whether it worked.
+  //sleep(3000);
+  //getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
 }

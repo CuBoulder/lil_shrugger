@@ -15,9 +15,11 @@
     <tbody>
     <tr v-for="(entry, index) in filteredData" scope="row">
       <td v-for="key in columns">
-        <div v-html="link(entry[key],key)"></div>
+        <div v-if="showDefault(entry, key)" v-html="link(entry[key],key)"></div>
+        <input v-if="showEdit(entry, key)" type="text" :name="key" :data-id="entry.id" :value="entry[key]">
       </td>
-      <td><button class="btn btn-default" v-on:click="addEdit(entry)" :data-id="entry.id">Edit</button></td>
+      <td><button v-if="showDefault(entry)" class="btn btn-default" v-on:click="makeEdit(entry)" :data-id="entry.id">Edit</button>
+      <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="cancelEdit()" :data-id="entry.id">Cancel</button></td>
     </tr>
     </tbody>
   </table>
