@@ -71,9 +71,6 @@ $(document).ready(function () {
  */
 let createSite = new Vue({
   el: '#create-site',
-  computed: {
-
-  },
   methods: {
     createASite: function() {
       let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);

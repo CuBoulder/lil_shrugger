@@ -40,8 +40,9 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
   // Setup headers to send to Atlas.
   let headers = new Headers();
   let auth = btoa(siteConfig.username + ':' + siteConfig.password);
+  let postman_token = siteConfig.postman_token;
   headers.set('Content-Type', 'application/json');
-  headers.set('Authorization', 'Basic ' + auth);
+  headers.set('Authorization', 'Basic ' + postman_token);
 
   // The etag is only needed when doing write operations.
   if (method === "PATCH" || method === "PUT") {
