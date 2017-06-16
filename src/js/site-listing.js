@@ -68,6 +68,7 @@ $(document).ready(function () {
 
 /**
  * Creates a site with the currently selected environment.
+ * No etag used for POST to Atlas for creating new sites.
  */
 let createSite = new Vue({
   el: '#create-site',
