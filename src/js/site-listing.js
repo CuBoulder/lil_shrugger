@@ -9,6 +9,16 @@ var el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
 /**
+ * Imports Button HTML into DOM of pages using it.
+ *
+ * @type {Element}
+ */
+link = document.querySelector('link[href="src/partials/confirm-button.html"]');
+content = link.import;
+el = content.querySelector('script');
+document.querySelector('body').appendChild(el.cloneNode(true));
+
+/**
  * Gets a list of site records based on environment and pass data to template.
  *
  * @param env
@@ -16,10 +26,9 @@ document.querySelector('body').appendChild(el.cloneNode(true));
 function getSiteRecords(env) {
   // Get response of all site records.
   let response = atlasRequest(getAtlasURL(env), 'sites');
-  console.log(response);
 
   // Response is a Promise object so we must resolve it to get the data out.
-  response.then(function(data){
+  response.then(function (data) {
 
     // Add links.
     data = formatSiteData(data._items);
@@ -45,7 +54,6 @@ function formatSiteData(data) {
   let formattedData = [];
 
   data.forEach(function (element, index) {
-    console.log(element);
     let item = [];
     item['id'] = element.sid;
     item['path'] = element.path;
@@ -64,5 +72,35 @@ function formatSiteData(data) {
  */
 $(document).ready(function () {
   getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
+
+  // Ad create a site button to page.
+  let siteCreateButton = new Vue({
+    el: '#create-site',
+    data: {
+      label: 'Create A Site',
+      callback: 'createSite',
+      params: ['goofy', 'doc']
+    }
+  });
 });
 
+/**
+ *
+ * @param paramas
+ */
+function createSite() {
+  console.log('got here');
+  let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+  let endpoint = 'sites';
+
+  let data = JSON.stringify({
+    "status": "pending"
+  });
+
+  atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data)
+  console.log('You clicked create site.');
+
+  sleep(3000);
+
+  getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
+}
