@@ -56,11 +56,19 @@ function formatSiteData(data) {
   let formattedData = [];
 
   data.forEach(function (element, index) {
+
+    // Format date.
+    var date = new Date(element._updated);
+    var options = {
+      weekday: "long", year: "numeric", month: "short",
+      day: "numeric", hour: "2-digit", minute: "2-digit"
+    };
+
     let item = [];
     item['id'] = element.sid;
     item['path'] = element.path;
     item['status'] = element.status;
-    item['updated'] = element._updated;
+    item['updated'] = date.toLocaleTimeString("en-us", options);
     item['etag'] = element._etag;
     item['_id'] = element._id;
     formattedData.push(item);

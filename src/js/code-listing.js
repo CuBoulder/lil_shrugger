@@ -23,8 +23,6 @@ function getCodeRecords(env) {
     // Add links.
     data = formatCodeData(data._items);
 
-    console.log(data);
-
     // Place site data in table via site-listing template located in site-listing.html.
     let siteListing = new Vue({
       el: '#code-listing',
@@ -32,7 +30,8 @@ function getCodeRecords(env) {
         searchQuery: '',
         gridColumns: ['id', 'label', 'type', 'hash'],
         gridData: data,
-        callback: 'updateCodeRecord'
+        callback: 'updateCodeRecord',
+        editKeys: ['label', 'hash', 'type'],
       }
     });
   });
@@ -47,7 +46,6 @@ function formatCodeData(data) {
   let formattedData = [];
 
   data.forEach(function (element, index) {
-    console.log(element);
     let item = [];
     item['label'] = element.meta.label;
     item['type'] = element.meta.code_type;

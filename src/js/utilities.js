@@ -153,12 +153,14 @@ Vue.component('listing', {
     },
     showEdit: function (entry, index = null) {
       if (this.edit && this.editId === entry.id) {
-        return true;
+        if (index === null || this.editKeys.indexOf(index) !== -1) {
+          return true;
+        }
       }
       return false;
     },
     showDefault: function (entry, index = null) {
-      if (!this.edit || this.editId !== entry.id) {
+      if (!this.edit || this.editId !== entry.id || this.editKeys.indexOf(index) === -1 && index !== null) {
         return true;
       }
       return false;
