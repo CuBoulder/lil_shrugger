@@ -30,18 +30,53 @@ function getSiteRecords(env) {
   // Response is a Promise object so we must resolve it to get the data out.
   response.then(function (data) {
 
-    // Add links.
+    // Format site records for display.
     data = formatSiteData(data._items);
+
+    // Cache the result until the next request.
+    var cachedRecords = data;
 
     // Place site data in table via site-listing template located in site-listing.html.
     let siteListing = new Vue({
       el: '#site-listing',
       data: {
-        searchQuery: '',
+        searchQuery: '?where={"nodes_total":{"$gt":1}}',
         gridColumns: ['id', 'path', 'status', 'updated'],
         gridData: data,
         editKeys: ['path', 'status'],
         callback: 'updateSiteRecord'
+      },
+      methods: {
+        search: function (query) {
+
+          // Make request to Atlas.
+          let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+          let response = atlasRequest(baseURL, 'statistics', query);
+
+          // Response is a Promise object so we must resolve it to get the data out.
+          response.then(function (objects) {
+
+            // Get array only of site IDs to check from stats query.
+            let siteIds = [];
+            objects._items.forEach(function (element, index) {
+              siteIds.push(element['site']);
+            });
+
+            // Filter results by using the site ID stored in stats records.
+            let queryResult = siteListing.gridData.filter(function (row) {
+              return siteIds.indexOf(row['_id']) > -1
+            });
+
+            // By setting the gridData property, the view will automatically update.
+            siteListing.gridData = queryResult;
+
+          });
+        },
+        reset: function () {
+          // By using the cached results when the page is loaded, the query can be reverted.
+          siteListing.gridData = cachedRecords;
+          siteListing.searchQuery = '';
+        }
       }
     });
   });

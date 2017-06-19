@@ -100,12 +100,21 @@ Vue.component('listing', {
   template: '#listing',
   props: {
     data: Array,
-    columns: Array,
+    columns: {
+      type: Array,
+      required: true
+    },
     filterKey: String,
     editKeys: Array,
     callback: String,
-    edit: false,
-    editId: ''
+    edit: {
+      type: Boolean,
+      default: false
+    },
+    editId: {
+      type: String,
+      default: ''
+    }
   },
   data: function () {
     var sortOrders = {}
@@ -117,6 +126,7 @@ Vue.component('listing', {
       sortOrders: sortOrders,
     }
   },
+  /*
   computed: {
     filteredData: function () {
       var sortKey = this.sortKey
@@ -140,19 +150,16 @@ Vue.component('listing', {
       return data
     }
   },
+  */
   filters: {
     capitalize: function (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
-
   },
   methods: {
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
-    },
-    search: function (query) {
-      console.log(query);
     },
     callMeMaybe: function (callback, entry) {
       let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
