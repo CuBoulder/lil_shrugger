@@ -14,7 +14,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="(entry, index) in filteredData" scope="row">
+    <tr v-for="(entry, index) in data" scope="row">
       <td v-for="key in columns">
         <div v-if="showDefault(entry, key)" v-html="link(entry[key],key)"></div>
         <input v-if="showEdit(entry, key)" type="text" :name="key" :data-id="entry.id" :value="entry[key]">
