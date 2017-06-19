@@ -23,6 +23,7 @@ function getAtlasURL(env) {
  * @param query
  * @param method
  * @param body
+ * @param etag
  * @returns {Promise.<TResult>}
  */
 function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null) {
@@ -34,7 +35,7 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
   headers.set('Authorization', 'Basic ' + auth);
 
   // The etag is only needed when doing write operations.
-  if (method === "PATCH" || method === "PUT") {
+  if (method === "PATCH" || method === "PUT" || method === 'DELETE') {
     headers.set('If-Match', etag);
   }
 
@@ -80,6 +81,16 @@ function handleErrors(response) {
  */
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function deleteRecord(record) {
+  // For now, just check for something in the site record that is different
+  // than the code record.
+  if (record['hash']) {
+    return updateCodeRecord([], record, 'DELETE');
+  }
+  return updateSiteRecord([], record, 'DELETE');
 }
 
 /**
@@ -140,6 +151,9 @@ Vue.component('listing', {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
+    search: function (query) {
+      console.log(query);
+    },
     callMeMaybe: function (callback, entry) {
       let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
       window[callback](formData, entry);
@@ -191,6 +205,7 @@ Vue.component('confirm-button', {
   methods: {
     callMeMaybe: function (callback, params) {
       window[callback](params);
+      this.cancel();
     },
     cancel: function () {
       this.confirmed = false;

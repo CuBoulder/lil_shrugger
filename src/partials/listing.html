@@ -21,7 +21,12 @@
       </td>
       <td><button v-if="showDefault(entry)" class="btn btn-default" v-on:click="makeEdit(entry)" :data-id="entry.id">Edit</button>
         <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="callMeMaybe(callback, entry)" :data-id="entry.id">Send</button>
-      <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="cancelEdit()" :data-id="entry.id">Cancel</button></td>
+        <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="cancelEdit()" :data-id="entry.id">Cancel</button>
+        <confirm-button v-if="showEdit(entry)"  label="Delete"
+                        callback="deleteRecord"
+                        :params="entry">
+        </confirm-button>
+      </td>
     </tr>
     </tbody>
   </table>

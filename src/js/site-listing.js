@@ -118,8 +118,9 @@ function createSite() {
  *
  * @param formData
  * @param record
+ * @param method
  */
-function updateSiteRecord(formData, record) {
+function updateSiteRecord(formData, record, method = 'PATCH') {
   // Take input values from formData and put into array for comparison.
   // Only return values that are different.
   let formInput = {};
@@ -130,5 +131,9 @@ function updateSiteRecord(formData, record) {
   });
 
   let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
-  atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method = 'PATCH', JSON.stringify(formInput), record['etag']);
+  atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
+}
+
+function deleteSite(site) {
+  console.log(site);
 }

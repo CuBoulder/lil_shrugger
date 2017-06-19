@@ -9,6 +9,16 @@ var el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
 /**
+ * Imports Button HTML into DOM of pages using it.
+ *
+ * @type {Element}
+ */
+link = document.querySelector('link[href="src/partials/confirm-button.html"]');
+content = link.import;
+el = content.querySelector('script');
+document.querySelector('body').appendChild(el.cloneNode(true));
+
+/**
  * Gets a list of site records based on environment and pass data to template.
  *
  * @param env
@@ -73,8 +83,9 @@ $(document).ready(function () {
  *
  * @param formData
  * @param record
+ * @param method
  */
-function updateCodeRecord(formData, record) {
+function updateCodeRecord(formData, record, method = 'PATCH') {
 
   // Define parts of code record that are nested in the meta field.
   let metaKeys = ['code_type', 'is_current', 'label', 'name', 'version'];
@@ -97,6 +108,7 @@ function updateCodeRecord(formData, record) {
     }
   });
 
+  console.log(JSON.stringify(formInput));
   let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
-  atlasRequest(baseURL, 'code/' + record['_id'], query = '', method = 'PATCH', JSON.stringify(formInput), record['etag']);
+  atlasRequest(baseURL, 'code/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
 }

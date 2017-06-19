@@ -31,6 +31,9 @@
              v-model="searchQuery"
              placeholder='{"node_other":{"$ne":"null"}}'>
     </div>
+    <div class="form-group">
+      <button class="btn btn-primary" @click="search(searchQuery)">Search</button>
+    </div>
   </form>
   <div class="row">
     <listing
