@@ -23,9 +23,10 @@ function getAtlasURL(env) {
  * @param query
  * @param method
  * @param body
+ * @param etag
  * @returns {Promise.<TResult>}
  */
-function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null) {
+function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null) {
 
   // Setup headers to send to Atlas.
   let headers = new Headers();
@@ -34,7 +35,7 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
   headers.set('Authorization', 'Basic ' + auth);
 
   // The etag is only needed when doing write operations.
-  if (method === "PATCH" || method === "PUT") {
+  if (method === "PATCH" || method === "PUT" || method === 'DELETE') {
     headers.set('If-Match', etag);
   }
 
@@ -82,6 +83,16 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+function deleteRecord(record) {
+  // For now, just check for something in the site record that is different
+  // than the code record.
+  if (record['hash']) {
+    return updateCodeRecord([], record, 'DELETE');
+  }
+  return updateSiteRecord([], record, 'DELETE');
+}
+
 /**
  * Creates a listing component for data in a table.
  */
@@ -91,7 +102,10 @@ Vue.component('listing', {
     data: Array,
     columns: Array,
     filterKey: String,
-    foo: []
+    editKeys: Array,
+    callback: String,
+    edit: false,
+    editId: ''
   },
   data: function () {
     var sortOrders = {}
@@ -137,23 +151,41 @@ Vue.component('listing', {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    addEdit: function (entry, index) {
-      console.log(entry);
-      let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
-
-      let body = {}
-
-      //atlasRequest(getAtlasURL(env), 'sites', query = '', method = 'PATCH', body)
+    search: function (query) {
+      console.log(query);
     },
-    entryId: function (entry, key) {
-      console.log(entry);
-      console.log(key);
+    callMeMaybe: function (callback, entry) {
+      let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
+      window[callback](formData, entry);
+      this.cancelEdit();
     },
     link: function (value, key) {
       if (key === 'path') {
         return '<a href="' + siteConfig.host + value + '">' + value + '</a>';
       }
       return value;
+    },
+    showEdit: function (entry, index = null) {
+      if (this.edit && this.editId === entry.id) {
+        if (index === null || this.editKeys.indexOf(index) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    },
+    showDefault: function (entry, index = null) {
+      if (!this.edit || this.editId !== entry.id || this.editKeys.indexOf(index) === -1 && index !== null) {
+        return true;
+      }
+      return false;
+    },
+    makeEdit: function (entry) {
+      this.edit = !this.edit;
+      this.editId = entry.id;
+    },
+    cancelEdit: function () {
+      this.edit = !this.edit;
+      this.editId = '';
     }
   }
 });
@@ -173,6 +205,11 @@ Vue.component('confirm-button', {
   methods: {
     callMeMaybe: function (callback, params) {
       window[callback](params);
+      this.cancel();
+    },
+    cancel: function () {
+      this.confirmed = false;
+      this.finaled = false;
     }
   }
 });

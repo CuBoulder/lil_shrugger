@@ -26,17 +26,16 @@
   <div id="site-listing" class="row">
     <form id="search" class="row">
       <div class="form-group">
-        <label for="query">Search</label>
-        <input id="query" class="form-control" name="query"
-               v-model="searchQuery"
-               placeholder='{"node_other":{"$ne":"null"}}'>
+        <button class="btn btn-primary" @click="search(searchQuery)">Search</button>
       </div>
     </form>
     <div class="row">
       <listing
          :data="gridData"
          :columns="gridColumns"
-         :filter-key="searchQuery">
+         :filter-key="searchQuery"
+         :edit-keys="editKeys"
+         :callback="callback">
       </listing>
     </div>
   </div>
