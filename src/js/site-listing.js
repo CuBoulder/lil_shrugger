@@ -127,17 +127,6 @@ $(document).ready(function () {
       callback: 'createSite',
     }
   });
-
-  const store = new Vuex.Store({
-    state: {
-      siteRecords: []
-    },
-    mutations: {
-      increment (state) {
-        state.count++
-      }
-    }
-  })
 });
 
 /**
