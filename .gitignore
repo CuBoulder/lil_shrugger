@@ -3,3 +3,9 @@
 
 # Ignore config
 src/config/config.js
+
+.DS_Store
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log

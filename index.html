@@ -9,11 +9,11 @@
           integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
           crossorigin="anonymous"></script>
   <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-      media="all" rel="stylesheet"/>
+     href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+     media="all" rel="stylesheet"/>
   <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
 
   <link rel="import" href="src/partials/navbar.html">
@@ -23,38 +23,35 @@
 <body>
 <div class="atlas-navbar"></div>
 <div class="page container">
-<div id="site-listing" class="row">
-  <form id="search" class="row">
-    <div class="form-group">
-      <label for="query">Search</label>
-      <input id="query" class="form-control" name="query"
-             v-model="searchQuery"
-             placeholder='{"node_other":{"$ne":"null"}}'>
+  <div id="site-listing" class="row">
+    <form id="search" class="row">
+      <div class="form-group">
+        <button class="btn btn-primary" @click="search(searchQuery)">Search</button>
+      </div>
+    </form>
+    <div class="row">
+      <listing
+         :data="gridData"
+         :columns="gridColumns"
+         :filter-key="searchQuery"
+         :edit-keys="editKeys"
+         :callback="callback">
+      </listing>
     </div>
-    <div class="form-group">
-      <button class="btn btn-primary" @click="search(searchQuery)">Search</button>
-    </div>
-  </form>
-  <div class="row">
-    <listing
-        :data="gridData"
-        :columns="gridColumns"
-        :filter-key="searchQuery"
-        :edit-keys="editKeys"
-        :callback="callback">
-    </listing>
+  </div>
+  <div id="create-site" class="row">
+    <confirm-button :label="label"
+                    :callback="callback">
+    </confirm-button>
   </div>
 </div>
-<div id="create-site" class="row">
-  <confirm-button :label="label"
-            :callback="callback">
-  </confirm-button>
-</div>
-</div>
+
 <script src="src/config/config.js"></script>
 <script src="src/config/routes.js"></script>
 <script src="src/js/utilities.js"></script>
 <script src="src/js/navbar.js"></script>
 <script src="src/js/site-listing.js"></script>
+
+<script src="/dist/build.js"></script>
 </body>
 </html>
