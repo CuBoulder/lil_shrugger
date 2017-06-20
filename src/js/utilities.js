@@ -106,6 +106,7 @@ Vue.component('listing', {
     },
     filterKey: String,
     editKeys: Array,
+    selectKeys: Array,
     callback: String,
     edit: {
       type: Boolean,
@@ -124,6 +125,7 @@ Vue.component('listing', {
     return {
       sortKey: '',
       sortOrders: sortOrders,
+      selectOptions: siteConfig.selectOptions
     }
   },
   /*
@@ -171,6 +173,12 @@ Vue.component('listing', {
         return '<a href="' + siteConfig.host + value + '">' + value + '</a>';
       }
       return value;
+    },
+    selectType: function (index) {
+      if (this.selectKeys.indexOf(index) !== -1) {
+        return true;
+      }
+      return false;
     },
     showEdit: function (entry, index = null) {
       if (this.edit && this.editId === entry.id) {

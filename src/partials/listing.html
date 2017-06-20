@@ -17,7 +17,14 @@
     <tr v-for="(entry, index) in data" scope="row">
       <td v-for="key in columns">
         <div v-if="showDefault(entry, key)" v-html="link(entry[key],key)"></div>
+        <div v-if="selectType(key)">
+          <select v-if="showEdit(entry, key)" :name="key" :data-id="entry.id">
+            <option v-for="anOption in selectOptions[key]" :value="anOption" :selected=" entry[key] == anOption ? true : null">{{anOption}}</option>
+          </select>
+        </div>
+        <div v-else>
         <input v-if="showEdit(entry, key)" type="text" :name="key" :data-id="entry.id" :value="entry[key]">
+        </div>
       </td>
       <td><button v-if="showDefault(entry)" class="btn btn-default" v-on:click="makeEdit(entry)" :data-id="entry.id">Edit</button>
         <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="callMeMaybe(callback, entry)" :data-id="entry.id">Send</button>
