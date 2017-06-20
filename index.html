@@ -32,7 +32,7 @@
     </div>
     <div class="form-group">
       <button class="btn btn-primary" v-on:click.prevent="search(searchQuery)">Search</button>
-      <button class="btn btn-default" v-on:click.prevent="reset()">Reset</button>
+      <button class="btn btn-default" v-if="reset" v-on:click.prevent="resetSearch()">Reset</button>
     </div>
   </form>
   <div class="row">
