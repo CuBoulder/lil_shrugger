@@ -44,6 +44,7 @@ function getSiteRecords(env) {
         gridColumns: ['id', 'path', 'status', 'updated'],
         gridData: data,
         editKeys: ['path', 'status'],
+        selectKeys: ['status'],
         callback: 'updateSiteRecord',
         reset: false
       },
