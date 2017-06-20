@@ -44,7 +44,13 @@ function getSiteRecords(env) {
         gridColumns: ['id', 'path', 'status', 'updated'],
         gridData: data,
         editKeys: ['path', 'status'],
-        callback: 'updateSiteRecord'
+        callback: 'updateSiteRecord',
+        reset: false
+      },
+      computed: {
+        showReset: function () {
+          return siteListing.reset;
+        }
       },
       methods: {
         search: function (query) {
@@ -63,19 +69,21 @@ function getSiteRecords(env) {
             });
 
             // Filter results by using the site ID stored in stats records.
-            let queryResult = siteListing.gridData.filter(function (row) {
+            let queryResult = cachedRecords.filter(function (row) {
               return siteIds.indexOf(row['_id']) > -1
             });
 
             // By setting the gridData property, the view will automatically update.
             siteListing.gridData = queryResult;
+            siteListing.reset = true;
 
           });
         },
-        reset: function () {
+        resetSearch: function () {
           // By using the cached results when the page is loaded, the query can be reverted.
           siteListing.gridData = cachedRecords;
           siteListing.searchQuery = '';
+          siteListing.reset = false;
         }
       }
     });

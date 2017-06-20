@@ -108,7 +108,6 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
     }
   });
 
-  console.log(JSON.stringify(formInput));
   let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
   atlasRequest(baseURL, 'code/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
 }
