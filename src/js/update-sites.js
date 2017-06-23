@@ -69,7 +69,7 @@ var vm = new Vue({
 
         let data = JSON.stringify({
           "code": {
-            "pacfkage": packagesAdded
+            "package": packagesAdded
           }
         });
 
