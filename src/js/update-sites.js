@@ -19,7 +19,12 @@ var vm = new Vue({
     getSites(siteQuery) {
       let that = this;
       let request = new XMLHttpRequest();
-      request.open('GET', (baseSitesURL + siteQuery), true);
+
+      if (siteQuery.length > 0) {
+        request.open('GET', (baseSitesURL + siteQuery), true);
+      } else {
+        request.open('GET', (baseSitesURL), true);
+      }
 
       request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
@@ -82,20 +87,44 @@ var vm = new Vue({
 
         let site_etag = e._etag;
 
-        console.log(data);
         atlasRequest(baseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
       });
 
       // atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null);
+    },
+    codeName(index) {
+      let codeItem = vm.codes._items;
+
+      codeItem.forEach(function(e) {
+        let codeName = e.meta.name;
+        let codeID = e._id;
+
+        if (codeID === index) {
+          index = codeName;
+        }
+      });
+
+      return index;
     }
   },
   computed: {
-    computedFinalPackages() {
-      let siteOriginalPackages = vm.sites._items[1].code.package;
-      let finalPackages = vm.finalPackages;
-      let removePackages = vm.removePackages;
-      let output = siteOriginalPackages;
-      return output;
+    computedCodeName(index) {
+      let codeItem = vm.codes._items;
+      let sitePackage = vm.sites._items;
+
+      sitePackage.forEach(function(e) {
+        let index = e.code.package;
+
+        codeItem.forEach(function(o) {
+          let codeName = o.name;
+          let codeID = o._id;
+
+          if (codeID === index) {
+            let index = codeName;
+            return index;
+          }
+        });
+      });
     }
   },
   mounted () {

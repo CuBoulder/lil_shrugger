@@ -38,7 +38,7 @@
       <option disabled selected value> -- select an option -- </option>
       <template v-for="package in sites._items">
         <option :value="index" v-if="package.code.package != null" v-for="(index, val) in package.code.package">
-          {{index}}
+          {{codeName(index)}}
         </option>
       </template>
     </select>
