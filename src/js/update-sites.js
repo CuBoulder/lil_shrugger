@@ -18,40 +18,28 @@ var vm = new Vue({
   methods: {
     getSites(siteQuery) {
       let that = this;
-      let request = new XMLHttpRequest();
 
       if (siteQuery.length > 0) {
-        request.open('GET', (baseSitesURL + siteQuery), true);
+        baseCodeURL = baseSitesURL + siteQuery;
       } else {
-        request.open('GET', (baseSitesURL), true);
+        baseCodeURL = baseSitesURL;
       }
 
-      request.onload = function() {
-        if (request.status >= 200 && request.status < 400) {
-          // Success!
-          that.sites = JSON.parse(request.responseText);
-        } else {
-          // We reached our target server, but it returned an error
-        }
-      };
-
-      request.send();
+      $.getJSON( baseCodeURL, {
+        format: "json"
+      })
+        .done(function( data ) {
+          that.sites = data;
+        });
     },
     getCodes() {
       let that = this;
-      let request = new XMLHttpRequest();
-      request.open('GET', baseCodeURL, true);
-
-      request.onload = function() {
-        if (request.status >= 200 && request.status < 400) {
-          // Success!
-          that.codes = JSON.parse(request.responseText);
-        } else {
-          // We reached our target server, but it returned an error
-        }
-      };
-
-      request.send();
+      $.getJSON( baseCodeURL, {
+        format: "json"
+      })
+        .done(function( data ) {
+          that.codes = data;
+        });
     },
     sendToAtlas() {
       let siteOriginalPackages = this.sites._items;
@@ -81,7 +69,7 @@ var vm = new Vue({
 
         let data = JSON.stringify({
           "code": {
-            "package": packagesAdded
+            "pacfkage": packagesAdded
           }
         });
 

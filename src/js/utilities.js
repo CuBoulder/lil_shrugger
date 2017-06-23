@@ -60,26 +60,6 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
 }
 
 /**
- * Simplified XMLHttpRequest version of atlasRequest.
- */
-function atlasRequestSimple() {
-  let that = this;
-  let request = new XMLHttpRequest();
-  request.open('GET', baseURL, true);
-
-  request.onload = function() {
-    if (request.status >= 200 && request.status < 400) {
-      // Success!
-      that.sites = JSON.parse(request.responseText);
-    } else {
-      // We reached our target server, but it returned an error
-    }
-  };
-
-  request.send();
-}
-
-/**
  * This function can be placed before any call to an external service or when
  * performing an operation that might fail.
  *
