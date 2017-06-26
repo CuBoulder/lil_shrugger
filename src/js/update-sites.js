@@ -17,14 +17,16 @@ var vm = new Vue({
   },
   methods: {
     getSites(siteQuery) {
+      let that = this;
       let endpoint = '/sites';
 
-      atlasRequest(baseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => this.sites = data).bind(this);
+      atlasRequest(baseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => that.sites = data);
     },
     getCodes() {
+      let that = this;
       let endpoint = '/code';
 
-      atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => this.codes = data).bind(this)
+      atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data);
     },
     sendToAtlas() {
       let siteOriginalPackages = this.sites._items;
@@ -65,15 +67,7 @@ var vm = new Vue({
         let site_etag = e._etag;
 
         if (packagesAdded.length <= 0) {
-          if (confirm("You're about to send an empty array that will remove all packages. (This message will appear for each site, sorry.)")) {
-            atlasRequest(baseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
-            window.scrollTo(0, 0);
-            $('#update-packages').attr('disabled','disabled');
-            console.log('Request has been sent to Atlas.');
-          } else {
-            console.log('action canceled.');
-            return '';
-          }
+          return '';
         } else {
           atlasRequest(baseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
           window.scrollTo(0, 0);

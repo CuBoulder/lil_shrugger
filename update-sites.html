@@ -37,7 +37,7 @@
       <option disabled selected value> -- select an option -- </option>
       <template v-for="package in sites._items">
         <option :value="index" v-if="package.code.package != null" v-for="(index, val) in package.code.package">
-          {{codeName(index)}}
+          {{codeName(index)}}: {{index}}
         </option>
       </template>
     </select>
@@ -46,7 +46,7 @@
       <option disabled selected value> -- select an option -- </option>
       <template v-for="code in codes._items" v-if="code.meta.code_type !== 'core'">
         <option :value="code._id" v-if="code.meta.code_type !== 'profile'">
-          <span>{{code.meta.name}}: {{code._id}}</span>
+          <span><strong>{{code.meta.label}}</strong> (name: {{code.meta.name}}) (id: {{code._id}})</span>
         </option>
       </template>
     </select>
@@ -59,7 +59,7 @@
     </ul>
 
   </div>
-  <button class="btn btn-secondary" id="update-packages" @click="sendToAtlas">Update Packages</button>
+  <button class="btn btn-primary" id="update-packages" @click="sendToAtlas">Update Packages</button>
   <p></p>
 </div>
 
@@ -67,7 +67,6 @@
 <script src="src/config/routes.js"></script>
 <script src="src/js/utilities.js"></script>
 <script src="src/js/navbar.js"></script>
-<!--<script src="src/js/site-listing.js"></script>-->
 <script src="src/js/update-sites.js"></script>
 </body>
 </html>
