@@ -9,15 +9,20 @@
  *
  * host - The place where you sites live, e.g. https://express.local.
  *
+ * gitHub - Need to make a token and use your username to not hit rate limit for GitHub API.
+ *
  * @type {string}
  */
 let siteConfig = {
   baseURL: '',
   username: '',
   password: '',
-  host: ''
+  host: '',
+  gitHub: {
+    username: '',
+    token: '',
+  }
 };
-
 
 /**
  * The select options can be used in the listing component for when the data/options 
@@ -27,5 +32,5 @@ let siteConfig = {
  */
 siteConfig['selectOptions'] = {
   status: ['available', 'installed', 'launching'],
-  code_type: ['core', 'profile', 'module'],
+  type: ['core', 'profile', 'module'],
 };
