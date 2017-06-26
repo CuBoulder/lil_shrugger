@@ -1,6 +1,6 @@
 let env = document.querySelector('.env-list .selected').innerHTML;
 let baseURL = getAtlasURL(env);
-let baseSitesURL = baseURL + '/sites';
+let baseSitesURL = baseURL + 'sites';
 let baseCodeURL = baseURL + '/code';
 
 var vm = new Vue({
@@ -17,26 +17,14 @@ var vm = new Vue({
   },
   methods: {
     getSites(siteQuery) {
-      let that = this;
+      let endpoint = '/sites';
 
-        baseCodeURL = baseSitesURL + siteQuery;
-        console.log(baseCodeURL);
-
-      $.getJSON( baseCodeURL, {
-        format: "json"
-      })
-        .done(function( data ) {
-          that.sites = data;
-        });
+      atlasRequest(baseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => this.sites = data).bind(this);
     },
     getCodes() {
-      let that = this;
-      $.getJSON( baseCodeURL, {
-        format: "json"
-      })
-        .done(function( data ) {
-          that.codes = data;
-        });
+      let endpoint = '/code';
+
+      atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => this.codes = data).bind(this)
     },
     sendToAtlas() {
       let siteOriginalPackages = this.sites._items;
@@ -79,8 +67,6 @@ var vm = new Vue({
         if (packagesAdded.length <= 0) {
           if (confirm("You're about to send an empty array that will remove all packages. (This message will appear for each site, sorry.)")) {
             atlasRequest(baseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
-
-            $('#messages').html('<p class="alert alert-success" role="alert">Request has been sent to Atlas.</p>');
             window.scrollTo(0, 0);
             $('#update-packages').attr('disabled','disabled');
             console.log('Request has been sent to Atlas.');
@@ -89,12 +75,14 @@ var vm = new Vue({
             return '';
           }
         } else {
-          return '';
+          atlasRequest(baseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
+          window.scrollTo(0, 0);
+          $('#update-packages').attr('disabled','disabled');
+          console.log('Request has been sent to Atlas.');
         }
 
       });
 
-      // atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null);
     },
     codeName(index) {
       let codeItem = vm.codes._items;
