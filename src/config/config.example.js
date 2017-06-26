@@ -32,5 +32,5 @@ let siteConfig = {
  */
 siteConfig['selectOptions'] = {
   status: ['available', 'installed', 'launching'],
-  type: ['module', 'core', 'profile'],
+  type: ['core', 'profile', 'module'],
 };
