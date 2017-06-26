@@ -23,7 +23,7 @@
 <body>
 <div class="atlas-navbar"></div>
 <div id="app" class="container">
-  <div id="code-listing" class="container">
+  <div id="code-listing">
     <form id="search">
       <div class="form-group">
         <label for="query">Search</label>
@@ -38,7 +38,7 @@
         :filter-key="searchQuery"
         :callback="callback"
         :edit-keys="editKeys"
-        :select-keys="[]">
+        :select-keys="selectKeys">
     </listing>
   </div>
   <div id="create-code" class="row">
@@ -61,7 +61,11 @@
           </option>
         </select>
         <label for="code_type">Code Type:</label>
-        <input type="text" name="code_type" id="code_type" v-model="codeType">
+        <select name="code_type" id="code_type" v-model="codeType">
+          <option v-for="anOption in selectOptions" :value="anOption">
+            {{anOption}}
+          </option>
+        </select>
         <label for="code_version">Code Version:</label>
         <input type="text" name="code_version" id="code_version"
                v-model="codeVersion">
@@ -83,127 +87,19 @@
 <script src="src/js/code-listing.js"></script>
 <script src="src/js/github.js"></script>
 <script type="text/javascript">
-
-  // Imports Site Listing HTML into DOM of pages using it.
-  var link = document.querySelector('link[href="src/partials/listing.html"]');
-  var content = link.import;
-  var el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
-  // Imports Button HTML into DOM of pages using it.
-  link = document.querySelector('link[href="src/partials/confirm-button.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
   /**
    * Creates the list of site records based on the environment. Every time the environment
    * changes via the environment selector, the search will update.
    */
   $(document).ready(function () {
-    getCodeRecords(document.querySelector('.env-list .selected').innerHTML);
+
+    getCodeRecords(document.querySelector('.env-list .selected').innerHTML)
+      .then(data => codeListing.gridData = data);
 
     // Get GitHub data to pass in.
-    let response = getGitHubRepos();
-
-    response.then(function(repoList) {
-      console.log(repoList);
-
-      // Add create code button.
-      let codeCreateButton = new Vue({
-        el: '#create-code',
-        data: {
-          repos: repoList,
-          branches: [],
-          branchToAdd: {},
-          activeRepo: {},
-          ready: false,
-          branchReady: false,
-          addCode: false,
-          codeType: '',
-          codeVersion: '',
-          codeLabel: '',
-        },
-        computed: {
-          userInput: function () {
-            return {
-              version: this.codeVersion,
-              type: this.codeType,
-              label: this.codeLabel,
-            };
-          }
-        },
-        methods: {
-          changeRepo: function (event) {
-            // Set to true for branch select list to appear.
-            this.branchReady = true;
-            this.branches = [];
-            this.activeRepo = this.repos[event.target.value];
-            this.branches = [];
-
-            let response = getRepoBranches(this.activeRepo.name);
-
-            response.then(function(branchesList) {
-              this.branches = branchesList;
-              console.log();
-
-              // Add a default; otherwise user can't select first element.
-              let first = {
-                name: '-Select-',
-                commit: {
-                  hash: null
-                }
-              };
-              this.branches.unshift(first);
-            });
-          },
-          changeBranch: function (event) {
-            this.ready = true;
-            this.branchToAdd = this.branches[event.target.value];
-          },
-          codeButton: function () {
-            this.addCode = true;
-          },
-          createCode: function () {
-            let repo = this.activeRepo;
-            let branch = this.branchToAdd;
-            let input = this.userInput;
-
-            let codeAsset = {
-              "git_url": repo.git_url,
-              "commit_hash": branch.commit.sha,
-              "meta": {
-                "version": input.version,
-                "code_type": input.type,
-                "name": branch.name,
-                "label": input.label,
-                "is_current": true
-              }
-            };
-
-            let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
-            atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset));
-
-            // @todo Replace data in table.
-            /*
-             sleep(2000);
-             let response = atlasRequest(baseURL, 'code');
-
-             // Response is a Promise object so we must resolve it to get the data out.
-             response.then(function(data) {
-
-             // Add links.
-             data = formatCodeData(data._items);
-
-             codeListing.gridData = data;
-             });
-             */
-          }
-        }
-      });
+    getGitHubRepos().then(function (repoList) {
+      codeCreateButton.repos = repoList;
     });
-
-
   });
 </script>
 </body>

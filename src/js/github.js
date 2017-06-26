@@ -1,7 +1,7 @@
-
-
-var repoList = [];
-var branchList = [];
+/**
+ * @file
+ * Contains functionality for interacting with the GitHub API.
+ */
 
 /**
  * Returns an array of CuBoulder repos and branches.
@@ -49,23 +49,6 @@ function getGitHubRepos() {
  * @returns {Array}
  */
 function getRepoBranches(repo) {
-  /*
-  let auth = btoa(siteConfig.gitHub.username + ':' + siteConfig.gitHub.token);
-  let branchReq = new XMLHttpRequest();
-
-  branchReq.open("GET", 'https://api.github.com/repos/CuBoulder/' + repo + '/branches?per_page=100', false);
-  branchReq.setRequestHeader('Authorization', 'basic ' + auth);
-  branchReq.setRequestHeader('Content-Type', 'application/json');
-
-  branchReq.addEventListener('load', function () {
-   branchList = JSON.parse(this.responseText);
-  });
-
-  branchReq.send();
-
-  return branchList;
-  */
-
   let headers = new Headers();
   let auth = btoa(siteConfig.gitHub.username + ':' + siteConfig.gitHub.token);
   headers.set('Content-Type', 'application/json');
