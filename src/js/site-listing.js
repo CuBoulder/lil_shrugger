@@ -128,7 +128,7 @@ function formatSiteData(data) {
 $(document).ready(function () {
   getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
 
-  // Ad create a site button to page.
+  // Add create a site button to page.
   let siteCreateButton = new Vue({
     el: '#create-site',
     data: {

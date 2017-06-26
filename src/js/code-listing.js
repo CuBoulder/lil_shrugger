@@ -1,23 +1,5 @@
-/**
- * Imports Site Listing HTML into DOM of pages using it.
- *
- * @type {Element}
- */
-var link = document.querySelector('link[href="src/partials/listing.html"]');
-var content = link.import;
-var el = content.querySelector('script');
-document.querySelector('body').appendChild(el.cloneNode(true));
 
-/**
- * Imports Button HTML into DOM of pages using it.
- *
- * @type {Element}
- */
-link = document.querySelector('link[href="src/partials/confirm-button.html"]');
-content = link.import;
-el = content.querySelector('script');
-document.querySelector('body').appendChild(el.cloneNode(true));
-
+let codeListing = {};
 /**
  * Gets a list of site records based on environment and pass data to template.
  *
@@ -34,7 +16,7 @@ function getCodeRecords(env) {
     data = formatCodeData(data._items);
 
     // Place site data in table via site-listing template located in site-listing.html.
-    let siteListing = new Vue({
+    codeListing = new Vue({
       el: '#code-listing',
       data: {
         searchQuery: '',
@@ -70,15 +52,6 @@ function formatCodeData(data) {
 }
 
 /**
- * Creates the list of site records based on the environment. Every time the environment
- * changes via the environment selector, the search will update.
- */
-$(document).ready(function () {
-  getCodeRecords(document.querySelector('.env-list .selected').innerHTML);
-});
-
-
-/**
  * Updates a code asset based on user input.
  *
  * @param formData
@@ -111,3 +84,5 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
   let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
   atlasRequest(baseURL, 'code/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
 }
+
+

@@ -83,7 +83,12 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
+/**
+ * Deletes a site or code record.
+ *
+ * @param record
+ * @returns {*}
+ */
 function deleteRecord(record) {
   // For now, just check for something in the site record that is different
   // than the code record.
