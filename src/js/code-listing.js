@@ -1,22 +1,114 @@
-/**
- * Imports Site Listing HTML into DOM of pages using it.
- *
- * @type {Element}
- */
+
+// Imports Site Listing HTML into DOM of pages using it.
 var link = document.querySelector('link[href="src/partials/listing.html"]');
 var content = link.import;
 var el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
-/**
- * Imports Button HTML into DOM of pages using it.
- *
- * @type {Element}
- */
+// Imports Button HTML into DOM of pages using it.
 link = document.querySelector('link[href="src/partials/confirm-button.html"]');
 content = link.import;
 el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
+
+// Place site data in table via site-listing template located in site-listing.html.
+codeListing = new Vue({
+  el: '#code-listing',
+  data: {
+    searchQuery: '',
+    gridColumns: ['id', 'label', 'type', 'hash'],
+    gridData: [],
+    callback: 'updateCodeRecord',
+    editKeys: ['label', 'hash', 'type'],
+    selectKeys: ['type'],
+  }
+});
+
+// Add create code button.
+let codeCreateButton = new Vue({
+  el: '#create-code',
+  data: {
+    selectOptions: siteConfig.selectOptions.type,
+    repos: [],
+    branches: [],
+    branchToAdd: {},
+    activeRepo: {},
+    ready: false,
+    branchReady: false,
+    addCode: false,
+    codeType: '',
+    codeVersion: '',
+    codeLabel: '',
+  },
+  computed: {
+    userInput: function () {
+      return {
+        version: this.codeVersion,
+        type: this.codeType,
+        label: this.codeLabel,
+      };
+    }
+  },
+  methods: {
+    changeRepo: function (event) {
+      // Set to true for branch select list to appear.
+      this.branchReady = true;
+      this.branches = [];
+      this.activeRepo = this.repos[event.target.value];
+
+      let that = this;
+      let response = getRepoBranches(this.activeRepo.name);
+
+      response.then(function (branchesList) {
+        that.branches = branchesList;
+        console.log();
+
+        // Add a default; otherwise user can't select first element.
+        let first = {
+          name: '-Select-',
+          commit: {
+            hash: null
+          }
+        };
+        that.branches.unshift(first);
+      });
+    },
+    changeBranch: function (event) {
+      this.ready = true;
+      this.branchToAdd = this.branches[event.target.value];
+    },
+    codeButton: function () {
+      this.addCode = true;
+    },
+    createCode: function () {
+      let repo = this.activeRepo;
+      let branch = this.branchToAdd;
+      let input = this.userInput;
+
+      let codeAsset = {
+        "git_url": repo.git_url,
+        "commit_hash": branch.commit.sha,
+        "meta": {
+          "version": input.version,
+          "code_type": input.type,
+          "name": branch.name,
+          "label": input.label,
+          "is_current": true
+        }
+      };
+
+      let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+      atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
+        .then(response =>
+          getCodeRecords(document.querySelector('.env-list .selected').innerHTML)
+            .then(data => codeListing.gridData = data)
+        );
+
+      this.addCode = false;
+    }
+  }
+});
+
 
 /**
  * Gets a list of site records based on environment and pass data to template.
@@ -24,26 +116,9 @@ document.querySelector('body').appendChild(el.cloneNode(true));
  * @param env
  */
 function getCodeRecords(env) {
-  // Get response of all site records.
-  let response = atlasRequest(getAtlasURL(env), 'code');
-
-  // Response is a Promise object so we must resolve it to get the data out.
-  response.then(function(data){
-
-    // Add links.
-    data = formatCodeData(data._items);
-
-    // Place site data in table via site-listing template located in site-listing.html.
-    let siteListing = new Vue({
-      el: '#code-listing',
-      data: {
-        searchQuery: '',
-        gridColumns: ['id', 'label', 'type', 'hash'],
-        gridData: data,
-        callback: 'updateCodeRecord',
-        editKeys: ['label', 'hash', 'type'],
-      }
-    });
+  // Return a promise with formatted code data.
+ return atlasRequest(getAtlasURL(env), 'code').then(function(data){
+    return formatCodeData(data._items);
   });
 }
 
@@ -68,15 +143,6 @@ function formatCodeData(data) {
 
   return formattedData;
 }
-
-/**
- * Creates the list of site records based on the environment. Every time the environment
- * changes via the environment selector, the search will update.
- */
-$(document).ready(function () {
-  getCodeRecords(document.querySelector('.env-list .selected').innerHTML);
-});
-
 
 /**
  * Updates a code asset based on user input.
@@ -111,3 +177,5 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
   let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
   atlasRequest(baseURL, 'code/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
 }
+
+
