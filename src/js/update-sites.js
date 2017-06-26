@@ -19,11 +19,8 @@ var vm = new Vue({
     getSites(siteQuery) {
       let that = this;
 
-      if (siteQuery.length > 0) {
         baseCodeURL = baseSitesURL + siteQuery;
-      } else {
-        baseCodeURL = baseSitesURL;
-      }
+        console.log(baseCodeURL);
 
       $.getJSON( baseCodeURL, {
         format: "json"
@@ -50,7 +47,11 @@ var vm = new Vue({
         let id = e._id;
         let addPackages = vm.updatePackages;
         let removePackages = vm.removePackages;
-        let sitePackages = e.code.package;
+        let sitePackages = [];
+
+        if (e.code.package) {
+          let sitePackages = e.code.package;
+        }
 
         let endpoint = 'sites/' + id;
 
@@ -75,7 +76,22 @@ var vm = new Vue({
 
         let site_etag = e._etag;
 
-        atlasRequest(baseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
+        if (packagesAdded.length <= 0) {
+          if (confirm("You're about to send an empty array that will remove all packages. (This message will appear for each site, sorry.)")) {
+            atlasRequest(baseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
+
+            $('#messages').html('<p class="alert alert-success" role="alert">Request has been sent to Atlas.</p>');
+            window.scrollTo(0, 0);
+            $('#update-packages').attr('disabled','disabled');
+            console.log('Request has been sent to Atlas.');
+          } else {
+            console.log('action canceled.');
+            return '';
+          }
+        } else {
+          return '';
+        }
+
       });
 
       // atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null);
