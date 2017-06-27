@@ -18,76 +18,93 @@ content = link.import;
 el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
+// Place site data in table via site-listing template located in site-listing.html.
+let siteListing = new Vue({
+  el: '#site-listing',
+  data: {
+    searchQuery: '?where={"nodes_total":{"$gt":1}}',
+    gridColumns: ['id', 'path', 'status', 'updated'],
+    gridData: [],
+    cachedRecords: [],
+    editKeys: ['path', 'status'],
+    selectKeys: ['status'],
+    callback: 'updateSiteRecord',
+    reset: false
+  },
+  created: function () {
+    bus.$on('switchEnv', function (env) {
+      getSiteRecords(siteConfig.atlasEnvironments[env])
+        .then(function (data) {
+          siteListing.gridData = data;
+          // Cache the result until the next request.
+          siteListing.cachedRecords = data;
+        });
+    })
+  },
+  computed: {
+    showReset: function () {
+      return siteListing.reset;
+    }
+  },
+  methods: {
+    search: function (query) {
+
+      // Make request to Atlas.
+      let baseURL = localStorage.getItem('env');
+      let response = atlasRequest(baseURL, 'statistics', query);
+
+      // Response is a Promise object so we must resolve it to get the data out.
+      response.then(function (objects) {
+
+        // Get array only of site IDs to check from stats query.
+        let siteIds = [];
+        objects._items.forEach(function (element, index) {
+          siteIds.push(element['site']);
+        });
+
+        // Filter results by using the site ID stored in stats records.
+        let queryResult = siteListing.cachedRecords.filter(function (row) {
+          return siteIds.indexOf(row['_id']) > -1
+        });
+
+        // By setting the gridData property, the view will automatically update.
+        siteListing.gridData = queryResult;
+        siteListing.reset = true;
+      });
+    },
+    resetSearch: function () {
+      // By using the cached results when the page is loaded, the query can be reverted.
+      siteListing.gridData = siteListing.cachedRecords;
+      siteListing.searchQuery = '';
+      siteListing.reset = false;
+    }
+  }
+});
+
+// Add create a site button to page.
+let siteCreateButton = new Vue({
+  el: '#create-site',
+  data: {
+    label: 'Create A Site',
+    callback: 'createSite',
+  }
+});
+
 /**
  * Gets a list of site records based on environment and pass data to template.
  *
- * @param env
+ * @param envURL
  */
-function getSiteRecords(env) {
-  // Get response of all site records.
-  let response = atlasRequest(getAtlasURL(env), 'sites');
+function getSiteRecords(envURL = null) {
+  // If no environment passed in, then get from local storage.
+  if (envURL === null) {
+    let env = localStorage.getItem('env');
+  }
 
   // Response is a Promise object so we must resolve it to get the data out.
-  response.then(function (data) {
-
+  return atlasRequest(envURL, 'sites').then(function (data) {
     // Format site records for display.
-    data = formatSiteData(data._items);
-
-    // Cache the result until the next request.
-    var cachedRecords = data;
-
-    // Place site data in table via site-listing template located in site-listing.html.
-    let siteListing = new Vue({
-      el: '#site-listing',
-      data: {
-        searchQuery: '?where={"nodes_total":{"$gt":1}}',
-        gridColumns: ['id', 'path', 'status', 'updated'],
-        gridData: data,
-        editKeys: ['path', 'status'],
-        selectKeys: ['status'],
-        callback: 'updateSiteRecord',
-        reset: false
-      },
-      computed: {
-        showReset: function () {
-          return siteListing.reset;
-        }
-      },
-      methods: {
-        search: function (query) {
-
-          // Make request to Atlas.
-          let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
-          let response = atlasRequest(baseURL, 'statistics', query);
-
-          // Response is a Promise object so we must resolve it to get the data out.
-          response.then(function (objects) {
-
-            // Get array only of site IDs to check from stats query.
-            let siteIds = [];
-            objects._items.forEach(function (element, index) {
-              siteIds.push(element['site']);
-            });
-
-            // Filter results by using the site ID stored in stats records.
-            let queryResult = cachedRecords.filter(function (row) {
-              return siteIds.indexOf(row['_id']) > -1
-            });
-
-            // By setting the gridData property, the view will automatically update.
-            siteListing.gridData = queryResult;
-            siteListing.reset = true;
-
-          });
-        },
-        resetSearch: function () {
-          // By using the cached results when the page is loaded, the query can be reverted.
-          siteListing.gridData = cachedRecords;
-          siteListing.searchQuery = '';
-          siteListing.reset = false;
-        }
-      }
-    });
+    return formatSiteData(data._items);
   });
 }
 
@@ -122,27 +139,10 @@ function formatSiteData(data) {
 }
 
 /**
- * Creates the list of site records based on the environment. Every time the environment
- * changes via the environment selector, the search will update.
- */
-$(document).ready(function () {
-  getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
-
-  // Add create a site button to page.
-  let siteCreateButton = new Vue({
-    el: '#create-site',
-    data: {
-      label: 'Create A Site',
-      callback: 'createSite',
-    }
-  });
-});
-
-/**
  * Creates a site record.
  */
 function createSite() {
-  let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+  let baseURL = localStorage.getItem('env');
   let endpoint = 'sites';
 
   let data = JSON.stringify({
@@ -174,10 +174,9 @@ function updateSiteRecord(formData, record, method = 'PATCH') {
     }
   });
 
-  let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+  let baseURL = localStorage.getItem('env');
   atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
 }
 
 function deleteSite(site) {
-  console.log(site);
 }

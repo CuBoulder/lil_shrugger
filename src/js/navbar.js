@@ -6,68 +6,58 @@
  */
 var link = document.querySelector('link[href="src/partials/navbar.html"]');
 var content = link.import;
-var el = content.querySelector('.navbar.navbar-default');
-document.querySelector('.atlas-navbar').appendChild(el.cloneNode(true));
+var el = content.querySelector('script');
+document.querySelector('body').appendChild(el.cloneNode(true));
 
 
 /**
- * Sets up routing for the navbar menu.
- *
- * @type {Vue}
+ * Creates a button component with comfirm step.
  */
-var navbarRoutes = new Vue({
-  el: '#routes',
+Vue.component('atlas-navbar', {
+  template: '#a-navbar',
+  props: {
+    routes: {
+      type: Array,
+      default: routes
+    },
+    environments: {
+      type: Object,
+      default: siteConfig.atlasEnvironments
+    }
+  },
+  computed: {
+    selectedEnv: function () {
+      return localStorage.getItem('env');
+    }
+  },
+  /*
+  filters: {
+    capitalize: function (value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  },*/
+  methods: {
+    callMeMaybe: function (callback, params) {
+      window[callback](params);
+      this.cancel();
+    },
+    cancel: function () {
+      this.confirmed = false;
+      this.finaled = false;
+    },
+    changeEnv: function (event) {
+      localStorage.setItem('env', siteConfig.atlasEnvironments[event.target.value]);
+      bus.$emit('switchEnv', event.target.value);
+    }
+  }
+});
+
+let navbar = new Vue({
+  el: '#atlas-navbar',
   data: {
-    routes: routes
-  }
-});
-
-/**
- * Places environment label in navbar.
- */
-$(document).ready(function () {
-  $(".btn-select").each(function (e) {
-    var value = $(this).find("ul li.selected").html();
-    if (value != undefined) {
-      $(this).find(".btn-select-input").val(value);
-      $(this).find(".btn-select-value").html(value);
-    }
-  });
-});
-
-/**
- * Changes selected environment in navbar.
- */
-$(document).on('click', '.btn-select', function (e) {
-  e.preventDefault();
-  var ul = $(this).find("ul");
-  if ($(this).hasClass("active")) {
-    if (ul.find("li").is(e.target)) {
-      var target = $(e.target);
-      target.addClass("selected").siblings().removeClass("selected");
-      var value = target.html();
-      $(this).find(".btn-select-input").val(value);
-      $(this).find(".btn-select-value").html(value);
-      getSiteRecords(value);
-    }
-    ul.hide();
-    $(this).removeClass("active");
-  }
-  else {
-    $('.btn-select').not(this).each(function () {
-      $(this).removeClass("active").find("ul").hide();
-    });
-    ul.slideDown(300);
-    $(this).addClass("active");
-  }
-});
-
-/**
- * Hides and shows environment select list on navebar.
- */
-$(document).on('click', function (e) {
-  var target = $(e.target).closest(".btn-select");
-  if (!target.length) {
-    $(".btn-select").removeClass("active").find("ul").hide();
+    routes: routes,
+    environments: siteConfig.atlasEnvironments
   }
 });

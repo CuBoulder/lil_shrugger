@@ -21,6 +21,14 @@ codeListing = new Vue({
     callback: 'updateCodeRecord',
     editKeys: ['label', 'hash', 'type'],
     selectKeys: ['type'],
+  },
+  created: function () {
+    bus.$on('switchEnv', function (env) {
+      getCodeRecords(siteConfig.atlasEnvironments[env])
+        .then(function (data) {
+          codeListing.gridData = data;
+        });
+    })
   }
 });
 
@@ -61,7 +69,6 @@ let codeCreateButton = new Vue({
 
       response.then(function (branchesList) {
         that.branches = branchesList;
-        console.log();
 
         // Add a default; otherwise user can't select first element.
         let first = {
@@ -97,7 +104,7 @@ let codeCreateButton = new Vue({
         }
       };
 
-      let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+      let baseURL = localStorage.getItem('env');
       atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
         .then(response =>
           getCodeRecords(document.querySelector('.env-list .selected').innerHTML)
@@ -117,7 +124,7 @@ let codeCreateButton = new Vue({
  */
 function getCodeRecords(env) {
   // Return a promise with formatted code data.
- return atlasRequest(getAtlasURL(env), 'code').then(function(data){
+ return atlasRequest(localStorage.getItem('env'), 'code').then(function(data){
     return formatCodeData(data._items);
   });
 }
@@ -174,7 +181,7 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
     }
   });
 
-  let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+  let baseURL = localStorage.getItem('env');
   atlasRequest(baseURL, 'code/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
 }
 
