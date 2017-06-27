@@ -30,7 +30,7 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
 
   // Setup headers to send to Atlas.
   let headers = new Headers();
-  let auth = btoa(siteConfig.username + ':' + siteConfig.password);
+  let auth = btoa(localStorage.getItem('atlas-username') + ':' + localStorage.getItem('atlas-password'));
   headers.set('Content-Type', 'application/json');
   headers.set('Authorization', 'Basic ' + auth);
 
@@ -175,7 +175,7 @@ Vue.component('listing', {
     },
     link: function (value, key) {
       if (key === 'path') {
-        return '<a href="' + siteConfig.host + value + '">' + value + '</a>';
+        return '<a href="' + localStorage.getItem('host') + value + '">' + value + '</a>';
       }
       return value;
     },

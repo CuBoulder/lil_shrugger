@@ -6,4 +6,5 @@
 let routes = [
   { name: 'Sites', path: siteConfig.baseURL + '/' },
   { name: 'Code', path: siteConfig.baseURL + '/code.html' },
+  { name: 'Settings', path: siteConfig.baseURL + '/settings.html' },
 ];
