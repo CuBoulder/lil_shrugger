@@ -14,8 +14,12 @@
   <link rel="import" href="src/partials/navbar.html">
 </head>
 <body>
-
-<div class="atlas-navbar"></div>
+<div id="atlas-navbar">
+  <atlas-navbar
+      :routes="routes"
+      :environments="environments">
+  </atlas-navbar>
+</div>
 <div id="user-settings" class="container">
   <form>
     <fieldset class="form-group">
