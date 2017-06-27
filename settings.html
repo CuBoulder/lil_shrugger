@@ -27,14 +27,24 @@
     <fieldset class="form-group">
       <label for="host">Host</label>
       <input type="text" id="host" class="form-control" name="host" v-model="host">
+      <p class="form-text text-muted">
+        Enter the base URL of where your Express sites are located.
+      </p>
       <label for="base-url">Base URL</label>
       <input type="text" id="base-url" class="form-control" name="host" v-model="baseURL">
+      <p class="form-text text-muted">
+        If you have this application in sub-directory, then add with beginning slash, e.g "/shrugger".
+        If you have this application at the root-level, leave blank.
+      </p>
     </fieldset>
     <fieldset class="form-group">
       <label for="github-username">GitHub Username</label>
       <input type="text" id="github-username" class="form-control" name="github-username" v-model="gitHub.username">
       <label for="github-token">GitHub Token</label>
       <input type="text" id="github-token" class="form-control" name="github-token" v-model="gitHub.token">
+      <p class="form-text text-muted">
+        Need to setup <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> under Personal access tokens.
+      </p>
     </fieldset>
     <button @click="saveCreds()" type="button" class="btn btn-primary">Save</button>
   </form>
