@@ -10,7 +10,7 @@
  */
 function getGitHubRepos() {
   let headers = new Headers();
-  let auth = btoa(siteConfig.gitHub.username + ':' + siteConfig.gitHub.token);
+  let auth = btoa(localStorage.getItem('github-username') + ':' + localStorage.getItem('github-token'));
   headers.set('Content-Type', 'application/json');
   headers.set('Authorization', 'Basic ' + auth);
 
@@ -50,7 +50,7 @@ function getGitHubRepos() {
  */
 function getRepoBranches(repo) {
   let headers = new Headers();
-  let auth = btoa(siteConfig.gitHub.username + ':' + siteConfig.gitHub.token);
+  let auth = btoa(localStorage.getItem('github-username') + ':' + localStorage.getItem('github-token'));
   headers.set('Content-Type', 'application/json');
   headers.set('Authorization', 'Basic ' + auth);
 

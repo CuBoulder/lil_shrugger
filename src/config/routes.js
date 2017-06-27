@@ -1,9 +1,10 @@
 /**
  * These routes will appear in the navbar menu.
  *
- * The baseURL variable comes from the config.js JSON object.
+ * The baseURL variable comes from the settings.html page.
  */
 let routes = [
-  { name: 'Sites', path: siteConfig.baseURL + '/' },
-  { name: 'Code', path: siteConfig.baseURL + '/code.html' },
+  { name: 'Sites', path: localStorage.getItem('baseURL') + '/' },
+  { name: 'Code', path: localStorage.getItem('baseURL') + '/code.html' },
+  { name: 'Settings', path: localStorage.getItem('baseURL') + '/settings.html' },
 ];
