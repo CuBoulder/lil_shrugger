@@ -101,11 +101,11 @@ Vue.component('listing', {
     editKeys: Array,
     selectKeys: Array,
     callback: String,
-    edit: {
+    editProp: {
       type: Boolean,
       default: false
     },
-    editId: {
+    editIdProp: {
       type: String,
       default: ''
     }
@@ -118,7 +118,9 @@ Vue.component('listing', {
     return {
       sortKey: '',
       sortOrders: sortOrders,
-      selectOptions: siteConfig.selectOptions
+      selectOptions: siteConfig.selectOptions,
+      editId: this.editIdProp,
+      edit: this.editProp
     }
   },
   computed: {
