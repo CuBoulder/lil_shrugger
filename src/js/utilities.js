@@ -225,7 +225,8 @@ Vue.component('confirm-button', {
 Vue.component('message-area', {
   template: '<p :class="alertType">{{message}}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>',
   props: [
-    'message'
+    'message',
+    'alertType'
   ]
 });
 
