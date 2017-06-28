@@ -151,7 +151,6 @@ function createSite() {
 
   // @todo somehow provide a message to users whether this operation succeeded or failed.
   atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data);
-  //alert.newAlert('Successfully created a site.', 'alert-success');
   bus.$emit('onMessage', ['Successfully created a site.', 'alert-success']);
 
 
@@ -179,7 +178,6 @@ function updateSiteRecord(formData, record, method = 'PATCH') {
 
   let baseURL = localStorage.getItem('env');
   atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
-  //alert.newAlert('You have deleted a site.', 'alert-info');
   bus.$emit('onMessage', ['You have deleted a site.', 'alert-info']);
 }
 
