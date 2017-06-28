@@ -21,8 +21,14 @@
   <link rel="import" href="src/partials/confirm-button.html">
 </head>
 <body>
-<div class="atlas-navbar"></div>
+<div id="atlas-navbar">
+  <atlas-navbar
+      :routes="routes"
+      :environments="environments">
+  </atlas-navbar>
+</div>
 <div id="app" class="container">
+  <message-area id="alert" :message="message" :class="alertType" class="alert" v-if="message.length > 0"></message-area>
   <div id="code-listing">
     <form id="search">
       <div class="form-group">
@@ -93,7 +99,7 @@
    */
   $(document).ready(function () {
 
-    getCodeRecords(document.querySelector('.env-list .selected').innerHTML)
+    getCodeRecords(localStorage.getItem('env'))
       .then(data => codeListing.gridData = data);
 
     // Get GitHub data to pass in.

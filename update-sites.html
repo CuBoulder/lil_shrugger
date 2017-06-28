@@ -16,10 +16,14 @@
   <link rel="import" href="src/partials/confirm-button.html">
 </head>
 <body>
-<div class="atlas-navbar"></div>
-
-
+<div id="atlas-navbar">
+  <atlas-navbar
+     :routes="routes"
+     :environments="environments">
+  </atlas-navbar>
+</div>
 <div id="list-full-sites" class="container">
+  <message-area id="alert" :message="message" :class="alertType" class="alert" v-if="message.length > 0"></message-area>
   <form id="search" class="row">
     <div class="form-group">
       <label for="querySites">Search</label>

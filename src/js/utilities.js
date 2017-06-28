@@ -1,19 +1,7 @@
-
 /**
- * Takes an environment label and matches the Atlas URL instance.
- *
- * @param env
- * @returns {*}
+ * Create an event bus to emit events across the application.
  */
-function getAtlasURL(env) {
-  let atlasURLs = {
-    'Local': 'https://inventory.local/',
-    'Dev': 'https://osr-atlas01.int.colorado.edu/',
-    'Test': 'https://osr-atlas02.int.colorado.edu/',
-    'Prod': 'https://osr-atlas03.int.colorado.edu/'
-  };
-  return atlasURLs[env];
-}
+var bus = new Vue();
 
 /**
  * Makes a request to Atlas.

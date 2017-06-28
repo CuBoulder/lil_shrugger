@@ -21,7 +21,12 @@
   <link rel="import" href="src/partials/confirm-button.html">
 </head>
 <body>
-<div class="atlas-navbar"></div>
+<div id="atlas-navbar">
+  <atlas-navbar
+      :routes="routes"
+      :environments="environments">
+  </atlas-navbar>
+</div>
 <div class="page container">
 <message-area id="alert" :message="message" :class="alertType" class="alert" v-if="message.length > 0"></message-area>
 <div id="site-listing" class="row">
@@ -58,5 +63,20 @@
 <script src="src/js/utilities.js"></script>
 <script src="src/js/navbar.js"></script>
 <script src="src/js/site-listing.js"></script>
+<script type="text/javascript">
+  /**
+   * Creates the list of site records based on the environment. Every time the environment
+   * changes via the environment selector, the search will update.
+   */
+  $(document).ready(function () {
+    let cachedRecords = {};
+    getSiteRecords(localStorage.getItem('env'))
+      .then(function (data) {
+        siteListing.gridData = data;
+        // Cache the result until the next request.
+        siteListing.cachedRecords = data;
+      });
+  });
+</script>
 </body>
 </html>
