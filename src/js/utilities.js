@@ -121,13 +121,13 @@ Vue.component('listing', {
       selectOptions: siteConfig.selectOptions
     }
   },
-  /*
   computed: {
     filteredData: function () {
       var sortKey = this.sortKey
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
+      //var filterKey = this.filterKey && this.filterKey.toLowerCase()
       var order = this.sortOrders[sortKey] || 1
       var data = this.data
+      /*
       if (filterKey) {
         data = data.filter(function (row) {
           return Object.keys(row).some(function (key) {
@@ -135,6 +135,7 @@ Vue.component('listing', {
           })
         })
       }
+      */
       if (sortKey) {
         data = data.slice().sort(function (a, b) {
           a = a[sortKey]
@@ -145,7 +146,6 @@ Vue.component('listing', {
       return data
     }
   },
-  */
   filters: {
     capitalize: function (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
