@@ -150,14 +150,15 @@ function createSite() {
   });
 
   // @todo somehow provide a message to users whether this operation succeeded or failed.
-  atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data);
+  atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data).then(response =>
+    reloadPage()
+  );
   alert.newAlert('Successfully created a site.', 'alert-success');
 
 
   // @todo Find a way to load site records after a delay so you don't have to guess whether it worked.
   //sleep(3000);
   //getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
-  alert.actionReload();
 }
 
 /**
@@ -178,10 +179,19 @@ function updateSiteRecord(formData, record, method = 'PATCH') {
   });
 
   let baseURL = localStorage.getItem('env');
-  atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
+  atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']).then(response =>
+    reloadPage()
+  );
   alert.newAlert('You have deleted a site.', 'alert-info');
-  alert.actionReload();
 }
 
 function deleteSite(site) {
+}
+
+/**
+ * After using the atlasRequest function, add the following:
+ * .then(response => reloadPage());
+ */
+function reloadPage() {
+  setTimeout(location.reload.bind(location), 500)
 }

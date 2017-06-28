@@ -267,9 +267,6 @@ var alert = new Vue({
     newAlert(message, type) {
       alert.message = message;
       alert.alertType = type;
-    },
-    actionReload() {
-      setTimeout(location.reload.bind(location), 5000);
     }
   }
 });
