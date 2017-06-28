@@ -28,6 +28,7 @@
   </atlas-navbar>
 </div>
 <div class="page container">
+<message-area id="alert" :message="message" :class="alertType" class="alert" v-if="message.length > 0"></message-area>
 <div id="site-listing" class="row">
   <form id="search" class="row">
     <div class="form-group">

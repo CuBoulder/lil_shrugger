@@ -221,3 +221,35 @@ Vue.component('confirm-button', {
     }
   }
 });
+
+Vue.component('message-area', {
+  template: '<p :class="alertType">{{message}}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>',
+  data() {
+    return {
+      alertType: alert.alertType,
+      message: alert.message
+    }
+  },
+  props: [
+    'message'
+  ]
+});
+
+var alert = new Vue({
+  el: '#alert',
+  data: {
+    message: '',
+    alertType: ''
+  },
+  methods: {
+    // To use this anywhere: alert.newAlert('Message you want displayed.', 'alert-info');
+    // You can use any available bootstrap alert: alert-info, alert-success, alert-danger, etc.
+    newAlert(message, type) {
+      alert.message = message;
+      alert.alertType = type;
+    },
+    actionReload() {
+      setTimeout(location.reload.bind(location), 5000);
+    }
+  }
+});
