@@ -101,11 +101,11 @@ Vue.component('listing', {
     editKeys: Array,
     selectKeys: Array,
     callback: String,
-    edit: {
+    editProp: {
       type: Boolean,
       default: false
     },
-    editId: {
+    editIdProp: {
       type: String,
       default: ''
     }
@@ -118,7 +118,9 @@ Vue.component('listing', {
     return {
       sortKey: '',
       sortOrders: sortOrders,
-      selectOptions: siteConfig.selectOptions
+      selectOptions: siteConfig.selectOptions,
+      editId: this.editIdProp,
+      edit: this.editProp
     }
   },
   computed: {
@@ -207,13 +209,31 @@ Vue.component('confirm-button', {
     label: String,
     callback: String,
     params: Array,
-    confirmed: false,
-    finaled: false
+    confirmProp: {
+      type: Boolean,
+      default: false
+    },
+    finalProp: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: function () {
+    return {
+      confirmed: this.confirmProp,
+      finaled: this.finalProp
+    }
   },
   methods: {
     callMeMaybe: function (callback, params) {
       window[callback](params);
       this.cancel();
+    },
+    confirm: function () {
+      this.confirmed = true;
+    },
+    final: function () {
+      this.finaled = true;
     },
     cancel: function () {
       this.confirmed = false;
