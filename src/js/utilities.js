@@ -207,13 +207,31 @@ Vue.component('confirm-button', {
     label: String,
     callback: String,
     params: Array,
-    confirmed: false,
-    finaled: false
+    confirmProp: {
+      type: Boolean,
+      default: false
+    },
+    finalProp: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: function () {
+    return {
+      confirmed: this.confirmProp,
+      finaled: this.finalProp
+    }
   },
   methods: {
     callMeMaybe: function (callback, params) {
       window[callback](params);
       this.cancel();
+    },
+    confirm: function () {
+      this.confirmed = true;
+    },
+    final: function () {
+      this.finaled = true;
     },
     cancel: function () {
       this.confirmed = false;
