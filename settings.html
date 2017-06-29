@@ -29,16 +29,11 @@
       <input type="password" id="password" class="form-control" name="password" v-model="password">
     </fieldset>
     <fieldset class="form-group">
-      <label for="host">Host</label>
-      <input type="text" id="host" class="form-control" name="host" v-model="host">
-      <p class="form-text text-muted">
-        Enter the base URL of where your Express sites are located.
-      </p>
       <label for="base-url">Base URL</label>
       <input type="text" id="base-url" class="form-control" name="host" v-model="baseURL">
       <p class="form-text text-muted">
-        If you have this application in sub-directory, then add with beginning slash, e.g "/shrugger".
-        If you have this application at the root-level, leave blank.
+        If you have this application in sub-directory of your virtual host, then add with beginning slash, e.g "/shrugger".
+        If you have this application at the root-level, then leave blank.
       </p>
     </fieldset>
     <fieldset class="form-group">
@@ -62,7 +57,6 @@
     data: {
       username: localStorage.getItem('atlas-username'),
       password: localStorage.getItem('atlas-password'),
-      host: localStorage.getItem('host'),
       baseURL: localStorage.getItem('baseURL'),
       gitHub: {
         username: localStorage.getItem('github-username'),
@@ -73,7 +67,6 @@
       saveCreds: function () {
         localStorage.setItem('atlas-username', this.username);
         localStorage.setItem('atlas-password', this.password);
-        localStorage.setItem('host', this.host);
         localStorage.setItem('baseURL', this.baseURL);
         localStorage.setItem('github-username', this.gitHub.username);
         localStorage.setItem('github-token', this.gitHub.token);
