@@ -65,7 +65,6 @@ let codeCreateButton = new Vue({
       this.branchReady = true;
       this.branches = [];
       this.activeRepo = this.repos[event.target.value];
-      console.log(this.activeRepo);
 
       let that = this;
       let response = getRepoBranches(this.activeRepo.name);
