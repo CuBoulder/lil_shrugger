@@ -7,41 +7,25 @@ Atlas was sad and in need of a friend so that's where Lil' Shrugger comes in. He
 
 ## Getting Started
 
-Once you clone this repository down, you'll have to take a couple of steps to get started. Currently, you can only test this UI with "https://inventory.local".
+Once you clone this repository down, you'll have to take a couple of steps to get started.
 
-1. You will need to add headers to the Atlas code until https://github.com/CuBoulder/atlas/pull/267/files is reviewed and merged in.  To do this...
-
-```
-cd ~/express_local/data/code/atlas
-git fetch --all
-git checkout feature/266
-ssh inventory.local
-restartatlas
-```
-
-2. This app can run anywhere, but to add it to http://express.local, you'll need to clone the lil_shrgger and create a symlink.
+1. This app can run anywhere, but to add it to http://express.local, you'll need to clone the lil_shrugger and create a symlink.
 
 ```
 cd ~/express_local/data/code
 git clone git@github.com:CuBoulder/lil_shrugger.git
 ssh express.local
 cd /data/web/express
-ln -s /express_local/data/code/lil_shrugger vue
+ln -s /express_local/data/code/lil_shrugger shrugger
 ```
 
-Now you should be able to access this at http://express.local/vue
+Now you should be able to access this app at http://express.local/shrugger. 
 
-3. You will need to configure "config.js" to your use case. First you need to copy "src/config/config.example.js" into "src/config/config.js". This is done to ignore your local config while keep a copy with default examples and comments. For instance, I have my site locally at "localhost/vue" where the docroot is in the "/vue" subdirectory. For "baseURL", I then need to add "/vue" for the menu to work. 
+You can also clone down a tagged release and then select the "index.html" file from your OS file finder window to run the application. The releases will include a build step that allows the application to run with more broswer support, and it can be easier than importing the application to express.local.	
 
-```
-let siteConfig = {
-  baseURL: '/vue',
-  username: 'yourIdentikey',
-  password: 'yourPassword',
-  host: 'http://yourUrl/'
-};
-```
-4. Now, the root "index.html" should load with your sites listed in a table. Assuming "https://inventory.local" is running, you've approved the lack of verified SSL cert for the https connection in the browser you are using and there are site records.
+2. You will need to configure the application to your use case by visiitng the "settings.html" page. There you will see several fields you need to enter for making requests to Atlas, setting up where your app is located, and making requests to the GitHub API.  
+
+3. Once configured, the root "index.html" should load with your sites listed in a table assuming "https://inventory.local" is running. You may have to go to "https://inventory.local" and choose to verfiy the SSL cert in order for the listing of sites to show up. 
 
 ## App Structure 
 ```
@@ -69,15 +53,17 @@ The CSS files should be semantic in that I can know what CSS they contain by rea
 At the root of the application, we have the HTML files used for navigation. In the future, there will probably only be one HTML file, "index.html", that acts as a front controller and the body of the page would be loaded and swtiched via AJAX. For now, it is simpler just to have a separate HTML file per path/route. 
 
 - **index.html** - Homepage of the app which currently maps to a listing of site records.
-- **status.html** - Eventually will contain an overview of statuses relating to Atlas. 
+- **code.html** - A List of code assets with the ability to update, delete, or add new code assets. 
+- **update-sites.html** - A way to query sites for code assets and add/remove packages to the query results. 
+- **settings.html** - User credentials for talking to other applications or services. 
 
-Then there are other HTML files for pages. For instance, the "status.html" page is intended to list a quick check of the status of things like Apache, Celery, etc. that we can use when starting to debug an issue. "code.html" will be added in the future to list out code assets. 
+Not listed here, but inside "vue-examples.html" are several examples that come from the Vue documentation on how to create different types of components. It is left in the repo for reference, but it will be deleted later when we have a better grasp of how to use Vue. 
 
-Inside "vue-examples.html" are several examples that come from the Vue documentation on how to create different types of components. It is left in the repo for reference, but it will be deleted later when we have a better grasp of how to use Vue. 
+## Troubleshooting
 
-## Next Steps
+- **I can't see sites or code in the tables** - It is possible that the environment indicator, located in the top right of the screen, has not sent a value to other parts of the app trying to make calls to Atlas based on the environment. If you toggle between environments, e.g. local => dev => local, you should see sites/code coming up, if this was the issue. It is also possible that you need to visit "https://inventory.local/" in order to accept the self-signed SSL cert. After a certain timeframe, Chrome will forget that you've approved it and block the application's requests to Atlas. 
 
-This is a very intial version of the code. The "edit" button on the "index.html" page listing is planned to pop out more information where you can enter data into text fields, select boxes, etc. and then that to be updated. 
+- **I made an update to a site/code asset and nothing happened** - There could be many reasons that your update failed, but one of the most common is that one part of your update is not allowed, e.g. you entered the wrong commit hash or code already exists with the same repo and commit hash. Also, the etag could have changed. If you refresh the page, you should get an up-to-date etag for the code/site asset and be able to send your update successfully. 
 
 ## JS Nonsense Used
 
