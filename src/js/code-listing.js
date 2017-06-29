@@ -104,10 +104,10 @@ let codeCreateButton = new Vue({
         }
       };
 
-      let baseURL = localStorage.getItem('env');
+      let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
       atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
         .then(response =>
-          getCodeRecords(localStorage.getItem('env'))
+          getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
             .then(data => codeListing.gridData = data)
         );
 
@@ -124,7 +124,7 @@ let codeCreateButton = new Vue({
  */
 function getCodeRecords(env) {
   // Return a promise with formatted code data.
- return atlasRequest(localStorage.getItem('env'), 'code').then(function(data){
+ return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code').then(function(data){
     return formatCodeData(data);
   });
 }
@@ -186,7 +186,7 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
     }
   });
 
-  let baseURL = localStorage.getItem('env');
+  let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
   atlasRequest(baseURL, 'code/' + record['id'], query = '', method, JSON.stringify(formInput), record['etag']);
 }
 

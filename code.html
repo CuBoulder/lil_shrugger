@@ -99,7 +99,7 @@
    */
   $(document).ready(function () {
 
-    getCodeRecords(localStorage.getItem('env'))
+    getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
       .then(data => codeListing.gridData = data);
 
     // Get GitHub data to pass in.
