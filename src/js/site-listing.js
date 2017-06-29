@@ -98,7 +98,7 @@ let siteCreateButton = new Vue({
 function getSiteRecords(envURL = null) {
   // If no environment passed in, then get from local storage.
   if (envURL === null) {
-    let env = localStorage.getItem('env');
+    envURL = localStorage.getItem('env');
   }
 
   // Response is a Promise object so we must resolve it to get the data out.
