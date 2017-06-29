@@ -47,7 +47,7 @@ let codeCreateButton = new Vue({
     codeType: 'module',
     codeVersion: '',
     codeLabel: '',
-    isCurrent: "False",
+    isCurrent: false,
   },
   computed: {
     userInput: function () {
@@ -93,10 +93,18 @@ let codeCreateButton = new Vue({
       let repo = this.activeRepo;
       let branch = this.branchToAdd;
       let input = this.userInput;
+      let current = false;
 
       // Need to check for special code assets (drupal/express) and set data accordingly.
       if (repo.name === 'drupal-7.x') {
         repo.name = 'drupal';
+      }
+
+      // Need to deal with true/false for is_current.
+      if (input.is_current === true) {
+        current = "True";
+      } else {
+        current = "False";
       }
 
       let codeAsset = {
@@ -107,7 +115,7 @@ let codeCreateButton = new Vue({
           "code_type": input.type,
           "name": repo.name,
           "label": input.label,
-          "is_current": input.is_current
+          "is_current": current
         }
       };
 
@@ -117,6 +125,7 @@ let codeCreateButton = new Vue({
           getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
             .then(data => codeListing.gridData = data)
         );
+      bus.$emit('onMessage', ['You have created a code asset.', 'alert-success']);
 
       this.addCode = false;
     }
@@ -195,7 +204,12 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
   });
 
   let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
-  atlasRequest(baseURL, 'code/' + record['id'], query = '', method, JSON.stringify(formInput), record['etag']);
+  atlasRequest(baseURL, 'code/' + record['id'], query = '', method, JSON.stringify(formInput), record['etag'])
+    .then(response =>
+      getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+        .then(data => codeListing.gridData = data)
+    );
+  bus.$emit('onMessage', ['You have updated a code record. Code ID: ' + record['id'], 'alert-success']);
 }
 
 

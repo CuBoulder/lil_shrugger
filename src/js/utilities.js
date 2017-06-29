@@ -135,9 +135,11 @@ function deleteRecord(record) {
   // For now, just check for something in the site record that is different
   // than the code record.
   if (record['hash']) {
-    return updateCodeRecord([], record, 'DELETE');
+    updateCodeRecord([], record, 'DELETE');
+    return bus.$emit('onMessage', ['You have deleted a code asset: Code ID: ' + record['id'], 'alert-info']);
   }
-  return updateSiteRecord([], record, 'DELETE');
+  updateSiteRecord([], record, 'DELETE');
+  return bus.$emit('onMessage', ['You have deleted a site record: Site ID: ' + record['_id'], 'alert-info']);
 }
 
 /**
