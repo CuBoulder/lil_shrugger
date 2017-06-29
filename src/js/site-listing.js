@@ -152,14 +152,15 @@ function createSite() {
     "status": "pending"
   });
 
-  // @todo somehow provide a message to users whether this operation succeeded or failed.
-  atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data);
+  atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data)
+    .then(response =>
+      getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+        .then(data => siteListing.gridData = data)
+    );
   bus.$emit('onMessage', ['Successfully created a site.', 'alert-success']);
 
 
-  // @todo Find a way to load site records after a delay so you don't have to guess whether it worked.
-  //sleep(3000);
-  //getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
+
 }
 
 /**
@@ -180,8 +181,12 @@ function updateSiteRecord(formData, record, method = 'PATCH') {
   });
 
   let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
-  atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
-  bus.$emit('onMessage', ['You have deleted a site.', 'alert-info']);
+  atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag'])
+    .then(response =>
+      getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+        .then(data => siteListing.gridData = data)
+    );
+  bus.$emit('onMessage', ['You have updated a site record. Site ID: ' + record['_id'], 'alert-success']);
 }
 
 function deleteSite(site) {
