@@ -48,7 +48,7 @@ Vue.component('atlas-navbar', {
       this.finaled = false;
     },
     changeEnv: function (event) {
-      localStorage.setItem('env', siteConfig.atlasEnvironments[event.target.value]);
+      localStorage.setItem('env', event.target.value);
       bus.$emit('switchEnv', event.target.value);
     }
   }

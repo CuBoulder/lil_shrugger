@@ -71,7 +71,7 @@
    */
   $(document).ready(function () {
     let cachedRecords = {};
-    getSiteRecords(localStorage.getItem('env'))
+    getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
       .then(function (data) {
         siteListing.gridData = data;
         // Cache the result until the next request.

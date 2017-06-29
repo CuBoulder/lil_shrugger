@@ -222,8 +222,9 @@ Vue.component('listing', {
       this.cancelEdit();
     },
     link: function (value, key) {
+      console.log(localStorage.getItem('env'));
       if (key === 'path') {
-        return '<a href="' + localStorage.getItem('host') + value + '">' + value + '</a>';
+        return '<a href="' + siteConfig['expressEnvironments'][localStorage.getItem('env')] + value + '">' + value + '</a>';
       }
       return value;
     },

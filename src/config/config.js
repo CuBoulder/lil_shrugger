@@ -18,8 +18,20 @@ siteConfig['atlasEnvironments'] = {
 
 // Need to set default environment.
 if (localStorage.getItem('env') === null) {
-  localStorage.setItem('env', 'https://inventory.local/');
+  localStorage.setItem('env', 'Local');
 }
+
+/**
+ * These URLs will be used for site links in the listing table.
+ *
+ * @type {{Local: string, Dev: string, Test: string, Prod: string}}
+ */
+siteConfig['expressEnvironments'] = {
+  Local: 'https://express.local/',
+  Dev: 'https://www-dev.colorado.edu/',
+  Test: 'https://www-test.colorado.edu/',
+  Prod: 'https://www.colorado.edu/'
+};
 
 /**
  * The select options can be used in the listing component for when the data/options

@@ -50,7 +50,7 @@ let siteListing = new Vue({
     search: function (query) {
 
       // Make request to Atlas.
-      let baseURL = localStorage.getItem('env');
+      let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
       let response = atlasRequest(baseURL, 'statistics', query);
 
       // Response is a Promise object so we must resolve it to get the data out.
@@ -100,7 +100,7 @@ let siteCreateButton = new Vue({
 function getSiteRecords(envURL = null) {
   // If no environment passed in, then get from local storage.
   if (envURL === null) {
-    envURL = localStorage.getItem('env');
+    envURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
   }
 
   // Response is a Promise object so we must resolve it to get the data out.
@@ -145,7 +145,7 @@ function formatSiteData(data) {
  * Creates a site record.
  */
 function createSite() {
-  let baseURL = localStorage.getItem('env');
+  let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
   let endpoint = 'sites';
 
   let data = JSON.stringify({
@@ -179,7 +179,7 @@ function updateSiteRecord(formData, record, method = 'PATCH') {
     }
   });
 
-  let baseURL = localStorage.getItem('env');
+  let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
   atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
   bus.$emit('onMessage', ['You have deleted a site.', 'alert-info']);
 }
