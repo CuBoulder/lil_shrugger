@@ -16,11 +16,11 @@ codeListing = new Vue({
   el: '#code-listing',
   data: {
     searchQuery: '',
-    gridColumns: ['id', 'label', 'name', 'version', 'code_type', 'hash'],
+    gridColumns: ['id', 'label', 'name', 'version', 'code_type', 'is_current', 'hash'],
     gridData: [],
     callback: 'updateCodeRecord',
-    editKeys: ['label', 'name', 'version', 'code_type', 'hash'],
-    selectKeys: ['code_type'],
+    editKeys: ['label', 'name', 'version', 'code_type', 'is_current', 'hash'],
+    selectKeys: ['code_type', 'is_current'],
   },
   created: function () {
     bus.$on('switchEnv', function (env) {
@@ -36,7 +36,7 @@ codeListing = new Vue({
 let codeCreateButton = new Vue({
   el: '#create-code',
   data: {
-    selectOptions: siteConfig.selectOptions.type,
+    selectOptions: siteConfig.selectOptions,
     repos: [],
     branches: [],
     branchToAdd: {},
@@ -44,9 +44,10 @@ let codeCreateButton = new Vue({
     ready: false,
     branchReady: false,
     addCode: false,
-    codeType: '',
+    codeType: 'module',
     codeVersion: '',
     codeLabel: '',
+    isCurrent: "False",
   },
   computed: {
     userInput: function () {
@@ -54,6 +55,7 @@ let codeCreateButton = new Vue({
         version: this.codeVersion,
         type: this.codeType,
         label: this.codeLabel,
+        is_current: this.isCurrent,
       };
     }
   },
@@ -92,15 +94,20 @@ let codeCreateButton = new Vue({
       let branch = this.branchToAdd;
       let input = this.userInput;
 
+      // Need to check for special code assets (drupal/express) and set data accordingly.
+      if (repo.name === 'drupal-7.x') {
+        repo.name = 'drupal';
+      }
+
       let codeAsset = {
         "git_url": repo.git_url,
         "commit_hash": branch.commit.sha,
         "meta": {
           "version": input.version,
           "code_type": input.type,
-          "name": branch.name,
+          "name": repo.name,
           "label": input.label,
-          "is_current": true
+          "is_current": input.is_current
         }
       };
 
@@ -146,6 +153,7 @@ function formatCodeData(data) {
       item['code_type'] = element.meta.code_type;
       item['name'] = element.meta.name;
       item['version'] = element.meta.version;
+      item['is_current'] = element.meta.is_current;
       item['hash'] = element.commit_hash;
       item['etag'] = element._etag;
       item['id'] = element._id;
