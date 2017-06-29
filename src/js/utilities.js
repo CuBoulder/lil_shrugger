@@ -159,7 +159,8 @@ Vue.component('listing', {
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
     callMeMaybe: function (callback, entry) {
-      let formData = document.querySelectorAll('[data-id=' + entry.id + ']');
+      let formData = document.querySelectorAll('[data-id="' + entry.id + '"]');
+      console.log(formData);
       window[callback](formData, entry);
       this.cancelEdit();
     },

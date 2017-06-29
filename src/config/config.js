@@ -29,5 +29,5 @@ if (localStorage.getItem('env') === null) {
  */
 siteConfig['selectOptions'] = {
   status: ['available', 'installed', 'launching'],
-  type: ['module', 'core', 'profile'],
+  code_type: ['module', 'core', 'profile'],
 };

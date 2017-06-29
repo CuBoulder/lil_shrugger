@@ -16,11 +16,11 @@ codeListing = new Vue({
   el: '#code-listing',
   data: {
     searchQuery: '',
-    gridColumns: ['id', 'label', 'type', 'hash'],
+    gridColumns: ['id', 'label', 'name', 'version', 'code_type', 'hash'],
     gridData: [],
     callback: 'updateCodeRecord',
-    editKeys: ['label', 'hash', 'type'],
-    selectKeys: ['type'],
+    editKeys: ['label', 'name', 'version', 'code_type', 'hash'],
+    selectKeys: ['code_type'],
   },
   created: function () {
     bus.$on('switchEnv', function (env) {
@@ -140,11 +140,12 @@ function formatCodeData(data) {
   data.forEach(function (element, index) {
     let item = [];
     item['label'] = element.meta.label;
-    item['type'] = element.meta.code_type;
-    item['id'] = element.meta.name;
+    item['code_type'] = element.meta.code_type;
+    item['name'] = element.meta.name;
+    item['version'] = element.meta.version;
     item['hash'] = element.commit_hash;
     item['etag'] = element._etag;
-    item['_id'] = element._id;
+    item['id'] = element._id;
     formattedData.push(item);
   });
 
@@ -182,7 +183,7 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
   });
 
   let baseURL = localStorage.getItem('env');
-  atlasRequest(baseURL, 'code/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
+  atlasRequest(baseURL, 'code/' + record['id'], query = '', method, JSON.stringify(formInput), record['etag']);
 }
 
 
