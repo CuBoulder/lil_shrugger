@@ -157,9 +157,6 @@ function formatCodeData(data) {
   // This is why there are two loops through the data.
   data.forEach(function (elements, index) {
     elements.forEach(function (element, index) {
-      // Need to capitalize the first letter of is_current to match table.
-     //let current = element.meta.is_current.charAt(0).toUpperCase() + element.meta.is_current.slice(1);
-
       let item = [];
       item['label'] = element.meta.label;
       item['code_type'] = element.meta.code_type;
@@ -199,11 +196,6 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
         if (!formInput['meta']) {
           formInput['meta'] = {};
         }
-
-        // Deal with true/false for is_current.
-        console.log(record);
-        console.log(value);
-
         formInput['meta'][value['name']] = value['value'];
       } else {
         formInput[value['name']] = value['value'];
@@ -211,7 +203,6 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
     }
   });
 
-  console.log('got here');
   let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
   atlasRequest(baseURL, 'code/' + record['id'], query = '', method, JSON.stringify(formInput), record['etag'])
     .then(response =>
