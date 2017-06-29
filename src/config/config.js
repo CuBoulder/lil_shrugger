@@ -42,4 +42,5 @@ siteConfig['expressEnvironments'] = {
 siteConfig['selectOptions'] = {
   status: ['available', 'installed', 'launching'],
   code_type: ['module', 'core', 'profile'],
+  is_current: ['True', 'False'],
 };

@@ -68,7 +68,13 @@
         </select>
         <label for="code_type">Code Type:</label>
         <select name="code_type" id="code_type" v-model="codeType">
-          <option v-for="anOption in selectOptions" :value="anOption">
+          <option v-for="anOption in selectOptions.code_type" :value="anOption">
+            {{anOption}}
+          </option>
+        </select>
+        <label for="is_current">Is Current:</label>
+        <select name="is_current" id="is_current" v-model="isCurrent">
+          <option v-for="anOption in selectOptions.is_current" :value="anOption">
             {{anOption}}
           </option>
         </select>

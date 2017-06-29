@@ -217,12 +217,10 @@ Vue.component('listing', {
     },
     callMeMaybe: function (callback, entry) {
       let formData = document.querySelectorAll('[data-id="' + entry.id + '"]');
-      console.log(formData);
       window[callback](formData, entry);
       this.cancelEdit();
     },
     link: function (value, key) {
-      console.log(localStorage.getItem('env'));
       if (key === 'path') {
         return '<a href="' + siteConfig['expressEnvironments'][localStorage.getItem('env')] + value + '">' + value + '</a>';
       }
