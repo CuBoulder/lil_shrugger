@@ -125,7 +125,7 @@ let codeCreateButton = new Vue({
 function getCodeRecords(env) {
   // Return a promise with formatted code data.
  return atlasRequest(localStorage.getItem('env'), 'code').then(function(data){
-    return formatCodeData(data._items);
+    return formatCodeData(data);
   });
 }
 
@@ -137,16 +137,20 @@ function getCodeRecords(env) {
 function formatCodeData(data) {
   let formattedData = [];
 
-  data.forEach(function (element, index) {
-    let item = [];
-    item['label'] = element.meta.label;
-    item['code_type'] = element.meta.code_type;
-    item['name'] = element.meta.name;
-    item['version'] = element.meta.version;
-    item['hash'] = element.commit_hash;
-    item['etag'] = element._etag;
-    item['id'] = element._id;
-    formattedData.push(item);
+  // Data can be a nested array if it has paging links.
+  // This is why there are two loops through the data.
+  data.forEach(function (elements, index) {
+    elements.forEach(function (element, index) {
+      let item = [];
+      item['label'] = element.meta.label;
+      item['code_type'] = element.meta.code_type;
+      item['name'] = element.meta.name;
+      item['version'] = element.meta.version;
+      item['hash'] = element.commit_hash;
+      item['etag'] = element._etag;
+      item['id'] = element._id;
+      formattedData.push(item);
+    });
   });
 
   return formattedData;
