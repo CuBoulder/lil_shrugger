@@ -85,7 +85,7 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
 
           // Check if more pages exist.
           if (data._links.next) {
-            return recursiveFun(finalData, data._links.next.href);
+            return recursiveFetch(finalData, data._links.next.href);
           } else {
             return finalData;
           }
@@ -200,6 +200,9 @@ Vue.component('listing', {
         })
       }
       return data
+    },
+    resultCount: function () {
+      return this.filteredData.length;
     }
   },
   filters: {

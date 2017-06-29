@@ -58,8 +58,10 @@ let siteListing = new Vue({
 
         // Get array only of site IDs to check from stats query.
         let siteIds = [];
-        objects._items.forEach(function (element, index) {
-          siteIds.push(element['site']);
+        objects.forEach(function (elements, index) {
+          elements.forEach(function (element, index) {
+            siteIds.push(element['site']);
+          });
         });
 
         // Filter results by using the site ID stored in stats records.
