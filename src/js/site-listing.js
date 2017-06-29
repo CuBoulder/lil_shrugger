@@ -102,10 +102,8 @@ function getSiteRecords(envURL = null) {
   }
 
   // Response is a Promise object so we must resolve it to get the data out.
-  return atlasRequest(envURL, 'sites').then(function (data) {
-    // Format site records for display.
-    return formatSiteData(data._items);
-  });
+  return atlasRequest(envURL, 'sites')
+    .then(data => formatSiteData(data));
 }
 
 /**
@@ -116,23 +114,26 @@ function getSiteRecords(envURL = null) {
 function formatSiteData(data) {
   let formattedData = [];
 
-  data.forEach(function (element, index) {
+  // Data can be a nested array if it has paging links.
+  // This is why there are two loops through the data.
+  data.forEach(function (elements, index) {
+    elements.forEach(function (element, index) {
+      // Format date.
+      var date = new Date(element._updated);
+      var options = {
+        weekday: "long", year: "numeric", month: "short",
+        day: "numeric", hour: "2-digit", minute: "2-digit"
+      };
 
-    // Format date.
-    var date = new Date(element._updated);
-    var options = {
-      weekday: "long", year: "numeric", month: "short",
-      day: "numeric", hour: "2-digit", minute: "2-digit"
-    };
-
-    let item = [];
-    item['id'] = element.sid;
-    item['path'] = element.path;
-    item['status'] = element.status;
-    item['updated'] = date.toLocaleTimeString("en-us", options);
-    item['etag'] = element._etag;
-    item['_id'] = element._id;
-    formattedData.push(item);
+      let item = [];
+      item['id'] = element.sid;
+      item['path'] = element.path;
+      item['status'] = element.status;
+      item['updated'] = date.toLocaleTimeString("en-us", options);
+      item['etag'] = element._etag;
+      item['_id'] = element._id;
+      formattedData.push(item);
+    });
   });
 
   return formattedData;
