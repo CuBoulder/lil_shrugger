@@ -151,13 +151,12 @@ function createSite() {
 
   // @todo somehow provide a message to users whether this operation succeeded or failed.
   atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data);
-  alert.newAlert('Successfully created a site.', 'alert-success');
+  bus.$emit('onMessage', ['Successfully created a site.', 'alert-success']);
 
 
   // @todo Find a way to load site records after a delay so you don't have to guess whether it worked.
   //sleep(3000);
   //getSiteRecords(document.querySelector('.env-list .selected').innerHTML);
-  alert.actionReload();
 }
 
 /**
@@ -179,8 +178,7 @@ function updateSiteRecord(formData, record, method = 'PATCH') {
 
   let baseURL = localStorage.getItem('env');
   atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag']);
-  alert.newAlert('You have deleted a site.', 'alert-info');
-  alert.actionReload();
+  bus.$emit('onMessage', ['You have deleted a site.', 'alert-info']);
 }
 
 function deleteSite(site) {
