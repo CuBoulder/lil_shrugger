@@ -107,7 +107,7 @@ let codeCreateButton = new Vue({
       let baseURL = localStorage.getItem('env');
       atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
         .then(response =>
-          getCodeRecords(document.querySelector('.env-list .selected').innerHTML)
+          getCodeRecords(localStorage.getItem('env'))
             .then(data => codeListing.gridData = data)
         );
 
