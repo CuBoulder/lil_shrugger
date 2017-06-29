@@ -27,7 +27,7 @@ Vue.component('atlas-navbar', {
   },
   computed: {
     selectedEnv: function () {
-      return localStorage.getItem('env');
+      return siteConfig.atlasEnvironments[localStorage.getItem('env')];
     }
   },
   /*
