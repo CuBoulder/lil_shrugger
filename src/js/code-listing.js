@@ -1,4 +1,3 @@
-
 // Imports Site Listing HTML into DOM of pages using it.
 var link = document.querySelector('link[href="src/partials/listing.html"]');
 var content = link.import;
@@ -16,10 +15,10 @@ codeListing = new Vue({
   el: '#code-listing',
   data: {
     searchQuery: '',
-    gridColumns: ['id', 'label', 'name', 'version', 'code_type', 'is_current', 'hash'],
+    gridColumns: ['id', 'label', 'name', 'version', 'code_type', 'is_current', 'commit_hash'],
     gridData: [],
     callback: 'updateCodeRecord',
-    editKeys: ['label', 'name', 'version', 'code_type', 'is_current', 'hash'],
+    editKeys: ['label', 'name', 'version', 'code_type', 'is_current', 'commit_hash'],
     selectKeys: ['code_type', 'is_current'],
   },
   created: function () {
@@ -101,11 +100,13 @@ let codeCreateButton = new Vue({
       }
 
       // Need to deal with true/false for is_current.
-      if (input.is_current === true) {
-        current = "True";
-      } else {
-        current = "False";
-      }
+      /*
+       if (input.is_current === true) {
+       current = true;
+       } else {
+       current = "False";
+       }
+       */
 
       let codeAsset = {
         "git_url": repo.git_url,
@@ -125,7 +126,10 @@ let codeCreateButton = new Vue({
           getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
             .then(data => codeListing.gridData = data)
         );
-      bus.$emit('onMessage', {text: 'You have created a code asset.', type: 'alert-success'});
+      bus.$emit('onMessage', {
+        text: 'You have created a code asset.',
+        type: 'alert-success'
+      });
 
       this.addCode = false;
     }
@@ -146,7 +150,7 @@ function getCodeRecords(env) {
   }
 
   // Return a promise with formatted code data.
- return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code', query).then(function(data){
+  return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code', query).then(function (data) {
     return formatCodeData(data);
   });
 }
@@ -169,7 +173,7 @@ function formatCodeData(data) {
       item['name'] = element.meta.name;
       item['version'] = element.meta.version;
       item['is_current'] = element.meta.is_current;
-      item['hash'] = element.commit_hash;
+      item['commit_hash'] = element.commit_hash;
       item['etag'] = element._etag;
       item['id'] = element._id;
       formattedData.push(item);
@@ -202,7 +206,17 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
         if (!formInput['meta']) {
           formInput['meta'] = {};
         }
-        formInput['meta'][value['name']] = value['value'];
+
+        // Need to deal with booleans for is_current.
+        if (value['name'] === 'is_current') {
+          if (value['value'] === 'true') {
+            formInput['meta'][value['name']] = true;
+          } else {
+            formInput['meta'][value['name']] = false;
+          }
+        } else {
+          formInput['meta'][value['name']] = value['value'];
+        }
       } else {
         formInput[value['name']] = value['value'];
       }
@@ -215,7 +229,10 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
       getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
         .then(data => codeListing.gridData = data)
     );
-  bus.$emit('onMessage', {text: 'You have updated a code record. Code ID: ' + record['id'], alertType: 'alert-success'});
+  bus.$emit('onMessage', {
+    text: 'You have updated a code record. Code ID: ' + record['id'],
+    alertType: 'alert-success'
+  });
 }
 
 
