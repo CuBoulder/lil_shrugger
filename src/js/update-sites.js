@@ -1,12 +1,3 @@
-/**
- * Imports Site Listing HTML into DOM of pages using it.
- *
- * @type {Element}
- */
-var link = document.querySelector('link[href="src/partials/listing.html"]');
-var content = link.import;
-var el = content.querySelector('script');
-document.querySelector('body').appendChild(el.cloneNode(true));
 
 let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
 

@@ -1,22 +1,3 @@
-/**
- * Imports Site Listing HTML into DOM of pages using it.
- *
- * @type {Element}
- */
-var link = document.querySelector('link[href="src/partials/listing.html"]');
-var content = link.import;
-var el = content.querySelector('script');
-document.querySelector('body').appendChild(el.cloneNode(true));
-
-/**
- * Imports Button HTML into DOM of pages using it.
- *
- * @type {Element}
- */
-link = document.querySelector('link[href="src/partials/confirm-button.html"]');
-content = link.import;
-el = content.querySelector('script');
-document.querySelector('body').appendChild(el.cloneNode(true));
 
 // Place site data in table via site-listing template located in site-listing.html.
 let siteListing = new Vue({

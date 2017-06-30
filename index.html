@@ -16,9 +16,6 @@
       media="all" rel="stylesheet"/>
   <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
 
-  <link rel="import" href="src/partials/navbar.html">
-  <link rel="import" href="src/partials/listing.html">
-  <link rel="import" href="src/partials/confirm-button.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -59,6 +56,94 @@
   </confirm-button>
 </div>
 </div>
+<!-- Static navbar -->
+<script type="text/x-template" id="a-navbar">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed"
+                data-toggle="collapse" data-target="#navbar"
+                aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand">Atlas Front-end</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li v-for="route in routes"><a :href="route.path">{{route.name}}</a></li>
+        </ul>
+        <div class="nav navbar-nav navbar-right">
+          <div class="styled-select slate">
+            <select name="selectEnv" id="selectEnv" @change="changeEnv($event)">
+              <option v-for="(env, index) in environments" :value="index" :selected="selectedEnv == env ? true : null">
+                {{index}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+  </nav>
+</script>
+<!-- component template -->
+<script type="text/x-template" id="listing">
+  <div class="lisitng-wrapper">
+    <div class="result-count">Result Count: {{resultCount}}</div>
+    <table class="table">
+      <thead>
+      <tr>
+        <th v-for="key in columns"
+            @click="sortBy(key)"
+            :class="{ active: sortKey == key }">
+          {{ key | capitalize }}
+          <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+          </span>
+        </th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(entry, index) in filteredData" scope="row">
+        <!-- Row with data and edit/inputs -->
+        <td v-for="key in columns">
+          <div v-if="showDefault(entry, key)" v-html="link(entry[key],key)"></div>
+          <div v-if="selectType(key)">
+            <select v-if="showEdit(entry, key)" :name="key" :data-id="entry.id">
+              <option v-for="anOption in selectOptions[key]" :value="anOption" :selected=" entry[key] == anOption ? true : null">{{anOption}}</option>
+            </select>
+          </div>
+          <div v-else>
+            <input v-if="showEdit(entry, key)" type="text" :name="key" :data-id="entry.id" :value="entry[key]">
+          </div>
+        </td>
+        <!-- @todo Only add Edit option if there are editKeys -->
+        <td>
+          <button v-if="showDefault(entry)" class="btn btn-default" v-on:click="makeEdit(entry)" :data-id="entry.id">Edit</button>
+          <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="callMeMaybe(callback, entry)" :data-id="entry.id">Send</button>
+          <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="cancelEdit()" :data-id="entry.id">Cancel</button>
+          <confirm-button v-if="showEdit(entry)" label="Delete"
+                          callback="deleteRecord"
+                          :params="entry">
+          </confirm-button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</script>
+<!-- component template -->
+<script type="text/x-template" id="confirm-button">
+  <div class="button-wrapper">
+    <button class="btn btn-primary" v-if="!confirmed" @click="confirm()">{{label}}</button>
+    <button class="btn btn-warning" v-if="confirmed && !finaled" @click="final()">Set?</button>
+    <button class="btn btn-danger" v-if="finaled" @click="callMeMaybe(callback, params)">Fire!</button>
+    <button class="btn btn-default" v-if="finaled || confirmed" @click="cancel()">Cancel</button>
+  </div>
+</script>
+
 <script src="src/config/config.js"></script>
 <script src="src/config/routes.js"></script>
 <script src="src/js/utilities.js"></script>

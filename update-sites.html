@@ -11,9 +11,6 @@
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all" rel="stylesheet"/>
   <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
 
-  <link rel="import" href="src/partials/navbar.html">
-  <link rel="import" href="src/partials/listing.html">
-  <link rel="import" href="src/partials/confirm-button.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -23,7 +20,7 @@
   </atlas-navbar>
 </div>
 <div id="list-full-sites" class="container">
-  <message-area id="alert" :message="message" :class="alertType" class="alert" v-if="message.length > 0"></message-area>
+  <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <form id="search" class="row">
     <div class="form-group">
       <label for="querySites">Search</label>
@@ -66,6 +63,38 @@
   <button class="btn btn-primary" id="update-packages" @click="sendToAtlas">Update Packages</button>
   <p></p>
 </div>
+<!-- Static navbar -->
+<script type="text/x-template" id="a-navbar">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed"
+                data-toggle="collapse" data-target="#navbar"
+                aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand">Atlas Front-end</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li v-for="route in routes"><a :href="route.path">{{route.name}}</a></li>
+        </ul>
+        <div class="nav navbar-nav navbar-right">
+          <div class="styled-select slate">
+            <select name="selectEnv" id="selectEnv" @change="changeEnv($event)">
+              <option v-for="(env, index) in environments" :value="index" :selected="selectedEnv == env ? true : null">
+                {{index}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+  </nav>
+</script>
 
 <script src="src/config/config.js"></script>
 <script src="src/config/routes.js"></script>

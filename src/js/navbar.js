@@ -1,16 +1,5 @@
 
 /**
- * Import navbar HTML and insert into DOM of pages.
- *
- * @type {Element}
- */
-var link = document.querySelector('link[href="src/partials/navbar.html"]');
-var content = link.import;
-var el = content.querySelector('script');
-document.querySelector('body').appendChild(el.cloneNode(true));
-
-
-/**
  * Creates a button component with comfirm step.
  */
 Vue.component('atlas-navbar', {
