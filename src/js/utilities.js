@@ -134,7 +134,7 @@ function sleep(ms) {
 function deleteRecord(record) {
   // For now, just check for something in the site record that is different
   // than the code record.
-  if (record['hash']) {
+  if (record['commit_hash']) {
     updateCodeRecord([], record, 'DELETE');
     return bus.$emit('onMessage', {text: 'You have deleted a code asset: Code ID: ' + record['id'], alertType: 'alert-info'});
   }
