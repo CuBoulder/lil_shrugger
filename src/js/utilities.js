@@ -136,10 +136,10 @@ function deleteRecord(record) {
   // than the code record.
   if (record['hash']) {
     updateCodeRecord([], record, 'DELETE');
-    return bus.$emit('onMessage', ['You have deleted a code asset: Code ID: ' + record['id'], 'alert-info']);
+    return bus.$emit('onMessage', {text: 'You have deleted a code asset: Code ID: ' + record['id'], alertType: 'alert-info'});
   }
   updateSiteRecord([], record, 'DELETE');
-  return bus.$emit('onMessage', ['You have deleted a site record: Site ID: ' + record['_id'], 'alert-info']);
+  return bus.$emit('onMessage', {text: 'You have deleted a site record: Site ID: ' + record['_id'], alertType: 'alert-info'});
 }
 
 /**
@@ -302,25 +302,31 @@ Vue.component('confirm-button', {
 });
 
 Vue.component('message-area', {
-  template: '<p :class="alertType">{{message}}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>',
-  props: [
-    'message',
-    'alertType'
-  ]
+  template: '<div><div :class="[bsAlert, message.alertType]" v-for="(message, index) in messages">{{message.text}}<button type="button" class="close" aria-label="Close" @click="close(index)"><span aria-hidden="true">&times;</span></button></div></div>',
+  props: {
+    messages: Array,
+    bsAlert: {
+      type: String,
+      default: 'alert'
+    }
+  },
+  methods: {
+    close: function (index) {
+      this.messages.splice(index, 1);
+    }
+  }
 });
 
 var alert = new Vue({
   el: '#alert',
   data: {
-    message: '',
-    alertType: ''
+    messages: []
   },
   created() {
-    // To use this anywhere: bus.$emit('onMessage', ['You have deleted a site.', 'alert-info']);
-    // You can use any available bootstrap alert: alert-info, alert-success, alert-danger, etc.
-    bus.$on('onMessage', ([message, alertType]) => {
-      alert.message = message;
-      alert.alertType = alertType;
+    // To use this anywhere: bus.$emit('onMessage', {text: 'You have deleted a site.', alertType: 'alert-info'});
+    // You can use any available bootstrap alert classes: alert-info, alert-success, alert-danger, etc.
+    bus.$on('onMessage', function (params) {
+      alert.messages.push(params);
     });
   }
 });

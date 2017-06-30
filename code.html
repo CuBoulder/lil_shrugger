@@ -28,7 +28,7 @@
   </atlas-navbar>
 </div>
 <div id="app" class="container">
-  <message-area id="alert" :message="message" :class="alertType" class="alert" v-if="message.length > 0"></message-area>
+  <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="code-listing">
     <form id="search">
       <div class="form-group">

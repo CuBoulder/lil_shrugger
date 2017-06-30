@@ -103,8 +103,14 @@ function getSiteRecords(envURL = null) {
     envURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
   }
 
+  // Check for query to add to code request.
+  let query = localStorage.getItem('sites-query');
+  if (query === null) {
+    query = '';
+  }
+
   // Response is a Promise object so we must resolve it to get the data out.
-  return atlasRequest(envURL, 'sites')
+  return atlasRequest(envURL, 'sites', query)
     .then(data => formatSiteData(data));
 }
 
@@ -157,7 +163,7 @@ function createSite() {
       getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
         .then(data => siteListing.gridData = data)
     );
-  bus.$emit('onMessage', ['Successfully created a site.', 'alert-success']);
+  bus.$emit('onMessage', {text: 'Successfully created a site.', alertType: 'alert-success'});
 
 
 
@@ -186,7 +192,7 @@ function updateSiteRecord(formData, record, method = 'PATCH') {
       getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
         .then(data => siteListing.gridData = data)
     );
-  bus.$emit('onMessage', ['You have updated a site record. Site ID: ' + record['_id'], 'alert-success']);
+  bus.$emit('onMessage', {text: 'You have updated a site record. Site ID: ' + record['_id'], alertType: 'alert-success'});
 }
 
 function deleteSite(site) {

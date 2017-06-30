@@ -20,36 +20,47 @@
       :environments="environments">
   </atlas-navbar>
 </div>
-<div id="user-settings" class="container">
-  <form>
-    <fieldset class="form-group">
-      <label for="username">Atlas Username</label>
-      <input type="text" id="username" class="form-control" name="username" v-model="username">
-      <label for="password">Atlas Password</label>
-      <input type="password" id="password" class="form-control" name="password" v-model="password">
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="base-url">Base URL</label>
-      <input type="text" id="base-url" class="form-control" name="host" v-model="baseURL">
-      <p class="form-text text-muted">
-        If you have this application in sub-directory of your virtual host, then add with beginning slash, e.g "/shrugger".
-        If you have this application at the root-level, then leave blank.
-      </p>
-    </fieldset>
-    <fieldset class="form-group">
-      <label for="github-username">GitHub Username</label>
-      <input type="text" id="github-username" class="form-control" name="github-username" v-model="gitHub.username">
-      <label for="github-token">GitHub Token</label>
-      <input type="text" id="github-token" class="form-control" name="github-token" v-model="gitHub.token">
-      <p class="form-text text-muted">
-        Need to setup <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> under Personal access tokens.
-      </p>
-    </fieldset>
-    <button @click="saveCreds()" type="button" class="btn btn-primary">Save</button>
-  </form>
+<div class="container">
+  <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
+  <div id="user-settings">
+    <form>
+      <fieldset class="form-group">
+        <label for="username">Atlas Username</label>
+        <input type="text" id="username" class="form-control" name="username" v-model="username">
+        <label for="password">Atlas Password</label>
+        <input type="password" id="password" class="form-control" name="password" v-model="password">
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="base-url">Base URL</label>
+        <input type="text" id="base-url" class="form-control" name="host" v-model="baseURL">
+        <p class="form-text text-muted">
+          If you have this application in sub-directory of your virtual host, then add with beginning slash, e.g "/shrugger".
+          If you have this application at the root-level, then leave blank.
+        </p>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="github-username">GitHub Username</label>
+        <input type="text" id="github-username" class="form-control" name="github-username" v-model="gitHub.username">
+        <label for="github-token">GitHub Token</label>
+        <input type="text" id="github-token" class="form-control" name="github-token" v-model="gitHub.token">
+        <p class="form-text text-muted">
+          Need to setup
+          <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> under Personal access tokens.
+        </p>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="sites-query">Sites Query</label>
+        <input type="text" id="sites-query" class="form-control" name="sites-query" v-model="sitesQuery">
+        <label for="code-query">Code Query</label>
+        <input type="text" id="code-query" class="form-control" name="code-query" v-model="codeQuery">
+      </fieldset>
+      <button @click="saveCreds()" type="button" class="btn btn-primary">Save</button>
+    </form>
+  </div>
 </div>
 <script src="src/config/config.js"></script>
 <script src="src/config/routes.js"></script>
+<script src="src/js/utilities.js"></script>
 <script src="src/js/navbar.js"></script>
 <script type="text/javascript">
   let settingsForm = new Vue({
@@ -61,7 +72,9 @@
       gitHub: {
         username: localStorage.getItem('github-username'),
         token: localStorage.getItem('github-token')
-      }
+      },
+      sitesQuery: localStorage.getItem('sites-query'),
+      codeQuery: localStorage.getItem('code-query'),
     },
     methods: {
       saveCreds: function () {
@@ -70,6 +83,11 @@
         localStorage.setItem('baseURL', this.baseURL);
         localStorage.setItem('github-username', this.gitHub.username);
         localStorage.setItem('github-token', this.gitHub.token);
+        localStorage.setItem('sites-query', this.sitesQuery);
+        localStorage.setItem('code-query', this.codeQuery);
+
+        // Send success message.
+        bus.$emit('onMessage', {text: 'Successfully saved settings.', alertType:'alert-success'});
       }
     }
   });

@@ -125,7 +125,7 @@ let codeCreateButton = new Vue({
           getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
             .then(data => codeListing.gridData = data)
         );
-      bus.$emit('onMessage', ['You have created a code asset.', 'alert-success']);
+      bus.$emit('onMessage', {text: 'You have created a code asset.', type: 'alert-success'});
 
       this.addCode = false;
     }
@@ -139,8 +139,14 @@ let codeCreateButton = new Vue({
  * @param env
  */
 function getCodeRecords(env) {
+  // Check for query to add to code request.
+  let query = localStorage.getItem('code-query');
+  if (query === null) {
+    query = '';
+  }
+
   // Return a promise with formatted code data.
- return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code').then(function(data){
+ return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code', query).then(function(data){
     return formatCodeData(data);
   });
 }
@@ -209,7 +215,7 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
       getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
         .then(data => codeListing.gridData = data)
     );
-  bus.$emit('onMessage', ['You have updated a code record. Code ID: ' + record['id'], 'alert-success']);
+  bus.$emit('onMessage', {text: 'You have updated a code record. Code ID: ' + record['id'], alertType: 'alert-success'});
 }
 
 
