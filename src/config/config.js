@@ -44,3 +44,13 @@ siteConfig['selectOptions'] = {
   code_type: ['module', 'core', 'profile'],
   is_current: [true, false],
 };
+
+
+/**
+ * Need to set the default sites search query. The reason for doing this is that
+ * the inventory has records off of pool-A and alos legacy sites, which we might
+ * not care to see.
+ */
+if (localStorage.getItem('env') === null) {
+  localStorage.setItem('sites-query', '?where={"type":"express"}');
+}

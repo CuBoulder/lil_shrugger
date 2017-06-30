@@ -125,7 +125,7 @@ let codeCreateButton = new Vue({
           getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
             .then(data => codeListing.gridData = data)
         );
-      bus.$emit('onMessage', ['You have created a code asset.', 'alert-success']);
+      bus.$emit('onMessage', {text: 'You have created a code asset.', type: 'alert-success'});
 
       this.addCode = false;
     }
@@ -215,7 +215,7 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
       getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
         .then(data => codeListing.gridData = data)
     );
-  bus.$emit('onMessage', ['You have updated a code record. Code ID: ' + record['id'], 'alert-success']);
+  bus.$emit('onMessage', {text: 'You have updated a code record. Code ID: ' + record['id'], alertType: 'alert-success'});
 }
 
 

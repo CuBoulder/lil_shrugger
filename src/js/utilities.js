@@ -136,10 +136,10 @@ function deleteRecord(record) {
   // than the code record.
   if (record['hash']) {
     updateCodeRecord([], record, 'DELETE');
-    return bus.$emit('onMessage', ['You have deleted a code asset: Code ID: ' + record['id'], 'alert-info']);
+    return bus.$emit('onMessage', {text: 'You have deleted a code asset: Code ID: ' + record['id'], alertType: 'alert-info'});
   }
   updateSiteRecord([], record, 'DELETE');
-  return bus.$emit('onMessage', ['You have deleted a site record: Site ID: ' + record['_id'], 'alert-info']);
+  return bus.$emit('onMessage', {text: 'You have deleted a site record: Site ID: ' + record['_id'], alertType: 'alert-info'});
 }
 
 /**
@@ -323,8 +323,8 @@ var alert = new Vue({
     messages: []
   },
   created() {
-    // To use this anywhere: bus.$emit('onMessage', ['You have deleted a site.', 'alert-info']);
-    // You can use any available bootstrap alert: alert-info, alert-success, alert-danger, etc.
+    // To use this anywhere: bus.$emit('onMessage', {text: 'You have deleted a site.', alertType: 'alert-info'});
+    // You can use any available bootstrap alert classes: alert-info, alert-success, alert-danger, etc.
     bus.$on('onMessage', function (params) {
       alert.messages.push(params);
     });
