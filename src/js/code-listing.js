@@ -139,8 +139,14 @@ let codeCreateButton = new Vue({
  * @param env
  */
 function getCodeRecords(env) {
+  // Check for query to add to code request.
+  let query = localStorage.getItem('code-query');
+  if (query === null) {
+    query = '';
+  }
+
   // Return a promise with formatted code data.
- return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code').then(function(data){
+ return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code', query).then(function(data){
     return formatCodeData(data);
   });
 }
