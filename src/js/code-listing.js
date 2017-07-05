@@ -122,14 +122,15 @@ let codeCreateButton = new Vue({
 
       let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
       atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
-        .then(response =>
+        .then((response) => {
+          bus.$emit('onMessage', {
+            text: 'You have created a code asset.',
+            alertType: 'alert-success'
+          });
           getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
             .then(data => codeListing.gridData = data)
-        );
-      bus.$emit('onMessage', {
-        text: 'You have created a code asset.',
-        alertType: 'alert-success'
-      });
+        })
+        .catch(error => console.log(error));
 
       this.addCode = false;
     }
@@ -151,7 +152,10 @@ function getCodeRecords(env) {
 
   // Return a promise with formatted code data.
   return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code', query).then(function (data) {
-    return formatCodeData(data);
+    console.log(data);
+    let foo = formatCodeData(data);
+
+    return foo;
   });
 }
 

@@ -47,7 +47,13 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
     return fetch(baseURL + endpoint + query, myInit)
       .then(handleErrors)
       .then(response => response.json())
-      .catch(error =>  console.log(error))
+      .catch((error) => {
+        bus.$emit('onMessage', {
+          text: 'Error in Atlas Request: ' + error,
+          alertType: 'alert-danger'
+        });
+        console.log(error)
+      })
 
   } else {
 
@@ -90,6 +96,8 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
             // Trying to return a variable outside this lexical scope won't work
             // Since that would be declared synchronously.
             finalData.push(data._items);
+            console.log(data);
+            console.log('doopty');
 
             // Check if more pages exist.
             if (data._links.next) {
