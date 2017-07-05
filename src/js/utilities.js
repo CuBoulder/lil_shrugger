@@ -96,8 +96,6 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
             // Trying to return a variable outside this lexical scope won't work
             // Since that would be declared synchronously.
             finalData.push(data._items);
-            console.log(data);
-            console.log('doopty');
 
             // Check if more pages exist.
             if (data._links.next) {
@@ -128,9 +126,9 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
 function handleErrors(response) {
   if (!response.ok) {
     // @todo Figure out why the Vue object is being passed in as a response.
-    //console.log(response);
+    console.log(response);
     //bus.$emit('onMessage', {text: 'Error in Atlas Request: ' + response, alertType: 'alert-danger'});
-    throw Error(response.statusText);
+    //throw Error(response.statusText);
   }
   return response;
 }

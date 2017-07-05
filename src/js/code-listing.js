@@ -92,31 +92,21 @@ let codeCreateButton = new Vue({
       let repo = this.activeRepo;
       let branch = this.branchToAdd;
       let input = this.userInput;
-      let current = false;
 
       // Need to check for special code assets (drupal/express) and set data accordingly.
       if (repo.name === 'drupal-7.x') {
         repo.name = 'drupal';
       }
 
-      // Need to deal with true/false for is_current.
-      /*
-       if (input.is_current === true) {
-       current = true;
-       } else {
-       current = "False";
-       }
-       */
-
       let codeAsset = {
-        "git_url": repo.git_url,
+        "git_url": repo.ssh_url,
         "commit_hash": branch.commit.sha,
         "meta": {
           "version": input.version,
           "code_type": input.type,
           "name": repo.name,
           "label": input.label,
-          "is_current": current
+          "is_current": input.is_current
         }
       };
 
@@ -152,10 +142,7 @@ function getCodeRecords(env) {
 
   // Return a promise with formatted code data.
   return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code', query).then(function (data) {
-    console.log(data);
-    let foo = formatCodeData(data);
-
-    return foo;
+    return formatCodeData(data);
   });
 }
 
@@ -226,6 +213,12 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
       }
     }
   });
+
+  // If deleting a record, don't send a body.
+  let body = null;
+  if (method !== 'DELETE') {
+    body = JSON.stringify(formInput);
+  }
 
   let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
   atlasRequest(baseURL, 'code/' + record['id'], query = '', method, JSON.stringify(formInput), record['etag'])
