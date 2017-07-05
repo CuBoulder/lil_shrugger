@@ -128,7 +128,7 @@ let codeCreateButton = new Vue({
         );
       bus.$emit('onMessage', {
         text: 'You have created a code asset.',
-        type: 'alert-success'
+        alertType: 'alert-success'
       });
 
       this.addCode = false;
