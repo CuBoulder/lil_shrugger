@@ -3,9 +3,14 @@
  *
  * The baseURL variable comes from the settings.html page.
  */
+let baseURL = '';
+if (localStorage.getItem('baseURL') !== null) {
+  baseURL = localStorage.getItem('baseURL');
+}
+
 let routes = [
-  { name: 'Sites', path: localStorage.getItem('baseURL') + '/' },
-  { name: 'Code', path: localStorage.getItem('baseURL') + '/code.html' },
-  { name: 'Packages', path: localStorage.getItem('baseURL') + '/update-sites.html' },
-  { name: 'Settings', path: localStorage.getItem('baseURL') + '/settings.html' },
+  { name: 'Sites', path: baseURL + '/' },
+  { name: 'Code', path: baseURL + '/code.html' },
+  { name: 'Packages', path: baseURL + '/update-sites.html' },
+  { name: 'Settings', path: baseURL + '/settings.html' },
 ];
