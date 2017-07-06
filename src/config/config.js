@@ -51,6 +51,13 @@ siteConfig['selectOptions'] = {
  * the inventory has records off of pool-A and also legacy sites, which we might
  * not care to see.
  */
-if (localStorage.getItem('env') === null) {
+if (localStorage.getItem('sites-query') === null) {
   localStorage.setItem('sites-query', '?where={"type":"express"}');
+}
+
+/**
+ * Set the default code query to grab all code assets.
+ */
+if (localStorage.getItem('code-query') === null) {
+  localStorage.setItem('code-query', '');
 }
