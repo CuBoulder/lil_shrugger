@@ -26,10 +26,20 @@ function getGitHubRepos() {
     .then(handleErrors)
     .then(response => response.json())
     .then(function(data) {
-      // Sort by pushed at date.
-      data.sort(function (a, b) {
-        return new Date(b.pushed_at) - new Date(a.pushed_at);
-      });
+      // Sort alphabetically or by updated date if repo-listing = true.
+      if (localStorage.getItem('repo-listing') === "true") {
+        data.sort(function (a, b) {
+          return new Date(b.pushed_at) - new Date(a.pushed_at);
+        });
+      } else {
+        data.sort(function (a, b) {
+          if (a.name < b.name) {return -1}
+          if (a.name > b.name) {return 1}
+          return 0;
+        });
+      }
+
+
 
       // Add a default; otherwise user can't select first element.
       let first = {

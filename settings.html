@@ -54,6 +54,19 @@
         <label for="code-query">Code Query</label>
         <input type="text" id="code-query" class="form-control" name="code-query" v-model="codeQuery">
       </fieldset>
+      <fieldset class="form-group">
+        <h3>Repository Listing</h3>
+        <p class="form-text text-muted">
+          You can choose to have the repository list for creating code be chronologically by updated date instead of alphabetically.
+        </p>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" id="chronological" v-model="repoListing">
+            Chronological
+          </label>
+        </div>
+
+      </fieldset>
       <button @click="saveCreds()" type="button" class="btn btn-primary">Save</button>
     </form>
   </div>
@@ -63,6 +76,12 @@
 <script src="src/js/utilities.js"></script>
 <script src="src/js/navbar.js"></script>
 <script type="text/javascript">
+  // Need to convert from string to boolean.
+  let listing = false;
+  if (localStorage.getItem('repo-listing') === 'true') {
+    listing = true;
+  }
+
   let settingsForm = new Vue({
     el: '#user-settings',
     data: {
@@ -75,6 +94,7 @@
       },
       sitesQuery: localStorage.getItem('sites-query'),
       codeQuery: localStorage.getItem('code-query'),
+      repoListing: listing,
     },
     methods: {
       saveCreds: function () {
@@ -85,6 +105,7 @@
         localStorage.setItem('github-token', this.gitHub.token);
         localStorage.setItem('sites-query', this.sitesQuery);
         localStorage.setItem('code-query', this.codeQuery);
+        localStorage.setItem('repo-listing', this.repoListing);
 
         // Send success message.
         bus.$emit('onMessage', {text: 'Successfully saved settings.', alertType:'alert-success'});
