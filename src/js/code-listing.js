@@ -4,6 +4,11 @@ var content = link.import;
 var el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
+var link = document.querySelector('link[href="src/partials/row.html"]');
+var content = link.import;
+var el = content.querySelector('script');
+document.querySelector('body').appendChild(el.cloneNode(true));
+
 // Imports Button HTML into DOM of pages using it.
 link = document.querySelector('link[href="src/partials/confirm-button.html"]');
 content = link.import;
@@ -27,7 +32,11 @@ codeListing = new Vue({
         .then(function (data) {
           codeListing.gridData = data;
         });
-    })
+    });
+
+    bus.$on('updateCodeRecord', function (params) {
+      updateCodeRecord(params);
+    });
   }
 });
 
@@ -181,7 +190,7 @@ function formatCodeData(data) {
  * @param record
  * @param method
  */
-function updateCodeRecord(formData, record, method = 'PATCH') {
+function updateCodeRecord(params, method = 'PATCH') {
 
   // Define parts of code record that are nested in the meta field.
   let metaKeys = ['code_type', 'is_current', 'label', 'name', 'version'];
@@ -189,30 +198,37 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
   // Take input values from formData and put into array for comparison.
   // Only return values that are different.
   let formInput = {};
-  formData.forEach(function (value, index) {
-    if (value['name'] && record[value['name']] !== value['value']) {
+  for (key in params.previous) {
+
+    // Check if values are different to add to PATCH.
+    // Don't need to check etag since user can't change that on form.
+    if (params.current[key] !== params.previous[key] && key !== 'etag') {
+
       // Need to put meta fields in right place.
-      if (metaKeys.indexOf(value['name']) !== -1) {
+      if (metaKeys.indexOf(key) !== -1) {
         // Initialize meta field if it doesn't exist yet.
         if (!formInput['meta']) {
           formInput['meta'] = {};
         }
 
+        formInput['meta'][key] = params.current[key];
+
         // Need to deal with booleans for is_current.
-        if (value['name'] === 'is_current') {
-          if (value['value'] === 'true') {
-            formInput['meta'][value['name']] = true;
-          } else {
-            formInput['meta'][value['name']] = false;
-          }
-        } else {
-          formInput['meta'][value['name']] = value['value'];
-        }
+        /*
+         if (value['name'] === 'is_current') {
+         if (value['value'] === 'true') {
+         formInput['meta'][value['name']] = true;
+         } else {
+         formInput['meta'][value['name']] = false;
+         }
+         } else {
+         */
+
       } else {
-        formInput[value['name']] = value['value'];
+        formInput[key] = params.current[key];
       }
     }
-  });
+  }
 
   // If deleting a record, don't send a body.
   let body = null;
@@ -221,15 +237,16 @@ function updateCodeRecord(formData, record, method = 'PATCH') {
   }
 
   let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
-  atlasRequest(baseURL, 'code/' + record['id'], query = '', method, JSON.stringify(formInput), record['etag'])
-    .then(response =>
+  atlasRequest(baseURL, 'code/' + params.current.id, query = '', method, body, params.current.etag)
+    .then(function (response) {
+      bus.$emit('onMessage', {
+        text: 'You have updated a code record. Code ID: ' + params.current.id,
+        alertType: 'alert-success'
+      });
+
       getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
         .then(data => codeListing.gridData = data)
-    );
-  bus.$emit('onMessage', {
-    text: 'You have updated a code record. Code ID: ' + record['id'],
-    alertType: 'alert-success'
-  });
+    });
 }
 
 
