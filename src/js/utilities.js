@@ -221,6 +221,9 @@ Vue.component('listing', {
         }
       });
       return realData;
+    },
+    noResults: function () {
+      return this.filteredData.length < 1;
     }
   },
   filters: {
@@ -325,7 +328,9 @@ Vue.component('confirm-button', {
     callback: String,
     row: {
       type: Object,
-      default: {}
+      default: function () {
+        return {}
+      }
     },
     params: Object,
     confirmProp: {
