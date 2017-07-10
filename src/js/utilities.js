@@ -325,7 +325,9 @@ Vue.component('confirm-button', {
     callback: String,
     row: {
       type: Object,
-      default: {}
+      default: function () {
+        return {}
+      }
     },
     params: Object,
     confirmProp: {
