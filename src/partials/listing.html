@@ -21,6 +21,7 @@
       <tbody>
       <row v-for="(data2, index) in dataObjects"
            :data="data2"
+           :key="data2.id"
            :old-data="filteredData[index]"
            :edit-keys="editKeys"
            :select-keys="selectKeys"
