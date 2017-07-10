@@ -2,6 +2,9 @@
 <script type="text/x-template" id="listing">
   <div class="lisitng-wrapper">
     <div class="result-count">Result Count: {{resultCount}}</div>
+    <div v-if="noResults">
+      <div class="alert alert-info">Your query returned no results.</div>
+    </div>
     <table class="table">
       <thead>
       <tr>
