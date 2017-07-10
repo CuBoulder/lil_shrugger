@@ -2,6 +2,9 @@
 <script type="text/x-template" id="listing">
   <div class="lisitng-wrapper">
     <div class="result-count">Result Count: {{resultCount}}</div>
+    <div v-if="noResults">
+      <div class="alert alert-info">Your query returned no results.</div>
+    </div>
     <table class="table">
       <thead>
       <tr>
@@ -17,12 +20,13 @@
       </thead>
       <tbody>
       <row v-for="(data2, index) in dataObjects"
-        :data="data2"
-        :old-data="filteredData[index]"
-        :edit-keys="editKeys"
-        :select-keys="selectKeys"
-        :callback="callback"
-        :columns="columns">
+           :data="data2"
+           :key="data2.id"
+           :old-data="filteredData[index]"
+           :edit-keys="editKeys"
+           :select-keys="selectKeys"
+           :callback="callback"
+           :columns="columns">
       </row>
       </tbody>
     </table>

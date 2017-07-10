@@ -221,6 +221,9 @@ Vue.component('listing', {
         }
       });
       return realData;
+    },
+    noResults: function () {
+      return this.filteredData.length < 1;
     }
   },
   filters: {
