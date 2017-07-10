@@ -16,30 +16,14 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(entry, index) in filteredData" scope="row">
-        <!-- Row with data and edit/inputs -->
-        <td v-for="key in columns">
-          <div v-if="showDefault(entry, key)" v-html="link(entry[key],key)"></div>
-          <div v-if="selectType(key)">
-            <select v-if="showEdit(entry, key)" :name="key" :data-id="entry.id">
-              <option v-for="anOption in selectOptions[key]" :value="anOption" :selected=" entry[key] == anOption ? true : null">{{anOption}}</option>
-            </select>
-          </div>
-          <div v-else>
-            <input v-if="showEdit(entry, key)" type="text" :name="key" :data-id="entry.id" :value="entry[key]">
-          </div>
-        </td>
-        <!-- @todo Only add Edit option if there are editKeys -->
-        <td>
-          <button v-if="showDefault(entry)" class="btn btn-default" v-on:click="makeEdit(entry)" :data-id="entry.id">Edit</button>
-          <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="callMeMaybe(callback, entry)" :data-id="entry.id">Send</button>
-          <button v-if="showEdit(entry)" class="btn btn-default" v-on:click="cancelEdit()" :data-id="entry.id">Cancel</button>
-          <confirm-button v-if="showEdit(entry)" label="Delete"
-                          callback="deleteRecord"
-                          :params="entry">
-          </confirm-button>
-        </td>
-      </tr>
+      <row v-for="(data2, index) in dataObjects"
+        :data="data2"
+        :old-data="filteredData[index]"
+        :edit-keys="editKeys"
+        :select-keys="selectKeys"
+        :callback="callback"
+        :columns="columns">
+      </row>
       </tbody>
     </table>
   </div>

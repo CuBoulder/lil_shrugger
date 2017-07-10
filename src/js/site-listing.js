@@ -8,6 +8,11 @@ var content = link.import;
 var el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
+var link = document.querySelector('link[href="src/partials/row.html"]');
+var content = link.import;
+var el = content.querySelector('script');
+document.querySelector('body').appendChild(el.cloneNode(true));
+
 /**
  * Imports Button HTML into DOM of pages using it.
  *

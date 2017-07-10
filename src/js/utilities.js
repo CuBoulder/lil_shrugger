@@ -181,14 +181,6 @@ Vue.component('listing', {
     editKeys: Array,
     selectKeys: Array,
     callback: String,
-    editProp: {
-      type: Boolean,
-      default: false
-    },
-    editIdProp: {
-      type: String,
-      default: ''
-    }
   },
   data: function () {
     var sortOrders = {}
@@ -198,26 +190,14 @@ Vue.component('listing', {
     return {
       sortKey: '',
       sortOrders: sortOrders,
-      selectOptions: siteConfig.selectOptions,
-      editId: this.editIdProp,
-      edit: this.editProp
     }
   },
   computed: {
     filteredData: function () {
       var sortKey = this.sortKey
-      //var filterKey = this.filterKey && this.filterKey.toLowerCase()
       var order = this.sortOrders[sortKey] || 1
       var data = this.data
-      /*
-       if (filterKey) {
-       data = data.filter(function (row) {
-       return Object.keys(row).some(function (key) {
-       return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-       })
-       })
-       }
-       */
+
       if (sortKey) {
         data = data.slice().sort(function (a, b) {
           a = a[sortKey]
@@ -229,6 +209,18 @@ Vue.component('listing', {
     },
     resultCount: function () {
       return this.filteredData.length;
+    },
+    dataObjects: function () {
+      // Transform data in array to object for comparison later.
+      // @todo Remove this function and do this in filteredData().
+      let realData = {};
+      this.filteredData.forEach(function (element, index) {
+        realData[index] = {};
+        for (obj in element) {
+          realData[index][obj] = element[obj];
+        }
+      });
+      return realData;
     }
   },
   filters: {
@@ -240,12 +232,54 @@ Vue.component('listing', {
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
+    }
+  }
+});
+
+/**
+ * Creates a button component with comfirm step.
+ */
+Vue.component('row', {
+  template: '#a-row',
+  props: {
+    data: Object,
+    dataArray: Array,
+    editKeys: Array,
+    selectKeys: Array,
+    columns: Array,
+    oldData: Array,
+    selectOptions: {
+      type: Object,
+      default: function () {
+        return siteConfig.selectOptions
+      }
     },
-    callMeMaybe: function (callback, entry) {
-      let formData = document.querySelectorAll('[data-id="' + entry.id + '"]');
-      window[callback](formData, entry);
-      this.cancelEdit();
+    callback: String,
+    editProp: {
+      type: Boolean,
+      default: false
     },
+  },
+  data: function () {
+    return {
+      edit: this.editProp
+    }
+  },
+  created: function () {
+    // Accepts own row component and cancels edit mode.
+    bus.$on('confirmButtonSuccess', function (that) {
+      that.edit = false;
+    });
+  },
+  computed: {
+    params: function () {
+      return {
+        previous: this.oldData,
+        current: this.data,
+      }
+    }
+  },
+  methods: {
     link: function (value, key) {
       if (key === 'path') {
         return '<a href="' + siteConfig['expressEnvironments'][localStorage.getItem('env')] + value + '">' + value + '</a>';
@@ -258,27 +292,25 @@ Vue.component('listing', {
       }
       return false;
     },
-    showEdit: function (entry, index = null) {
-      if (this.edit && this.editId === entry.id) {
+    showEdit: function (index = null) {
+      if (this.edit) {
         if (index === null || this.editKeys.indexOf(index) !== -1) {
           return true;
         }
       }
       return false;
     },
-    showDefault: function (entry, index = null) {
-      if (!this.edit || this.editId !== entry.id || this.editKeys.indexOf(index) === -1 && index !== null) {
+    showDefault: function (index = null) {
+      if (!this.edit || this.editKeys.indexOf(index) === -1 && index !== null) {
         return true;
       }
       return false;
     },
-    makeEdit: function (entry) {
-      this.edit = !this.edit;
-      this.editId = entry.id;
+    makeEdit: function () {
+      this.edit = true;
     },
     cancelEdit: function () {
-      this.edit = !this.edit;
-      this.editId = '';
+      this.edit = false;
     }
   }
 });
@@ -291,7 +323,11 @@ Vue.component('confirm-button', {
   props: {
     label: String,
     callback: String,
-    params: Array,
+    row: {
+      type: Object,
+      default: {}
+    },
+    params: Object,
     confirmProp: {
       type: Boolean,
       default: false
@@ -309,7 +345,13 @@ Vue.component('confirm-button', {
   },
   methods: {
     callMeMaybe: function (callback, params) {
-      window[callback](params);
+      // Emit whatever event the button confirmed.
+      bus.$emit(callback, params);
+
+      // Send event for row component to cancel edit functionality.
+      bus.$emit('confirmButtonSuccess', this.row);
+
+      // Cancel edit mode within confirm button component.
       this.cancel();
     },
     confirm: function () {
@@ -328,7 +370,10 @@ Vue.component('confirm-button', {
 Vue.component('message-area', {
   template: '<div><div :class="[bsAlert, message.alertType]" v-for="(message, index) in messages">{{message.text}}<button type="button" class="close" aria-label="Close" @click="close(index)"><span aria-hidden="true">&times;</span></button></div></div>',
   props: {
-    messages: Array,
+    messages: {
+      type: Array,
+      default: []
+    },
     bsAlert: {
       type: String,
       default: 'alert'

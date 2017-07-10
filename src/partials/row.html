@@ -1,0 +1,35 @@
+<script type="text/x-template" id="a-row">
+<tr scope="row">
+  <!-- Row with data and edit/inputs -->
+  <td v-for="(key, index) in columns">
+    <div v-if="showDefault(key)" v-html="link(data[key],key)"></div>
+    <div v-if="selectType(key)">
+      <select v-if="showEdit(key)" :name="key"  v-model="data[key]">
+        <option v-for="anOption in selectOptions[key]" :value="anOption" :selected=" data[key] == anOption ? true : null">{{anOption}}</option>
+      </select>
+    </div>
+    <div v-else>
+      <input v-if="showEdit(key)" type="text" :name="key" :value="data[key]" v-model="data[key]">
+    </div>
+  </td>
+  <!-- @todo Only add Edit option if there are editKeys -->
+  <td>
+    <button v-if="showDefault()" class="btn btn-default" @click="makeEdit()">Edit</button>
+    <confirm-button v-if="showEdit()"
+                    label="Update"
+                    :row="this"
+                    :edit="edit"
+                    :callback="callback"
+                    :params="params">
+    </confirm-button>
+    <confirm-button v-if="showEdit()"
+                    label="Delete"
+                    :row="this"
+                    :edit="edit"
+                    callback="deleteRecord"
+                    :params="params">
+    </confirm-button>
+    <button v-if="showEdit()" class="btn btn-default" @click="cancelEdit()">Cancel Edit</button>
+  </td>
+</tr>
+</script>
