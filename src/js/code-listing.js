@@ -20,10 +20,10 @@ codeListing = new Vue({
   el: '#code-listing',
   data: {
     searchQuery: '',
-    gridColumns: ['id', 'label', 'name', 'version', 'code_type', 'is_current', 'commit_hash'],
+    gridColumns: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
     gridData: [],
     callback: 'updateCodeRecord',
-    editKeys: ['label', 'name', 'version', 'code_type', 'is_current', 'commit_hash'],
+    editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash'],
     selectKeys: ['code_type', 'is_current'],
   },
   created: function () {
@@ -36,6 +36,35 @@ codeListing = new Vue({
 
     bus.$on('updateCodeRecord', function (params) {
       updateCodeRecord(params);
+    });
+
+    // Set anything that needs updated when in edit mode.
+    bus.$on('rowEdit', function (row) {
+      let options = {}
+
+      // Add special edit content to the row key by key.
+      row.editKeys.forEach(function (element, index) {
+        // Get latest commit from GitHub repo.
+        if (element === 'commit_hash') {
+          getLatestCommit(row.data.name, row)
+            .then(function (response) {
+              options = {
+                rowId: row.data.id,
+                rowKey: element,
+                content: '<span><strong>Current Hash:</strong> ' + response.hash + '</span>'
+              }
+              store.commit('addEditContent', options)
+            });
+        } else {
+          // Need to set other edit row options to nothing so they can render in component.
+          options = {
+            rowId: row.data.id,
+            rowKey: element,
+            content: ''
+          }
+          store.commit('addEditContent', options)
+        }
+      });
     });
   }
 });

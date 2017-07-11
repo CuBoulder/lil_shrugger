@@ -61,3 +61,19 @@ if (localStorage.getItem('sites-query') === null) {
 if (localStorage.getItem('code-query') === null) {
   localStorage.setItem('code-query', '');
 }
+
+
+const store = new Vuex.Store({
+  state: {
+    editContent: {}
+  },
+  mutations: {
+    addEditContent (state, options) {
+      if (!state.editContent[options.rowId]) {
+        Vue.set(store.state.editContent, [options.rowId], {})
+      }
+      Vue.set(store.state.editContent[options.rowId], [options.rowKey], options.content)
+
+    }
+  }
+})

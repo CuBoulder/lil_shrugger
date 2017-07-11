@@ -42,6 +42,9 @@ Vue.component('listing', {
     resultCount: function () {
       return this.filteredData.length;
     },
+    noResults: function () {
+      return this.filteredData.length < 1;
+    },
     dataObjects: function () {
       // Transform data in array to object for comparison later.
       // @todo Remove this function and do this in filteredData().
@@ -94,7 +97,8 @@ Vue.component('row', {
   },
   data: function () {
     return {
-      edit: this.editProp
+      edit: this.editProp,
+      specialEditContent: {}
     }
   },
   created: function () {
@@ -109,6 +113,9 @@ Vue.component('row', {
         previous: this.oldData,
         current: this.data,
       }
+    },
+    editContent: function () {
+      return store.state.editContent
     }
   },
   methods: {
@@ -140,10 +147,12 @@ Vue.component('row', {
     },
     makeEdit: function () {
       this.edit = true;
+      // Emit event for other components to act on when row is being edited.
+      bus.$emit('rowEdit', this);
     },
     cancelEdit: function () {
       this.edit = false;
-    }
+    },
   }
 });
 

@@ -45,6 +45,20 @@ let siteListing = new Vue({
           siteListing.cachedRecords = data;
         });
     })
+
+    // Set anything that needs updated when in edit mode.
+    bus.$on('rowEdit', function (row) {
+      // Add special edit content to the row key by key.
+      row.editKeys.forEach(function (element, index) {
+        // Need to set edit row options to nothing so they can render in component.
+        let options = {
+          rowId: row.data.id,
+          rowKey: element,
+          content: ''
+        }
+        store.commit('addEditContent', options)
+      })
+    })
   },
   computed: {
     showReset: function () {
