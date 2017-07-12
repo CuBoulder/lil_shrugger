@@ -38,6 +38,10 @@ codeListing = new Vue({
       updateCodeRecord(params);
     });
 
+    bus.$on('deleteRecord', function (params) {
+      updateCodeRecord(params, 'DELETE');
+    });
+
     // Set anything that needs updated when in edit mode.
     bus.$on('rowEdit', function (row) {
       let options = {}
@@ -239,20 +243,7 @@ function updateCodeRecord(params, method = 'PATCH') {
         if (!formInput['meta']) {
           formInput['meta'] = {};
         }
-
         formInput['meta'][key] = params.current[key];
-
-        // Need to deal with booleans for is_current.
-        /*
-         if (value['name'] === 'is_current') {
-         if (value['value'] === 'true') {
-         formInput['meta'][value['name']] = true;
-         } else {
-         formInput['meta'][value['name']] = false;
-         }
-         } else {
-         */
-
       } else {
         formInput[key] = params.current[key];
       }
@@ -269,12 +260,15 @@ function updateCodeRecord(params, method = 'PATCH') {
   atlasRequest(baseURL, 'code/' + params.current.id, query = '', method, body, params.current.etag)
     .then(function (response) {
       bus.$emit('onMessage', {
-        text: 'You have updated a code record. Code ID: ' + params.current.id,
+        text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
         alertType: 'alert-success'
       });
 
       getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
         .then(data => codeListing.gridData = data)
+    })
+    .catch((error) => {
+      console.log(error);
     });
 }
 
