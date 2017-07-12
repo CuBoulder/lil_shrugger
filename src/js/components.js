@@ -120,9 +120,22 @@ Vue.component('row', {
   },
   methods: {
     link: function (value, key) {
+      // Link path to instance.
       if (key === 'path') {
         return '<a href="' + siteConfig['expressEnvironments'][localStorage.getItem('env')] + value + '">' + value + '</a>';
       }
+
+      // Link to full code/site record.
+      if (key === 'id') {
+        // Determine site or code record from other key.
+        console.log(this.editKeys)
+        if (this.editKeys.indexOf('commit_hash') !== -1) {
+          return '<a href="' + siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'code/' + value + '">' + value + '</a>';
+        } else {
+          return '<a href="' + siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'sites/' + value + '">' + value + '</a>';
+        }
+      }
+
       return value;
     },
     selectType: function (index) {
