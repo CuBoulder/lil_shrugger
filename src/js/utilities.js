@@ -142,26 +142,3 @@ function handleErrors(response) {
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-/**
- * Deletes a site or code record.
- *
- * @param record
- * @returns {*}
- */
-function deleteRecord(record) {
-  // For now, just check for something in the site record that is different
-  // than the code record.
-  if (record['commit_hash']) {
-    updateCodeRecord([], record, 'DELETE');
-    return bus.$emit('onMessage', {
-      text: 'You have deleted a code asset: Code ID: ' + record['id'],
-      alertType: 'alert-info'
-    });
-  }
-  updateSiteRecord([], record, 'DELETE');
-  return bus.$emit('onMessage', {
-    text: 'You have deleted a site record: Site ID: ' + record['_id'],
-    alertType: 'alert-info'
-  });
-}

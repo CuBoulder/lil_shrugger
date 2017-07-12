@@ -46,6 +46,14 @@ let siteListing = new Vue({
         });
     })
 
+    bus.$on('updateSiteRecord', function (params) {
+      updateSiteRecord(params);
+    });
+
+    bus.$on('deleteRecord', function (params) {
+      updateSiteRecord(params, 'DELETE');
+    });
+
     // Set anything that needs updated when in edit mode.
     bus.$on('rowEdit', function (row) {
       // Add special edit content to the row key by key.
@@ -108,6 +116,11 @@ let siteCreateButton = new Vue({
   data: {
     label: 'Create A Site',
     callback: 'createSite',
+  },
+  created: function () {
+    bus.$on('createSite', function (params) {
+      createSite(params);
+    });
   }
 });
 
@@ -153,12 +166,12 @@ function formatSiteData(data) {
       };
 
       let item = [];
-      item['id'] = element.sid;
+      //item['id'] = element.sid;
       item['path'] = element.path;
       item['status'] = element.status;
       item['updated'] = date.toLocaleTimeString("en-us", options);
       item['etag'] = element._etag;
-      item['_id'] = element._id;
+      item['id'] = element._id;
       formattedData.push(item);
     });
   });
@@ -173,6 +186,7 @@ function createSite() {
   let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
   let endpoint = 'sites';
 
+  // @todo Add more fields here so you can create a site with different assets than current.
   let data = JSON.stringify({
     "status": "pending"
   });
@@ -196,25 +210,46 @@ function createSite() {
 /**
  * Updates a site record based on user input.
  *
- * @param formData
- * @param record
+ * @param params
  * @param method
  */
-function updateSiteRecord(formData, record, method = 'PATCH') {
+function updateSiteRecord(params, method = 'PATCH') {
+  // Define parts of code record that are nested in the settings field.
+  let settingsKeys = ['page_cache_maximum_age'];
+
   // Take input values from formData and put into array for comparison.
   // Only return values that are different.
   let formInput = {};
-  formData.forEach(function (value, index) {
-    if (value['name'] && record[value['name']] !== value['value']) {
-      formInput[value['name']] = value['value'];
+  for (key in params.previous) {
+
+    // Check if values are different to add to PATCH.
+    // Don't need to check etag since user can't change that on form.
+    if (params.current[key] !== params.previous[key] && key !== 'etag') {
+
+      // Need to put meta fields in right place.
+      if (settingsKeys.indexOf(key) !== -1) {
+        // Initialize meta field if it doesn't exist yet.
+        if (!formInput['settings']) {
+          formInput['settings'] = {};
+        }
+        formInput['settings'][key] = params.current[key];
+      } else {
+        formInput[key] = params.current[key];
+      }
     }
-  });
+  }
+
+  // If deleting a record, don't send a body.
+  let body = null;
+  if (method !== 'DELETE') {
+    body = JSON.stringify(formInput);
+  }
 
   let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
-  atlasRequest(baseURL, 'sites/' + record['_id'], query = '', method, JSON.stringify(formInput), record['etag'])
+  atlasRequest(baseURL, 'sites/' + params.current.id, query = '', method, body, params.current.etag)
     .then((response) => {
       bus.$emit('onMessage', {
-        text: 'You have updated a site record. Site ID: ' + record['_id'],
+        text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
         alertType: 'alert-success'
       });
       getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
