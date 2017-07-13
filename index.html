@@ -31,35 +31,42 @@
 </div>
 <div class="page container">
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
-<div id="site-listing" class="row">
-  <form id="search" class="row">
-    <div class="form-group">
-      <label for="query">Search Statistics</label>
-      <input id="query" class="form-control" name="query"
-             v-model="searchQuery">
+  <div id="site-listing" class="row">
+    <form id="statsSearch" class="row">
+      <div class="form-group">
+        <label for="statsQuery">Search Statistics</label>
+        <input id="statsQuery" class="form-control" name="statsQuery"
+               v-model="statsQuery">
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" @click.prevent="search(statsQuery)">Search</button>
+        <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
+      </div>
+    </form>
+    <form id="search" class="row">
+      <div class="form-group">
+        <label for="query">Filter Table</label>
+        <input id="query" class="form-control" name="query"
+               v-model="searchQuery">
+      </div>
+    </form>
+    <div class="row">
+      <listing
+          :data="gridData"
+          :columns="gridColumns"
+          :filter-key="searchQuery"
+          :edit-keys="editKeys"
+          :select-keys="selectKeys"
+          :callback="callback">
+      </listing>
     </div>
-    <div class="form-group">
-      <button class="btn btn-primary" @click.prevent="search(searchQuery)">Search</button>
-      <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
-    </div>
-  </form>
-  <div class="row">
-    <listing
-        :data="gridData"
-        :columns="gridColumns"
-        :filter-key="searchQuery"
-        :edit-keys="editKeys"
-        :select-keys="selectKeys"
-        :callback="callback">
-    </listing>
   </div>
-</div>
-<div id="create-site" class="row">
-  <confirm-button
-      :label="label"
-      :callback="callback">
-  </confirm-button>
-</div>
+  <div id="create-site" class="row">
+    <confirm-button
+        :label="label"
+        :callback="callback">
+    </confirm-button>
+  </div>
 </div>
 <script src="src/config/config.js"></script>
 <script src="src/config/routes.js"></script>
@@ -98,7 +105,8 @@
   let siteListing = new Vue({
     el: '#site-listing',
     data: {
-      searchQuery: '?where={"nodes_total":{"$gt":1}}',
+      searchQuery: '',
+      statsQuery: '?where={"nodes_total":{"$gt":1}}',
       gridColumns: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
       gridData: [],
       cachedRecords: [],
