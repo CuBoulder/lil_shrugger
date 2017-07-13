@@ -181,7 +181,7 @@
 
           // Filter results by using the site ID stored in stats records.
           let queryResult = siteListing.cachedRecords.filter(function (row) {
-            return siteIds.indexOf(row['_id']) > -1
+            return siteIds.indexOf(row['id']) > -1
           });
 
           // By setting the gridData property, the view will automatically update.
