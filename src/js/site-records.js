@@ -34,6 +34,10 @@ function formatSiteData(data) {
   data.forEach(function (elements, index) {
     elements.forEach(function (element, index) {
 
+      if (typeof element.code === "undefined") {
+        console.log(element);
+      }
+
       // Format date.
       var updated_date = new Date(element._updated);
       var created_date = new Date(element._created);
@@ -146,4 +150,79 @@ function updateSiteRecord(params, method = 'PATCH') {
     .catch((error) => {
       console.log(error);
     });
+}
+
+/**
+ * Adds code records to siteListing object.
+ *
+ * @param siteRecords
+ * @param codeRecords
+ */
+function addCodeToSites(siteRecords, codeRecords) {
+
+  let code = {
+    cores: {},
+    profiles: {},
+    packages: {},
+  }
+  // Separate out code into profiles, cores, and packages.
+  codeRecords.forEach(function (record, index) {
+
+    let label = record['label'] ? record['label'] + '-' : ''
+    let version = record['version'] ? record['version'] : ''
+
+    if (record['code_type'] === 'profile') {
+      code.profiles[label + version] = record['id'];
+    }
+
+    if (record['code_type'] === 'core') {
+      code.cores[[label + version]] = record['id'];
+    }
+
+    if (record['code_type'] === 'module' || record['code_type'] === 'theme') {
+      // Use name of record as label since the repo name will always be there when labels aren't.
+      // For core and profile the names are always the same, so the label is more descriptive.
+      label = record['name'] ? record['name'] + '-' : ''
+      code.packages[[label + version]] = record['id'];
+    }
+  })
+
+  // Loop through site records to search for code.
+  siteRecords.forEach(function (element, index) {
+
+    // Don't do anything if there is no code on the site record.
+    if (typeof element['code'] === 'undefined') {
+      return
+    }
+
+    if (typeof element['code']['core'] !== 'undefined') {
+      let foundKeys = Object.keys(code.cores).filter(function(key) {
+        return code.cores[key] === element['code']['core'];
+      })
+      siteRecords[index]['core'] = foundKeys[0];
+    }
+
+    if (typeof element['code']['profile'] !== 'undefined') {
+      let foundKeys = Object.keys(code.profiles).filter(function(key) {
+        return code.profiles[key] === element['code']['profile'];
+      })
+      siteRecords[index]['profile'] = foundKeys[0];
+    }
+
+    if (typeof element['code']['package'] !== 'undefined') {
+      // Clear out packages first since we are pushing to an array.
+      siteRecords[index]['packages'] = [];
+
+      element['code']['package'].forEach(function (element2, index2) {
+        let foundKeys = Object.keys(code.packages).filter(function(key) {
+          return code.packages[key] === element2;
+        })
+        siteRecords[index]['packages'].push(foundKeys[0]);
+      })
+    }
+  })
+
+  Vue.set(siteListing.gridData, siteRecords)
+  // Cache the result until the next request.
+  Vue.set(siteListing.cachedRecords, siteRecords)
 }

@@ -74,14 +74,14 @@
    *
    * @type {Element}
    */
-  var link = document.querySelector('link[href="src/partials/listing.html"]');
-  var content = link.import;
-  var el = content.querySelector('script');
+  link = document.querySelector('link[href="src/partials/listing.html"]');
+  content = link.import;
+  el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
-  var link = document.querySelector('link[href="src/partials/row.html"]');
-  var content = link.import;
-  var el = content.querySelector('script');
+  link = document.querySelector('link[href="src/partials/row.html"]');
+  content = link.import;
+  el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
   /**
@@ -149,60 +149,7 @@
       gridData: function (siteRecords) {
         getCodeRecords(siteConfig.atlasEnvironments[localStorage.getItem('env')])
           .then(function (codeRecords) {
-
-            let code = {
-              cores: {},
-              profiles: {},
-              packages: {},
-            }
-            // Separate out code into profiles, cores, and packages.
-            codeRecords.forEach(function (element, index) {
-              if (element['code_type'] === 'profile') {
-                code.profiles[element['label']] = element['id'];
-              }
-
-              if (element['code_type'] === 'core') {
-                code.cores[element['label']] = element['id'];
-              }
-
-              if (element['code_type'] === 'module' || element['code_type'] === 'theme') {
-                code.packages[element['label']] = element['id'];
-              }
-            })
-
-            // Loop through site records to search for code.
-            siteRecords.forEach(function (element, index) {
-              if (typeof element['code']['core'] !== 'undefined') {
-                let foundKeys = Object.keys(code.cores).filter(function(key) {
-                  return code.cores[key] === element['code']['core'];
-                })
-                siteRecords[index]['core'] = foundKeys[0];
-              }
-
-              if (typeof element['code']['profile'] !== 'undefined') {
-                let foundKeys = Object.keys(code.profiles).filter(function(key) {
-                  return code.profiles[key] === element['code']['profile'];
-                })
-                siteRecords[index]['profile'] = foundKeys[0];
-              }
-
-              if (typeof element['code']['package'] !== 'undefined') {
-                // Clear out packages first since we are pushing to an array.
-                siteRecords[index]['packages'] = [];
-
-                element['code']['package'].forEach(function (element2, index2) {
-                  let foundKeys = Object.keys(code.packages).filter(function(key) {
-                    return code.packages[key] === element2;
-                  })
-                  siteRecords[index]['packages'].push(foundKeys[0]);
-                })
-              }
-            })
-
-            Vue.set(siteListing.gridData, siteRecords)
-            // Cache the result until the next request.
-            Vue.set(siteListing.cachedRecords, siteRecords)
-
+            addCodeToSites(siteRecords, codeRecords)
           });
       }
     },

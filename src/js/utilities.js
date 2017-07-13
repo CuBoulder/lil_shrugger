@@ -126,7 +126,7 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
 function handleErrors(response) {
   if (!response.ok) {
     // @todo Figure out why the Vue object is being passed in as a response.
-    console.log(response);
+    //console.log(response);
     //bus.$emit('onMessage', {text: 'Error in Atlas Request: ' + response, alertType: 'alert-danger'});
     //throw Error(response.statusText);
   }
