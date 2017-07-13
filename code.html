@@ -99,9 +99,181 @@
 <script src="src/js/utilities.js"></script>
 <script src="src/js/components.js"></script>
 <script src="src/js/navbar.js"></script>
-<script src="src/js/code-listing.js"></script>
+<script src="src/js/code-records.js"></script>
 <script src="src/js/github.js"></script>
 <script type="text/javascript">
+
+  // Imports Site Listing HTML into DOM of pages using it.
+  var link = document.querySelector('link[href="src/partials/listing.html"]');
+  var content = link.import;
+  var el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
+  var link = document.querySelector('link[href="src/partials/row.html"]');
+  var content = link.import;
+  var el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
+  // Imports Button HTML into DOM of pages using it.
+  link = document.querySelector('link[href="src/partials/confirm-button.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
+  // Place site data in table via site-listing template located in site-listing.html.
+  codeListing = new Vue({
+    el: '#code-listing',
+    data: {
+      searchQuery: '',
+      gridColumns: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
+      gridData: [],
+      callback: 'updateCodeRecord',
+      editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash'],
+      selectKeys: ['code_type', 'is_current'],
+    },
+    created: function () {
+      bus.$on('switchEnv', function (env) {
+        getCodeRecords(siteConfig.atlasEnvironments[env])
+          .then(function (data) {
+            codeListing.gridData = data;
+          });
+      });
+
+      bus.$on('updateCodeRecord', function (params) {
+        updateCodeRecord(params);
+      });
+
+      bus.$on('deleteRecord', function (params) {
+        updateCodeRecord(params, 'DELETE');
+      });
+
+      // Set anything that needs updated when in edit mode.
+      bus.$on('rowEdit', function (row) {
+        let options = {}
+
+        // Add special edit content to the row key by key.
+        row.editKeys.forEach(function (element, index) {
+          // Get latest commit from GitHub repo.
+          if (element === 'commit_hash') {
+            getLatestCommit(row.data.name, row)
+              .then(function (response) {
+                options = {
+                  rowId: row.data.id,
+                  rowKey: element,
+                  content: '<span><strong>Current Hash:</strong> ' + response.hash + '</span>'
+                }
+                store.commit('addEditContent', options)
+              });
+          } else {
+            // Need to set other edit row options to nothing so they can render in component.
+            options = {
+              rowId: row.data.id,
+              rowKey: element,
+              content: ''
+            }
+            store.commit('addEditContent', options)
+          }
+        });
+      });
+    }
+  });
+
+  // Add create code button.
+  let codeCreateButton = new Vue({
+    el: '#create-code',
+    data: {
+      selectOptions: siteConfig.selectOptions,
+      repos: [],
+      branches: [],
+      branchToAdd: {},
+      activeRepo: {},
+      ready: false,
+      branchReady: false,
+      addCode: false,
+      codeType: 'module',
+      codeVersion: '',
+      codeLabel: '',
+      isCurrent: false,
+    },
+    computed: {
+      userInput: function () {
+        return {
+          version: this.codeVersion,
+          type: this.codeType,
+          label: this.codeLabel,
+          is_current: this.isCurrent,
+        };
+      }
+    },
+    methods: {
+      changeRepo: function (event) {
+        // Set to true for branch select list to appear.
+        this.branchReady = true;
+        this.branches = [];
+        this.activeRepo = this.repos[event.target.value];
+
+        let that = this;
+        let response = getRepoBranches(this.activeRepo.name);
+
+        response.then(function (branchesList) {
+          that.branches = branchesList;
+
+          // Add a default; otherwise user can't select first element.
+          let first = {
+            name: '-Select-',
+            commit: {
+              hash: null
+            }
+          };
+          that.branches.unshift(first);
+        });
+      },
+      changeBranch: function (event) {
+        this.ready = true;
+        this.branchToAdd = this.branches[event.target.value];
+      },
+      codeButton: function () {
+        this.addCode = true;
+      },
+      createCode: function () {
+        let repo = this.activeRepo;
+        let branch = this.branchToAdd;
+        let input = this.userInput;
+
+        // Need to check for special code assets (drupal/express) and set data accordingly.
+        if (repo.name === 'drupal-7.x') {
+          repo.name = 'drupal';
+        }
+
+        let codeAsset = {
+          "git_url": repo.ssh_url,
+          "commit_hash": branch.commit.sha,
+          "meta": {
+            "version": input.version,
+            "code_type": input.type,
+            "name": repo.name,
+            "label": input.label,
+            "is_current": input.is_current
+          }
+        };
+
+        let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+        atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
+          .then((response) => {
+            bus.$emit('onMessage', {
+              text: 'You have created a code asset.',
+              alertType: 'alert-success'
+            });
+            getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+              .then(data => codeListing.gridData = data)
+          })
+          .catch(error => console.log(error));
+
+        this.addCode = false;
+      }
+    }
+  });
+
   /**
    * Creates the list of site records based on the environment. Every time the environment
    * changes via the environment selector, the search will update.

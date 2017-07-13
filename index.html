@@ -66,8 +66,144 @@
 <script src="src/js/utilities.js"></script>
 <script src="src/js/components.js"></script>
 <script src="src/js/navbar.js"></script>
-<script src="src/js/site-listing.js"></script>
+<script src="src/js/site-records.js"></script>
+<script src="src/js/code-records.js"></script>
 <script type="text/javascript">
+  /**
+   * Imports Site Listing HTML into DOM of pages using it.
+   *
+   * @type {Element}
+   */
+  link = document.querySelector('link[href="src/partials/listing.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
+  link = document.querySelector('link[href="src/partials/row.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
+  /**
+   * Imports Button HTML into DOM of pages using it.
+   *
+   * @type {Element}
+   */
+  link = document.querySelector('link[href="src/partials/confirm-button.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
+  // Place site data in table via site-listing template located in site-listing.html.
+  let siteListing = new Vue({
+    el: '#site-listing',
+    data: {
+      searchQuery: '?where={"nodes_total":{"$gt":1}}',
+      gridColumns: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
+      gridData: [],
+      cachedRecords: [],
+      editKeys: ['path', 'status'],
+      selectKeys: ['status'],
+      callback: 'updateSiteRecord',
+      reset: false
+    },
+    created: function () {
+      bus.$on('switchEnv', function (env) {
+        getSiteRecords(siteConfig.atlasEnvironments[env])
+          .then(function (data) {
+            siteListing.gridData = data;
+            // Cache the result until the next request.
+            siteListing.cachedRecords = data;
+          });
+      })
+
+      bus.$on('updateSiteRecord', function (params) {
+        updateSiteRecord(params);
+      });
+
+      bus.$on('deleteRecord', function (params) {
+        updateSiteRecord(params, 'DELETE');
+      });
+
+      // Set anything that needs updated when in edit mode.
+      bus.$on('rowEdit', function (row) {
+        // Add special edit content to the row key by key.
+        row.editKeys.forEach(function (element, index) {
+          // Need to set edit row options to nothing so they can render in component.
+          let options = {
+            rowId: row.data.id,
+            rowKey: element,
+            content: ''
+          }
+          store.commit('addEditContent', options)
+        })
+      })
+    },
+    computed: {
+      showReset: function () {
+        return siteListing.reset;
+      }
+    },
+    watch: {
+      // Update table with code data once site records have been loaded.
+      gridData: function (siteRecords) {
+        getCodeRecords(siteConfig.atlasEnvironments[localStorage.getItem('env')])
+          .then(function (codeRecords) {
+            addCodeToSites(siteRecords, codeRecords)
+          });
+      }
+    },
+    methods: {
+      search: function (query) {
+
+        // Make request to Atlas.
+        let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+        let response = atlasRequest(baseURL, 'statistics', query);
+
+        // Response is a Promise object so we must resolve it to get the data out.
+        response.then(function (objects) {
+
+          // Get array only of site IDs to check from stats query.
+          let siteIds = [];
+          objects.forEach(function (elements, index) {
+            elements.forEach(function (element, index) {
+              siteIds.push(element['site']);
+            });
+          });
+
+          // Filter results by using the site ID stored in stats records.
+          let queryResult = siteListing.cachedRecords.filter(function (row) {
+            return siteIds.indexOf(row['_id']) > -1
+          });
+
+          // By setting the gridData property, the view will automatically update.
+          siteListing.gridData = queryResult;
+          siteListing.reset = true;
+        });
+      },
+      resetSearch: function () {
+        // By using the cached results when the page is loaded, the query can be reverted.
+        siteListing.gridData = siteListing.cachedRecords;
+        siteListing.searchQuery = '';
+        siteListing.reset = false;
+      }
+    }
+  });
+
+  // Add create a site button to page.
+  let siteCreateButton = new Vue({
+    el: '#create-site',
+    data: {
+      label: 'Create A Site',
+      callback: 'createSite',
+    },
+    created: function () {
+      bus.$on('createSite', function (params) {
+        createSite(params);
+      });
+    }
+  });
+
   /**
    * Creates the list of site records based on the environment. Every time the environment
    * changes via the environment selector, the search will update.

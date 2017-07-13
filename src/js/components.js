@@ -127,12 +127,19 @@ Vue.component('row', {
 
       // Link to full code/site record.
       if (key === 'id') {
+         let atlasEnvironment = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
         // Determine site or code record from other key.
-        console.log(this.editKeys)
         if (this.editKeys.indexOf('commit_hash') !== -1) {
-          return '<a href="' + siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'code/' + value + '">' + value + '</a>';
+          return '<a href="' + atlasEnvironment + 'code/' + value + '">' + value + '</a>';
         } else {
-          return '<a href="' + siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'sites/' + value + '">' + value + '</a>';
+          return '<a href="' + atlasEnvironment + 'sites/' + value + '">' + value + '</a> - (<a href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
+        }
+      }
+
+      // Deal with empty packages arrays.
+      if (key === 'packages') {
+        if (value.length === 0) {
+          return 'N/A';
         }
       }
 
