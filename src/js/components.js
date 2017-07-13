@@ -22,6 +22,7 @@ Vue.component('listing', {
     return {
       sortKey: '',
       sortOrders: sortOrders,
+      showAllRows: false
     }
   },
   computed: {
@@ -56,6 +57,9 @@ Vue.component('listing', {
         }
       });
       return realData;
+    },
+    showRowCount: function () {
+      return store.state.recordsToShow;
     }
   },
   filters: {
@@ -67,6 +71,18 @@ Vue.component('listing', {
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
+    },
+    showRow: function (index) {
+      if (!this.showAllRows) {
+        return index < this.showRowCount
+      }
+      return true
+    },
+    showMore: function () {
+      store.commit('addRows', this.showRowCount + 25)
+    },
+    showAll: function () {
+      this.showAllRows = !this.showAllRows
     }
   }
 });
