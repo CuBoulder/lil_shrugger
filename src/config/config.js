@@ -65,7 +65,8 @@ if (localStorage.getItem('code-query') === null) {
 
 const store = new Vuex.Store({
   state: {
-    editContent: {}
+    editContent: {},
+    recordsToShow: 25
   },
   mutations: {
     addEditContent (state, options) {
@@ -73,7 +74,9 @@ const store = new Vuex.Store({
         Vue.set(store.state.editContent, [options.rowId], {})
       }
       Vue.set(store.state.editContent[options.rowId], [options.rowKey], options.content)
-
+    },
+    addRows (state, options) {
+      store.state.recordsToShow = options;
     }
   }
 })
