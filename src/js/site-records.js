@@ -34,10 +34,6 @@ function formatSiteData(data) {
   data.forEach(function (elements, index) {
     elements.forEach(function (element, index) {
 
-      if (typeof element.code === "undefined") {
-        console.log(element);
-      }
-
       // Format date.
       var updated_date = new Date(element._updated);
       var created_date = new Date(element._created);

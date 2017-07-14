@@ -56,7 +56,7 @@
         <input type="text" id="code-query" class="form-control" name="code-query" v-model="codeQuery">
       </fieldset>
       <fieldset class="form-group">
-        <h3>Repository Listing</h3>
+        <h4>Repositories Listing</h4>
         <p class="form-text text-muted">
           You can choose to have the repository list for creating code be chronologically by updated date instead of alphabetically.
         </p>
@@ -64,6 +64,26 @@
           <label class="form-check-label">
             <input class="form-check-input" type="checkbox" id="chronological" v-model="repoListing">
             Chronological
+          </label>
+        </div>
+        <h4>Site Record Keys</h4>
+        <p class="form-text text-muted">
+          Choose which keys you want to include in the site record listing.
+        </p>
+        <div class="form-check checkbox-inline" v-for="key in siteKeys">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" :id="'site-' + key" :value="key" v-model="saveSiteKeys">
+            {{key}}
+          </label>
+        </div>
+        <h4>Code Record Keys</h4>
+        <p class="form-text text-muted">
+          Choose which keys you want to include in the code record listing.
+        </p>
+        <div class="form-check checkbox-inline" v-for="key in codeKeys">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" :id="'site-' + key" :value="key" v-model="saveCodeKeys">
+            {{key}}
           </label>
         </div>
 
@@ -78,11 +98,6 @@
 <script src="src/js/components.js"></script>
 <script src="src/js/navbar.js"></script>
 <script type="text/javascript">
-  // Need to convert from string to boolean.
-  let listing = false;
-  if (localStorage.getItem('repo-listing') === 'true') {
-    listing = true;
-  }
 
   let settingsForm = new Vue({
     el: '#user-settings',
@@ -96,7 +111,17 @@
       },
       sitesQuery: localStorage.getItem('sites-query'),
       codeQuery: localStorage.getItem('code-query'),
-      repoListing: listing,
+      repoListing: localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false,
+      saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : [],
+      saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')): []
+    },
+    computed: {
+      siteKeys: function () {
+        return store.state.siteKeys
+      },
+      codeKeys: function () {
+        return store.state.codeKeys
+      }
     },
     methods: {
       saveCreds: function () {
@@ -107,7 +132,9 @@
         localStorage.setItem('github-token', this.gitHub.token);
         localStorage.setItem('sites-query', this.sitesQuery);
         localStorage.setItem('code-query', this.codeQuery);
-        localStorage.setItem('repo-listing', this.repoListing);
+        localStorage.setItem('repo-listing', JSON.stringify(this.repoListing));
+        localStorage.setItem('code-keys', JSON.stringify(this.saveCodeKeys));
+        localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
 
         // Send success message.
         bus.$emit('onMessage', {text: 'Successfully saved settings.', alertType:'alert-success'});

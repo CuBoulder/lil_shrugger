@@ -124,7 +124,6 @@
     el: '#code-listing',
     data: {
       searchQuery: '',
-      gridColumns: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
       gridData: [],
       callback: 'updateCodeRecord',
       editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash'],
@@ -174,6 +173,11 @@
           }
         });
       });
+    },
+    computed: {
+      gridColumns: function () {
+        return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys
+      }
     }
   });
 

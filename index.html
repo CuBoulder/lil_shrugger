@@ -107,7 +107,6 @@
     data: {
       searchQuery: '',
       statsQuery: '?where={"nodes_total":{"$gt":1}}',
-      gridColumns: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
       gridData: [],
       cachedRecords: [],
       editKeys: ['path', 'status'],
@@ -150,6 +149,9 @@
     computed: {
       showReset: function () {
         return siteListing.reset;
+      },
+      gridColumns: function () {
+        return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys
       }
     },
     watch: {
