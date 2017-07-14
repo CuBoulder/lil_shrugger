@@ -66,7 +66,7 @@ if (localStorage.getItem('code-query') === null) {
 const store = new Vuex.Store({
   state: {
     editContent: {},
-    recordsToShow: 25,
+    recordsToShow: 10,
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
     codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash']
   },
