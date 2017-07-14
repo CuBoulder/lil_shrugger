@@ -58,7 +58,6 @@ let fetchData = function () {
         // Check if more pages exist.
         let nextLink = object.headers.get('Link').split(',')[0].split(';')
         if (nextLink[1].trim() === 'rel="next"') {
-          console.log(nextLink[0].slice(1, -1))
           return recursiveFetch(finalData, nextLink[0].slice(1, -1))
         } else {
           return finalData
