@@ -219,7 +219,7 @@ Vue.component('row', {
         })
     },
     cancelEdit: function () {
-      bus.$emit('cancelEdit', that);
+      bus.$emit('cancelEdit', this);
       this.edit = false;
     },
   }
