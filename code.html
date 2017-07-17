@@ -134,9 +134,17 @@
       bus.$on('switchEnv', function (env) {
         getCodeRecords(siteConfig.atlasEnvironments[env])
           .then(function (data) {
-            codeListing.gridData = data;
+            codeListing.gridData = data
           });
       });
+
+      // When a user tries to edit a site record, update data if etags don't match.
+      bus.$on('etagFail', function (env) {
+        getCodeRecords(siteConfig.atlasEnvironments[env])
+          .then(function (data) {
+            codeListing.gridData = data
+          })
+      })
 
       bus.$on('updateCodeRecord', function (params) {
         updateCodeRecord(params);

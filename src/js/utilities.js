@@ -91,17 +91,24 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
         return foo(pageLink)
           .then(handleErrors)
           .then(function (data) {
+            // This can be a query for just a single asset.
+            // If it is, we can tell that from having no data._items.
+            if (typeof data._items === 'undefined') {
+              finalData.push(data)
+              return finalData
+            }
+
             // By pushing the data to an array that exists in recursion, we
             // can return the compiled array.
             // Trying to return a variable outside this lexical scope won't work
             // Since that would be declared synchronously.
-            finalData.push(data._items);
+            finalData.push(data._items)
 
             // Check if more pages exist.
             if (data._links.next) {
-              return recursiveFetch(finalData, data._links.next.href);
+              return recursiveFetch(finalData, data._links.next.href)
             } else {
-              return finalData;
+              return finalData
             }
           })
           .catch(error => console.log(error));

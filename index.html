@@ -118,10 +118,20 @@
       bus.$on('switchEnv', function (env) {
         getSiteRecords(siteConfig.atlasEnvironments[env])
           .then(function (data) {
-            siteListing.gridData = data;
+            siteListing.gridData = data
             // Cache the result until the next request.
-            siteListing.cachedRecords = data;
-          });
+            siteListing.cachedRecords = data
+          })
+      })
+
+      // When a user tries to edit a site record, update data if etags don't match.
+      bus.$on('etagFail', function (env) {
+        getSiteRecords(siteConfig.atlasEnvironments[env])
+          .then(function (data) {
+            siteListing.gridData = data
+            // Cache the result until the next request.
+            siteListing.cachedRecords = data
+          })
       })
 
       bus.$on('updateSiteRecord', function (params) {
