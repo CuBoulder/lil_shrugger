@@ -197,11 +197,9 @@ Vue.component('row', {
         type = 'code'
       }
 
-
       let that = this
       atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], type + '/' + this.data.id)
         .then(function (data) {
-          console.log(data)
           // Check and see if etags are different and update row data if so.
           if (data[0]._etag !== that.data.etag) {
             bus.$emit('onMessage', {
