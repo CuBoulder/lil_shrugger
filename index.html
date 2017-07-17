@@ -57,6 +57,7 @@
           :filter-key="searchQuery"
           :edit-keys="editKeys"
           :select-keys="selectKeys"
+          :extra-content="rowViewContent"
           :callback="callback">
       </listing>
     </div>
@@ -112,7 +113,8 @@
       editKeys: ['path', 'status'],
       selectKeys: ['status'],
       callback: 'updateSiteRecord',
-      reset: false
+      reset: false,
+      rowViewContent: {}
     },
     created: function () {
       bus.$on('switchEnv', function (env) {
@@ -144,6 +146,50 @@
           }
           store.commit('addEditContent', options)
         })
+      })
+
+      // Display whole record in view area.
+      bus.$on('rowView', function (row) {
+        console.log(row)
+        // Make call to stats page to get full data to inject.
+        fetch(siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'statistics/' + row.data.statistics)
+          .then(handleErrors)
+          .then(response => response.json())
+          .then(function (data) {
+            siteListing.rowViewContent = data
+            /*
+            let emptyString = ''
+            let indents = 0
+
+            let logRecursive = function (object, indents) {
+
+              for (key in object) {
+                console.log(key)
+                let value = object[key];
+                if (typeof value === 'object') {
+                  let indentString = ''
+
+                  for (let i = 0; i < indents; i++) {
+                    indentString += '&nbsp;'
+                  }
+                  console.log(indents)
+                  emptyString +=  indentString + key + ': '
+                  logRecursive(value)
+                  emptyString += '<br/>'
+                } else {
+                  emptyString += indentString + key + ': ' + value + '<br/>'
+                }
+              }
+            }
+
+            logRecursive(data)
+
+            console.log(emptyString)
+            console.log('foo')
+            */
+          })
+          .catch(error => error);
+
       })
     },
     computed: {

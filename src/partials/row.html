@@ -19,6 +19,7 @@
     <!-- @todo Only add Edit option if there are editKeys -->
     <td>
       <button v-if="showDefault()" class="btn btn-default" @click="makeEdit()">Edit</button>
+      <button v-if="showDefault()" class="btn btn-default" @click="viewRecord()">View</button>
       <div v-if="showEdit()">
       <confirm-button label="Update"
                       :row="this"

@@ -5,6 +5,12 @@
     <div v-if="noResults">
       <div class="alert alert-info">Your query returned no results.</div>
     </div>
+    <div v-if="Object.keys(extraContent).length > 0">
+      <button class="btn btn-default pull-right" @click="extraContent = {}">Hide</button>
+      <pre>
+        {{extraContent}}
+      </pre>
+    </div>
     <table class="table">
       <thead>
       <tr>

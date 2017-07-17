@@ -13,6 +13,7 @@ Vue.component('listing', {
     editKeys: Array,
     selectKeys: Array,
     callback: String,
+    extraContent: Object,
   },
   data: function () {
     var sortOrders = {}
@@ -22,7 +23,8 @@ Vue.component('listing', {
     return {
       sortKey: '',
       sortOrders: sortOrders,
-      showAllRows: false
+      showAllRows: false,
+      extraContent: ''
     }
   },
   computed: {
@@ -198,6 +200,9 @@ Vue.component('row', {
     cancelEdit: function () {
       this.edit = false;
     },
+    viewRecord: function () {
+      bus.$emit('rowView', this);
+    }
   }
 });
 
