@@ -1,0 +1,15 @@
+<!-- component template -->
+<script type="text/x-template" id="autocomplete-input">
+  <div class="autocomplete-input">
+    <p class="control has-icon has-icon-right">
+      <input
+          class="input is-large"
+          v-model="model">
+    </p>
+    <ul class="options-list">
+      <li v-for="option in options">
+        {{ option[theKey] }}
+      </li>
+    </ul>
+  </div>
+</script>

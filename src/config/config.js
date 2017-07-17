@@ -68,7 +68,13 @@ const store = new Vuex.Store({
     editContent: {},
     recordsToShow: 10,
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
-    codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash']
+    codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
+    statsQueryOptions: [
+      { title: 'Sites Status', query: '{"drupal_system_status":true}'},
+      { title: 'Sites - < 10 nodes', query: '{"nodes_total":{"$lt":10}}'},
+      { title: 'Un-launched and No Edits in 90 Days', query: '{"status":"installed","days_since_last_edit":{"$gt":90}}'},
+      { title: 'Archiving - Sites with no edits in > 1 year', query: '{"days_since_last_edit":{"$gt":365}}'},
+    ]
   },
   mutations: {
     addEditContent (state, options) {

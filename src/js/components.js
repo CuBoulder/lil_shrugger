@@ -296,7 +296,7 @@ Vue.component('message-area', {
   }
 });
 
-var alert = new Vue({
+let alert = new Vue({
   el: '#alert',
   data: {
     messages: []
@@ -309,3 +309,12 @@ var alert = new Vue({
     });
   }
 });
+
+Vue.component('autocomplete-input', {
+  template: '#autocomplete-input',
+  props: {
+    model: String,
+    options: Array,
+    theKey: String
+  }
+})

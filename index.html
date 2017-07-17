@@ -21,6 +21,7 @@
   <link rel="import" href="src/partials/listing.html">
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
+  <link rel="import" href="src/partials/autocomplete-input.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -33,12 +34,24 @@
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="site-listing" class="row">
     <form id="statsSearch" class="row">
-      <div class="form-group">
-        <label for="statsQuery">Search Statistics</label>
-        <input id="statsQuery" class="form-control" name="statsQuery"
-               v-model="statsQuery">
+      <autocomplete-input
+          :options="statsQueryOptions"
+          the-key="query"
+          :model="statsQuery">
+      </autocomplete-input>
+      <!--
+      <div class="form-group row">
+        <div class="col-md-6">
+          <label for="statsQuery">Mongo Query</label>
+          <input id="statsQuery" class="form-control" name="statsQuery" v-model="statsQuery">
+        </div>
+        <div class="col-md-6">
+          <label for="statsQuery">Query Name</label>
+          <input id="statsQueryName" class="form-control" name="statsQueryName" v-model="statsQueryName">
+        </div>
       </div>
-      <div class="form-group">
+      -->
+      <div class="form-group row">
         <button class="btn btn-primary" @click.prevent="search(statsQuery)">Search</button>
         <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
       </div>
@@ -91,6 +104,11 @@
   el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
+  link = document.querySelector('link[href="src/partials/autocomplete-input.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
   /**
    * Imports Button HTML into DOM of pages using it.
    *
@@ -107,6 +125,8 @@
     data: {
       searchQuery: '',
       statsQuery: '?where={"nodes_total":{"$gt":1}}',
+      statsQueryOptions: store.state.statsQueryOptions,
+      statsQueryName: '',
       gridData: [],
       cachedRecords: [],
       editKeys: ['path', 'status'],
