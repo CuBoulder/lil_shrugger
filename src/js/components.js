@@ -191,11 +191,35 @@ Vue.component('row', {
       return false;
     },
     makeEdit: function () {
-      this.edit = true;
-      // Emit event for other components to act on when row is being edited.
-      bus.$emit('rowEdit', this);
+      // Get row type.
+      let type = 'sites'
+      if (typeof this.data.code_type !== 'undefined') {
+        type = 'code'
+      }
+
+
+      let that = this
+      atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], type + '/' + this.data.id)
+        .then(function (data) {
+          console.log(data)
+          // Check and see if etags are different and update row data if so.
+          if (data[0]._etag !== that.data.etag) {
+            bus.$emit('onMessage', {
+              text: 'The etag has changed for this record. The listing of records has been updated with the latest data.',
+              alertType: 'alert-danger'
+            })
+            bus.$emit('etagFail', that);
+            return
+          }
+
+          // Otherwise, continue with row edit.
+          that.edit = true;
+          // Emit event for other components to act on when row is being edited.
+          bus.$emit('rowEdit', that);
+        })
     },
     cancelEdit: function () {
+      bus.$emit('cancelEdit', that);
       this.edit = false;
     },
   }
