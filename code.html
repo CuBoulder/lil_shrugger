@@ -221,7 +221,6 @@
 
         response.then(function (branchesList) {
           that.branches = branchesList;
-
           // Add a default; otherwise user can't select first element.
           let first = {
             name: '-Select-',
@@ -289,6 +288,7 @@
 
     // Get GitHub data to pass in.
     getGitHubRepos().then(function (repoList) {
+      console.log(repoList)
       codeCreateButton.repos = repoList;
     });
   });
