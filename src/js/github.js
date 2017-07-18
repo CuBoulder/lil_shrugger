@@ -89,7 +89,6 @@ function getGitHubRepos() {
     .then(function (data) {
 
       // Combine data into one array.
-      console.log(data)
       let allData = []
       data.forEach(function (element, index) {
         element.forEach(function (part, index2) {
