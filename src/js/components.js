@@ -296,7 +296,7 @@ Vue.component('message-area', {
   }
 });
 
-var alert = new Vue({
+let alert = new Vue({
   el: '#alert',
   data: {
     messages: []
@@ -309,3 +309,62 @@ var alert = new Vue({
     });
   }
 });
+
+
+Vue.component('autocomplete-input', {
+  template: '#autocomplete-input',
+  props: {
+    model: String,
+    options: Array,
+    theKey: String
+  },
+  data () {
+    return {
+      isOpen: false,
+      highlightedPosition: 0,
+      keyword: this.model
+    }
+  },
+  created () {
+    // Allow other autocomplete inputs to interact and update each other.
+    let that = this
+    bus.$on('matchKeys', function (params) {
+      // If the key of this component matches then change the desired key.
+      if (params.key === that.theKey) {
+        that.keyword = params.keyword
+      }
+    })
+  },
+  computed: {
+    fOptions () {
+      const re = new RegExp(this.keyword, 'i')
+      return this.options.filter(o => o[this.theKey].match(re))
+    },
+  },
+  methods: {
+    onInput: function (value) {
+      this.isOpen = !!value
+      this.highlightedPosition = 0
+    },
+    moveDown () {
+      if (!this.isOpen) {
+        return
+      }
+      this.highlightedPosition = (this.highlightedPosition + 1) % this.fOptions.length
+    },
+    moveUp () {
+      if (!this.isOpen) {
+        return
+      }
+      this.highlightedPosition = this.highlightedPosition - 1 < 0 ? this.fOptions.length - 1 : this.highlightedPosition - 1
+    },
+    select () {
+      const selectedOption = this.fOptions[this.highlightedPosition]
+      this.keyword = selectedOption[this.theKey]
+      this.isOpen = false
+      let params = {selectedOption}
+      params['key'] = this.theKey
+      bus.$emit('select', params)
+    }
+  }
+})
