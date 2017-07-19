@@ -40,19 +40,19 @@
           <label for="query-mongo">Query</label>
           <autocomplete-input
               id="query-mongo"
-              :options="statsQueryOptions"
+              :options-key="optionsKey"
               the-key="query"
               :model="statsQuery">
           </autocomplete-input>
         </div>
         <div class="col-md-6">
-        <label for="query-name">Query Name</label>
-        <autocomplete-input
-            id="query-name"
-            :options="statsQueryOptions"
-            the-key="title"
-            :model="statsQueryName">
-        </autocomplete-input>
+          <label for="query-name">Query Name</label>
+          <autocomplete-input
+              id="query-name"
+              :options-key="optionsKey"
+              the-key="title"
+              :model="statsQueryName">
+          </autocomplete-input>
         </div>
       </div>
       <div class="form-group row col-md-6">
@@ -129,8 +129,8 @@
     data: {
       searchQuery: '',
       statsQuery: '',
-      statsQueryOptions: store.state.statsQueryOptions,
       statsQueryName: '',
+      optionsKey: 'statsQueryOptions',
       gridData: [],
       cachedRecords: [],
       editKeys: ['path', 'status'],
@@ -206,7 +206,12 @@
       },
       gridColumns: function () {
         return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys
-      }
+      },
+      /*
+       statsQueryOptions: function () {
+       return store.state.statsQueryOptions
+       }
+       */
     },
     watch: {
       // Update table with code data once site records have been loaded.
@@ -222,9 +227,14 @@
 
         // Grab keyword to search for.
         let query = null
+        let name = null
+        let that = this
         this.$children.forEach(function (element, index) {
           if (element.theKey === 'query') {
             query = element.keyword
+          }
+          if (element.theKey === 'title') {
+            name = element.keyword
           }
         })
 
@@ -244,6 +254,15 @@
         // Response is a Promise object so we must resolve it to get the data out.
         response.then(function (objects) {
 
+          // If no search results returned, catch with error.
+          if (typeof objects["0"]._error !== 'undefined') {
+            bus.$emit('onMessage', {
+              text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
+              alertType: 'alert-danger'
+            });
+            that.$options.methods.resetSearch(that)
+          }
+
           // Get array only of site IDs to check from stats query.
           let siteIds = [];
           objects.forEach(function (elements, index) {
@@ -260,11 +279,52 @@
           // By setting the gridData property, the view will automatically update.
           siteListing.gridData = queryResult;
           siteListing.reset = true;
-        });
+        })
+          .catch((error) => {
+            console.log(error);
+          })
+
+        // Add/change query list.
+
+        // Grab current list of options.
+        let queryOption = {}
+        store.state[this.optionsKey].forEach(function (element, index) {
+
+          if (element.query === query) {
+            // If name/title isn't the same, then switch to new one.
+            queryOption.title = element.title
+            queryOption.query = element.query
+            if (element.title !== name) {
+              queryOption.title = name
+            }
+
+            // Increment rank.
+            queryOption.rank = element.rank + 1
+          }
+        })
+
+        // If queryOption is still null, then add this query as new.
+        if (typeof queryOption.title === 'undefined' ) {
+          queryOption = {
+            title: name,
+            query: query,
+            rank: 1
+          }
+        }
+
+        store.commit('saveQuery', queryOption)
+
       },
-      resetSearch: function () {
+      resetSearch: function (that = null) {
+        let thing = {}
+        if (that) {
+          thing = that
+        } else {
+          thing = this
+        }
+
         // Reset keywords in child components.
-        this.$children.forEach(function (element, index) {
+        thing.$children.forEach(function (element, index) {
           if (typeof element.keyword !== 'undefined') {
             element.keyword = ''
           }
