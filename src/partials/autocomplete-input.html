@@ -1,13 +1,19 @@
 <!-- component template -->
 <script type="text/x-template" id="autocomplete-input">
   <div class="autocomplete-input">
-    <p class="control has-icon has-icon-right">
-      <input
-          class="input is-large"
-          v-model="model">
-    </p>
-    <ul class="options-list">
-      <li v-for="option in options">
+    <input class="form-control"
+           @input="onInput($event.target.value)"
+           @keyup.esc="isOpen = false"
+           @blur="isOpen = false"
+           @keydown.down="moveDown"
+           @keydown.up="moveUp"
+           @keydown.enter="select"
+           v-model="keyword">
+    <ul class="options-list" v-show="isOpen">
+      <li v-for="(option, index) in fOptions"
+          @mouseenter="highlightedPosition = index"
+          @mousedown="select"
+          :class="{'highlighted': index === highlightedPosition}">
         {{ option[theKey] }}
       </li>
     </ul>

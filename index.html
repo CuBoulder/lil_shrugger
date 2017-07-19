@@ -16,6 +16,7 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
       media="all" rel="stylesheet"/>
   <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
+  <link href="src/css/autocomplete.css" media="all" rel="stylesheet"/>
 
   <link rel="import" href="src/partials/navbar.html">
   <link rel="import" href="src/partials/listing.html">
@@ -34,32 +35,35 @@
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="site-listing" class="row">
     <form id="statsSearch" class="row">
-      <autocomplete-input
-          :options="statsQueryOptions"
-          the-key="query"
-          :model="statsQuery">
-      </autocomplete-input>
-      <!--
       <div class="form-group row">
         <div class="col-md-6">
-          <label for="statsQuery">Mongo Query</label>
-          <input id="statsQuery" class="form-control" name="statsQuery" v-model="statsQuery">
+          <label for="query-mongo">Query</label>
+          <autocomplete-input
+              id="query-mongo"
+              :options="statsQueryOptions"
+              the-key="query"
+              :model="statsQuery">
+          </autocomplete-input>
         </div>
         <div class="col-md-6">
-          <label for="statsQuery">Query Name</label>
-          <input id="statsQueryName" class="form-control" name="statsQueryName" v-model="statsQueryName">
+        <label for="query-name">Query Name</label>
+        <autocomplete-input
+            id="query-name"
+            :options="statsQueryOptions"
+            the-key="title"
+            :model="statsQueryName">
+        </autocomplete-input>
         </div>
       </div>
-      -->
-      <div class="form-group row">
-        <button class="btn btn-primary" @click.prevent="search(statsQuery)">Search</button>
+      <div class="form-group row col-md-6">
+        <button class="btn btn-primary" @click.prevent="search()">Search</button>
         <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
       </div>
     </form>
     <form id="search" class="row">
       <div class="form-group">
-        <label for="query">Filter Table</label>
-        <input id="query" class="form-control" name="query"
+        <label for="filter-records">Filter Table</label>
+        <input id="filter-records" class="form-control" name="query"
                v-model="searchQuery">
       </div>
     </form>
@@ -124,7 +128,7 @@
     el: '#site-listing',
     data: {
       searchQuery: '',
-      statsQuery: '?where={"nodes_total":{"$gt":1}}',
+      statsQuery: '',
       statsQueryOptions: store.state.statsQueryOptions,
       statsQueryName: '',
       gridData: [],
@@ -175,6 +179,26 @@
           store.commit('addEditContent', options)
         })
       })
+
+      // Listen for autocomplete selections and match both inputs.
+      bus.$on('select', function (params) {
+
+        // Since we know that we have queries and titles, we can check the key and
+        // make the opposite property match what the user selected.
+        if (params.key === 'title') {
+          let params2 = {
+            keyword: params.selectedOption.query,
+            key: 'query'
+          }
+          bus.$emit('matchKeys', params2)
+        } else {
+          let params2 = {
+            keyword: params.selectedOption.title,
+            key: 'title'
+          }
+          bus.$emit('matchKeys', params2)
+        }
+      })
     },
     computed: {
       showReset: function () {
@@ -194,11 +218,28 @@
       }
     },
     methods: {
-      search: function (query) {
+      search: function () {
+
+        // Grab keyword to search for.
+        let query = null
+        this.$children.forEach(function (element, index) {
+          if (element.theKey === 'query') {
+            query = element.keyword
+          }
+        })
+
+        // If no query, then emit an error message and return.
+        if (query === null) {
+          bus.$emit('onMessage', {
+            text: 'No query found.',
+            alertType: 'alert-danger'
+          });
+          return
+        }
 
         // Make request to Atlas.
         let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
-        let response = atlasRequest(baseURL, 'statistics', query);
+        let response = atlasRequest(baseURL, 'statistics', '?where=' + query);
 
         // Response is a Promise object so we must resolve it to get the data out.
         response.then(function (objects) {
@@ -222,6 +263,13 @@
         });
       },
       resetSearch: function () {
+        // Reset keywords in child components.
+        this.$children.forEach(function (element, index) {
+          if (typeof element.keyword !== 'undefined') {
+            element.keyword = ''
+          }
+        })
+
         // By using the cached results when the page is loaded, the query can be reverted.
         siteListing.gridData = siteListing.cachedRecords;
         siteListing.searchQuery = '';
