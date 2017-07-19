@@ -315,7 +315,7 @@ Vue.component('autocomplete-input', {
   template: '#autocomplete-input',
   props: {
     model: String,
-    options: Array,
+    optionsKey: String,
     theKey: String
   },
   data () {
@@ -340,6 +340,10 @@ Vue.component('autocomplete-input', {
       const re = new RegExp(this.keyword, 'i')
       return this.options.filter(o => o[this.theKey].match(re))
     },
+    options: function () {
+      return store.state[this.optionsKey]
+    }
+
   },
   methods: {
     onInput: function (value) {
