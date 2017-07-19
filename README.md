@@ -23,7 +23,7 @@ Now you should be able to access this app at http://express.local/shrugger/setti
 
 2. You will need to configure the application to your use case on the settings page. There you will see several fields you need to enter for making requests to Atlas, setting up where your app is located, and making requests to the GitHub API.  
 
-3. After saving your settings, the page needs to be refreshed to load the baseURL you just entered. After refreshing the page, "index.html", i.e. the "Sites" page, should load with your sites listed in a table assuming "https://inventory.local" is running. You may have to go to "https://inventory.local" and choose to verfiy the SSL cert in order for the listing of sites to show up. 
+3. After saving your settings, "index.html", i.e. the "Sites" page, should load with your sites listed in a table assuming "https://inventory.local" is running. You may have to go to "https://inventory.local" and choose to verfiy the SSL cert in order for the listing of sites to show up. 
 
 ## App Structure 
 ```
