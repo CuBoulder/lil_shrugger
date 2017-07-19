@@ -206,12 +206,7 @@
       },
       gridColumns: function () {
         return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys
-      },
-      /*
-       statsQueryOptions: function () {
-       return store.state.statsQueryOptions
-       }
-       */
+      }
     },
     watch: {
       // Update table with code data once site records have been loaded.
@@ -284,12 +279,12 @@
             console.log(error);
           })
 
-        // Add/change query list.
 
         // Grab current list of options.
         let queryOption = {}
         store.state[this.optionsKey].forEach(function (element, index) {
 
+          // Replace query if it exists.
           if (element.query === query) {
             // If name/title isn't the same, then switch to new one.
             queryOption.title = element.title
@@ -313,7 +308,6 @@
         }
 
         store.commit('saveQuery', queryOption)
-
       },
       resetSearch: function (that = null) {
         let thing = {}
