@@ -326,7 +326,6 @@ Vue.component('autocomplete-input', {
     }
   },
   created () {
-
     // Allow other autocomplete inputs to interact and update each other.
     let that = this
     bus.$on('matchKeys', function (params) {
