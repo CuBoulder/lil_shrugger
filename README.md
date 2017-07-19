@@ -19,11 +19,9 @@ cd /data/web/express
 ln -s /data/code/lil_shrugger shrugger
 ```
 
-Now you should be able to access this app at http://express.local/shrugger. 
+Now you should be able to access this app at http://express.local/shrugger/settings.html. 
 
-You can also clone down a tagged release and then select the "index.html" file from your OS file finder window to run the application. The releases will include a build step that allows the application to run with more broswer support, and it can be easier than importing the application to express.local.	
-
-2. You will need to configure the application to your use case by visiitng the "settings.html" page. There you will see several fields you need to enter for making requests to Atlas, setting up where your app is located, and making requests to the GitHub API.  
+2. You will need to configure the application to your use case on the settings page. There you will see several fields you need to enter for making requests to Atlas, setting up where your app is located, and making requests to the GitHub API.  
 
 3. Once configured, the root "index.html" should load with your sites listed in a table assuming "https://inventory.local" is running. You may have to go to "https://inventory.local" and choose to verfiy the SSL cert in order for the listing of sites to show up. 
 
