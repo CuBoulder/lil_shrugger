@@ -138,6 +138,9 @@
 
         // Send success message.
         bus.$emit('onMessage', {text: 'Successfully saved settings.', alertType:'alert-success'});
+
+        // Redirect user so any settings changes can be reloaded.
+        window.location = window.location.href
       }
     }
   });
