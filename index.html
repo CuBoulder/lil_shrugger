@@ -141,12 +141,18 @@
       rowViewContent: {}
     },
     created: function () {
+      // Assign this to that in case needed in events.
+      let that = this
+
       bus.$on('switchEnv', function (env) {
         getSiteRecords(siteConfig.atlasEnvironments[env])
           .then(function (data) {
             siteListing.gridData = data
             // Cache the result until the next request.
             siteListing.cachedRecords = data
+
+            // Hide any row if it was being viewed.
+            siteListing.rowViewContent = {}
           })
       })
 
@@ -184,45 +190,29 @@
 
       // Display whole record in view area.
       bus.$on('rowView', function (row) {
-        console.log(row)
+
+        // Set temp variable for holding what was in the current table.
+        // We can't used the cached data as that is a list of all the records.
+        siteListing.tempGridData = siteListing.gridData
+
+        // Filter table to only show that record.
+        siteListing.gridData = [row.oldData]
+
         // Make call to stats page to get full data to inject.
         fetch(siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'statistics/' + row.data.statistics)
           .then(handleErrors)
           .then(response => response.json())
           .then(function (data) {
             siteListing.rowViewContent = data
-            /*
-            let emptyString = ''
-            let indents = 0
-
-            let logRecursive = function (object, indents) {
-
-              for (key in object) {
-                console.log(key)
-                let value = object[key];
-                if (typeof value === 'object') {
-                  let indentString = ''
-
-                  for (let i = 0; i < indents; i++) {
-                    indentString += '&nbsp;'
-                  }
-                  console.log(indents)
-                  emptyString +=  indentString + key + ': '
-                  logRecursive(value)
-                  emptyString += '<br/>'
-                } else {
-                  emptyString += indentString + key + ': ' + value + '<br/>'
-                }
-              }
-            }
-
-            logRecursive(data)
-
-            console.log(emptyString)
-            console.log('foo')
-            */
           })
-          .catch(error => error);
+          .catch(error => error)
+        })
+
+      bus.$on('rowHide', function (row) {
+        // Filter table to only show that record.
+        siteListing.gridData = siteListing.tempGridData
+        siteListing.rowViewContent = {}
+      })
 
       // Listen for autocomplete selections and match both inputs.
       bus.$on('select', function (params) {

@@ -13,7 +13,10 @@ Vue.component('listing', {
     editKeys: Array,
     selectKeys: Array,
     callback: String,
-    extraContent: Object,
+    extraContent: {
+      type: Object,
+      default: {}
+    },
   },
   data: function () {
     var sortOrders = {}
@@ -24,8 +27,11 @@ Vue.component('listing', {
       sortKey: '',
       sortOrders: sortOrders,
       showAllRows: false,
-      extraContent: ''
     }
+  },
+  created () {
+    let that = this
+
   },
   computed: {
     filteredData: function () {
@@ -120,12 +126,13 @@ Vue.component('row', {
     editProp: {
       type: Boolean,
       default: false
-    },
+    }
   },
   data: function () {
     return {
       edit: this.editProp,
-      specialEditContent: {}
+      specialEditContent: {},
+      view: false
     }
   },
   created: function () {
@@ -223,7 +230,12 @@ Vue.component('row', {
       this.edit = false;
     },
     viewRecord: function () {
+      this.view = !this.view
       bus.$emit('rowView', this);
+    },
+    hideRecord: function () {
+      this.view = !this.view
+      bus.$emit('rowHide', this);
     }
   }
 });
