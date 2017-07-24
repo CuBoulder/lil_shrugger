@@ -137,7 +137,7 @@
       bus.$on('switchEnv', function (env) {
         getCodeRecords(siteConfig.atlasEnvironments[env])
           .then(function (data) {
-            codeListing.gridData = data
+            codeListing.gridData = data;
           });
       });
 
@@ -145,9 +145,9 @@
       bus.$on('etagFail', function (env) {
         getCodeRecords(siteConfig.atlasEnvironments[env])
           .then(function (data) {
-            codeListing.gridData = data
+            codeListing.gridData = data;
           })
-      })
+      });
 
       bus.$on('updateCodeRecord', function (params) {
         updateCodeRecord(params);
@@ -159,7 +159,7 @@
 
       // Set anything that needs updated when in edit mode.
       bus.$on('rowEdit', function (row) {
-        let options = {}
+        let options = {};
 
         // Add special edit content to the row key by key.
         row.editKeys.forEach(function (element, index) {
@@ -171,8 +171,8 @@
                   rowId: row.data.id,
                   rowKey: element,
                   content: '<span><strong>Current Hash:</strong> ' + response.hash + '</span>'
-                }
-                store.commit('addEditContent', options)
+                };
+                store.commit('addEditContent', options);
               });
           } else {
             // Need to set other edit row options to nothing so they can render in component.
@@ -180,41 +180,41 @@
               rowId: row.data.id,
               rowKey: element,
               content: ''
-            }
-            store.commit('addEditContent', options)
+            };
+            store.commit('addEditContent', options);
           }
         })
-      })
+      });
 
       // Display whole record in view area.
       bus.$on('rowView', function (row) {
 
         // Set temp variable for holding what was in the current table.
         // We can't used the cached data as that is a list of all the records.
-        codeListing.tempGridData = codeListing.gridData
+        codeListing.tempGridData = codeListing.gridData;
 
         // Filter table to only show that record.
-        codeListing.gridData = [row.oldData]
+        codeListing.gridData = [row.oldData];
 
         // Make call to stats page to get full data to inject.
         fetch(siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'code/' + row.data.id)
           .then(handleErrors)
           .then(response => response.json())
           .then(function (data) {
-            codeListing.rowViewContent = data
+            codeListing.rowViewContent = data;
           })
-          .catch(error => error)
-      })
+          .catch(error => error);
+      });
 
       bus.$on('rowHide', function (row) {
         // Filter table to only show that record.
-        codeListing.gridData = codeListing.tempGridData
-        codeListing.rowViewContent = {}
+        codeListing.gridData = codeListing.tempGridData;
+        codeListing.rowViewContent = {};
       })
     },
     computed: {
       gridColumns: function () {
-        return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys
+        return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys;
       }
     }
   });
@@ -305,7 +305,7 @@
               alertType: 'alert-success'
             });
             getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
-              .then(data => codeListing.gridData = data)
+              .then(data => codeListing.gridData = data);
           })
           .catch(error => console.log(error));
 
