@@ -4,9 +4,9 @@
  *
  * @type {Element}
  */
-var link = document.querySelector('link[href="src/partials/navbar.html"]');
-var content = link.import;
-var el = content.querySelector('script');
+let link = document.querySelector('link[href="src/partials/navbar.html"]');
+let content = link.import;
+let el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
 
