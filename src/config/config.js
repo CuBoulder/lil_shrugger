@@ -83,9 +83,9 @@ const store = new Vuex.Store({
   mutations: {
     addEditContent (state, options) {
       if (!state.editContent[options.rowId]) {
-        Vue.set(store.state.editContent, [options.rowId], {})
+        Vue.set(store.state.editContent, [options.rowId], {});
       }
-      Vue.set(store.state.editContent[options.rowId], [options.rowKey], options.content)
+      Vue.set(store.state.editContent[options.rowId], [options.rowKey], options.content);
     },
     addRows (state, options) {
       store.state.recordsToShow = options;
@@ -93,20 +93,20 @@ const store = new Vuex.Store({
     saveQuery (state, queryOption) {
 
       // Check if query exists and replace if it does.
-      let stored = false
+      let stored = false;
       store.state.statsQueryOptions.forEach(function (element, index) {
         if (element.query === queryOption.query) {
-          store.state.statsQueryOptions[index] = queryOption
-          stored = true
+          store.state.statsQueryOptions[index] = queryOption;
+          stored = true;
         }
-      })
+      });
 
       if (stored === true) {
-        return
+        return;
       }
 
       // Add query if it doesn't exist.
-      Vue.set(store.state.statsQueryOptions, store.state.statsQueryOptions.length + 1, queryOption)
+      Vue.set(store.state.statsQueryOptions, store.state.statsQueryOptions.length + 1, queryOption);
     }
   }
-})
+});

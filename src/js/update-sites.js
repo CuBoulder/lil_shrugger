@@ -10,7 +10,7 @@ document.querySelector('body').appendChild(el.cloneNode(true));
 
 let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
 
-var vm = new Vue({
+let vm = new Vue({
   el: '#list-full-sites',
   data: {
     finalPackages: [],
@@ -121,6 +121,6 @@ var vm = new Vue({
     }
   },
   mounted () {
-    this.getCodes()
+    this.getCodes();
   }
 });

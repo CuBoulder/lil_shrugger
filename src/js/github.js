@@ -3,26 +3,26 @@
  * Contains functionality for interacting with the GitHub API.
  */
 
-let currentURL = ''
+let currentURL = '';
 let myInit = initializeHeaders();
 // This function returns the data based on the current page.
 let foo = function (pageLink = null) {
   // Use paging link if it exists.
   // The paging link contains the endpoint and query.
-  let url = ''
+  let url = '';
   if (pageLink !== null) {
-    url = pageLink
+    url = pageLink;
   } else {
-    url = currentURL
+    url = currentURL;
   }
 
-  let link = ''
+  let link = '';
   return Promise.resolve(
     fetch(url, myInit)
       .then(handleErrors)
       .then(function (response) {
-        link = response.headers
-        return response.json()
+        link = response.headers;
+        return response.json();
       })
       .then(function (data) {
         return {
@@ -34,8 +34,8 @@ let foo = function (pageLink = null) {
         bus.$emit('onMessage', {
           text: 'Error in Atlas Request: ' + error,
           alertType: 'alert-danger'
-        })
-        console.log(error)
+        });
+        console.log(error);
       })
   );
 };
@@ -53,28 +53,28 @@ let fetchData = function () {
         // can return the compiled array.
         // Trying to return a variable outside this lexical scope won't work
         // Since that would be declared synchronously.
-        finalData.push(object.data)
+        finalData.push(object.data);
 
         // Check if more pages exist.
-        let headerLink = object.headers.get('Link')
+        let headerLink = object.headers.get('Link');
         if (headerLink) {
-          let nextLink = headerLink.split(',')[0].split(';')
+          let nextLink = headerLink.split(',')[0].split(';');
           // Fetch next page if link exists.
           if (nextLink[1].trim() === 'rel="next"') {
-            return recursiveFetch(finalData, nextLink[0].slice(1, -1))
+            return recursiveFetch(finalData, nextLink[0].slice(1, -1));
           } else {
-            return finalData
+            return finalData;
           }
         } else {
-          return finalData
+          return finalData;
         }
       })
-      .catch(error => console.log(error))
+      .catch(error => console.log(error));
   };
 
   // Finally call recursive function and return a promise with the data in it.
-  return recursiveFetch([], null)
-}
+  return recursiveFetch([], null);
+};
 
 /**
  * Returns an array of CuBoulder repos and branches.
@@ -82,34 +82,34 @@ let fetchData = function () {
  * @returns {Array}
  */
 function getGitHubRepos() {
-  currentURL = 'https://api.github.com/orgs/CuBoulder/repos?per_page=100'
+  currentURL = 'https://api.github.com/orgs/CuBoulder/repos?per_page=100';
 
   // Pass the resolved promise along.
   return fetchData()
     .then(function (data) {
 
       // Combine data into one array.
-      let allData = []
+      let allData = [];
       data.forEach(function (element, index) {
         element.forEach(function (part, index2) {
-          allData.push(part)
+          allData.push(part);
         })
-      })
+      });
 
       // Sort alphabetically or by updated date if repo-listing = true.
       if (localStorage.getItem('repo-listing') === "true") {
         allData.sort(function (a, b) {
-          return new Date(b.pushed_at) - new Date(a.pushed_at)
+          return new Date(b.pushed_at) - new Date(a.pushed_at);
         })
       } else {
         allData.sort(function (a, b) {
           if (a.name < b.name) {
-            return -1
+            return -1;
           }
           if (a.name > b.name) {
-            return 1
+            return 1;
           }
-          return 0
+          return 0;
         });
       }
 
@@ -117,9 +117,9 @@ function getGitHubRepos() {
       let first = {
         name: '-Select-'
       };
-      allData.unshift(first)
+      allData.unshift(first);
 
-      return allData
+      return allData;
     })
     .catch(error => error);
 }
@@ -131,19 +131,19 @@ function getGitHubRepos() {
  * @returns {Array}
  */
 function getRepoBranches(repo) {
-  currentURL = 'https://api.github.com/repos/CuBoulder/' + repo + '/branches?per_page=100'
+  currentURL = 'https://api.github.com/repos/CuBoulder/' + repo + '/branches?per_page=100';
 
   return fetchData()
     .then(handleErrors)
     .then(function (data) {
       // Combine data into one array.
-      let allData = []
+      let allData = [];
       data.forEach(function (element, index) {
         element.forEach(function (part, index2) {
           allData.push(part);
         })
-      })
-      return allData
+      });
+      return allData;
     })
     .catch(error => error);
 }
@@ -159,7 +159,7 @@ function getLatestCommit(repo, that = null) {
 
   // Need to account for stupid Drupal repo name.
   if (repo === 'drupal') {
-    repo = 'drupal-7.x'
+    repo = 'drupal-7.x';
   }
 
   return fetch('https://api.github.com/repos/CuBoulder/' + repo + '/commits', myInit)

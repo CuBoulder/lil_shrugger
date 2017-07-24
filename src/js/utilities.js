@@ -1,7 +1,7 @@
 /**
  * Create an event bus to emit events across the application.
  */
-var bus = new Vue();
+let bus = new Vue();
 
 /**
  * Makes a request to Atlas.
@@ -52,7 +52,7 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
           text: 'Error in Atlas Request: ' + error,
           alertType: 'alert-danger'
         });
-        console.log(error)
+        console.log(error);
       })
 
   } else {
@@ -94,21 +94,21 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
             // This can be a query for just a single asset.
             // If it is, we can tell that from having no data._items.
             if (typeof data._items === 'undefined') {
-              finalData.push(data)
-              return finalData
+              finalData.push(data);
+              return finalData;
             }
 
             // By pushing the data to an array that exists in recursion, we
             // can return the compiled array.
             // Trying to return a variable outside this lexical scope won't work
             // Since that would be declared synchronously.
-            finalData.push(data._items)
+            finalData.push(data._items);
 
             // Check if more pages exist.
             if (data._links.next) {
-              return recursiveFetch(finalData, data._links.next.href)
+              return recursiveFetch(finalData, data._links.next.href);
             } else {
-              return finalData
+              return finalData;
             }
           })
           .catch(error => console.log(error));
@@ -138,14 +138,4 @@ function handleErrors(response) {
     //throw Error(response.statusText);
   }
   return response;
-}
-
-/**
- * Pauses execution for specified number of milliseconds.
- *
- * @param ms
- * @returns {Promise}
- */
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
