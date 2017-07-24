@@ -36,5 +36,10 @@
         <button class="btn btn-default" @click="showAll()">Show All</button>
       </div>
     </table>
+    <div v-if="Object.keys(extraContent).length > 0">
+      <pre>
+        {{extraContent}}
+      </pre>
+    </div>
   </div>
 </script>

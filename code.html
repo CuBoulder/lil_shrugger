@@ -44,6 +44,7 @@
         :columns="gridColumns"
         :filter-key="searchQuery"
         :callback="callback"
+        :extra-content="rowViewContent"
         :edit-keys="editKeys"
         :select-keys="selectKeys">
     </listing>
@@ -126,9 +127,11 @@
     data: {
       searchQuery: '',
       gridData: [],
+      cachedRecords: [],
       callback: 'updateCodeRecord',
       editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash'],
       selectKeys: ['code_type', 'is_current'],
+      rowViewContent: {}
     },
     created: function () {
       bus.$on('switchEnv', function (env) {
@@ -180,8 +183,34 @@
             }
             store.commit('addEditContent', options)
           }
-        });
-      });
+        })
+      })
+
+      // Display whole record in view area.
+      bus.$on('rowView', function (row) {
+
+        // Set temp variable for holding what was in the current table.
+        // We can't used the cached data as that is a list of all the records.
+        codeListing.tempGridData = codeListing.gridData
+
+        // Filter table to only show that record.
+        codeListing.gridData = [row.oldData]
+
+        // Make call to stats page to get full data to inject.
+        fetch(siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'code/' + row.data.id)
+          .then(handleErrors)
+          .then(response => response.json())
+          .then(function (data) {
+            codeListing.rowViewContent = data
+          })
+          .catch(error => error)
+      })
+
+      bus.$on('rowHide', function (row) {
+        // Filter table to only show that record.
+        codeListing.gridData = codeListing.tempGridData
+        codeListing.rowViewContent = {}
+      })
     },
     computed: {
       gridColumns: function () {

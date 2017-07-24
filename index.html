@@ -74,6 +74,7 @@
           :filter-key="searchQuery"
           :edit-keys="editKeys"
           :select-keys="selectKeys"
+          :extra-content="rowViewContent"
           :callback="callback">
       </listing>
     </div>
@@ -136,15 +137,22 @@
       editKeys: ['path', 'status'],
       selectKeys: ['status'],
       callback: 'updateSiteRecord',
-      reset: false
+      reset: false,
+      rowViewContent: {}
     },
     created: function () {
+      // Assign this to that in case needed in events.
+      let that = this
+
       bus.$on('switchEnv', function (env) {
         getSiteRecords(siteConfig.atlasEnvironments[env])
           .then(function (data) {
             siteListing.gridData = data
             // Cache the result until the next request.
             siteListing.cachedRecords = data
+
+            // Hide any row if it was being viewed.
+            siteListing.rowViewContent = {}
           })
       })
 
@@ -178,6 +186,32 @@
           }
           store.commit('addEditContent', options)
         })
+      })
+
+      // Display whole record in view area.
+      bus.$on('rowView', function (row) {
+
+        // Set temp variable for holding what was in the current table.
+        // We can't used the cached data as that is a list of all the records.
+        siteListing.tempGridData = siteListing.gridData
+
+        // Filter table to only show that record.
+        siteListing.gridData = [row.oldData]
+
+        // Make call to stats page to get full data to inject.
+        fetch(siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'statistics/' + row.data.statistics)
+          .then(handleErrors)
+          .then(response => response.json())
+          .then(function (data) {
+            siteListing.rowViewContent = data
+          })
+          .catch(error => error)
+        })
+
+      bus.$on('rowHide', function (row) {
+        // Filter table to only show that record.
+        siteListing.gridData = siteListing.tempGridData
+        siteListing.rowViewContent = {}
       })
 
       // Listen for autocomplete selections and match both inputs.
