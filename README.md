@@ -25,4 +25,6 @@ Now you should be able to access this app at http://express.local/shrugger/setti
 
 3. After saving your settings, "index.html", i.e. the "Sites" page, should load with your sites listed in a table assuming "https://inventory.local" is running. You may have to go to "https://inventory.local" and choose to verfiy the SSL cert in order for the listing of sites to show up. 
 
+## Documentation
 
+Documentation for this codebase will [reside in the wiki](https://github.com/CuBoulder/lil_shrugger/wiki).
