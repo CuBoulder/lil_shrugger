@@ -26,7 +26,7 @@ Vue.component('listing', {
     return {
       sortKey: '',
       sortOrders: sortOrders,
-      showAllRows: false,
+      showAllRows: false
     }
   },
   created () {
