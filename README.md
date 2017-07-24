@@ -16,7 +16,7 @@ cd ~/express_local/data/code
 git clone git@github.com:CuBoulder/lil_shrugger.git
 ssh express.local
 cd /data/web/express
-ln -s /express_local/data/code/lil_shrugger shrugger
+ln -s /data/code/lil_shrugger shrugger
 ```
 
 Now you should be able to access this app at http://express.local/shrugger. 
@@ -65,7 +65,7 @@ Not listed here, but inside "vue-examples.html" are several examples that come f
 
 - **I made an update to a site/code asset and nothing happened** - There could be many reasons that your update failed, but one of the most common is that one part of your update is not allowed, e.g. you entered the wrong commit hash or code already exists with the same repo and commit hash. Also, the etag could have changed. If you refresh the page, you should get an up-to-date etag for the code/site asset and be able to send your update successfully. 
 
-## JS Nonsense Used
+## Reading List
 
 - [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 - [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
@@ -73,5 +73,6 @@ Not listed here, but inside "vue-examples.html" are several examples that come f
 - [Bootstrap](http://getbootstrap.com/css/)
 - [HTML Imports](https://www.html5rocks.com/en/tutorials/webcomponents/imports/)
 - [ES6 Arrow Functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+- [A Vue.js Autocomplete Component](http://taha-sh.com/blog/building-an-awesome-reusable-autocomplete-input-component-in-vue-21-part-one)
 
 

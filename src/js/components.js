@@ -193,11 +193,33 @@ Vue.component('row', {
       return false;
     },
     makeEdit: function () {
-      this.edit = true;
-      // Emit event for other components to act on when row is being edited.
-      bus.$emit('rowEdit', this);
+      // Get row type.
+      let type = 'sites'
+      if (typeof this.data.code_type !== 'undefined') {
+        type = 'code'
+      }
+
+      let that = this
+      atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], type + '/' + this.data.id)
+        .then(function (data) {
+          // Check and see if etags are different and update row data if so.
+          if (data[0]._etag !== that.data.etag) {
+            bus.$emit('onMessage', {
+              text: 'The etag has changed for this record. The listing of records has been updated with the latest data.',
+              alertType: 'alert-danger'
+            })
+            bus.$emit('etagFail', that);
+            return
+          }
+
+          // Otherwise, continue with row edit.
+          that.edit = true;
+          // Emit event for other components to act on when row is being edited.
+          bus.$emit('rowEdit', that);
+        })
     },
     cancelEdit: function () {
+      bus.$emit('cancelEdit', this);
       this.edit = false;
     },
     viewRecord: function () {
@@ -279,7 +301,7 @@ Vue.component('message-area', {
   }
 });
 
-var alert = new Vue({
+let alert = new Vue({
   el: '#alert',
   data: {
     messages: []
@@ -292,3 +314,66 @@ var alert = new Vue({
     });
   }
 });
+
+
+Vue.component('autocomplete-input', {
+  template: '#autocomplete-input',
+  props: {
+    model: String,
+    optionsKey: String,
+    theKey: String
+  },
+  data () {
+    return {
+      isOpen: false,
+      highlightedPosition: 0,
+      keyword: this.model
+    }
+  },
+  created () {
+    // Allow other autocomplete inputs to interact and update each other.
+    let that = this
+    bus.$on('matchKeys', function (params) {
+      // If the key of this component matches then change the desired key.
+      if (params.key === that.theKey) {
+        that.keyword = params.keyword
+      }
+    })
+  },
+  computed: {
+    fOptions () {
+      const re = new RegExp(this.keyword, 'i')
+      return this.options.filter(o => o[this.theKey].match(re))
+    },
+    options: function () {
+      return store.state[this.optionsKey]
+    }
+
+  },
+  methods: {
+    onInput: function (value) {
+      this.isOpen = !!value
+      this.highlightedPosition = 0
+    },
+    moveDown () {
+      if (!this.isOpen) {
+        return
+      }
+      this.highlightedPosition = (this.highlightedPosition + 1) % this.fOptions.length
+    },
+    moveUp () {
+      if (!this.isOpen) {
+        return
+      }
+      this.highlightedPosition = this.highlightedPosition - 1 < 0 ? this.fOptions.length - 1 : this.highlightedPosition - 1
+    },
+    select () {
+      const selectedOption = this.fOptions[this.highlightedPosition]
+      this.keyword = selectedOption[this.theKey]
+      this.isOpen = false
+      let params = {selectedOption}
+      params['key'] = this.theKey
+      bus.$emit('select', params)
+    }
+  }
+})

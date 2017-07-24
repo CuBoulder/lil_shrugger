@@ -62,13 +62,23 @@ if (localStorage.getItem('code-query') === null) {
   localStorage.setItem('code-query', '');
 }
 
-
+/**
+ * An object to help manage state between components and Vue instances.
+ *
+ * @type {Vuex.Store}
+ */
 const store = new Vuex.Store({
   state: {
     editContent: {},
     recordsToShow: 10,
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
-    codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash']
+    codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
+    statsQueryOptions: [
+      { title: 'Sites Status', query: '{"drupal_system_status":true}', rank: 2},
+      { title: 'Sites - < 10 nodes', query: '{"nodes_total":{"$lt":10}}', rank: 1},
+      { title: 'Un-launched and No Edits in 90 Days', query: '{"status":"installed","days_since_last_edit":{"$gt":90}}', rank: 0},
+      { title: 'Archiving - Sites with no edits in > 1 year', query: '{"days_since_last_edit":{"$gt":365}}', rank: 0},
+    ]
   },
   mutations: {
     addEditContent (state, options) {
@@ -79,6 +89,24 @@ const store = new Vuex.Store({
     },
     addRows (state, options) {
       store.state.recordsToShow = options;
+    },
+    saveQuery (state, queryOption) {
+
+      // Check if query exists and replace if it does.
+      let stored = false
+      store.state.statsQueryOptions.forEach(function (element, index) {
+        if (element.query === queryOption.query) {
+          store.state.statsQueryOptions[index] = queryOption
+          stored = true
+        }
+      })
+
+      if (stored === true) {
+        return
+      }
+
+      // Add query if it doesn't exist.
+      Vue.set(store.state.statsQueryOptions, store.state.statsQueryOptions.length + 1, queryOption)
     }
   }
 })

@@ -56,9 +56,15 @@ let fetchData = function () {
         finalData.push(object.data)
 
         // Check if more pages exist.
-        let nextLink = object.headers.get('Link').split(',')[0].split(';')
-        if (nextLink[1].trim() === 'rel="next"') {
-          return recursiveFetch(finalData, nextLink[0].slice(1, -1))
+        let headerLink = object.headers.get('Link')
+        if (headerLink) {
+          let nextLink = headerLink.split(',')[0].split(';')
+          // Fetch next page if link exists.
+          if (nextLink[1].trim() === 'rel="next"') {
+            return recursiveFetch(finalData, nextLink[0].slice(1, -1))
+          } else {
+            return finalData
+          }
         } else {
           return finalData
         }

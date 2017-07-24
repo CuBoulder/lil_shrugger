@@ -16,11 +16,13 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
       media="all" rel="stylesheet"/>
   <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
+  <link href="src/css/autocomplete.css" media="all" rel="stylesheet"/>
 
   <link rel="import" href="src/partials/navbar.html">
   <link rel="import" href="src/partials/listing.html">
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
+  <link rel="import" href="src/partials/autocomplete-input.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -33,20 +35,35 @@
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="site-listing" class="row">
     <form id="statsSearch" class="row">
-      <div class="form-group">
-        <label for="statsQuery">Search Statistics</label>
-        <input id="statsQuery" class="form-control" name="statsQuery"
-               v-model="statsQuery">
+      <div class="form-group row">
+        <div class="col-md-6">
+          <label for="query-mongo">Query</label>
+          <autocomplete-input
+              id="query-mongo"
+              :options-key="optionsKey"
+              the-key="query"
+              :model="statsQuery">
+          </autocomplete-input>
+        </div>
+        <div class="col-md-6">
+          <label for="query-name">Query Name</label>
+          <autocomplete-input
+              id="query-name"
+              :options-key="optionsKey"
+              the-key="title"
+              :model="statsQueryName">
+          </autocomplete-input>
+        </div>
       </div>
-      <div class="form-group">
-        <button class="btn btn-primary" @click.prevent="search(statsQuery)">Search</button>
+      <div class="form-group row col-md-6">
+        <button class="btn btn-primary" @click.prevent="search()">Search</button>
         <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
       </div>
     </form>
     <form id="search" class="row">
       <div class="form-group">
-        <label for="query">Filter Table</label>
-        <input id="query" class="form-control" name="query"
+        <label for="filter-records">Filter Table</label>
+        <input id="filter-records" class="form-control" name="query"
                v-model="searchQuery">
       </div>
     </form>
@@ -92,6 +109,11 @@
   el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
+  link = document.querySelector('link[href="src/partials/autocomplete-input.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
   /**
    * Imports Button HTML into DOM of pages using it.
    *
@@ -107,7 +129,9 @@
     el: '#site-listing',
     data: {
       searchQuery: '',
-      statsQuery: '?where={"nodes_total":{"$gt":1}}',
+      statsQuery: '',
+      statsQueryName: '',
+      optionsKey: 'statsQueryOptions',
       gridData: [],
       cachedRecords: [],
       editKeys: ['path', 'status'],
@@ -120,10 +144,20 @@
       bus.$on('switchEnv', function (env) {
         getSiteRecords(siteConfig.atlasEnvironments[env])
           .then(function (data) {
-            siteListing.gridData = data;
+            siteListing.gridData = data
             // Cache the result until the next request.
-            siteListing.cachedRecords = data;
-          });
+            siteListing.cachedRecords = data
+          })
+      })
+
+      // When a user tries to edit a site record, update data if etags don't match.
+      bus.$on('etagFail', function (env) {
+        getSiteRecords(siteConfig.atlasEnvironments[env])
+          .then(function (data) {
+            siteListing.gridData = data
+            // Cache the result until the next request.
+            siteListing.cachedRecords = data
+          })
       })
 
       bus.$on('updateSiteRecord', function (params) {
@@ -190,6 +224,24 @@
           })
           .catch(error => error);
 
+      // Listen for autocomplete selections and match both inputs.
+      bus.$on('select', function (params) {
+
+        // Since we know that we have queries and titles, we can check the key and
+        // make the opposite property match what the user selected.
+        if (params.key === 'title') {
+          let params2 = {
+            keyword: params.selectedOption.query,
+            key: 'query'
+          }
+          bus.$emit('matchKeys', params2)
+        } else {
+          let params2 = {
+            keyword: params.selectedOption.title,
+            key: 'title'
+          }
+          bus.$emit('matchKeys', params2)
+        }
       })
     },
     computed: {
@@ -210,14 +262,45 @@
       }
     },
     methods: {
-      search: function (query) {
+      search: function () {
+
+        // Grab keyword to search for.
+        let query = null
+        let name = null
+        let that = this
+        this.$children.forEach(function (element, index) {
+          if (element.theKey === 'query') {
+            query = element.keyword
+          }
+          if (element.theKey === 'title') {
+            name = element.keyword
+          }
+        })
+
+        // If no query, then emit an error message and return.
+        if (query === null) {
+          bus.$emit('onMessage', {
+            text: 'No query found.',
+            alertType: 'alert-danger'
+          });
+          return
+        }
 
         // Make request to Atlas.
         let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
-        let response = atlasRequest(baseURL, 'statistics', query);
+        let response = atlasRequest(baseURL, 'statistics', '?where=' + query);
 
         // Response is a Promise object so we must resolve it to get the data out.
         response.then(function (objects) {
+
+          // If no search results returned, catch with error.
+          if (typeof objects["0"]._error !== 'undefined') {
+            bus.$emit('onMessage', {
+              text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
+              alertType: 'alert-danger'
+            });
+            that.$options.methods.resetSearch(that)
+          }
 
           // Get array only of site IDs to check from stats query.
           let siteIds = [];
@@ -235,9 +318,56 @@
           // By setting the gridData property, the view will automatically update.
           siteListing.gridData = queryResult;
           siteListing.reset = true;
-        });
+        })
+          .catch((error) => {
+            console.log(error);
+          })
+
+
+        // Grab current list of options.
+        let queryOption = {}
+        store.state[this.optionsKey].forEach(function (element, index) {
+
+          // Replace query if it exists.
+          if (element.query === query) {
+            // If name/title isn't the same, then switch to new one.
+            queryOption.title = element.title
+            queryOption.query = element.query
+            if (element.title !== name) {
+              queryOption.title = name
+            }
+
+            // Increment rank.
+            queryOption.rank = element.rank + 1
+          }
+        })
+
+        // If queryOption is still null, then add this query as new.
+        if (typeof queryOption.title === 'undefined' ) {
+          queryOption = {
+            title: name,
+            query: query,
+            rank: 1
+          }
+        }
+
+        store.commit('saveQuery', queryOption)
       },
-      resetSearch: function () {
+      resetSearch: function (that = null) {
+        let thing = {}
+        if (that) {
+          thing = that
+        } else {
+          thing = this
+        }
+
+        // Reset keywords in child components.
+        thing.$children.forEach(function (element, index) {
+          if (typeof element.keyword !== 'undefined') {
+            element.keyword = ''
+          }
+        })
+
         // By using the cached results when the page is loaded, the query can be reverted.
         siteListing.gridData = siteListing.cachedRecords;
         siteListing.searchQuery = '';
