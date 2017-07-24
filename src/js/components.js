@@ -19,43 +19,39 @@ Vue.component('listing', {
     },
   },
   data: function () {
-    var sortOrders = {}
+    let sortOrders = {};
     this.columns.forEach(function (key) {
       sortOrders[key] = 1
-    })
+    });
     return {
       sortKey: '',
       sortOrders: sortOrders,
       showAllRows: false
     }
   },
-  created () {
-    let that = this
-
-  },
   computed: {
     filteredData: function () {
-      var sortKey = this.sortKey
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
-      var order = this.sortOrders[sortKey] || 1
-      var data = this.data
+      let sortKey = this.sortKey;
+      let filterKey = this.filterKey && this.filterKey.toLowerCase();
+      let order = this.sortOrders[sortKey] || 1;
+      let data = this.data;
 
       if (filterKey) {
         data = data.filter(function (row) {
           return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+            return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
           })
         })
       }
 
       if (sortKey) {
         data = data.slice().sort(function (a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
-          return (a === b ? 0 : a > b ? 1 : -1) * order
+          a = a[sortKey];
+          b = b[sortKey];
+          return (a === b ? 0 : a > b ? 1 : -1) * order;
         })
       }
-      return data
+      return data;
     },
     resultCount: function () {
       return this.filteredData.length;
@@ -81,25 +77,25 @@ Vue.component('listing', {
   },
   filters: {
     capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
+      return str.charAt(0).toUpperCase() + str.slice(1);
     },
   },
   methods: {
     sortBy: function (key) {
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
+      this.sortKey = key;
+      this.sortOrders[key] = this.sortOrders[key] * -1;
     },
     showRow: function (index) {
       if (!this.showAllRows) {
-        return index < this.showRowCount
+        return index < this.showRowCount;
       }
-      return true
+      return true;
     },
     showMore: function () {
-      store.commit('addRows', this.showRowCount + 25)
+      store.commit('addRows', this.showRowCount + 25);
     },
     showAll: function () {
-      this.showAllRows = !this.showAllRows
+      this.showAllRows = !this.showAllRows;
     }
   }
 });
@@ -149,7 +145,7 @@ Vue.component('row', {
       }
     },
     editContent: function () {
-      return store.state.editContent
+      return store.state.editContent;
     }
   },
   methods: {
@@ -201,12 +197,12 @@ Vue.component('row', {
     },
     makeEdit: function () {
       // Get row type.
-      let type = 'sites'
+      let type = 'sites';
       if (typeof this.data.code_type !== 'undefined') {
-        type = 'code'
+        type = 'code';
       }
 
-      let that = this
+      let that = this;
       atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], type + '/' + this.data.id)
         .then(function (data) {
           // Check and see if etags are different and update row data if so.
@@ -214,9 +210,9 @@ Vue.component('row', {
             bus.$emit('onMessage', {
               text: 'The etag has changed for this record. The listing of records has been updated with the latest data.',
               alertType: 'alert-danger'
-            })
+            });
             bus.$emit('etagFail', that);
-            return
+            return;
           }
 
           // Otherwise, continue with row edit.
@@ -230,11 +226,11 @@ Vue.component('row', {
       this.edit = false;
     },
     viewRecord: function () {
-      this.view = !this.view
+      this.view = !this.view;
       bus.$emit('rowView', this);
     },
     hideRecord: function () {
-      this.view = !this.view
+      this.view = !this.view;
       bus.$emit('rowHide', this);
     }
   }
@@ -344,48 +340,48 @@ Vue.component('autocomplete-input', {
   },
   created () {
     // Allow other autocomplete inputs to interact and update each other.
-    let that = this
+    let that = this;
     bus.$on('matchKeys', function (params) {
       // If the key of this component matches then change the desired key.
       if (params.key === that.theKey) {
-        that.keyword = params.keyword
+        that.keyword = params.keyword;
       }
     })
   },
   computed: {
     fOptions () {
-      const re = new RegExp(this.keyword, 'i')
-      return this.options.filter(o => o[this.theKey].match(re))
+      const re = new RegExp(this.keyword, 'i');
+      return this.options.filter(o => o[this.theKey].match(re));
     },
     options: function () {
-      return store.state[this.optionsKey]
+      return store.state[this.optionsKey];
     }
 
   },
   methods: {
     onInput: function (value) {
-      this.isOpen = !!value
-      this.highlightedPosition = 0
+      this.isOpen = !!value;
+      this.highlightedPosition = 0;
     },
     moveDown () {
       if (!this.isOpen) {
-        return
+        return;
       }
-      this.highlightedPosition = (this.highlightedPosition + 1) % this.fOptions.length
+      this.highlightedPosition = (this.highlightedPosition + 1) % this.fOptions.length;
     },
     moveUp () {
       if (!this.isOpen) {
-        return
+        return;
       }
-      this.highlightedPosition = this.highlightedPosition - 1 < 0 ? this.fOptions.length - 1 : this.highlightedPosition - 1
+      this.highlightedPosition = this.highlightedPosition - 1 < 0 ? this.fOptions.length - 1 : this.highlightedPosition - 1;
     },
     select () {
-      const selectedOption = this.fOptions[this.highlightedPosition]
-      this.keyword = selectedOption[this.theKey]
-      this.isOpen = false
-      let params = {selectedOption}
-      params['key'] = this.theKey
-      bus.$emit('select', params)
+      const selectedOption = this.fOptions[this.highlightedPosition];
+      this.keyword = selectedOption[this.theKey];
+      this.isOpen = false;
+      let params = {selectedOption};
+      params['key'] = this.theKey;
+      bus.$emit('select', params);
     }
   }
-})
+});

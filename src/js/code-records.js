@@ -93,7 +93,7 @@ function updateCodeRecord(params, method = 'PATCH') {
       });
 
       getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
-        .then(data => codeListing.gridData = data)
+        .then(data => codeListing.gridData = data);
     })
     .catch((error) => {
       console.log(error);

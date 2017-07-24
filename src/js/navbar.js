@@ -4,9 +4,9 @@
  *
  * @type {Element}
  */
-var link = document.querySelector('link[href="src/partials/navbar.html"]');
-var content = link.import;
-var el = content.querySelector('script');
+let link = document.querySelector('link[href="src/partials/navbar.html"]');
+let content = link.import;
+let el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
 
@@ -30,14 +30,6 @@ Vue.component('atlas-navbar', {
       return siteConfig.atlasEnvironments[localStorage.getItem('env')];
     }
   },
-  /*
-  filters: {
-    capitalize: function (value) {
-      if (!value) return '';
-      value = value.toString();
-      return value.charAt(0).toUpperCase() + value.slice(1);
-    }
-  },*/
   methods: {
     callMeMaybe: function (callback, params) {
       window[callback](params);
