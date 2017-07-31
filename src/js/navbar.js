@@ -61,3 +61,26 @@ let navbar = new Vue({
     environments: siteConfig.atlasEnvironments
   }
 });
+
+$(document).ready(function(){
+  // Add indicator on load
+  envIndicator();
+  $('#selectEnv').on('change', function() {
+    envIndicator();
+  });
+});
+
+// Udpate Environment Indicator
+function envIndicator() {
+  // Get selected value nad lowercase
+  var env = $("#selectEnv").val();
+  env = env.toLowerCase();
+
+  // Remove existing indicator classes
+  var envs = ["local", "dev", "test", "prod"];
+  for (var i = 0, len = envs.length; i < len; i++) {
+    $('body').removeClass('environment-' + envs[i]);
+  }
+  // Apply class for current environment
+  $('body').addClass('environment-' + env);
+}

@@ -26,3 +26,32 @@
     height: 34px;
     width: 268px;
 }
+
+/* Environment Indicator */
+
+body {
+  padding-top:20px;
+}
+body:before {
+  content:'';
+  padding:10px;
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:10;
+}
+body.environment-prod:before {
+  background: red;
+}
+body.environment-test:before {
+  background: orange;
+}
+
+body.environment-dev:before {
+  background: yellow;
+}
+
+body.environment-local:before {
+  background: green;
+}
