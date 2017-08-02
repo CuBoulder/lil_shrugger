@@ -21,6 +21,11 @@ if (localStorage.getItem('env') === null) {
   localStorage.setItem('env', 'Local');
 }
 
+// Need to set default Base URL.
+if (localStorage.getItem('baseURL') === null) {
+  localStorage.setItem('baseURL', '/shrugger');
+}
+
 /**
  * These URLs will be used for site links in the listing table.
  *
@@ -110,3 +115,16 @@ const store = new Vuex.Store({
     }
   }
 });
+
+
+/**
+ * You can use the code below to fetch a local config file if you need to override any settings.
+ */
+/*
+fetch(window.location.origin + localStorage.getItem('baseURL') + '/src/config/config.local.js')
+  .then(function (response) {
+    if (response.status === 200) {
+      console.log('Found local configuration file.');
+    }
+  });
+*/
