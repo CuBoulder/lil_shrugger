@@ -132,7 +132,7 @@
     },
     created: function () {
       bus.$on('switchEnv', function (env) {
-        getCodeRecords(siteConfig.atlasEnvironments[env])
+        getCodeRecords(store.state.atlasEnvironments[env])
           .then(function (data) {
             codeListing.gridData = data
           });
@@ -140,7 +140,7 @@
 
       // When a user tries to edit a site record, update data if etags don't match.
       bus.$on('etagFail', function (env) {
-        getCodeRecords(siteConfig.atlasEnvironments[env])
+        getCodeRecords(store.state.atlasEnvironments[env])
           .then(function (data) {
             codeListing.gridData = data
           })
@@ -268,14 +268,14 @@
           }
         };
 
-        let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+        let baseURL = store.state.atlasEnvironments[store.state.env];
         atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
           .then((response) => {
             bus.$emit('onMessage', {
               text: 'You have created a code asset.',
               alertType: 'alert-success'
             });
-            getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+            getCodeRecords(store.state.atlasEnvironments[store.state.env])
               .then(data => codeListing.gridData = data)
           })
           .catch(error => console.log(error));
@@ -291,7 +291,7 @@
    */
   $(document).ready(function () {
 
-    getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+    getCodeRecords(store.state.atlasEnvironments[store.state.env])
       .then(data => codeListing.gridData = data);
 
     // Get GitHub data to pass in.

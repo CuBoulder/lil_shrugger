@@ -7,7 +7,7 @@
 function getSiteRecords(envURL = null) {
   // If no environment passed in, then get from local storage.
   if (envURL === null) {
-    envURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+    envURL = store.state.atlasEnvironments[store.state.env];
   }
 
   // Check for query to add to code request.
@@ -71,7 +71,7 @@ function formatSiteData(data) {
  * Creates a site record.
  */
 function createSite() {
-  let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+  let baseURL = store.state.atlasEnvironments[store.state.env];
   let endpoint = 'sites';
 
   // @todo Add more fields here so you can create a site with different assets than current.
@@ -81,7 +81,7 @@ function createSite() {
 
   atlasRequest(baseURL, endpoint, query = '', method = 'POST', body = data)
     .then(response =>
-      getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+      getSiteRecords(store.state.atlasEnvironments[store.state.env])
         .then((data) => {
           siteListing.gridData = data;
           bus.$emit('onMessage', {
@@ -133,14 +133,14 @@ function updateSiteRecord(params, method = 'PATCH') {
     body = JSON.stringify(formInput);
   }
 
-  let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+  let baseURL = store.state.atlasEnvironments[store.state.env];
   atlasRequest(baseURL, 'sites/' + params.current.id, query = '', method, body, params.current.etag)
     .then((response) => {
       bus.$emit('onMessage', {
         text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
         alertType: 'alert-success'
       });
-      getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+      getSiteRecords(store.state.atlasEnvironments[store.state.env])
         .then(data => siteListing.gridData = data)
     })
     .catch((error) => {

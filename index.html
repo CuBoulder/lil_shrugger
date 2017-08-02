@@ -140,7 +140,7 @@
     },
     created: function () {
       bus.$on('switchEnv', function (env) {
-        getSiteRecords(siteConfig.atlasEnvironments[env])
+        getSiteRecords(store.state.atlasEnvironments[env])
           .then(function (data) {
             siteListing.gridData = data
             // Cache the result until the next request.
@@ -150,7 +150,7 @@
 
       // When a user tries to edit a site record, update data if etags don't match.
       bus.$on('etagFail', function (env) {
-        getSiteRecords(siteConfig.atlasEnvironments[env])
+        getSiteRecords(store.state.atlasEnvironments[env])
           .then(function (data) {
             siteListing.gridData = data
             // Cache the result until the next request.
@@ -211,7 +211,7 @@
     watch: {
       // Update table with code data once site records have been loaded.
       gridData: function (siteRecords) {
-        getCodeRecords(siteConfig.atlasEnvironments[localStorage.getItem('env')])
+        getCodeRecords(store.state.atlasEnvironments[store.state.env])
           .then(function (codeRecords) {
             addCodeToSites(siteRecords, codeRecords)
           });
@@ -243,7 +243,7 @@
         }
 
         // Make request to Atlas.
-        let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+        let baseURL = store.state.atlasEnvironments[store.state.env];
         let response = atlasRequest(baseURL, 'statistics', '?where=' + query);
 
         // Response is a Promise object so we must resolve it to get the data out.
@@ -277,18 +277,18 @@
         })
           .catch((error) => {
             console.log(error);
-          })
+          });
 
 
         // Grab current list of options.
-        let queryOption = {}
+        let queryOption = {};
         store.state[this.optionsKey].forEach(function (element, index) {
 
           // Replace query if it exists.
           if (element.query === query) {
             // If name/title isn't the same, then switch to new one.
-            queryOption.title = element.title
-            queryOption.query = element.query
+            queryOption.title = element.title;
+            queryOption.query = element.query;
             if (element.title !== name) {
               queryOption.title = name
             }
@@ -352,7 +352,7 @@
    */
   $(document).ready(function () {
     let cachedRecords = {};
-    getSiteRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
+    getSiteRecords(store.state.atlasEnvironments[store.state.env])
       .then(function (data) {
         siteListing.gridData = data;
         // Cache the result until the next request.

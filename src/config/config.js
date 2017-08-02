@@ -5,35 +5,6 @@
 let siteConfig = {};
 
 /**
- * These URLs will be used in many places via switching from the navbar.
- *
- * @type {{local: string, dev: string, test: string, prod: string}}
- */
-siteConfig['atlasEnvironments'] = {
-  Local: 'https://inventory.local/',
-  Dev: 'https://osr-atlas01.int.colorado.edu/',
-  Test: 'https://osr-atlas02.int.colorado.edu/',
-  Prod: 'https://osr-atlas03.int.colorado.edu/'
-};
-
-// Need to set default environment.
-if (localStorage.getItem('env') === null) {
-  localStorage.setItem('env', 'Local');
-}
-
-/**
- * These URLs will be used for site links in the listing table.
- *
- * @type {{Local: string, Dev: string, Test: string, Prod: string}}
- */
-siteConfig['expressEnvironments'] = {
-  Local: 'https://express.local/',
-  Dev: 'https://www-dev.colorado.edu/',
-  Test: 'https://www-test.colorado.edu/',
-  Prod: 'https://www.colorado.edu/'
-};
-
-/**
  * The select options can be used in the listing component for when the data/options
  * are known. To make this work, the keys, e.g "status, code_type", map to the columns
  * in the listing table. The keys also have to be listed in the editKeys as well
@@ -69,6 +40,19 @@ if (localStorage.getItem('code-query') === null) {
  */
 const store = new Vuex.Store({
   state: {
+    env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
+    atlasEnvironments: {
+      Local: 'https://inventory.local/',
+      Dev: 'https://osr-atlas01.int.colorado.edu/',
+      Test: 'https://osr-atlas02.int.colorado.edu/',
+      Prod: 'https://osr-atlas03.int.colorado.edu/'
+    },
+    expressEnvironments: {
+      Local: 'https://express.local/',
+      Dev: 'https://www-dev.colorado.edu/',
+      Test: 'https://www-test.colorado.edu/',
+      Prod: 'https://www.colorado.edu/'
+    },
     editContent: {},
     recordsToShow: 10,
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
@@ -99,7 +83,7 @@ const store = new Vuex.Store({
           store.state.statsQueryOptions[index] = queryOption
           stored = true
         }
-      })
+      });
 
       if (stored === true) {
         return
@@ -107,6 +91,10 @@ const store = new Vuex.Store({
 
       // Add query if it doesn't exist.
       Vue.set(store.state.statsQueryOptions, store.state.statsQueryOptions.length + 1, queryOption)
+    },
+    switchEnv (state, environment) {
+      store.state.env = environment;
+      localStorage.setItem('env', environment);
     }
   }
-})
+});

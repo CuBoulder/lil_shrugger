@@ -147,12 +147,12 @@ Vue.component('row', {
     link: function (value, key) {
       // Link path to instance.
       if (key === 'path') {
-        return '<a href="' + siteConfig['expressEnvironments'][localStorage.getItem('env')] + value + '">' + value + '</a>';
+        return '<a href="' + store.state.expressEnvironments[store.state.env] + value + '">' + value + '</a>';
       }
 
       // Link to full code/site record.
       if (key === 'id') {
-         let atlasEnvironment = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+         let atlasEnvironment = store.state.atlasEnvironments[store.state.env];
         // Determine site or code record from other key.
         if (this.editKeys.indexOf('commit_hash') !== -1) {
           return '<a href="' + atlasEnvironment + 'code/' + value + '">' + value + '</a>';
@@ -198,7 +198,7 @@ Vue.component('row', {
       }
 
       let that = this
-      atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], type + '/' + this.data.id)
+      atlasRequest(store.state.atlasEnvironments[store.state.env], type + '/' + this.data.id)
         .then(function (data) {
           // Check and see if etags are different and update row data if so.
           if (data[0]._etag !== that.data.etag) {

@@ -8,7 +8,7 @@ var content = link.import;
 var el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
-let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+let baseURL = store.state.atlasEnvironments[store.state.env];
 
 var vm = new Vue({
   el: '#list-full-sites',

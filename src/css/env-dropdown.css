@@ -28,30 +28,38 @@
 }
 
 /* Environment Indicator */
-
 body {
-  padding-top:20px;
-}
-body:before {
-  content:'';
-  padding:10px;
-  position: fixed;
-  top:0;
-  left:0;
-  right:0;
-  z-index:10;
-}
-body.environment-prod:before {
-  background: red;
-}
-body.environment-test:before {
-  background: orange;
+    padding-top: 100px;
 }
 
-body.environment-dev:before {
-  background: yellow;
+nav {
+    padding-top: 20px;
 }
 
-body.environment-local:before {
-  background: green;
+nav:before {
+    content: '';
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    width: 100%;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+nav.environment-Prod:before {
+    background: red;
+}
+
+nav.environment-Test:before {
+    background: orange;
+}
+
+nav.environment-Dev:before {
+    background: yellow;
+}
+
+nav.environment-Local:before {
+    background: green;
 }

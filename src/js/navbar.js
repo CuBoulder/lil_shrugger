@@ -22,12 +22,17 @@ Vue.component('atlas-navbar', {
     },
     environments: {
       type: Object,
-      default: siteConfig.atlasEnvironments
+      default: function () {
+        return store.state.atlasEnvironments
+      }
     }
   },
   computed: {
     selectedEnv: function () {
-      return siteConfig.atlasEnvironments[localStorage.getItem('env')];
+      return store.state.atlasEnvironments[store.state.env];
+    },
+    navClasses: function () {
+      return 'navbar navbar-default navbar-fixed-top environment-' +  store.state.env;
     }
   },
   /*
@@ -48,7 +53,8 @@ Vue.component('atlas-navbar', {
       this.finaled = false;
     },
     changeEnv: function (event) {
-      localStorage.setItem('env', event.target.value);
+      //localStorage.setItem('env', event.target.value);
+      store.commit('switchEnv', event.target.value);
       bus.$emit('switchEnv', event.target.value);
     }
   }
@@ -61,26 +67,3 @@ let navbar = new Vue({
     environments: siteConfig.atlasEnvironments
   }
 });
-
-$(document).ready(function(){
-  // Add indicator on load
-  envIndicator();
-  $('#selectEnv').on('change', function() {
-    envIndicator();
-  });
-});
-
-// Udpate Environment Indicator
-function envIndicator() {
-  // Get selected value nad lowercase
-  var env = $("#selectEnv").val();
-  env = env.toLowerCase();
-
-  // Remove existing indicator classes
-  var envs = ["local", "dev", "test", "prod"];
-  for (var i = 0, len = envs.length; i < len; i++) {
-    $('body').removeClass('environment-' + envs[i]);
-  }
-  // Apply class for current environment
-  $('body').addClass('environment-' + env);
-}
