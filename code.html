@@ -197,7 +197,7 @@
         codeListing.gridData = [row.oldData];
 
         // Make call to stats page to get full data to inject.
-        fetch(siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'code/' + row.data.id)
+        fetch(store.state.atlasEnvironments[store.state.env] + 'code/' + row.data.id)
           .then(handleErrors)
           .then(response => response.json())
           .then(function (data) {
