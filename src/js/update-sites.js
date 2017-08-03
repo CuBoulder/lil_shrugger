@@ -3,14 +3,14 @@
  *
  * @type {Element}
  */
-var link = document.querySelector('link[href="src/partials/listing.html"]');
-var content = link.import;
-var el = content.querySelector('script');
+let link = document.querySelector('link[href="src/partials/listing.html"]');
+let content = link.import;
+let el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
 let baseURL = store.state.atlasEnvironments[store.state.env];
 
-var vm = new Vue({
+let vm = new Vue({
   el: '#list-full-sites',
   data: {
     finalPackages: [],
@@ -121,6 +121,6 @@ var vm = new Vue({
     }
   },
   mounted () {
-    this.getCodes()
+    this.getCodes();
   }
 });

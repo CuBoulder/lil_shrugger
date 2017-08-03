@@ -18,7 +18,15 @@
     </td>
     <!-- @todo Only add Edit option if there are editKeys -->
     <td>
-      <button v-if="showDefault()" class="btn btn-default" @click="makeEdit()">Edit</button>
+      <button v-if="showDefault()" class="btn btn-default" @click="makeEdit()">
+        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+      </button>
+      <button v-if="!view" class="btn btn-default" @click="viewRecord()">
+        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+      </button>
+      <button v-if="view" class="btn btn-default" @click="hideRecord()">
+        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+      </button>
       <div v-if="showEdit()">
       <confirm-button label="Update"
                       :row="this"

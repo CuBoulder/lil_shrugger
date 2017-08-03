@@ -74,6 +74,7 @@
           :filter-key="searchQuery"
           :edit-keys="editKeys"
           :select-keys="selectKeys"
+          :extra-content="rowViewContent"
           :callback="callback">
       </listing>
     </div>
@@ -136,27 +137,34 @@
       editKeys: ['path', 'status'],
       selectKeys: ['status'],
       callback: 'updateSiteRecord',
-      reset: false
+      reset: false,
+      rowViewContent: {}
     },
     created: function () {
+      // Assign this to that in case needed in events.
+      let that = this;
+
       bus.$on('switchEnv', function (env) {
         getSiteRecords(store.state.atlasEnvironments[env])
           .then(function (data) {
-            siteListing.gridData = data
+            siteListing.gridData = data;
             // Cache the result until the next request.
-            siteListing.cachedRecords = data
+            siteListing.cachedRecords = data;
+
+            // Hide any row if it was being viewed.
+            siteListing.rowViewContent = {};
           })
-      })
+      });
 
       // When a user tries to edit a site record, update data if etags don't match.
       bus.$on('etagFail', function (env) {
         getSiteRecords(store.state.atlasEnvironments[env])
           .then(function (data) {
-            siteListing.gridData = data
+            siteListing.gridData = data;
             // Cache the result until the next request.
-            siteListing.cachedRecords = data
+            siteListing.cachedRecords = data;
           })
-      })
+      });
 
       bus.$on('updateSiteRecord', function (params) {
         updateSiteRecord(params);
@@ -175,10 +183,36 @@
             rowId: row.data.id,
             rowKey: element,
             content: ''
-          }
-          store.commit('addEditContent', options)
+          };
+          store.commit('addEditContent', options);
         })
-      })
+      });
+
+      // Display whole record in view area.
+      bus.$on('rowView', function (row) {
+
+        // Set temp variable for holding what was in the current table.
+        // We can't used the cached data as that is a list of all the records.
+        siteListing.tempGridData = siteListing.gridData;
+
+        // Filter table to only show that record.
+        siteListing.gridData = [row.oldData];
+
+        // Make call to stats page to get full data to inject.
+        fetch(siteConfig['atlasEnvironments'][localStorage.getItem('env')] + 'statistics/' + row.data.statistics)
+          .then(handleErrors)
+          .then(response => response.json())
+          .then(function (data) {
+            siteListing.rowViewContent = data;
+          })
+          .catch(error => error);
+        });
+
+      bus.$on('rowHide', function (row) {
+        // Filter table to only show that record.
+        siteListing.gridData = siteListing.tempGridData;
+        siteListing.rowViewContent = {};
+      });
 
       // Listen for autocomplete selections and match both inputs.
       bus.$on('select', function (params) {
@@ -189,14 +223,14 @@
           let params2 = {
             keyword: params.selectedOption.query,
             key: 'query'
-          }
-          bus.$emit('matchKeys', params2)
+          };
+          bus.$emit('matchKeys', params2);
         } else {
           let params2 = {
             keyword: params.selectedOption.title,
             key: 'title'
-          }
-          bus.$emit('matchKeys', params2)
+          };
+          bus.$emit('matchKeys', params2);
         }
       })
     },
@@ -205,7 +239,7 @@
         return siteListing.reset;
       },
       gridColumns: function () {
-        return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys
+        return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
       }
     },
     watch: {
@@ -213,7 +247,7 @@
       gridData: function (siteRecords) {
         getCodeRecords(store.state.atlasEnvironments[store.state.env])
           .then(function (codeRecords) {
-            addCodeToSites(siteRecords, codeRecords)
+            addCodeToSites(siteRecords, codeRecords);
           });
       }
     },
@@ -221,17 +255,17 @@
       search: function () {
 
         // Grab keyword to search for.
-        let query = null
-        let name = null
-        let that = this
+        let query = null;
+        let name = null;
+        let that = this;
         this.$children.forEach(function (element, index) {
           if (element.theKey === 'query') {
-            query = element.keyword
+            query = element.keyword;
           }
           if (element.theKey === 'title') {
-            name = element.keyword
+            name = element.keyword;
           }
-        })
+        });
 
         // If no query, then emit an error message and return.
         if (query === null) {
@@ -239,7 +273,7 @@
             text: 'No query found.',
             alertType: 'alert-danger'
           });
-          return
+          return;
         }
 
         // Make request to Atlas.
@@ -255,7 +289,7 @@
               text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
               alertType: 'alert-danger'
             });
-            that.$options.methods.resetSearch(that)
+            that.$options.methods.resetSearch(that);
           }
 
           // Get array only of site IDs to check from stats query.
@@ -290,13 +324,13 @@
             queryOption.title = element.title;
             queryOption.query = element.query;
             if (element.title !== name) {
-              queryOption.title = name
+              queryOption.title = name;
             }
 
             // Increment rank.
-            queryOption.rank = element.rank + 1
+            queryOption.rank = element.rank + 1;
           }
-        })
+        });
 
         // If queryOption is still null, then add this query as new.
         if (typeof queryOption.title === 'undefined' ) {
@@ -304,25 +338,25 @@
             title: name,
             query: query,
             rank: 1
-          }
+          };
         }
 
-        store.commit('saveQuery', queryOption)
+        store.commit('saveQuery', queryOption);
       },
       resetSearch: function (that = null) {
         let thing = {}
         if (that) {
-          thing = that
+          thing = that;
         } else {
-          thing = this
+          thing = this;
         }
 
         // Reset keywords in child components.
         thing.$children.forEach(function (element, index) {
           if (typeof element.keyword !== 'undefined') {
-            element.keyword = ''
+            element.keyword = '';
           }
-        })
+        });
 
         // By using the cached results when the page is loaded, the query can be reverted.
         siteListing.gridData = siteListing.cachedRecords;

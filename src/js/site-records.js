@@ -35,9 +35,9 @@ function formatSiteData(data) {
     elements.forEach(function (element, index) {
 
       // Format date.
-      var updated_date = new Date(element._updated);
-      var created_date = new Date(element._created);
-      var options = {
+      let updated_date = new Date(element._updated);
+      let created_date = new Date(element._created);
+      let options = {
         year: "numeric",
         month: "numeric",
         day: "numeric",
@@ -140,6 +140,7 @@ function updateSiteRecord(params, method = 'PATCH') {
         text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
         alertType: 'alert-success'
       });
+
       getSiteRecords(store.state.atlasEnvironments[store.state.env])
         .then(data => siteListing.gridData = data)
     })
@@ -160,12 +161,12 @@ function addCodeToSites(siteRecords, codeRecords) {
     cores: {},
     profiles: {},
     packages: {},
-  }
+  };
   // Separate out code into profiles, cores, and packages.
   codeRecords.forEach(function (record, index) {
 
-    let label = record['label'] ? record['label'] + '-' : ''
-    let version = record['version'] ? record['version'] : ''
+    let label = record['label'] ? record['label'] + '-' : '';
+    let version = record['version'] ? record['version'] : '';
 
     if (record['code_type'] === 'profile') {
       code.profiles[label + version] = record['id'];
@@ -178,30 +179,30 @@ function addCodeToSites(siteRecords, codeRecords) {
     if (record['code_type'] === 'module' || record['code_type'] === 'theme') {
       // Use name of record as label since the repo name will always be there when labels aren't.
       // For core and profile the names are always the same, so the label is more descriptive.
-      label = record['name'] ? record['name'] + '-' : ''
+      label = record['name'] ? record['name'] + '-' : '';
       code.packages[[label + version]] = record['id'];
     }
-  })
+  });
 
   // Loop through site records to search for code.
   siteRecords.forEach(function (element, index) {
 
     // Don't do anything if there is no code on the site record.
     if (typeof element['code'] === 'undefined') {
-      return
+      return;
     }
 
     if (typeof element['code']['core'] !== 'undefined') {
       let foundKeys = Object.keys(code.cores).filter(function(key) {
         return code.cores[key] === element['code']['core'];
-      })
+      });
       siteRecords[index]['core'] = foundKeys[0];
     }
 
     if (typeof element['code']['profile'] !== 'undefined') {
       let foundKeys = Object.keys(code.profiles).filter(function(key) {
         return code.profiles[key] === element['code']['profile'];
-      })
+      });
       siteRecords[index]['profile'] = foundKeys[0];
     }
 
@@ -212,13 +213,13 @@ function addCodeToSites(siteRecords, codeRecords) {
       element['code']['package'].forEach(function (element2, index2) {
         let foundKeys = Object.keys(code.packages).filter(function(key) {
           return code.packages[key] === element2;
-        })
+        });
         siteRecords[index]['packages'].push(foundKeys[0]);
       })
     }
   })
 
-  Vue.set(siteListing.gridData, siteRecords)
+  Vue.set(siteListing.gridData, siteRecords);
   // Cache the result until the next request.
-  Vue.set(siteListing.cachedRecords, siteRecords)
+  Vue.set(siteListing.cachedRecords, siteRecords);
 }

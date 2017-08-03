@@ -112,8 +112,8 @@
       sitesQuery: localStorage.getItem('sites-query'),
       codeQuery: localStorage.getItem('code-query'),
       repoListing: localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false,
-      saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : [],
-      saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')): []
+      saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : ['id', 'path', 'status', 'core', 'profile', 'packages'],
+      saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')): ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash']
     },
     computed: {
       siteKeys: function () {
@@ -138,6 +138,9 @@
 
         // Send success message.
         bus.$emit('onMessage', {text: 'Successfully saved settings.', alertType:'alert-success'});
+
+        // Redirect user so any settings changes can be reloaded.
+        window.location = window.location.href;
       }
     }
   });
