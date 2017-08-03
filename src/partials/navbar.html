@@ -18,7 +18,7 @@
         <li v-for="route in routes"><a :href="route.path">{{route.name}}</a></li>
       </ul>
       <div class="nav navbar-nav navbar-right">
-        <div class="styled-select slate">
+        <div class="styled-select">
         <select name="selectEnv" id="selectEnv" @change="changeEnv($event)">
           <option v-for="(env, index) in environments" :value="index" :selected="selectedEnv == env ? true : null">
             {{index}}

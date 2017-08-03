@@ -17,6 +17,7 @@
       media="all" rel="stylesheet"/>
   <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
   <link href="src/css/autocomplete.css" media="all" rel="stylesheet"/>
+  <link href="src/css/style.css" media="all" rel="stylesheet"/>
 
   <link rel="import" href="src/partials/navbar.html">
   <link rel="import" href="src/partials/listing.html">
@@ -25,374 +26,374 @@
   <link rel="import" href="src/partials/autocomplete-input.html">
 </head>
 <body>
-<div id="atlas-navbar">
-  <atlas-navbar
-      :routes="routes"
-      :environments="environments">
-  </atlas-navbar>
-</div>
-<div class="page container">
-  <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
-  <div id="site-listing" class="row">
-    <form id="statsSearch" class="row">
-      <div class="form-group row">
-        <div class="col-md-6">
-          <label for="query-mongo">Query</label>
-          <autocomplete-input
-              id="query-mongo"
-              :options-key="optionsKey"
-              the-key="query"
-              :model="statsQuery">
-          </autocomplete-input>
+  <div id="atlas-navbar">
+    <atlas-navbar
+        :routes="routes"
+        :environments="environments">
+    </atlas-navbar>
+  </div>
+  <div class="page container">
+    <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
+    <div id="site-listing" class="row">
+      <form id="statsSearch" class="row">
+        <div class="form-group row">
+          <div class="col-md-6">
+            <label for="query-mongo">Query</label>
+            <autocomplete-input
+                id="query-mongo"
+                :options-key="optionsKey"
+                the-key="query"
+                :model="statsQuery">
+            </autocomplete-input>
+          </div>
+          <div class="col-md-6">
+            <label for="query-name">Query Name</label>
+            <autocomplete-input
+                id="query-name"
+                :options-key="optionsKey"
+                the-key="title"
+                :model="statsQueryName">
+            </autocomplete-input>
+          </div>
         </div>
-        <div class="col-md-6">
-          <label for="query-name">Query Name</label>
-          <autocomplete-input
-              id="query-name"
-              :options-key="optionsKey"
-              the-key="title"
-              :model="statsQueryName">
-          </autocomplete-input>
+        <div class="form-group row col-md-6">
+          <button class="btn btn-primary" @click.prevent="search()">Search</button>
+          <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
         </div>
+      </form>
+      <form id="search" class="row">
+        <div class="form-group">
+          <label for="filter-records">Filter Table</label>
+          <input id="filter-records" class="form-control" name="query"
+                 v-model="searchQuery">
+        </div>
+      </form>
+      <div class="row">
+        <listing
+            :data="gridData"
+            :columns="gridColumns"
+            :filter-key="searchQuery"
+            :edit-keys="editKeys"
+            :select-keys="selectKeys"
+            :extra-content="rowViewContent"
+            :callback="callback">
+        </listing>
       </div>
-      <div class="form-group row col-md-6">
-        <button class="btn btn-primary" @click.prevent="search()">Search</button>
-        <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
-      </div>
-    </form>
-    <form id="search" class="row">
-      <div class="form-group">
-        <label for="filter-records">Filter Table</label>
-        <input id="filter-records" class="form-control" name="query"
-               v-model="searchQuery">
-      </div>
-    </form>
-    <div class="row">
-      <listing
-          :data="gridData"
-          :columns="gridColumns"
-          :filter-key="searchQuery"
-          :edit-keys="editKeys"
-          :select-keys="selectKeys"
-          :extra-content="rowViewContent"
+    </div>
+    <div id="create-site" class="row">
+      <confirm-button
+          :label="label"
           :callback="callback">
-      </listing>
+      </confirm-button>
     </div>
   </div>
-  <div id="create-site" class="row">
-    <confirm-button
-        :label="label"
-        :callback="callback">
-    </confirm-button>
-  </div>
-</div>
-<script src="src/config/config.js"></script>
-<script src="src/config/routes.js"></script>
-<script src="src/js/utilities.js"></script>
-<script src="src/js/components.js"></script>
-<script src="src/js/navbar.js"></script>
-<script src="src/js/site-records.js"></script>
-<script src="src/js/code-records.js"></script>
-<script type="text/javascript">
-  /**
-   * Imports Site Listing HTML into DOM of pages using it.
-   *
-   * @type {Element}
-   */
-  link = document.querySelector('link[href="src/partials/listing.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
+  <script src="src/config/config.js"></script>
+  <script src="src/config/routes.js"></script>
+  <script src="src/js/utilities.js"></script>
+  <script src="src/js/components.js"></script>
+  <script src="src/js/navbar.js"></script>
+  <script src="src/js/site-records.js"></script>
+  <script src="src/js/code-records.js"></script>
+  <script type="text/javascript">
+    /**
+     * Imports Site Listing HTML into DOM of pages using it.
+     *
+     * @type {Element}
+     */
+    link = document.querySelector('link[href="src/partials/listing.html"]');
+    content = link.import;
+    el = content.querySelector('script');
+    document.querySelector('body').appendChild(el.cloneNode(true));
 
-  link = document.querySelector('link[href="src/partials/row.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
+    link = document.querySelector('link[href="src/partials/row.html"]');
+    content = link.import;
+    el = content.querySelector('script');
+    document.querySelector('body').appendChild(el.cloneNode(true));
 
-  link = document.querySelector('link[href="src/partials/autocomplete-input.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
+    link = document.querySelector('link[href="src/partials/autocomplete-input.html"]');
+    content = link.import;
+    el = content.querySelector('script');
+    document.querySelector('body').appendChild(el.cloneNode(true));
 
-  /**
-   * Imports Button HTML into DOM of pages using it.
-   *
-   * @type {Element}
-   */
-  link = document.querySelector('link[href="src/partials/confirm-button.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
+    /**
+     * Imports Button HTML into DOM of pages using it.
+     *
+     * @type {Element}
+     */
+    link = document.querySelector('link[href="src/partials/confirm-button.html"]');
+    content = link.import;
+    el = content.querySelector('script');
+    document.querySelector('body').appendChild(el.cloneNode(true));
 
-  // Place site data in table via site-listing template located in site-listing.html.
-  let siteListing = new Vue({
-    el: '#site-listing',
-    data: {
-      searchQuery: '',
-      statsQuery: '',
-      statsQueryName: '',
-      optionsKey: 'statsQueryOptions',
-      gridData: [],
-      cachedRecords: [],
-      editKeys: ['path', 'status'],
-      selectKeys: ['status'],
-      callback: 'updateSiteRecord',
-      reset: false,
-      rowViewContent: {}
-    },
-    created: function () {
-      // Assign this to that in case needed in events.
-      let that = this;
-
-      bus.$on('switchEnv', function (env) {
-        getSiteRecords(store.state.atlasEnvironments[env])
-          .then(function (data) {
-            siteListing.gridData = data;
-            // Cache the result until the next request.
-            siteListing.cachedRecords = data;
-
-            // Hide any row if it was being viewed.
-            siteListing.rowViewContent = {};
-          })
-      });
-
-      // When a user tries to edit a site record, update data if etags don't match.
-      bus.$on('etagFail', function (env) {
-        getSiteRecords(store.state.atlasEnvironments[env])
-          .then(function (data) {
-            siteListing.gridData = data;
-            // Cache the result until the next request.
-            siteListing.cachedRecords = data;
-          })
-      });
-
-      bus.$on('updateSiteRecord', function (params) {
-        updateSiteRecord(params);
-      });
-
-      bus.$on('deleteRecord', function (params) {
-        updateSiteRecord(params, 'DELETE');
-      });
-
-      // Set anything that needs updated when in edit mode.
-      bus.$on('rowEdit', function (row) {
-        // Add special edit content to the row key by key.
-        row.editKeys.forEach(function (element, index) {
-          // Need to set edit row options to nothing so they can render in component.
-          let options = {
-            rowId: row.data.id,
-            rowKey: element,
-            content: ''
-          };
-          store.commit('addEditContent', options);
-        })
-      });
-
-      // Display whole record in view area.
-      bus.$on('rowView', function (row) {
-
-        // Set temp variable for holding what was in the current table.
-        // We can't used the cached data as that is a list of all the records.
-        siteListing.tempGridData = siteListing.gridData;
-
-        // Filter table to only show that record.
-        siteListing.gridData = [row.oldData];
-
-        // Make call to stats page to get full data to inject.
-        fetch(store.state.atlasEnvironments[store.state.env] + 'statistics/' + row.data.statistics)
-          .then(handleErrors)
-          .then(response => response.json())
-          .then(function (data) {
-            siteListing.rowViewContent = data;
-          })
-          .catch(error => error);
-        });
-
-      bus.$on('rowHide', function (row) {
-        // Filter table to only show that record.
-        siteListing.gridData = siteListing.tempGridData;
-        siteListing.rowViewContent = {};
-      });
-
-      // Listen for autocomplete selections and match both inputs.
-      bus.$on('select', function (params) {
-
-        // Since we know that we have queries and titles, we can check the key and
-        // make the opposite property match what the user selected.
-        if (params.key === 'title') {
-          let params2 = {
-            keyword: params.selectedOption.query,
-            key: 'query'
-          };
-          bus.$emit('matchKeys', params2);
-        } else {
-          let params2 = {
-            keyword: params.selectedOption.title,
-            key: 'title'
-          };
-          bus.$emit('matchKeys', params2);
-        }
-      })
-    },
-    computed: {
-      showReset: function () {
-        return siteListing.reset;
+    // Place site data in table via site-listing template located in site-listing.html.
+    let siteListing = new Vue({
+      el: '#site-listing',
+      data: {
+        searchQuery: '',
+        statsQuery: '',
+        statsQueryName: '',
+        optionsKey: 'statsQueryOptions',
+        gridData: [],
+        cachedRecords: [],
+        editKeys: ['path', 'status'],
+        selectKeys: ['status'],
+        callback: 'updateSiteRecord',
+        reset: false,
+        rowViewContent: {}
       },
-      gridColumns: function () {
-        return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
-      }
-    },
-    watch: {
-      // Update table with code data once site records have been loaded.
-      gridData: function (siteRecords) {
-        getCodeRecords(store.state.atlasEnvironments[store.state.env])
-          .then(function (codeRecords) {
-            addCodeToSites(siteRecords, codeRecords);
-          });
-      }
-    },
-    methods: {
-      search: function () {
-
-        // Grab keyword to search for.
-        let query = null;
-        let name = null;
+      created: function () {
+        // Assign this to that in case needed in events.
         let that = this;
-        this.$children.forEach(function (element, index) {
-          if (element.theKey === 'query') {
-            query = element.keyword;
-          }
-          if (element.theKey === 'title') {
-            name = element.keyword;
-          }
+
+        bus.$on('switchEnv', function (env) {
+          getSiteRecords(store.state.atlasEnvironments[env])
+            .then(function (data) {
+              siteListing.gridData = data;
+              // Cache the result until the next request.
+              siteListing.cachedRecords = data;
+
+              // Hide any row if it was being viewed.
+              siteListing.rowViewContent = {};
+            });
         });
 
-        // If no query, then emit an error message and return.
-        if (query === null) {
-          bus.$emit('onMessage', {
-            text: 'No query found.',
-            alertType: 'alert-danger'
+        // When a user tries to edit a site record, update data if etags don't match.
+        bus.$on('etagFail', function (env) {
+          getSiteRecords(store.state.atlasEnvironments[env])
+            .then(function (data) {
+              siteListing.gridData = data;
+              // Cache the result until the next request.
+              siteListing.cachedRecords = data;
+            });
+        });
+
+        bus.$on('updateSiteRecord', function (params) {
+          updateSiteRecord(params);
+        });
+
+        bus.$on('deleteRecord', function (params) {
+          updateSiteRecord(params, 'DELETE');
+        });
+
+        // Set anything that needs updated when in edit mode.
+        bus.$on('rowEdit', function (row) {
+          // Add special edit content to the row key by key.
+          row.editKeys.forEach(function (element, index) {
+            // Need to set edit row options to nothing so they can render in component.
+            let options = {
+              rowId: row.data.id,
+              rowKey: element,
+              content: ''
+            };
+            store.commit('addEditContent', options);
           });
-          return;
+        });
+
+        // Display whole record in view area.
+        bus.$on('rowView', function (row) {
+
+          // Set temp variable for holding what was in the current table.
+          // We can't used the cached data as that is a list of all the records.
+          siteListing.tempGridData = siteListing.gridData;
+
+          // Filter table to only show that record.
+          siteListing.gridData = [row.oldData];
+
+          // Make call to stats page to get full data to inject.
+          fetch(store.state.atlasEnvironments[store.state.env] + 'statistics/' + row.data.statistics)
+            .then(handleErrors)
+            .then(response => response.json())
+            .then(function (data) {
+              siteListing.rowViewContent = data;
+            })
+            .catch(error => error);
+        });
+
+        bus.$on('rowHide', function (row) {
+          // Filter table to only show that record.
+          siteListing.gridData = siteListing.tempGridData;
+          siteListing.rowViewContent = {};
+        });
+
+        // Listen for autocomplete selections and match both inputs.
+        bus.$on('select', function (params) {
+
+          // Since we know that we have queries and titles, we can check the key and
+          // make the opposite property match what the user selected.
+          if (params.key === 'title') {
+            let params2 = {
+              keyword: params.selectedOption.query,
+              key: 'query'
+            };
+            bus.$emit('matchKeys', params2);
+          } else {
+            let params2 = {
+              keyword: params.selectedOption.title,
+              key: 'title'
+            };
+            bus.$emit('matchKeys', params2);
+          }
+        });
+      },
+      computed: {
+        showReset: function () {
+          return siteListing.reset;
+        },
+        gridColumns: function () {
+          return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
         }
+      },
+      watch: {
+        // Update table with code data once site records have been loaded.
+        gridData: function (siteRecords) {
+          getCodeRecords(store.state.atlasEnvironments[store.state.env])
+            .then(function (codeRecords) {
+              addCodeToSites(siteRecords, codeRecords);
+            });
+        }
+      },
+      methods: {
+        search: function () {
 
-        // Make request to Atlas.
-        let baseURL = store.state.atlasEnvironments[store.state.env];
-        let response = atlasRequest(baseURL, 'statistics', '?where=' + query);
+          // Grab keyword to search for.
+          let query = null;
+          let name = null;
+          let that = this;
+          this.$children.forEach(function (element, index) {
+            if (element.theKey === 'query') {
+              query = element.keyword;
+            }
+            if (element.theKey === 'title') {
+              name = element.keyword;
+            }
+          });
 
-        // Response is a Promise object so we must resolve it to get the data out.
-        response.then(function (objects) {
-
-          // If no search results returned, catch with error.
-          if (typeof objects["0"]._error !== 'undefined') {
+          // If no query, then emit an error message and return.
+          if (query === null) {
             bus.$emit('onMessage', {
-              text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
+              text: 'No query found.',
               alertType: 'alert-danger'
             });
-            that.$options.methods.resetSearch(that);
+            return;
           }
 
-          // Get array only of site IDs to check from stats query.
-          let siteIds = [];
-          objects.forEach(function (elements, index) {
-            elements.forEach(function (element, index) {
-              siteIds.push(element['site']);
-            });
-          });
+          // Make request to Atlas.
+          let baseURL = store.state.atlasEnvironments[store.state.env];
+          let response = atlasRequest(baseURL, 'statistics', '?where=' + query);
 
-          // Filter results by using the site ID stored in stats records.
-          let queryResult = siteListing.cachedRecords.filter(function (row) {
-            return siteIds.indexOf(row['id']) > -1
-          });
+          // Response is a Promise object so we must resolve it to get the data out.
+          response.then(function (objects) {
 
-          // By setting the gridData property, the view will automatically update.
-          siteListing.gridData = queryResult;
-          siteListing.reset = true;
-        })
-          .catch((error) => {
-            console.log(error);
-          });
-
-
-        // Grab current list of options.
-        let queryOption = {};
-        store.state[this.optionsKey].forEach(function (element, index) {
-
-          // Replace query if it exists.
-          if (element.query === query) {
-            // If name/title isn't the same, then switch to new one.
-            queryOption.title = element.title;
-            queryOption.query = element.query;
-            if (element.title !== name) {
-              queryOption.title = name;
+            // If no search results returned, catch with error.
+            if (typeof objects["0"]._error !== 'undefined') {
+              bus.$emit('onMessage', {
+                text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
+                alertType: 'alert-danger'
+              });
+              that.$options.methods.resetSearch(that);
             }
 
-            // Increment rank.
-            queryOption.rank = element.rank + 1;
+            // Get array only of site IDs to check from stats query.
+            let siteIds = [];
+            objects.forEach(function (elements, index) {
+              elements.forEach(function (element, index) {
+                siteIds.push(element['site']);
+              });
+            });
+
+            // Filter results by using the site ID stored in stats records.
+            let queryResult = siteListing.cachedRecords.filter(function (row) {
+              return siteIds.indexOf(row['id']) > -1;
+            });
+
+            // By setting the gridData property, the view will automatically update.
+            siteListing.gridData = queryResult;
+            siteListing.reset = true;
+          })
+            .catch((error) => {
+              console.log(error);
+            });
+
+
+          // Grab current list of options.
+          let queryOption = {};
+          store.state[this.optionsKey].forEach(function (element, index) {
+
+            // Replace query if it exists.
+            if (element.query === query) {
+              // If name/title isn't the same, then switch to new one.
+              queryOption.title = element.title;
+              queryOption.query = element.query;
+              if (element.title !== name) {
+                queryOption.title = name;
+              }
+
+              // Increment rank.
+              queryOption.rank = element.rank + 1;
+            }
+          });
+
+          // If queryOption is still null, then add this query as new.
+          if (typeof queryOption.title === 'undefined') {
+            queryOption = {
+              title: name,
+              query: query,
+              rank: 1
+            };
           }
-        });
 
-        // If queryOption is still null, then add this query as new.
-        if (typeof queryOption.title === 'undefined' ) {
-          queryOption = {
-            title: name,
-            query: query,
-            rank: 1
-          };
-        }
-
-        store.commit('saveQuery', queryOption);
-      },
-      resetSearch: function (that = null) {
-        let thing = {}
-        if (that) {
-          thing = that;
-        } else {
-          thing = this;
-        }
-
-        // Reset keywords in child components.
-        thing.$children.forEach(function (element, index) {
-          if (typeof element.keyword !== 'undefined') {
-            element.keyword = '';
+          store.commit('saveQuery', queryOption);
+        },
+        resetSearch: function (that = null) {
+          let thing = {};
+          if (that) {
+            thing = that;
+          } else {
+            thing = this;
           }
-        });
 
-        // By using the cached results when the page is loaded, the query can be reverted.
-        siteListing.gridData = siteListing.cachedRecords;
-        siteListing.searchQuery = '';
-        siteListing.reset = false;
+          // Reset keywords in child components.
+          thing.$children.forEach(function (element, index) {
+            if (typeof element.keyword !== 'undefined') {
+              element.keyword = '';
+            }
+          });
+
+          // By using the cached results when the page is loaded, the query can be reverted.
+          siteListing.gridData = siteListing.cachedRecords;
+          siteListing.searchQuery = '';
+          siteListing.reset = false;
+        }
       }
-    }
-  });
+    });
 
-  // Add create a site button to page.
-  let siteCreateButton = new Vue({
-    el: '#create-site',
-    data: {
-      label: 'Create A Site',
-      callback: 'createSite',
-    },
-    created: function () {
-      bus.$on('createSite', function (params) {
-        createSite(params);
-      });
-    }
-  });
+    // Add create a site button to page.
+    let siteCreateButton = new Vue({
+      el: '#create-site',
+      data: {
+        label: 'Create A Site',
+        callback: 'createSite',
+      },
+      created: function () {
+        bus.$on('createSite', function (params) {
+          createSite(params);
+        });
+      }
+    });
 
-  /**
-   * Creates the list of site records based on the environment. Every time the environment
-   * changes via the environment selector, the search will update.
-   */
-  $(document).ready(function () {
-    let cachedRecords = {};
-    getSiteRecords(store.state.atlasEnvironments[store.state.env])
-      .then(function (data) {
-        siteListing.gridData = data;
-        // Cache the result until the next request.
-        siteListing.cachedRecords = data;
-      });
-  });
-</script>
+    /**
+     * Creates the list of site records based on the environment. Every time the environment
+     * changes via the environment selector, the search will update.
+     */
+    $(document).ready(function () {
+      let cachedRecords = {};
+      getSiteRecords(store.state.atlasEnvironments[store.state.env])
+        .then(function (data) {
+          siteListing.gridData = data;
+          // Cache the result until the next request.
+          siteListing.cachedRecords = data;
+        });
+    });
+  </script>
 </body>
 </html>
