@@ -12,7 +12,7 @@ function getCodeRecords(env) {
   }
 
   // Return a promise with formatted code data.
-  return atlasRequest(siteConfig['atlasEnvironments'][localStorage.getItem('env')], 'code', query).then(function (data) {
+  return atlasRequest(store.state.atlasEnvironments[store.state.env], 'code', query).then(function (data) {
     return formatCodeData(data);
   });
 }
@@ -84,7 +84,7 @@ function updateCodeRecord(params, method = 'PATCH') {
     body = JSON.stringify(formInput);
   }
 
-  let baseURL = siteConfig['atlasEnvironments'][localStorage.getItem('env')];
+  let baseURL = store.state.atlasEnvironments[store.state.env];
   atlasRequest(baseURL, 'code/' + params.current.id, query = '', method, body, params.current.etag)
     .then(function (response) {
       bus.$emit('onMessage', {
@@ -92,8 +92,8 @@ function updateCodeRecord(params, method = 'PATCH') {
         alertType: 'alert-success'
       });
 
-      getCodeRecords(siteConfig['atlasEnvironments'][localStorage.getItem('env')])
-        .then(data => codeListing.gridData = data);
+      getCodeRecords(store.state.atlasEnvironments[store.state.env])
+        .then(data => codeListing.gridData = data)
     })
     .catch((error) => {
       console.log(error);

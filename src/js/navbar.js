@@ -22,12 +22,17 @@ Vue.component('atlas-navbar', {
     },
     environments: {
       type: Object,
-      default: siteConfig.atlasEnvironments
+      default: function () {
+        return store.state.atlasEnvironments
+      }
     }
   },
   computed: {
     selectedEnv: function () {
-      return siteConfig.atlasEnvironments[localStorage.getItem('env')];
+      return store.state.atlasEnvironments[store.state.env];
+    },
+    navClasses: function () {
+      return 'navbar navbar-default navbar-fixed-top environment-' +  store.state.env;
     }
   },
   methods: {
@@ -40,7 +45,8 @@ Vue.component('atlas-navbar', {
       this.finaled = false;
     },
     changeEnv: function (event) {
-      localStorage.setItem('env', event.target.value);
+      //localStorage.setItem('env', event.target.value);
+      store.commit('switchEnv', event.target.value);
       bus.$emit('switchEnv', event.target.value);
     }
   }

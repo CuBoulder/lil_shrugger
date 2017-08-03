@@ -1,47 +1,49 @@
 <script type="text/x-template" id="a-row">
-  <tr scope="row">
-    <!-- Row with data and edit/inputs -->
-    <td v-for="(key, index) in columns">
-      <div v-if="showDefault(key)" v-html="link(data[key],key)"></div>
-      <div v-if="showEdit(key)">
-        <div v-if="selectType(key)">
-          <select :name="key" v-model="data[key]">
-            <option v-for="anOption in selectOptions[key]" :value="anOption" :selected=" data[key] == anOption ? true : null">{{anOption}}</option>
-          </select>
+  <transition name="fade">
+    <tr scope="row">
+      <!-- Row with data and edit/inputs -->
+      <td v-for="(key, index) in columns">
+        <div v-if="showDefault(key)" v-html="link(data[key],key)"></div>
+        <div v-if="showEdit(key)">
+          <div v-if="selectType(key)">
+            <select :name="key" v-model="data[key]">
+              <option v-for="anOption in selectOptions[key]" :value="anOption" :selected=" data[key] == anOption ? true : null">{{anOption}}</option>
+            </select>
+          </div>
+          <div v-else>
+            <input type="text" :name="key" :value="data[key]" v-model="data[key]">
+          </div>
+          <!-- Adding an editOptions div so that fields can have special things happen when in edit mode.  v-html="editContent[data.id][key]"-->
+          <div v-html="editContent[data.id][key]"></div>
         </div>
-        <div v-else>
-          <input type="text" :name="key" :value="data[key]" v-model="data[key]">
+      </td>
+      <!-- @todo Only add Edit option if there are editKeys -->
+      <td>
+        <button v-if="showDefault()" class="btn btn-default" @click="makeEdit()">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        </button>
+        <button v-if="!view" class="btn btn-default" @click="viewRecord()">
+          <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+        </button>
+        <button v-if="view" class="btn btn-default" @click="hideRecord()">
+          <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+        </button>
+        <div v-if="showEdit()">
+          <confirm-button label="Update"
+                          :row="this"
+                          :edit="edit"
+                          :callback="callback"
+                          :params="params">
+          </confirm-button>
+          <confirm-button label="Delete"
+                          :row="this"
+                          :edit="edit"
+                          callback="deleteRecord"
+                          :params="params">
+          </confirm-button>
+          <button class="btn btn-default" @click="cancelEdit()">Cancel Edit</button>
         </div>
-        <!-- Adding an editOptions div so that fields can have special things happen when in edit mode.  v-html="editContent[data.id][key]"-->
-        <div v-html="editContent[data.id][key]"></div>
-      </div>
-    </td>
-    <!-- @todo Only add Edit option if there are editKeys -->
-    <td>
-      <button v-if="showDefault()" class="btn btn-default" @click="makeEdit()">
-        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-      </button>
-      <button v-if="!view" class="btn btn-default" @click="viewRecord()">
-        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-      </button>
-      <button v-if="view" class="btn btn-default" @click="hideRecord()">
-        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-      </button>
-      <div v-if="showEdit()">
-      <confirm-button label="Update"
-                      :row="this"
-                      :edit="edit"
-                      :callback="callback"
-                      :params="params">
-      </confirm-button>
-      <confirm-button label="Delete"
-                      :row="this"
-                      :edit="edit"
-                      callback="deleteRecord"
-                      :params="params">
-      </confirm-button>
-      <button class="btn btn-default" @click="cancelEdit()">Cancel Edit</button>
-      </div>
-    </td>
-  </tr>
+      </td>
+    </tr>
+  </transition>
 </script>
