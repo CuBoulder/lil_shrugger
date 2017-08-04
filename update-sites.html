@@ -68,18 +68,10 @@
 
   <div class="container-fluid">
     <legend>Send update to Atlas:</legend>
-    <div class="form-group col-md-6">
-      <p>These sites: </p>
-      <ul v-if="sites == ''">
-        <li>- Warning: No sites available (Check JS console).</li>
-      </ul>
-      <ul v-for="site in sites._items">
-        <li>- {{site.sid}}</li>
-      </ul>
-      <p>will have these packages added: {{updatePackages}}</p>
-      <p>And these packages will be removed: {{removePackages}}</p>
+    <div class="form-group col-md-10">
+      <p>Add packages (<span v-for="package in updatePackages">{{codeName(package)}} </span>) to these sites (<span v-for="site in sites._items">{{site.path}} </span>) and remove these packages (<span v-for="package in removePackages">{{codeName(package)}} </span>).</p>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-2">
       <button class="btn btn-primary pull-right" id="update-packages" @click="sendToAtlas">Update Packages</button>
     </div>
   </div>
@@ -90,8 +82,6 @@
 <script src="src/js/utilities.js"></script>
 <script src="src/js/components.js"></script>
 <script src="src/js/navbar.js"></script>
-<script src="src/js/site-records.js"></script>
-<script src="src/js/code-records.js"></script>
 <script src="src/js/update-sites.js"></script>
 </body>
 </html>
