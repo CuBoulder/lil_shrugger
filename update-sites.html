@@ -6,16 +6,24 @@
 
   <script src="https://unpkg.com/vue"></script>
   <script src="https://unpkg.com/vuex"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+          integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+          crossorigin="anonymous"></script>
+  <script
+     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="all" rel="stylesheet"/>
+  <link
+     href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+     media="all" rel="stylesheet"/>
   <link href="src/css/env-dropdown.css" media="all" rel="stylesheet"/>
+  <link href="src/css/autocomplete.css" media="all" rel="stylesheet"/>
   <link href="src/css/style.css" media="all" rel="stylesheet"/>
 
   <link rel="import" href="src/partials/navbar.html">
   <link rel="import" href="src/partials/listing.html">
+  <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
+  <link rel="import" href="src/partials/autocomplete-input.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -25,20 +33,18 @@
   </atlas-navbar>
 </div>
 <div id="list-full-sites" class="container">
-  <message-area id="alert" :message="message" :class="alertType" class="alert" v-if="message.length > 0"></message-area>
+  <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <form id="search" class="row">
     <div class="form-group">
-      <label for="querySites">Search</label>
+      <legend>Search</legend>
       <input id="querySites" class="form-control" name="querySites"
              v-model="siteQuery" placeholder="?where={&#34;code.package&#34;:&#34;5939629989b0dc0e497e35ad&#34;}">
-    </div>
-    <div class="form-group">
-      <button class="btn btn-info" @click.prevent="getSites(siteQuery)">Query sites</button>
+      <button class="btn btn-primary pull-right" @click.prevent="getSites(siteQuery)">Query sites</button>
     </div>
   </form>
 
-  <div class="form-group">
-    <label for="packages-to-remove" id="remove-packages">Remove Packages</label>
+  <div class="form-group col-md-6">
+    <legend id="remove-packages">Remove Packages</legend>
     <select multiple class="form-control" id="packages-to-add" v-model="removePackages" style="height:300px;">
       <option disabled selected value> -- select an option -- </option>
       <template v-for="package in sites._items">
@@ -47,7 +53,9 @@
         </option>
       </template>
     </select>
-    <label for="packages-to-add" id="add-packages">Add Packages</label>
+  </div>
+  <div class="form-group col-md-6">
+    <legend id="add-packages">Add Packages</legend>
     <select multiple class="form-control" id="packages-to-remove" v-model="updatePackages" style="height:300px;">
       <option disabled selected value> -- select an option -- </option>
       <template v-for="code in codes._items" v-if="code.meta.code_type !== 'core'">
@@ -58,15 +66,24 @@
     </select>
   </div>
 
-  <div class="form-group">
-    <h3>Sites patched with this update:</h3>
-    <ul v-for="site in sites._items">
-      <li>{{site.sid}}</li>
-    </ul>
-
+  <div class="container-fluid">
+    <legend>Send update to Atlas:</legend>
+    <div class="form-group col-md-6">
+      <p>These sites: </p>
+      <ul v-if="sites == ''">
+        <li>- Warning: No sites available (Check JS console).</li>
+      </ul>
+      <ul v-for="site in sites._items">
+        <li>- {{site.sid}}</li>
+      </ul>
+      <p>will have these packages added: {{updatePackages}}</p>
+      <p>And these packages will be removed: {{removePackages}}</p>
+      <p>{{siteQuery}}</p>
+    </div>
+    <div class="form-group col-md-6">
+      <button class="btn btn-primary pull-right" id="update-packages" @click="sendToAtlas">Update Packages</button>
+    </div>
   </div>
-  <button class="btn btn-primary" id="update-packages" @click="sendToAtlas">Update Packages</button>
-  <p></p>
 </div>
 
 <script src="src/config/config.js"></script>
@@ -74,6 +91,8 @@
 <script src="src/js/utilities.js"></script>
 <script src="src/js/components.js"></script>
 <script src="src/js/navbar.js"></script>
+<script src="src/js/site-records.js"></script>
+<script src="src/js/code-records.js"></script>
 <script src="src/js/update-sites.js"></script>
 </body>
 </html>

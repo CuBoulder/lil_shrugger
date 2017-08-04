@@ -3,12 +3,7 @@
  *
  * @type {Element}
  */
-let link = document.querySelector('link[href="src/partials/listing.html"]');
-let content = link.import;
-let el = content.querySelector('script');
-document.querySelector('body').appendChild(el.cloneNode(true));
-
-let baseURL = store.state.atlasEnvironments[store.state.env];
+let packageBaseURL = store.state.atlasEnvironments[store.state.env];
 
 let vm = new Vue({
   el: '#list-full-sites',
@@ -25,21 +20,32 @@ let vm = new Vue({
   methods: {
     getSites(siteQuery) {
       let that = this;
-      let endpoint = '/sites';
-
-      atlasRequest(baseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => that.sites = data);
+      let endpoint = 'sites';
+      console.log(packageBaseURL+endpoint+siteQuery);
+      $.getJSON( packageBaseURL+endpoint+siteQuery, {
+        format: "json"
+      })
+        .done(function( data ) {
+          that.sites = data;
+        });
+      // atlasRequest(packageBaseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => that.sites = data);
     },
     getCodes() {
       let that = this;
-      let endpoint = '/code';
-
-      atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data);
+      let endpoint = 'code';
+      $.getJSON( packageBaseURL+endpoint, {
+        format: "json"
+      })
+        .done(function( data ) {
+          that.codes = data;
+      });
+      // atlasRequest(packageBaseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data);
     },
     sendToAtlas() {
       let siteOriginalPackages = this.sites._items;
 
       siteOriginalPackages.forEach(function(e) {
-        let baseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
+        // let packageBaseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
 
         let id = e._id;
         let addPackages = vm.updatePackages;
@@ -73,10 +79,10 @@ let vm = new Vue({
 
         let site_etag = e._etag;
 
-        if (packagesAdded.length <= 0) {
+        if (packagesAdded.length < 0) {
           return '';
         } else {
-          atlasRequest(baseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
+          atlasRequest(packageBaseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
           window.scrollTo(0, 0);
           $('#update-packages').attr('disabled','disabled');
           console.log('Request has been sent to Atlas.');
