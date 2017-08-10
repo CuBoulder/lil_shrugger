@@ -8,6 +8,14 @@
     <table class="table table-responsive">
       <thead>
       <tr>
+        <th>
+          <input type="checkbox"
+                 id="select-all-checkbox"
+                 name="select-all-checkbox"
+                 value="checked"
+                 @change="selectAll()"
+                 v-model="allChecked">
+        </th>
         <th v-for="key in columns"
             @click="sortBy(key)"
             :class="{ active: sortKey == key }">
@@ -26,6 +34,7 @@
            :old-data="filteredData[index]"
            :edit-keys="editKeys"
            :select-keys="selectKeys"
+           :all-checked="allChecked"
            :callback="callback"
            :columns="columns">
       </row>
