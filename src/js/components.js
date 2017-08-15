@@ -166,6 +166,7 @@ Vue.component('row', {
       return store.state.editContent;
     },
     isChecked: function () {
+      console.log(this.allChecked);
       return this.allChecked;
     }
   },
@@ -193,7 +194,6 @@ Vue.component('row', {
           return 'N/A';
         }
       }
-
       return value;
     },
     selectType: function (index) {
@@ -206,7 +206,6 @@ Vue.component('row', {
       this.checked = !this.checked;
 
       // Add row to sites array for commands.
-      console.log(this.checked);
       store.commit('addSiteToCommands', {add: this.checked, siteId: this.data.path});
 
     },

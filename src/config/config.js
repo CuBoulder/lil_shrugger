@@ -114,6 +114,7 @@ const store = new Vuex.Store({
         let arr = store.state.sitesSendCommand.filter(function (element) {
           return element !== options.siteId;
         });
+        store.state.sitesSendCommand = arr;
       }
     },
     addAllSitesToCommands (state, siteIds) {
