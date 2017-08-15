@@ -5,6 +5,13 @@
  */
 let packageBaseURL = store.state.atlasEnvironments[store.state.env];
 
+function remDup() {
+  $("#packages-to-add option").val(function(idx, val) {
+    $(this).siblings("[value='"+ val +"']").remove();
+  });
+  console.log('Duplicate options removed.');
+}
+
 let vm = new Vue({
   el: '#list-full-sites',
   data: {
@@ -15,36 +22,26 @@ let vm = new Vue({
     packages: [],
     codes: [],
     sites: [],
-    siteQuery: '?where={"code.package":"5893a62c926f5b14369b5e23"}'
+    siteQuery: '?where={"code.package":"588b90ab36447521c5af51e4"}'
   },
   methods: {
     getSites(siteQuery) {
       let that = this;
       let endpoint = 'sites';
       console.log(packageBaseURL+endpoint+siteQuery);
-      $.getJSON( packageBaseURL+endpoint+siteQuery, {
-        format: "json"
-      })
-        .done(function( data ) {
-          that.sites = data;
-        });
-      removeDup();
-      // atlasRequest(packageBaseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => that.sites = data);
+
+      atlasRequest(packageBaseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => that.sites = data);
+      setTimeout(remDup, 50);
     },
     getCodes() {
       let that = this;
       let endpoint = 'code';
-      $.getJSON( packageBaseURL+endpoint, {
-        format: "json"
-      })
-        .done(function( data ) {
-          that.codes = data;
-      });
+      console.log(packageBaseURL+endpoint);
 
-      // atlasRequest(packageBaseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data);
+      atlasRequest(packageBaseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data);
     },
     sendToAtlas() {
-      let siteOriginalPackages = this.sites._items;
+      let siteOriginalPackages = this.sites[0];
 
       siteOriginalPackages.forEach(function(e) {
         // let packageBaseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
@@ -94,7 +91,7 @@ let vm = new Vue({
 
     },
     codeName(index) {
-      let codeItem = vm.codes._items;
+      let codeItem = vm.codes[0];
 
       codeItem.forEach(function(e) {
         let codeName = e.meta.name;
@@ -110,8 +107,8 @@ let vm = new Vue({
   },
   computed: {
     computedCodeName(index) {
-      let codeItem = vm.codes._items;
-      let sitePackage = vm.sites._items;
+      let codeItem = vm.codes[0];
+      let sitePackage = vm.sites[0];
 
       sitePackage.forEach(function(e) {
         let index = e.code.package;

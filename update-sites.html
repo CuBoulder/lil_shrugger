@@ -24,14 +24,6 @@
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
   <link rel="import" href="src/partials/autocomplete-input.html">
-  <script>
-    function removeDup() {
-      $("select option").val(function (index, val) {
-        $(this).siblings("[value='" + val + "']").remove();
-        console.log('Did if fucking work?');
-      })
-    }
-  </script>
 </head>
 <body>
 <div id="atlas-navbar">
@@ -54,20 +46,21 @@
     <legend id="remove-packages">Remove Packages</legend>
     <select multiple class="form-control" id="packages-to-add" v-model="removePackages" style="height:300px;">
       <option disabled selected value> -- select an option -- </option>
-      <template v-for="package in sites._items">
-        <option :value="index" v-if="package.code.package != null" v-for="(index, val) in package.code.package">
+      <template v-for="site in sites[0]">
+        <option :value="index" v-if="site.code.package != null" v-for="index in site.code.package">
           {{codeName(index)}}: {{index}}
         </option>
       </template>
     </select>
+    <!--<p v-for="site in sites[0]">{{site.code.package}}</p>-->
   </div>
   <div class="form-group col-md-6">
     <legend id="add-packages">Add Packages</legend>
     <select multiple class="form-control" id="packages-to-remove" v-model="updatePackages" style="height:300px;">
       <option disabled selected value> -- select an option -- </option>
-      <template v-for="code in codes._items" v-if="code.meta.code_type !== 'core'">
+      <template v-for="code in codes[0]" v-if="code.meta.code_type !== 'core'">
         <option :value="code._id" v-if="code.meta.code_type !== 'profile'">
-          <span><strong>{{code.meta.label}}</strong> (name: {{code.meta.name}}) (id: {{code._id}})</span>
+          {{code.meta.label}} {{code.meta.name}}: {{code._id}}
         </option>
       </template>
     </select>
@@ -84,7 +77,7 @@
       </div>
       <div class="col-md-5">
         <h3>Sites to update:</h3>
-          <ul v-for="site in sites._items"><li>- {{site.path}}</li></ul>
+          <ul v-for="site in sites[0]"><li>- {{site.path}}</li></ul>
       </div>
     </div>
     <div class="form-group col-md-2">
