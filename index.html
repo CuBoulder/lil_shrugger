@@ -29,54 +29,58 @@
 <div id="atlas-navbar">
   <atlas-navbar
       :routes="routes"
-      :action-icons="[{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'}]"
+      :action-icons="[{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'},{name: 'refresh', component: 'table'}]"
       :environments="environments">
   </atlas-navbar>
 </div>
 <div class="page container">
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="site-listing" class="row">
-    <form id="statsSearch" class="row" v-if="showStatsSearch">
-      <div class="form-group row">
-        <div class="col-md-6">
-          <label for="query-mongo">Query</label>
-          <autocomplete-input
-              id="query-mongo"
-              :options-key="optionsKey"
-              the-key="query"
-              :model="statsQuery">
-          </autocomplete-input>
+    <transition name="slide-fade">
+      <form id="statsSearch" class="row" v-if="showStatsSearch">
+        <div class="form-group row">
+          <div class="col-md-6">
+            <label for="query-mongo">Query</label>
+            <autocomplete-input
+                id="query-mongo"
+                :options-key="optionsKey"
+                the-key="query"
+                :model="statsQuery">
+            </autocomplete-input>
+          </div>
+          <div class="col-md-6">
+            <label for="query-name">Query Name</label>
+            <autocomplete-input
+                id="query-name"
+                :options-key="optionsKey"
+                the-key="title"
+                :model="statsQueryName">
+            </autocomplete-input>
+          </div>
         </div>
-        <div class="col-md-6">
-          <label for="query-name">Query Name</label>
-          <autocomplete-input
-              id="query-name"
-              :options-key="optionsKey"
-              the-key="title"
-              :model="statsQueryName">
-          </autocomplete-input>
+        <div class="form-group row col-md-6">
+          <button class="btn btn-primary" @click.prevent="search()">Search</button>
+          <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
         </div>
-      </div>
-      <div class="form-group row col-md-6">
-        <button class="btn btn-primary" @click.prevent="search()">Search</button>
-        <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
-      </div>
-    </form>
-    <form id="commandsForm" class="row" v-if="showCommands">
-      <label for="sendCommand">Select Command</label>
-      <select name="sendCommand" id="sendCommand" v-model="selectedCommand">
-        <option v-for="(value, index) in commands" :value="value._id">
-          {{value.name}}
-        </option>
-      </select>
-      <div class="commands-button">
-        <confirm-button
-            label="Send Command"
-            :params="{command: selectedCommand}"
-            callback="sendCommand">
-        </confirm-button>
-      </div>
-    </form>
+      </form>
+    </transition>
+    <transition name="slide-fade">
+      <form id="commandsForm" class="row" v-if="showCommands">
+        <label for="sendCommand">Select Command</label>
+        <select name="sendCommand" id="sendCommand" v-model="selectedCommand">
+          <option v-for="(value, index) in commands" :value="value._id">
+            {{value.name}}
+          </option>
+        </select>
+        <div class="commands-button">
+          <confirm-button
+              label="Send Command"
+              :params="{command: selectedCommand}"
+              callback="sendCommand">
+          </confirm-button>
+        </div>
+      </form>
+    </transition>
     <form id="search" class="row">
       <div class="form-group">
         <label for="filter-records">Filter Table</label>
@@ -116,16 +120,7 @@
    * changes via the environment selector, the search will update.
    */
   jQuery(document).ready(function () {
-    let cachedRecords = {};
-    getSiteRecords(store.state.atlasEnvironments[store.state.env])
-      .then(function (data) {
-        siteListing.gridData = data;
-        // Cache the result until the next request.
-        siteListing.cachedRecords = data;
-      });
-
-    // Setup commands for select list.
-    getAtlasCommands();
+    siteListing.initialize();
   });
 
   /**
@@ -301,6 +296,7 @@
       });
 
       // Show search and commands when icon in navbar is clicked.
+      // Also refresh table data.
       bus.$on('navbarShow', function (component) {
         if (component === 'statsSearch') {
           that.showStatsSearch = !that.showStatsSearch;
@@ -308,6 +304,10 @@
 
         if (component === 'commands') {
           that.showCommands = !that.showCommands;
+        }
+
+        if (component === 'table') {
+          that.initialize();
         }
       });
     },
@@ -332,6 +332,17 @@
       }
     },
     methods: {
+      initialize: function () {
+        getSiteRecords(store.state.atlasEnvironments[store.state.env])
+          .then(function (data) {
+            siteListing.gridData = data;
+            // Cache the result until the next request.
+            siteListing.cachedRecords = data;
+          });
+
+        // Setup commands for select list.
+        getAtlasCommands();
+      },
       search: function () {
 
         // Grab keyword to search for.

@@ -27,6 +27,7 @@
 <div id="atlas-navbar">
   <atlas-navbar
       :routes="routes"
+      :action-icons="[{name: 'refresh', component: 'table'}]"
       :environments="environments">
   </atlas-navbar>
 </div>
@@ -110,6 +111,14 @@
 <script src="src/js/github.js"></script>
 <script type="text/javascript">
 
+  /**
+   * Creates the list of site records based on the environment. Every time the environment
+   * changes via the environment selector, the search will update.
+   */
+  $(document).ready(function () {
+    codeListing.initialize();
+  });
+
   // Imports Site Listing HTML into DOM of pages using it.
   link = document.querySelector('link[href="src/partials/listing.html"]');
   content = link.import;
@@ -140,6 +149,8 @@
       rowViewContent: {}
     },
     created: function () {
+      let that = this;
+
       bus.$on('switchEnv', function (env) {
         getCodeRecords(store.state.atlasEnvironments[env])
           .then(function (data) {
@@ -217,10 +228,29 @@
         codeListing.gridData = codeListing.tempGridData;
         codeListing.rowViewContent = {};
       });
+
+      // Refresh table data.
+      bus.$on('navbarShow', function (component) {
+        if (component === 'table') {
+          that.initialize();
+        }
+      });
+
     },
     computed: {
       gridColumns: function () {
         return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys;
+      }
+    },
+    methods: {
+      initialize: function () {
+        getCodeRecords(store.state.atlasEnvironments[store.state.env])
+          .then(data => codeListing.gridData = data);
+
+        // Get GitHub data to pass in.
+        getGitHubRepos().then(function (repoList) {
+          codeCreateButton.repos = repoList;
+        });
       }
     }
   });
@@ -318,21 +348,6 @@
         this.addCode = false;
       }
     }
-  });
-
-  /**
-   * Creates the list of site records based on the environment. Every time the environment
-   * changes via the environment selector, the search will update.
-   */
-  $(document).ready(function () {
-
-    getCodeRecords(store.state.atlasEnvironments[store.state.env])
-      .then(data => codeListing.gridData = data);
-
-    // Get GitHub data to pass in.
-    getGitHubRepos().then(function (repoList) {
-      codeCreateButton.repos = repoList;
-    });
   });
 </script>
 </body>
