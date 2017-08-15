@@ -29,13 +29,14 @@
 <div id="atlas-navbar">
   <atlas-navbar
       :routes="routes"
+      :action-icons="[{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'}]"
       :environments="environments">
   </atlas-navbar>
 </div>
 <div class="page container">
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="site-listing" class="row">
-    <form id="statsSearch" class="row">
+    <form id="statsSearch" class="row" v-if="showStatsSearch">
       <div class="form-group row">
         <div class="col-md-6">
           <label for="query-mongo">Query</label>
@@ -61,26 +62,27 @@
         <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
       </div>
     </form>
-    <form id="search" class="row">
-      <div class="form-group">
-        <label for="filter-records">Filter Table</label>
-        <input id="filter-records" class="form-control" name="query"
-               v-model="searchQuery">
-      </div>
-    </form>
-    <form id="commandsForm" class="row">
+    <form id="commandsForm" class="row" v-if="showCommands">
       <label for="sendCommand">Select Command</label>
       <select name="sendCommand" id="sendCommand" v-model="selectedCommand">
         <option v-for="(value, index) in commands" :value="value._id">
           {{value.name}}
         </option>
       </select>
-      {{selectedCommand}}
-      <confirm-button
-          label="Send Command"
-          :params="{command: selectedCommand}"
-          callback="sendCommand">
-      </confirm-button>
+      <div class="commands-button">
+        <confirm-button
+            label="Send Command"
+            :params="{command: selectedCommand}"
+            callback="sendCommand">
+        </confirm-button>
+      </div>
+    </form>
+    <form id="search" class="row">
+      <div class="form-group">
+        <label for="filter-records">Filter Table</label>
+        <input id="filter-records" class="form-control" name="query"
+               v-model="searchQuery">
+      </div>
     </form>
     <div class="row">
       <listing
@@ -109,6 +111,23 @@
 <script src="src/js/site-records.js"></script>
 <script src="src/js/code-records.js"></script>
 <script type="text/javascript">
+  /**
+   * Creates the list of site records based on the environment. Every time the environment
+   * changes via the environment selector, the search will update.
+   */
+  jQuery(document).ready(function () {
+    let cachedRecords = {};
+    getSiteRecords(store.state.atlasEnvironments[store.state.env])
+      .then(function (data) {
+        siteListing.gridData = data;
+        // Cache the result until the next request.
+        siteListing.cachedRecords = data;
+      });
+
+    // Setup commands for select list.
+    getAtlasCommands();
+  });
+
   /**
    * Imports Site Listing HTML into DOM of pages using it.
    *
@@ -155,6 +174,8 @@
       reset: false,
       rowViewContent: {},
       selectedCommand: '',
+      showCommands: false,
+      showStatsSearch: false
     },
     created: function () {
       // Assign this to that in case needed in events.
@@ -183,7 +204,7 @@
           return element._id === params.command;
         });
 
-       atlasRequest(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, query = '', 'PATCH', body, command[0]._etag);
+        atlasRequest(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, query = '', 'PATCH', body, command[0]._etag);
       });
 
       bus.$on('switchEnv', function (env) {
@@ -276,6 +297,17 @@
             key: 'title'
           };
           bus.$emit('matchKeys', params2);
+        }
+      });
+
+      // Show search and commands when icon in navbar is clicked.
+      bus.$on('navbarShow', function (component) {
+        if (component === 'statsSearch') {
+          that.showStatsSearch = !that.showStatsSearch;
+        }
+
+        if (component === 'commands') {
+          that.showCommands = !that.showCommands;
         }
       });
     },
@@ -426,23 +458,6 @@
         createSite(params);
       });
     }
-  });
-
-  /**
-   * Creates the list of site records based on the environment. Every time the environment
-   * changes via the environment selector, the search will update.
-   */
-  $(document).ready(function () {
-    let cachedRecords = {};
-    getSiteRecords(store.state.atlasEnvironments[store.state.env])
-      .then(function (data) {
-        siteListing.gridData = data;
-        // Cache the result until the next request.
-        siteListing.cachedRecords = data;
-      });
-
-    // Setup commands for select list.
-    getAtlasCommands();
   });
 </script>
 </body>

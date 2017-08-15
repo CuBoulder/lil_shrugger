@@ -18,6 +18,15 @@
         <li v-for="route in routes"><a :href="route.path">{{route.name}}</a></li>
       </ul>
       <div class="nav navbar-nav navbar-right">
+        <!-- Action Icons -->
+        <div class="action-icons-wrapper">
+            <span v-for="icon in actionIcons"
+                  :class="'navbar-action-icon glyphicon glyphicon-' + icon.name"
+                  aria-hidden="true"
+                  @click="show(icon.component)">
+            </span>
+        </div>
+        <!-- Environment Selector -->
         <div class="styled-select">
         <select name="selectEnv" id="selectEnv" @change="changeEnv($event)">
           <option v-for="(env, index) in environments" :value="index" :selected="selectedEnv == env ? true : null">
