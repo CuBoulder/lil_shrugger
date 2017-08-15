@@ -61,7 +61,9 @@ const store = new Vuex.Store({
       { title: 'Sites - < 10 nodes', query: '{"nodes_total":{"$lt":10}}', rank: 1},
       { title: 'Un-launched and No Edits in 90 Days', query: '{"status":"installed","days_since_last_edit":{"$gt":90}}', rank: 0},
       { title: 'Archiving - Sites with no edits in > 1 year', query: '{"days_since_last_edit":{"$gt":365}}', rank: 0},
-    ]
+    ],
+    sitesSendCommand: [],
+    commands: []
   },
   mutations: {
     addEditContent (state, options) {
@@ -94,6 +96,30 @@ const store = new Vuex.Store({
     switchEnv (state, environment) {
       store.state.env = environment;
       localStorage.setItem('env', environment);
+    },
+    setCommands (state, sentCommands) {
+      store.state.commands = [];
+      sentCommands.forEach(function (element, index) {
+        store.state.commands = [].concat(store.state.commands,element);
+      })
+    },
+    addSiteToCommands (state, options) {
+      // If option is to add, merge siteId into array.
+      if (options.add === true) {
+        let set = new Set(store.state.sitesSendCommand.concat([options.siteId]));
+        let arr = Array.from(set);
+        store.state.sitesSendCommand = arr;
+      } else {
+        // Remove Id from array.
+        let arr = store.state.sitesSendCommand.filter(function (element) {
+          return element !== options.siteId;
+        });
+        store.state.sitesSendCommand = arr;
+      }
+    },
+    addAllSitesToCommands (state, siteIds) {
+      // Search for if site is already in list.
+      store.state.sitesSendCommand = siteIds;
     }
   }
 });
