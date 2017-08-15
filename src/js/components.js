@@ -52,7 +52,6 @@ Vue.component('listing', {
           return (a === b ? 0 : a > b ? 1 : -1) * order;
         })
       }
-      //console.log(data);
       return data;
     },
     resultCount: function () {
@@ -166,7 +165,6 @@ Vue.component('row', {
       return store.state.editContent;
     },
     isChecked: function () {
-      console.log(this.allChecked);
       return this.allChecked;
     }
   },
