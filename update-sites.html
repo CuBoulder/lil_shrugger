@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Atlas Frontend</title>
-
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <script src="https://unpkg.com/vue"></script>
   <script src="https://unpkg.com/vuex"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -24,6 +24,14 @@
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
   <link rel="import" href="src/partials/autocomplete-input.html">
+  <script>
+    function removeDup() {
+      $("select option").val(function (index, val) {
+        $(this).siblings("[value='" + val + "']").remove();
+        console.log('Did if fucking work?');
+      })
+    }
+  </script>
 </head>
 <body>
 <div id="atlas-navbar">
@@ -34,14 +42,13 @@
 </div>
 <div id="list-full-sites" class="container">
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
-  <form id="search" class="row">
-    <div class="form-group">
+  <div class="form-group">
+    <form id="search" class="row">
       <legend>Search</legend>
-      <input id="querySites" class="form-control" name="querySites"
-             v-model="siteQuery" placeholder="?where={&#34;code.package&#34;:&#34;5939629989b0dc0e497e35ad&#34;}">
+      <input type="text" placeholder="?where={&#34;code.package&#34;:&#34;5939629989b0dc0e497e35ad&#34;}" id="querySites" class="form-control" name="querySites" v-model="siteQuery">
       <button class="btn btn-primary pull-right" @click.prevent="getSites(siteQuery)">Query sites</button>
-    </div>
-  </form>
+    </form>
+  </div>
 
   <div class="form-group col-md-6">
     <legend id="remove-packages">Remove Packages</legend>
@@ -69,7 +76,16 @@
   <div class="container-fluid">
     <legend>Send update to Atlas:</legend>
     <div class="form-group col-md-10">
-      <p>Add packages (<span v-for="package in updatePackages">{{codeName(package)}} </span>) to these sites (<span v-for="site in sites._items">{{site.path}} </span>) and remove these packages (<span v-for="package in removePackages">{{codeName(package)}} </span>).</p>
+      <div class="col-md-5">
+        <h3>Add:</h3>
+          <ul v-for="package in updatePackages"><li>- {{codeName(package)}}</li></ul>
+        <h3>Remove:</h3>
+          <ul v-for="package in removePackages"><li>- {{codeName(package)}}</li></ul>
+      </div>
+      <div class="col-md-5">
+        <h3>Sites to update:</h3>
+          <ul v-for="site in sites._items"><li>- {{site.path}}</li></ul>
+      </div>
     </div>
     <div class="form-group col-md-2">
       <button class="btn btn-primary pull-right" id="update-packages" @click="sendToAtlas">Update Packages</button>

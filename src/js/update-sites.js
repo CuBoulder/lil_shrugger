@@ -15,7 +15,7 @@ let vm = new Vue({
     packages: [],
     codes: [],
     sites: [],
-    siteQuery: []
+    siteQuery: '?where={"code.package":"5893a62c926f5b14369b5e23"}'
   },
   methods: {
     getSites(siteQuery) {
@@ -28,6 +28,7 @@ let vm = new Vue({
         .done(function( data ) {
           that.sites = data;
         });
+      removeDup();
       // atlasRequest(packageBaseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => that.sites = data);
     },
     getCodes() {
@@ -39,6 +40,7 @@ let vm = new Vue({
         .done(function( data ) {
           that.codes = data;
       });
+
       // atlasRequest(packageBaseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data);
     },
     sendToAtlas() {
