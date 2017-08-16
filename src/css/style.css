@@ -11,6 +11,47 @@ body {
     opacity: 0
 }
 
+.slide-fade-enter-active {
+    transition: all .4s ease;
+}
+.slide-fade-leave-active {
+    transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+    /* .slide-fade-leave-active below version 2.1.8 */ {
+    transform: translateY(-10px);
+    opacity: 0;
+}
+
+
+/* Navbar */
+.action-icons-wrapper {
+    display: inline-block;
+    font-size: 2.0em;
+    color: #777;
+    border-left: 1px solid #e7e7e7;
+    height: 50px;
+}
+
+.navbar-action-icon {
+    padding-left: 0.40em;
+    padding-top: 0.25em;
+    padding-right: 0.40em;
+    padding-bottom: 0.25em;
+    border-right: 1px solid #e7e7e7;
+    height: 100%;
+}
+
+/* Commands */
+.commands-button {
+    display: inline-block;
+}
+
+#commandsForm {
+    margin-bottom: 0.5em;
+}
+
+// Packages updates
 #querySites {
     float: left;
     width: 90%;

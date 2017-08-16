@@ -217,7 +217,7 @@ function addCodeToSites(siteRecords, codeRecords) {
         siteRecords[index]['packages'].push(foundKeys[0]);
       })
     }
-  })
+  });
 
   Vue.set(siteListing.gridData, siteRecords);
   // Cache the result until the next request.
