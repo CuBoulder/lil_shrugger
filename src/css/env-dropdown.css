@@ -5,6 +5,7 @@
     height: 50px;
     width: 230px;
     background-color: #ffffff;
+    display: inline-block;
 }
 
 .styled-select select {

@@ -1,7 +1,16 @@
 <script type="text/x-template" id="a-row">
   <transition name="fade">
     <tr scope="row">
-      <!-- Row with data and edit/inputs -->
+      <!-- Bulk operations checkbox.-->
+      <td>
+        <input type="checkbox"
+               :id="'checkbox-' + data.id"
+               :name="'checkbox-' + data.id"
+               value="checked"
+               @change="selectRow($event)"
+               v-model="isChecked">
+      </td>
+      <!--Row with data and edit/inputs. -->
       <td v-for="(key, index) in columns">
         <div v-if="showDefault(key)" v-html="link(data[key],key)"></div>
         <div v-if="showEdit(key)">

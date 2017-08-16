@@ -139,3 +139,11 @@ function handleErrors(response) {
   }
   return response;
 }
+
+
+function getAtlasCommands() {
+  atlasRequest(store.state.atlasEnvironments[store.state.env], 'commands')
+    .then(function (response) {
+      store.commit('setCommands', response);
+    });
+}
