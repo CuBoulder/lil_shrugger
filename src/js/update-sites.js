@@ -63,10 +63,6 @@ let vm = new Vue({
         let removePackages = vm.removePackages;
         let sitePackages = e.code.package;
 
-        //if (e.code.package) {
-          //let sitePackages = e.code.package;
-        //}
-
         let endpoint = 'sites/' + id;
 
         function remove(array, element) {
