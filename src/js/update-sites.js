@@ -52,7 +52,8 @@ let vm = new Vue({
       atlasRequest(packageBaseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data[0]);
     },
     sendToAtlas() {
-      let siteOriginalPackages = this.sites;
+      let that = this;
+      let siteOriginalPackages = that.sites;
 
       siteOriginalPackages.forEach(function(e) {
         // let packageBaseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
@@ -60,11 +61,11 @@ let vm = new Vue({
         let id = e._id;
         let addPackages = vm.updatePackages;
         let removePackages = vm.removePackages;
-        let sitePackages = [];
+        let sitePackages = e.code.package;
 
-        if (e.code.package) {
-          let sitePackages = e.code.package;
-        }
+        //if (e.code.package) {
+          //let sitePackages = e.code.package;
+        //}
 
         let endpoint = 'sites/' + id;
 
@@ -92,8 +93,9 @@ let vm = new Vue({
         if (packagesAdded.length < 0) {
           return '';
         } else {
+          console.log(packagesAdded);
           atlasRequest(packageBaseURL, endpoint, query = '', method = 'PATCH', body = data, etag = site_etag);
-          window.scrollTo(0, 0);
+          //window.scrollTo(0, 0);
           $('#update-packages').attr('disabled','disabled');
           console.log('Request has been sent to Atlas.');
         }
