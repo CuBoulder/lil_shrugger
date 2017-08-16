@@ -5,11 +5,8 @@
  */
 let packageBaseURL = store.state.atlasEnvironments[store.state.env];
 
-function remDup() {
-  $("#packages-to-add option").val(function(idx, val) {
-    $(this).siblings("[value='"+ val +"']").remove();
-  });
-  console.log('Duplicate options removed.');
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
 }
 
 let vm = new Vue({
@@ -22,7 +19,7 @@ let vm = new Vue({
     packages: [],
     codes: [],
     sites: [],
-    siteQuery: '?where={"code.package":"588b90ab36447521c5af51e4"}'
+    siteQuery: '?where={"code.package":"5972304889b0dc0c61cf5df3"}'
   },
   methods: {
     getSites(siteQuery) {
@@ -30,18 +27,32 @@ let vm = new Vue({
       let endpoint = 'sites';
       console.log(packageBaseURL+endpoint+siteQuery);
 
-      atlasRequest(packageBaseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => that.sites = data);
-      setTimeout(remDup, 50);
+      atlasRequest(packageBaseURL, endpoint, query = siteQuery, method = 'GET', body = null, etag = null).then(data => that.sites = data[0]).then(
+        function setPackages() {
+          let singlePackage = [];
+          for(site of that.sites) {
+            for(single of site.code.package) {
+              singlePackage.push(single);
+            }
+          }
+          var names = singlePackage;
+          var uniqueNames = [];
+          $.each(names, function(i, el){
+            if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+          });
+          that.packages = uniqueNames;
+        }
+      );
     },
     getCodes() {
       let that = this;
       let endpoint = 'code';
       console.log(packageBaseURL+endpoint);
 
-      atlasRequest(packageBaseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data);
+      atlasRequest(packageBaseURL, endpoint, query = '', method = 'GET', body = null, etag = null).then(data => that.codes = data[0]);
     },
     sendToAtlas() {
-      let siteOriginalPackages = this.sites[0];
+      let siteOriginalPackages = this.sites;
 
       siteOriginalPackages.forEach(function(e) {
         // let packageBaseURL = getAtlasURL(document.querySelector('.env-list .selected').innerHTML);
@@ -91,7 +102,7 @@ let vm = new Vue({
 
     },
     codeName(index) {
-      let codeItem = vm.codes[0];
+      let codeItem = vm.codes;
 
       codeItem.forEach(function(e) {
         let codeName = e.meta.name;
@@ -107,8 +118,8 @@ let vm = new Vue({
   },
   computed: {
     computedCodeName(index) {
-      let codeItem = vm.codes[0];
-      let sitePackage = vm.sites[0];
+      let codeItem = vm.codes;
+      let sitePackage = vm.sites;
 
       sitePackage.forEach(function(e) {
         let index = e.code.package;
