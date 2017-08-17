@@ -52,6 +52,10 @@ Vue.component('listing', {
           return (a === b ? 0 : a > b ? 1 : -1) * order;
         })
       }
+
+      // Set filterdData in store to be used elsewhere.
+      store.commit('addFilteredData', data);
+
       return data;
     },
     resultCount: function () {
@@ -280,16 +284,11 @@ Vue.component('confirm-button', {
     confirmProp: {
       type: Boolean,
       default: false
-    },
-    finalProp: {
-      type: Boolean,
-      default: false
     }
   },
   data: function () {
     return {
       confirmed: this.confirmProp,
-      finaled: this.finalProp
     }
   },
   methods: {
@@ -306,12 +305,8 @@ Vue.component('confirm-button', {
     confirm: function () {
       this.confirmed = true;
     },
-    final: function () {
-      this.finaled = true;
-    },
     cancel: function () {
       this.confirmed = false;
-      this.finaled = false;
     }
   }
 });

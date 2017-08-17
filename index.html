@@ -79,6 +79,13 @@
               callback="sendCommand">
           </confirm-button>
         </div>
+        <div class="export-button">
+          <confirm-button
+              label="Export Table"
+              :params="{columns: gridColumns}"
+              callback="exportTable">
+          </confirm-button>
+        </div>
       </form>
     </transition>
     <form id="search" class="row">
@@ -112,6 +119,7 @@
 <script src="src/config/routes.js"></script>
 <script src="src/js/components.js"></script>
 <script src="src/js/navbar.js"></script>
+<script src="src/js/export-table.js"></script>
 <script src="src/js/site-records.js"></script>
 <script src="src/js/code-records.js"></script>
 <script type="text/javascript">
@@ -248,7 +256,9 @@
         siteListing.tempGridData = siteListing.gridData;
 
         // Filter table to only show that record.
-        siteListing.statsData = [row.oldData];
+        that.sitesData = [row.oldData];
+        that.statsData = [];
+        that.codeData = [];
 
         // Make call to stats page to get full data to inject.
         fetch(store.state.atlasEnvironments[store.state.env] + 'statistics/' + row.data.statistics)
@@ -262,8 +272,10 @@
 
       bus.$on('rowHide', function (row) {
         // Filter table to only show that record.
-        siteListing.gridData = siteListing.tempGridData;
-        siteListing.rowViewContent = {};
+        that.sitesData = siteListing.tempGridData;
+        that.statsData = [];
+        that.codeData = [];
+        that.rowViewContent = {};
       });
 
       // Listen for autocomplete selections and match both inputs.
@@ -317,6 +329,49 @@
             addStatsToSites(siteRecords, statsRecords);
           })
           .catch(error => console.log(error));
+      });
+
+      bus.$on('exportTable', function (params) {
+        let rows = store.state.filteredData;
+        let columns = params.columns;
+        let headers = {};
+        
+        // Filter rows to only have keys visible in table. 
+        let exportData = rows.map(function (item) {
+          let returnItem = {};
+          columns.forEach(function (element, index) {
+
+            // Need to join arrays with different value than comma.
+            if (Array.isArray(item[element])) {
+              item[element] = item[element].join('|');
+            }
+
+            // If item is still an object, then we need to do more work.
+            if (typeof item[element] === "object") {
+              //console.log(item[element]);
+
+              let mrString = '';
+              for (thing in item[element]) {
+                //console.log(thing);
+                //console.log(item[element][thing]);
+                mrString = mrString + '|' + thing + ':' + item[element][thing];
+              }
+              item[element] = mrString;
+            }
+
+            returnItem[element] = item[element];
+
+            // Also make columns into header objects.
+            headers[element] = element;
+
+          });
+
+          return returnItem;
+        });
+
+        // Export to CSV file.
+        exportCSVFile(headers, exportData, 'report');
+
       });
     },
     computed: {

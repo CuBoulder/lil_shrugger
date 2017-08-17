@@ -297,9 +297,6 @@ function formatStatsData(data) {
  */
 function addStatsToSites(siteRecords, statsRecords) {
 
-  //console.log(siteRecords);
-  //console.log(statsRecords);
-
   // Merge together arrays.
   let newRecords = [];
   statsRecords.forEach(function (element, index) {
@@ -319,8 +316,6 @@ function addStatsToSites(siteRecords, statsRecords) {
       }
     }
   });
-
-  // siteRecords[index]['site'] === element['site']
 
   Vue.set(siteListing.statsData, siteRecords);
   // Cache the result until the next request.

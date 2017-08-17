@@ -69,7 +69,8 @@ const store = new Vuex.Store({
       { title: 'Archiving - Sites with no edits in > 1 year', query: '{"days_since_last_edit":{"$gt":365}}', rank: 0},
     ],
     sitesSendCommand: [],
-    commands: []
+    commands: [],
+    filteredData: [],
   },
   mutations: {
     addEditContent (state, options) {
@@ -82,7 +83,6 @@ const store = new Vuex.Store({
       store.state.recordsToShow = options;
     },
     saveQuery (state, queryOption) {
-
       // Check if query exists and replace if it does.
       let stored = false;
       store.state.statsQueryOptions.forEach(function (element, index) {
@@ -126,6 +126,9 @@ const store = new Vuex.Store({
     addAllSitesToCommands (state, siteIds) {
       // Search for if site is already in list.
       store.state.sitesSendCommand = siteIds;
+    },
+    addFilteredData (state, data) {
+      store.state.filteredData = data;
     }
   }
 });
