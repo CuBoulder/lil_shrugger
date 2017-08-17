@@ -22,15 +22,19 @@ Vue.component('atlas-navbar', {
     },
     actionIcons: {
       type: Array,
-      default: [
-        {name: 'refresh', component: 'table'},
-      ]
+      default: function () {
+        return [];
+      }
     },
     environments: {
       type: Object,
       default: function () {
         return store.state.atlasEnvironments
       }
+    },
+    baseURL: {
+      type: String,
+      default: localStorage.getItem('baseURL')
     }
   },
   computed: {
@@ -66,6 +70,5 @@ let navbar = new Vue({
   data: {
     routes: routes,
     environments: siteConfig.atlasEnvironments,
-    actionIcons: []
   }
 });

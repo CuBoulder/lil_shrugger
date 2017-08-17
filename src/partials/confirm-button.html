@@ -2,8 +2,7 @@
 <script type="text/x-template" id="confirm-button">
   <div class="button-wrapper">
     <button class="btn btn-primary" v-if="!confirmed" @click.prevent="confirm()">{{label}}</button>
-    <button class="btn btn-warning" v-if="confirmed && !finaled" @click.prevent="final()">Set?</button>
-    <button class="btn btn-danger" v-if="finaled" @click.prevent="callMeMaybe(callback, params)">Fire!</button>
-    <button class="btn btn-default" v-if="finaled || confirmed" @click.prevent="cancel()">Cancel</button>
+    <button class="btn btn-danger" v-if="confirmed" @click.prevent="callMeMaybe(callback, params)">Fire!</button>
+    <button class="btn btn-default" v-if="confirmed" @click.prevent="cancel()">Cancel</button>
   </div>
 </script>
