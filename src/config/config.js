@@ -56,6 +56,12 @@ const store = new Vuex.Store({
     recordsToShow: 10,
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
     codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
+    statsKeys: ['instance', 'name', 'status', 'nodes_total', 'nodes_by_type', 'nodes_other', 'days_since_last_edit',
+      'beans_total', 'beans_by_type', 'beans_other', 'context', 'context_other_conditions', 'context_other_reactions',
+      'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
+      'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
+      'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
+      'email_address','bundles', 'webforms'],
     statsQueryOptions: [
       { title: 'Sites Status', query: '{"drupal_system_status":true}', rank: 2},
       { title: 'Sites - < 10 nodes', query: '{"nodes_total":{"$lt":10}}', rank: 1},

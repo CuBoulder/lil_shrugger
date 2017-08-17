@@ -182,7 +182,7 @@ Vue.component('row', {
         if (this.editKeys.indexOf('commit_hash') !== -1) {
           return '<a href="' + atlasEnvironment + 'code/' + value + '">' + value + '</a>';
         } else {
-          return '<a href="' + atlasEnvironment + 'sites/' + value + '">' + value + '</a> - (<a href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
+          return '<a href="' + atlasEnvironment + 'sites/' + value + '">' + '(Site)</a><br/>(<a href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
         }
       }
 

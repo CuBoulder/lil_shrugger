@@ -22,9 +22,7 @@ Vue.component('atlas-navbar', {
     },
     actionIcons: {
       type: Array,
-      default: [
-        {name: 'refresh', component: 'table'},
-      ]
+      default: []
     },
     environments: {
       type: Object,

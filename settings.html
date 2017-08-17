@@ -77,17 +77,26 @@
             {{key}}
           </label>
         </div>
+        <h4>Stats Record Keys</h4>
+        <p class="form-text text-muted">
+          Choose which keys you want to include in the site record listing.
+        </p>
+        <div class="form-check checkbox-inline" v-for="key in statsKeys">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" :id="'stats-' + key" :value="key" v-model="saveStatsKeys">
+            {{key}}
+          </label>
+        </div>
         <h4>Code Record Keys</h4>
         <p class="form-text text-muted">
           Choose which keys you want to include in the code record listing.
         </p>
         <div class="form-check checkbox-inline" v-for="key in codeKeys">
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" :id="'site-' + key" :value="key" v-model="saveCodeKeys">
+            <input class="form-check-input" type="checkbox" :id="'code-' + key" :value="key" v-model="saveCodeKeys">
             {{key}}
           </label>
         </div>
-
       </fieldset>
       <button @click="saveCreds()" type="button" class="btn btn-primary">Save</button>
     </form>
@@ -114,7 +123,8 @@
       codeQuery: localStorage.getItem('code-query'),
       repoListing: localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false,
       saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : ['id', 'path', 'status', 'core', 'profile', 'packages'],
-      saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')): ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash']
+      saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')): ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
+      saveStatsKeys: localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')): [],
     },
     computed: {
       siteKeys: function () {
@@ -122,7 +132,10 @@
       },
       codeKeys: function () {
         return store.state.codeKeys
-      }
+      },
+      statsKeys: function () {
+        return store.state.statsKeys
+      },
     },
     methods: {
       saveCreds: function () {
@@ -136,6 +149,7 @@
         localStorage.setItem('repo-listing', JSON.stringify(this.repoListing));
         localStorage.setItem('code-keys', JSON.stringify(this.saveCodeKeys));
         localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
+        localStorage.setItem('stats-keys', JSON.stringify(this.saveStatsKeys));
 
         // Send success message.
         bus.$emit('onMessage', {text: 'Successfully saved settings.', alertType:'alert-success'});

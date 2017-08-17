@@ -161,7 +161,9 @@
       statsQuery: '',
       statsQueryName: '',
       optionsKey: 'statsQueryOptions',
-      gridData: [],
+      sitesData: [],
+      statsData: [],
+      codeData: [],
       cachedRecords: [],
       editKeys: ['path', 'status'],
       selectKeys: ['status'],
@@ -203,18 +205,7 @@
       });
 
       bus.$on('switchEnv', function (env) {
-        getSiteRecords(store.state.atlasEnvironments[env])
-          .then(function (data) {
-            siteListing.gridData = data;
-            // Cache the result until the next request.
-            siteListing.cachedRecords = data;
-
-            // Hide any row if it was being viewed.
-            siteListing.rowViewContent = {};
-
-            // Get new commands.
-            getAtlasCommands();
-          });
+        that.initialize();
       });
 
       // When a user tries to edit a site record, update data if etags don't match.
@@ -257,7 +248,7 @@
         siteListing.tempGridData = siteListing.gridData;
 
         // Filter table to only show that record.
-        siteListing.gridData = [row.oldData];
+        siteListing.statsData = [row.oldData];
 
         // Make call to stats page to get full data to inject.
         fetch(store.state.atlasEnvironments[store.state.env] + 'statistics/' + row.data.statistics)
@@ -310,34 +301,55 @@
           that.initialize();
         }
       });
+
+      bus.$on('tableDataUpdate', function (siteRecords) {
+        // Update table with code data once site records have been loaded.
+        let baseURL = store.state.atlasEnvironments[store.state.env];
+        getCodeRecords(baseURL)
+          .then(function (codeRecords) {
+            addCodeToSites(siteRecords, codeRecords);
+          })
+          .catch(error => console.log(error));
+
+        // Update with stats data.
+        getStatsRecords(siteRecords, baseURL)
+          .then(function (statsRecords) {
+            addStatsToSites(siteRecords, statsRecords);
+          })
+          .catch(error => console.log(error));
+      });
     },
     computed: {
       showReset: function () {
         return siteListing.reset;
       },
       gridColumns: function () {
-        return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
+        // Merge site and stats keys together.
+        let siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
+        let statsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : store.state.statsKeys;
+
+        return siteKeys.concat(statsKeys);
       },
       commands: function () {
         return store.state.commands;
-      }
-    },
-    watch: {
-      // Update table with code data once site records have been loaded.
-      gridData: function (siteRecords) {
-        getCodeRecords(store.state.atlasEnvironments[store.state.env])
-          .then(function (codeRecords) {
-            addCodeToSites(siteRecords, codeRecords);
-          });
+      },
+      gridData: function () {
+        return [].concat(this.sitesData, this.statsData, this.codeData);
       }
     },
     methods: {
       initialize: function () {
         getSiteRecords(store.state.atlasEnvironments[store.state.env])
           .then(function (data) {
-            siteListing.gridData = data;
+            siteListing.sitesData = data;
             // Cache the result until the next request.
             siteListing.cachedRecords = data;
+
+            // Hide any row if it was being viewed.
+            siteListing.rowViewContent = {};
+
+            // Emit event so other data can be added to the table.
+            bus.$emit('tableDataUpdate', data);
           });
 
         // Setup commands for select list.
