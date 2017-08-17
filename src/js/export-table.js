@@ -9,7 +9,6 @@ function convertToCSV(objArray) {
   var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
   var str = '';
 
-  console.log(array);
   for (var i = 0; i < array.length; i++) {
     var line = '';
     for (var index in array[i]) {
@@ -30,8 +29,6 @@ function convertToCSV(objArray) {
  * @param fileTitle
  */
 function exportCSVFile(headers, items, fileTitle) {
-
-  console.log(items);
   if (headers) {
     items.unshift(headers);
   }

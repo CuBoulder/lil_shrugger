@@ -271,8 +271,6 @@ function formatStatsData(data) {
       for (part in element) {
 
         if (part === 'users') {
-          //console.log(element);
-
           item['username'] = [].concat(element['users']['username']['content_editor'], element['users']['username']['site_contact']);
           item['email_address'] = [].concat(element['users']['email_address']['content_editor'], element['users']['email_address']['site_contact']);
           continue;
