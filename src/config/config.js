@@ -56,6 +56,12 @@ const store = new Vuex.Store({
     recordsToShow: 10,
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
     codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
+    statsKeys: ['instance', 'name', 'status', 'nodes_total', 'nodes_by_type', 'nodes_other', 'days_since_last_edit',
+      'beans_total', 'beans_by_type', 'beans_other', 'context', 'context_other_conditions', 'context_other_reactions',
+      'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
+      'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
+      'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
+      'email_address','bundles', 'webforms'],
     statsQueryOptions: [
       { title: 'Sites Status', query: '{"drupal_system_status":true}', rank: 2},
       { title: 'Sites - < 10 nodes', query: '{"nodes_total":{"$lt":10}}', rank: 1},
@@ -63,7 +69,8 @@ const store = new Vuex.Store({
       { title: 'Archiving - Sites with no edits in > 1 year', query: '{"days_since_last_edit":{"$gt":365}}', rank: 0},
     ],
     sitesSendCommand: [],
-    commands: []
+    commands: [],
+    filteredData: [],
   },
   mutations: {
     addEditContent (state, options) {
@@ -76,7 +83,6 @@ const store = new Vuex.Store({
       store.state.recordsToShow = options;
     },
     saveQuery (state, queryOption) {
-
       // Check if query exists and replace if it does.
       let stored = false;
       store.state.statsQueryOptions.forEach(function (element, index) {
@@ -120,6 +126,9 @@ const store = new Vuex.Store({
     addAllSitesToCommands (state, siteIds) {
       // Search for if site is already in list.
       store.state.sitesSendCommand = siteIds;
+    },
+    addFilteredData (state, data) {
+      store.state.filteredData = data;
     }
   }
 });

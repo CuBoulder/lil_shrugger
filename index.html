@@ -79,6 +79,13 @@
               callback="sendCommand">
           </confirm-button>
         </div>
+        <div class="export-button">
+          <confirm-button
+              label="Export Table"
+              :params="{columns: gridColumns}"
+              callback="exportTable">
+          </confirm-button>
+        </div>
       </form>
     </transition>
     <form id="search" class="row">
@@ -112,6 +119,7 @@
 <script src="src/config/routes.js"></script>
 <script src="src/js/components.js"></script>
 <script src="src/js/navbar.js"></script>
+<script src="src/js/export-table.js"></script>
 <script src="src/js/site-records.js"></script>
 <script src="src/js/code-records.js"></script>
 <script type="text/javascript">
@@ -161,7 +169,9 @@
       statsQuery: '',
       statsQueryName: '',
       optionsKey: 'statsQueryOptions',
-      gridData: [],
+      sitesData: [],
+      statsData: [],
+      codeData: [],
       cachedRecords: [],
       editKeys: ['path', 'status'],
       selectKeys: ['status'],
@@ -203,18 +213,7 @@
       });
 
       bus.$on('switchEnv', function (env) {
-        getSiteRecords(store.state.atlasEnvironments[env])
-          .then(function (data) {
-            siteListing.gridData = data;
-            // Cache the result until the next request.
-            siteListing.cachedRecords = data;
-
-            // Hide any row if it was being viewed.
-            siteListing.rowViewContent = {};
-
-            // Get new commands.
-            getAtlasCommands();
-          });
+        that.initialize();
       });
 
       // When a user tries to edit a site record, update data if etags don't match.
@@ -257,7 +256,9 @@
         siteListing.tempGridData = siteListing.gridData;
 
         // Filter table to only show that record.
-        siteListing.gridData = [row.oldData];
+        that.sitesData = [row.oldData];
+        that.statsData = [];
+        that.codeData = [];
 
         // Make call to stats page to get full data to inject.
         fetch(store.state.atlasEnvironments[store.state.env] + 'statistics/' + row.data.statistics)
@@ -271,8 +272,10 @@
 
       bus.$on('rowHide', function (row) {
         // Filter table to only show that record.
-        siteListing.gridData = siteListing.tempGridData;
-        siteListing.rowViewContent = {};
+        that.sitesData = siteListing.tempGridData;
+        that.statsData = [];
+        that.codeData = [];
+        that.rowViewContent = {};
       });
 
       // Listen for autocomplete selections and match both inputs.
@@ -310,34 +313,95 @@
           that.initialize();
         }
       });
+
+      bus.$on('tableDataUpdate', function (siteRecords) {
+        // Update table with code data once site records have been loaded.
+        let baseURL = store.state.atlasEnvironments[store.state.env];
+        getCodeRecords(baseURL)
+          .then(function (codeRecords) {
+            addCodeToSites(siteRecords, codeRecords);
+          })
+          .catch(error => console.log(error));
+
+        // Update with stats data.
+        getStatsRecords(siteRecords, baseURL)
+          .then(function (statsRecords) {
+            addStatsToSites(siteRecords, statsRecords);
+          })
+          .catch(error => console.log(error));
+      });
+
+      bus.$on('exportTable', function (params) {
+        let rows = store.state.filteredData;
+        let columns = params.columns;
+        let headers = {};
+        
+        // Filter rows to only have keys visible in table. 
+        let exportData = rows.map(function (item) {
+          let returnItem = {};
+          columns.forEach(function (element, index) {
+
+            // Need to join arrays with different value than comma.
+            if (Array.isArray(item[element])) {
+              item[element] = item[element].join('|');
+            }
+
+            // If item is still an object, then we need to do more work.
+            if (typeof item[element] === "object") {
+
+              let mrString = '';
+              for (thing in item[element]) {
+                mrString = mrString + '|' + thing + ':' + item[element][thing];
+              }
+              item[element] = mrString;
+            }
+
+            returnItem[element] = item[element];
+
+            // Also make columns into header objects.
+            headers[element] = element;
+
+          });
+
+          return returnItem;
+        });
+
+        // Export to CSV file.
+        exportCSVFile(headers, exportData, 'report');
+
+      });
     },
     computed: {
       showReset: function () {
         return siteListing.reset;
       },
       gridColumns: function () {
-        return localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
+        // Merge site and stats keys together.
+        let siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
+        let statsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : store.state.statsKeys;
+
+        return siteKeys.concat(statsKeys);
       },
       commands: function () {
         return store.state.commands;
-      }
-    },
-    watch: {
-      // Update table with code data once site records have been loaded.
-      gridData: function (siteRecords) {
-        getCodeRecords(store.state.atlasEnvironments[store.state.env])
-          .then(function (codeRecords) {
-            addCodeToSites(siteRecords, codeRecords);
-          });
+      },
+      gridData: function () {
+        return [].concat(this.sitesData, this.statsData, this.codeData);
       }
     },
     methods: {
       initialize: function () {
         getSiteRecords(store.state.atlasEnvironments[store.state.env])
           .then(function (data) {
-            siteListing.gridData = data;
+            siteListing.sitesData = data;
             // Cache the result until the next request.
             siteListing.cachedRecords = data;
+
+            // Hide any row if it was being viewed.
+            siteListing.rowViewContent = {};
+
+            // Emit event so other data can be added to the table.
+            bus.$emit('tableDataUpdate', data);
           });
 
         // Setup commands for select list.
