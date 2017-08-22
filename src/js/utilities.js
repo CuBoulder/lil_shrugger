@@ -2,14 +2,9 @@
  * Create an event bus to emit events across the application.
  */
 let bus = new Vue();
-
-function remEnvSelect() {
-  document.getElementsByClassName('styled-select');
-  for (var i=0;i<elems.length;i+=1){
-    elems[i].style.display = 'block';
-  }
-}
-remEnvSelect();
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementsByClassName("styled-select")[0].style.display = "none";
+});
 
 /**
  * Makes a request to Atlas.
