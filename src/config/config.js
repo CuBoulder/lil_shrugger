@@ -39,9 +39,9 @@ if (localStorage.getItem('code-query') === null) {
  */
 const store = new Vuex.Store({
   state: {
-    env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
+    env: localStorage.getItem('env') ? 'Local' : 'Local',
     atlasEnvironments: {
-      Local: 'https://inventory.local/',
+      Local: 'https://'+window.location.hostname+'/atlas/',
       Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/'
