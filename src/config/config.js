@@ -33,6 +33,23 @@ if (localStorage.getItem('code-query') === null) {
 }
 
 /**
+ * If express environment is this, return the correct -dev, -test, or none.
+ */
+const currentEnv = window.location.hostname;
+var expressEnv = '';
+switch (currentEnv) {
+  case 'osr-atlas01.int.colorado.edu':
+    expressEnv = '-dev';
+    break;
+  case 'osr-atlas02.int.colorado.edu':
+    expressEnv = '-test';
+    break;
+  case 'osr-atlas03.int.colorado.edu':
+    expressEnv = '';
+    break;
+}
+
+/**
  * An object to help manage state between components and Vue instances.
  *
  * @type {Vuex.Store}
@@ -41,13 +58,13 @@ const store = new Vuex.Store({
   state: {
     env: localStorage.getItem('env') ? 'Local' : 'Local',
     atlasEnvironments: {
-      Local: 'https://'+window.location.hostname+'/atlas/',
+      Local: 'https://'+currentEnv+'/atlas/',
       Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/'
     },
     expressEnvironments: {
-      Local: 'https://express.local/',
+      Local: 'https://www'+expressEnv+'.colorado.edu/',
       Dev: 'https://www-dev.colorado.edu/',
       Test: 'https://www-test.colorado.edu/',
       Prod: 'https://www.colorado.edu/'
