@@ -18,7 +18,6 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
 
   // Setup headers to send to Atlas.
   let headers = new Headers();
-
   let auth = btoa(localStorage.getItem('atlas-username') + ':' + localStorage.getItem('atlas-password'));
   headers.set('Content-Type', 'application/json');
   headers.set('Authorization', 'Basic ' + auth);
