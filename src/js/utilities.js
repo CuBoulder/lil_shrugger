@@ -2,9 +2,6 @@
  * Create an event bus to emit events across the application.
  */
 let bus = new Vue();
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementsByClassName("styled-select")[0].style.display = "none";
-});
 
 /**
  * Makes a request to Atlas.
