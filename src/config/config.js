@@ -42,7 +42,7 @@ const store = new Vuex.Store({
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     atlasEnvironments: {
       Local: 'https://inventory.local/',
-      Dev: 'https://osr-atlas01.int.colorado.edu/',
+      Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
       Test: 'https://osr-atlas02.int.colorado.edu/',
       Prod: 'https://osr-atlas03.int.colorado.edu/'
     },
@@ -99,10 +99,17 @@ const store = new Vuex.Store({
       // Add query if it doesn't exist.
       Vue.set(store.state.statsQueryOptions, store.state.statsQueryOptions.length + 1, queryOption)
     },
+
     switchEnv (state, environment) {
-      store.state.env = environment;
-      localStorage.setItem('env', environment);
+      if (window.location.hostname === 'localhost') {
+        store.state.env = environment;
+        localStorage.setItem('env', environment);
+      } else {
+        localStorage.setItem('env', 'https://'+window.location.hostname+'/shrugger');
+        document.querySelector(".styled-select").style.display = "none";
+      }
     },
+
     setCommands (state, sentCommands) {
       store.state.commands = [];
       sentCommands.forEach(function (element, index) {

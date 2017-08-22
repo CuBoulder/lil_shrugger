@@ -3,6 +3,14 @@
  */
 let bus = new Vue();
 
+function remEnvSelect() {
+  document.getElementsByClassName('styled-select');
+  for (var i=0;i<elems.length;i+=1){
+    elems[i].style.display = 'block';
+  }
+}
+remEnvSelect();
+
 /**
  * Makes a request to Atlas.
  *
@@ -18,9 +26,11 @@ function atlasRequest(baseURL, endpoint, query = '', method = 'GET', body = null
 
   // Setup headers to send to Atlas.
   let headers = new Headers();
-  let auth = btoa(localStorage.getItem('atlas-username') + ':' + localStorage.getItem('atlas-password'));
-  headers.set('Content-Type', 'application/json');
-  headers.set('Authorization', 'Basic ' + auth);
+
+  // REMOVE AUTH FOR ON SERVER USE.
+  //let auth = btoa(localStorage.getItem('atlas-username') + ':' + localStorage.getItem('atlas-password'));
+  //headers.set('Content-Type', 'application/json');
+  //headers.set('Authorization', 'Basic ' + auth);
 
   // The etag is only needed when doing write operations.
   if (method === "PATCH" || method === "PUT" || method === 'DELETE') {
