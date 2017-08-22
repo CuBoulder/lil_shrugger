@@ -43,8 +43,8 @@ const store = new Vuex.Store({
     atlasEnvironments: {
       Local: 'https://inventory.local/',
       Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
-      Test: 'https://osr-atlas02.int.colorado.edu/',
-      Prod: 'https://osr-atlas03.int.colorado.edu/'
+      Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
+      Prod: 'https://osr-atlas03.int.colorado.edu/atlas/'
     },
     expressEnvironments: {
       Local: 'https://express.local/',
