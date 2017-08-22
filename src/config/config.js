@@ -101,13 +101,8 @@ const store = new Vuex.Store({
     },
 
     switchEnv (state, environment) {
-      if (window.location.hostname === 'localhost') {
-        store.state.env = environment;
-        localStorage.setItem('env', environment);
-      } else {
-        localStorage.setItem('env', 'https://'+window.location.hostname+'/shrugger');
-        document.querySelector(".styled-select").style.display = "none";
-      }
+      store.state.env = environment;
+      localStorage.setItem('env', environment);
     },
 
     setCommands (state, sentCommands) {
