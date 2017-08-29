@@ -51,6 +51,13 @@ nav.environment-Local:before {
     background: transparent;
 }
 
+.no-env-selector {
+    display: inline-block;
+    padding: 0.25em 0.75em;
+    font-size: 1.75em;
+    color: #777;
+}
+
 /* Brand */
 .navbar-brand {
     font-size: 2.70em;

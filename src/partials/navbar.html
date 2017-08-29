@@ -35,8 +35,8 @@
               </option>
             </select>
           </div>
-          <div v-else>
-            {{environments[selectedEnv]}}
+          <div v-else class="no-env-selector">
+            <strong>ENV: </strong>{{selectedEnvName}}
           </div>
         </div>
       </div><!--/.nav-collapse -->

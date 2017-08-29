@@ -41,6 +41,9 @@ Vue.component('atlas-navbar', {
     selectedEnv: function () {
       return store.state.atlasEnvironments[store.state.env];
     },
+    selectedEnvName: function () {
+      return store.state.env;
+    },
     navClasses: function () {
       return 'navbar navbar-default navbar-fixed-top environment-' +  store.state.env;
     },
