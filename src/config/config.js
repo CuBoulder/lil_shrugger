@@ -142,7 +142,7 @@ fetch(window.location.origin + localStorage.getItem('baseURL') + '/src/config/co
       var imported = document.createElement('script');
       imported.src = localStorage.getItem('baseURL') + '/src/config/config.local.js';
       imported.typ = 'text/javascript';
-      document.head.appendChild(imported);
+      document.body.appendChild(imported);
       console.log('Found local configuration file.');
     }
   });

@@ -2,6 +2,8 @@
  * @file
  * Contains config overrides for on-server use.
  */
+
+/*
 document.getElementsByClassName("styled-select")[0].style.display = "none";
 
 localStorage.setItem('atlas-username', '');
@@ -18,3 +20,7 @@ if (window.location.hostname === 'osr-atlas01.int.colorado.edu') {
 } else {
   localStorage.setItem('env', 'Local');
 }
+  */
+
+// Set Atlas Environment to be singular.
+navbar.environments = {Dev: 'https://osr-atlas01.int.colorado.edu/atlas/'};

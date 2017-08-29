@@ -1,41 +1,45 @@
 <!-- Static navbar -->
 <script type="text/x-template" id="a-navbar">
-<nav :class="navClasses">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed"
-              data-toggle="collapse" data-target="#navbar"
-              aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" :href="baseURL">¯\_(ツ)_/¯</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li v-for="route in routes"><a :href="route.path">{{route.name}}</a></li>
-      </ul>
-      <div class="nav navbar-nav navbar-right">
-        <!-- Action Icons -->
-        <div class="action-icons-wrapper">
+  <nav :class="navClasses">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed"
+                data-toggle="collapse" data-target="#navbar"
+                aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" :href="baseURL">¯\_(ツ)_/¯</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li v-for="route in routes"><a :href="route.path">{{route.name}}</a>
+          </li>
+        </ul>
+        <div class="nav navbar-nav navbar-right">
+          <!-- Action Icons -->
+          <div class="action-icons-wrapper">
             <span v-for="icon in actionIcons"
                   :class="'navbar-action-icon glyphicon glyphicon-' + icon.name"
                   aria-hidden="true"
                   @click="show(icon.component)">
             </span>
+          </div>
+          <!-- Environment Selector -->
+          <div class="styled-select" v-if="multipleEnvironments">
+            <select name="selectEnv" id="selectEnv" @change="changeEnv($event)">
+              <option v-for="(env, index) in environments" :value="index" :selected="selectedEnv == env ? true : null">
+                {{index}}
+              </option>
+            </select>
+          </div>
+          <div v-else>
+            {{environments[selectedEnv]}}
+          </div>
         </div>
-        <!-- Environment Selector -->
-        <div class="styled-select">
-        <select name="selectEnv" id="selectEnv" @change="changeEnv($event)">
-          <option v-for="(env, index) in environments" :value="index" :selected="selectedEnv == env ? true : null">
-            {{index}}
-          </option>
-        </select>
-        </div>
-      </div>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container-fluid -->
-</nav>
+      </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+  </nav>
 </script>
