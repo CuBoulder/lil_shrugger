@@ -9,8 +9,8 @@ if (localStorage.getItem('baseURL') !== null) {
 }
 
 let routes = [
-  { name: 'Sites', path: baseURL + '/' },
-  { name: 'Code', path: baseURL + '/code.html' },
-  { name: 'Packages', path: baseURL + '/update-sites.html' },
-  { name: 'Settings', path: baseURL + '/settings.html' },
+  {name: 'Sites', path: baseURL},
+  {name: 'Code', path: baseURL + '/code.html'},
+  {name: 'Packages', path: baseURL + '/update-sites.html'},
+  {name: 'Settings', path: baseURL + '/settings.html'},
 ];

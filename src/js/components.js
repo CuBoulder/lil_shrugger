@@ -26,7 +26,8 @@ Vue.component('listing', {
     return {
       sortKey: '',
       sortOrders: sortOrders,
-      showAllRows: false
+      showAllRows: false,
+      allChecked: false
     }
   },
   computed: {
@@ -51,6 +52,10 @@ Vue.component('listing', {
           return (a === b ? 0 : a > b ? 1 : -1) * order;
         })
       }
+
+      // Set filterdData in store to be used elsewhere.
+      store.commit('addFilteredData', data);
+
       return data;
     },
     resultCount: function () {
@@ -96,6 +101,20 @@ Vue.component('listing', {
     },
     showAll: function () {
       this.showAllRows = !this.showAllRows;
+    },
+    selectAll: function () {
+      // Add all arrays into one.
+      let siteIdsSend = [];
+      this.filteredData.forEach(function (element, index) {
+        siteIdsSend.push(element.path);
+      });
+
+      // Store the site IDs array.
+      if (this.allChecked) {
+        store.commit('addAllSitesToCommands', siteIdsSend);
+      } else {
+        store.commit('addAllSitesToCommands', []);
+      }
     }
   }
 });
@@ -112,6 +131,7 @@ Vue.component('row', {
     selectKeys: Array,
     columns: Array,
     oldData: Array,
+    allChecked: Boolean,
     selectOptions: {
       type: Object,
       default: function () {
@@ -128,7 +148,8 @@ Vue.component('row', {
     return {
       edit: this.editProp,
       specialEditContent: {},
-      view: false
+      view: false,
+      checked: this.allChecked
     }
   },
   created: function () {
@@ -146,6 +167,9 @@ Vue.component('row', {
     },
     editContent: function () {
       return store.state.editContent;
+    },
+    isChecked: function () {
+      return this.allChecked;
     }
   },
   methods: {
@@ -162,7 +186,7 @@ Vue.component('row', {
         if (this.editKeys.indexOf('commit_hash') !== -1) {
           return '<a href="' + atlasEnvironment + 'code/' + value + '">' + value + '</a>';
         } else {
-          return '<a href="' + atlasEnvironment + 'sites/' + value + '">' + value + '</a> - (<a href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
+          return '<a href="' + atlasEnvironment + 'sites/' + value + '">' + '(Site)</a><br/>(<a href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
         }
       }
 
@@ -172,7 +196,6 @@ Vue.component('row', {
           return 'N/A';
         }
       }
-
       return value;
     },
     selectType: function (index) {
@@ -180,6 +203,13 @@ Vue.component('row', {
         return true;
       }
       return false;
+    },
+    selectRow: function (event) {
+      this.checked = !this.checked;
+
+      // Add row to sites array for commands.
+      store.commit('addSiteToCommands', {add: this.checked, siteId: this.data.path});
+
     },
     showEdit: function (index = null) {
       if (this.edit) {
@@ -254,16 +284,11 @@ Vue.component('confirm-button', {
     confirmProp: {
       type: Boolean,
       default: false
-    },
-    finalProp: {
-      type: Boolean,
-      default: false
     }
   },
   data: function () {
     return {
       confirmed: this.confirmProp,
-      finaled: this.finalProp
     }
   },
   methods: {
@@ -280,12 +305,8 @@ Vue.component('confirm-button', {
     confirm: function () {
       this.confirmed = true;
     },
-    final: function () {
-      this.finaled = true;
-    },
     cancel: function () {
       this.confirmed = false;
-      this.finaled = false;
     }
   }
 });

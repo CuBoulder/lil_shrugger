@@ -1,4 +1,3 @@
-
 /**
  * Gets a list of site records based on environment and pass data to template.
  *
@@ -142,7 +141,7 @@ function updateSiteRecord(params, method = 'PATCH') {
       });
 
       getSiteRecords(store.state.atlasEnvironments[store.state.env])
-        .then(data => siteListing.gridData = data)
+        .then(data => siteListing.gridData = data);
     })
     .catch((error) => {
       console.log(error);
@@ -156,12 +155,12 @@ function updateSiteRecord(params, method = 'PATCH') {
  * @param codeRecords
  */
 function addCodeToSites(siteRecords, codeRecords) {
-
   let code = {
     cores: {},
     profiles: {},
     packages: {},
   };
+
   // Separate out code into profiles, cores, and packages.
   codeRecords.forEach(function (record, index) {
 
@@ -193,14 +192,14 @@ function addCodeToSites(siteRecords, codeRecords) {
     }
 
     if (typeof element['code']['core'] !== 'undefined') {
-      let foundKeys = Object.keys(code.cores).filter(function(key) {
+      let foundKeys = Object.keys(code.cores).filter(function (key) {
         return code.cores[key] === element['code']['core'];
       });
       siteRecords[index]['core'] = foundKeys[0];
     }
 
     if (typeof element['code']['profile'] !== 'undefined') {
-      let foundKeys = Object.keys(code.profiles).filter(function(key) {
+      let foundKeys = Object.keys(code.profiles).filter(function (key) {
         return code.profiles[key] === element['code']['profile'];
       });
       siteRecords[index]['profile'] = foundKeys[0];
@@ -211,15 +210,112 @@ function addCodeToSites(siteRecords, codeRecords) {
       siteRecords[index]['packages'] = [];
 
       element['code']['package'].forEach(function (element2, index2) {
-        let foundKeys = Object.keys(code.packages).filter(function(key) {
+        let foundKeys = Object.keys(code.packages).filter(function (key) {
           return code.packages[key] === element2;
         });
         siteRecords[index]['packages'].push(foundKeys[0]);
-      })
+      });
     }
-  })
+  });
 
-  Vue.set(siteListing.gridData, siteRecords);
+  Vue.set(siteListing.codeData, siteRecords);
+  // Cache the result until the next request.
+  Vue.set(siteListing.cachedRecords, siteRecords);
+}
+
+
+/**
+ * Gets a list of site records based on environment and pass data to template.
+ *
+ * @param envURL
+ */
+function getStatsRecords(siteRecords, envURL = null) {
+  // If no environment passed in, then get from local storage.
+  if (envURL === null) {
+    envURL = store.state.atlasEnvironments[store.state.env];
+  }
+
+  // Only grab sites in the list.
+  let idsArray = [];
+  siteRecords.forEach(function (element, index) {
+    if (Array.isArray(element)) {
+      idsArray.push(element['statistics']);
+    }
+  });
+  let idsString = '"' + idsArray.join('","') + '"';
+
+  // Don't JSON encode since it escapes too much.
+  let query = '?where={"_id":{"$in":[' + idsString + ']}}';
+  query = '';
+
+  // Response is a Promise object so we must resolve it to get the data out.
+  return atlasRequest(envURL, 'statistics', query)
+    .then(data => formatStatsData(data));
+}
+
+/**
+ * Need to format data for table.
+ *
+ * @param data
+ */
+function formatStatsData(data) {
+  let formattedData = [];
+
+  // Data can be a nested array if it has paging links.
+  // This is why there are two loops through the data.
+  data.forEach(function (elements, index) {
+    elements.forEach(function (element, index2) {
+      let item = [];
+
+      // Loop through object.
+      for (part in element) {
+
+        if (part === 'users') {
+          item['username'] = [].concat(element['users']['username']['content_editor'], element['users']['username']['site_contact']);
+          item['email_address'] = [].concat(element['users']['email_address']['content_editor'], element['users']['email_address']['site_contact']);
+          continue;
+        }
+
+        item[part] = element[part];
+      }
+
+      // Get bundles out
+      formattedData.push(item);
+    });
+  });
+
+  return formattedData;
+}
+
+/**
+ * Adds code records to siteListing object.
+ *
+ * @param siteRecords
+ * @param statsRecords
+ */
+function addStatsToSites(siteRecords, statsRecords) {
+
+  // Merge together arrays.
+  let newRecords = [];
+  statsRecords.forEach(function (element, index) {
+
+    // Extract index of siteRecords from element site ID.
+    let siteIndex = siteRecords.findIndex(function (item) {
+      return item['id'] === element['site'];
+    });
+
+    if (typeof siteRecords[siteIndex] !== 'undefined') {
+      for (part in element) {
+        if (typeof element[part] !== 'undefined') {
+          siteRecords[siteIndex][part] = element[part];
+        } else {
+          siteRecords[siteIndex][part] = 'N/A';
+        }
+      }
+    }
+  });
+
+  Vue.set(siteListing.statsData, siteRecords);
   // Cache the result until the next request.
   Vue.set(siteListing.cachedRecords, siteRecords);
 }

@@ -20,11 +20,21 @@ Vue.component('atlas-navbar', {
       type: Array,
       default: routes
     },
+    actionIcons: {
+      type: Array,
+      default: function () {
+        return [];
+      }
+    },
     environments: {
       type: Object,
       default: function () {
         return store.state.atlasEnvironments
       }
+    },
+    baseURL: {
+      type: String,
+      default: localStorage.getItem('baseURL')
     }
   },
   computed: {
@@ -48,6 +58,9 @@ Vue.component('atlas-navbar', {
       //localStorage.setItem('env', event.target.value);
       store.commit('switchEnv', event.target.value);
       bus.$emit('switchEnv', event.target.value);
+    },
+    show: function (component) {
+      bus.$emit('navbarShow', component);
     }
   }
 });
@@ -56,6 +69,6 @@ let navbar = new Vue({
   el: '#atlas-navbar',
   data: {
     routes: routes,
-    environments: siteConfig.atlasEnvironments
+    environments: siteConfig.atlasEnvironments,
   }
 });
