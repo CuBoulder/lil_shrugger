@@ -67,12 +67,7 @@ const store = new Vuex.Store({
       'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
       'email_address','bundles', 'webforms'],
-    statsQueryOptions: [
-      { title: 'Sites Status', query: '{"drupal_system_status":true}', rank: 2},
-      { title: 'Sites - < 10 nodes', query: '{"nodes_total":{"$lt":10}}', rank: 1},
-      { title: 'Un-launched and No Edits in 90 Days', query: '{"status":"installed","days_since_last_edit":{"$gt":90}}', rank: 0},
-      { title: 'Archiving - Sites with no edits in > 1 year', query: '{"days_since_last_edit":{"$gt":365}}', rank: 0},
-    ],
+    statsQueryOptions: [],
     sitesSendCommand: [],
     commands: [],
     filteredData: [],
@@ -107,6 +102,12 @@ const store = new Vuex.Store({
     switchEnv (state, environment) {
       store.state.env = environment;
       localStorage.setItem('env', environment);
+    },
+    setQueries (state, queries) {
+      store.state.statsQueryOptions = [];
+      queries.forEach(function (element, index) {
+        store.state.statsQueryOptions = [].concat(store.state.statsQueryOptions,element);
+      })
     },
     setCommands (state, sentCommands) {
       store.state.commands = [];

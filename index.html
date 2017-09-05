@@ -406,6 +406,9 @@
 
         // Setup commands for select list.
         getAtlasCommands();
+
+        // Grab search queries.
+        getSearchQueries();
       },
       search: function () {
 
@@ -514,7 +517,7 @@
         });
 
         // By using the cached results when the page is loaded, the query can be reverted.
-        siteListing.gridData = siteListing.cachedRecords;
+        siteListing.sitesData = siteListing.cachedRecords;
         siteListing.searchQuery = '';
         siteListing.reset = false;
       }
