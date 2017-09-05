@@ -29,7 +29,7 @@
 <div id="atlas-navbar">
   <atlas-navbar
       :routes="routes"
-      :action-icons="[{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'},{name: 'refresh', component: 'table'}]"
+      icons="sites"
       :environments="environments">
   </atlas-navbar>
 </div>
@@ -107,7 +107,7 @@
       </listing>
     </div>
   </div>
-  <div id="create-site" class="row">
+  <div id="create-site" class="row" v-if="showDefault()">
     <confirm-button
         :label="label"
         :callback="callback">
@@ -532,6 +532,11 @@
       bus.$on('createSite', function (params) {
         createSite(params);
       });
+    },
+    methods: {
+      showDefault: function () {
+        return userAccess('createSite')
+      }
     }
   });
 </script>

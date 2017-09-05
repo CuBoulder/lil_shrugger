@@ -52,6 +52,11 @@ const store = new Vuex.Store({
       Test: 'https://www-test.colorado.edu/',
       Prod: 'https://www.colorado.edu/'
     },
+    userPermissions: ['row:edit', 'createSite', 'createCode'],
+    actionIcons: {
+      sites: [{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'},{name: 'refresh', component: 'table'}],
+      code: [{name: 'refresh', component: 'table'}]
+    },
     editContent: {},
     recordsToShow: 10,
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],

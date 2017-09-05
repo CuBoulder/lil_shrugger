@@ -167,3 +167,15 @@ const flatten = object => {
     );
   }(object));
 };
+
+/**
+ * Checks whether user can access permissions.
+ *
+ * @param permission
+ *
+ * @returns {boolean}
+ */
+function userAccess(permission = NULL) {
+  // Check to see if permission is in permissions array.
+  return store.state.userPermissions.includes(permission);
+}

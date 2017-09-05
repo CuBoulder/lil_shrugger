@@ -41,8 +41,8 @@
       </tbody>
       <!-- Show More Records Links -->
       <div v-if="resultCount > showRowCount">
-        <button class="btn btn-default" @click="showMore()">Show More</button>
-        <button class="btn btn-default" @click="showAll()">Show All</button>
+        <button class="btn btn-default" @click="showMore()" aria-label="Show More">Show More</button>
+        <button class="btn btn-default" @click="showAll()" aria-label="Show All">Show All</button>
       </div>
     </table>
     <div v-if="Object.keys(extraContent).length > 0">

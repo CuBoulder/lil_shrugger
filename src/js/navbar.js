@@ -20,11 +20,9 @@ Vue.component('atlas-navbar', {
       type: Array,
       default: routes
     },
-    actionIcons: {
-      type: Array,
-      default: function () {
-        return [];
-      }
+    icons: {
+      type: String,
+      default: ''
     },
     environments: {
       type: Object,
@@ -50,6 +48,9 @@ Vue.component('atlas-navbar', {
     multipleEnvironments: function () {
       // Only return true if environments object has more than one property.
       return Object.keys(this.environments).length > 1;
+    },
+    actionIcons: function () {
+      return store.state.actionIcons[this.icons];
     }
   },
   methods: {

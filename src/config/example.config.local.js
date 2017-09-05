@@ -20,3 +20,12 @@ navbar.environments = {Dev: 'https://osr-atlas01.int.colorado.edu/atlas/'};
 if (localStorage.getItem('env') !== 'Dev') {
   localStorage.setItem('env', 'Dev');
 }
+
+// Restrict user permissions other than navbar.
+store.state.userPermissions = [];
+
+// Restrict action icons in navbar.
+store.state.actionIcons = {
+  sites: [],
+  code: []
+};
