@@ -140,11 +140,23 @@ function handleErrors(response) {
   return response;
 }
 
-
+/**
+ * Adds Atlas commands to the data store.
+ */
 function getAtlasCommands() {
   atlasRequest(store.state.atlasEnvironments[store.state.env], 'commands')
     .then(function (response) {
       store.commit('setCommands', response);
+    });
+}
+
+/**
+ * Adds queries to the data store.
+ */
+function getSearchQueries() {
+  atlasRequest(store.state.atlasEnvironments[store.state.env], 'query')
+    .then(function (response) {
+      store.commit('setQueries', response);
     });
 }
 
