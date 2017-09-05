@@ -26,6 +26,6 @@ store.state.userPermissions = [];
 
 // Restrict action icons in navbar.
 store.state.actionIcons = {
-  sites: [],
-  code: []
+  sites: [{name: 'refresh', component: 'table'}],
+  code: [{name: 'refresh', component: 'table'}]
 };
