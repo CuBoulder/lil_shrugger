@@ -315,6 +315,10 @@ function addStatsToSites(siteRecords, statsRecords) {
     }
   });
 
+  // Set the sites data to be empty so computed variable combining sites, code, and stats will update on refresh.
+  // The data doesn't add stats if that data hasn't changed, which is likely between page load and refresh action.
+  Vue.set(siteListing.sitesData, []);
+
   Vue.set(siteListing.statsData, siteRecords);
   // Cache the result until the next request.
   Vue.set(siteListing.cachedRecords, siteRecords);

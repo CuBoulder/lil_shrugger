@@ -20,11 +20,9 @@ Vue.component('atlas-navbar', {
       type: Array,
       default: routes
     },
-    actionIcons: {
-      type: Array,
-      default: function () {
-        return [];
-      }
+    icons: {
+      type: String,
+      default: ''
     },
     environments: {
       type: Object,
@@ -41,8 +39,18 @@ Vue.component('atlas-navbar', {
     selectedEnv: function () {
       return store.state.atlasEnvironments[store.state.env];
     },
+    selectedEnvName: function () {
+      return store.state.env;
+    },
     navClasses: function () {
       return 'navbar navbar-default navbar-fixed-top environment-' +  store.state.env;
+    },
+    multipleEnvironments: function () {
+      // Only return true if environments object has more than one property.
+      return Object.keys(this.environments).length > 1;
+    },
+    actionIcons: function () {
+      return store.state.actionIcons[this.icons];
     }
   },
   methods: {
@@ -69,6 +77,6 @@ let navbar = new Vue({
   el: '#atlas-navbar',
   data: {
     routes: routes,
-    environments: siteConfig.atlasEnvironments,
+    environments: store.state.atlasEnvironments,
   }
 });

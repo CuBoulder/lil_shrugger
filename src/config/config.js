@@ -41,7 +41,7 @@ const store = new Vuex.Store({
   state: {
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     atlasEnvironments: {
-      Local: 'https://inventory.local/',
+      Local: 'https://inventory.local/atlas/',
       Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/'
@@ -51,6 +51,11 @@ const store = new Vuex.Store({
       Dev: 'https://www-dev.colorado.edu/',
       Test: 'https://www-test.colorado.edu/',
       Prod: 'https://www.colorado.edu/'
+    },
+    userPermissions: ['row:edit', 'createSite', 'createCode'],
+    actionIcons: {
+      sites: [{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'},{name: 'refresh', component: 'table'}],
+      code: [{name: 'refresh', component: 'table'}]
     },
     editContent: {},
     recordsToShow: 10,
@@ -136,11 +141,13 @@ const store = new Vuex.Store({
 /**
  * You can use the code below to fetch a local config file if you need to override any settings.
  */
-/*
 fetch(window.location.origin + localStorage.getItem('baseURL') + '/src/config/config.local.js')
   .then(function (response) {
     if (response.status === 200) {
+      var imported = document.createElement('script');
+      imported.src = localStorage.getItem('baseURL') + '/src/config/config.local.js';
+      imported.typ = 'text/javascript';
+      document.body.appendChild(imported);
       console.log('Found local configuration file.');
     }
   });
-*/

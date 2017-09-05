@@ -220,6 +220,12 @@ Vue.component('row', {
       return false;
     },
     showDefault: function (index = null) {
+
+      // Check for user permission to edit row.
+      if(index === null && !userAccess('row:edit')) {
+        return false;
+      }
+
       if (!this.edit || this.editKeys.indexOf(index) === -1 && index !== null) {
         return true;
       }

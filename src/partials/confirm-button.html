@@ -1,8 +1,8 @@
 <!-- component template -->
 <script type="text/x-template" id="confirm-button">
   <div class="button-wrapper">
-    <button class="btn btn-primary" v-if="!confirmed" @click.prevent="confirm()">{{label}}</button>
-    <button class="btn btn-danger" v-if="confirmed" @click.prevent="callMeMaybe(callback, params)">Fire!</button>
-    <button class="btn btn-default" v-if="confirmed" @click.prevent="cancel()">Cancel</button>
+    <button class="btn btn-primary" v-if="!confirmed" @click.prevent="confirm()" :aria-label="label">{{label}}</button>
+    <button class="btn btn-danger" v-if="confirmed" @click.prevent="callMeMaybe(callback, params)" aria-label="Fire!">Fire!</button>
+    <button class="btn btn-default" v-if="confirmed" @click.prevent="cancel()" aria-label="Cancel">Cancel</button>
   </div>
 </script>

@@ -27,7 +27,7 @@
 <div id="atlas-navbar">
   <atlas-navbar
       :routes="routes"
-      :action-icons="[{name: 'refresh', component: 'table'}]"
+      icons="code"
       :environments="environments">
   </atlas-navbar>
 </div>
@@ -51,8 +51,7 @@
         :select-keys="selectKeys">
     </listing>
   </div>
-  <div id="create-code" class="row">
-
+  <div id="create-code" class="row" v-if="showDefault()">
     <button v-if="!addCode" class="btn btn-primary" @click="codeButton()">Add
       Code
     </button>
@@ -310,6 +309,9 @@
       },
       codeButton: function () {
         this.addCode = true;
+      },
+      showDefault: function () {
+        return userAccess('createCode');
       },
       createCode: function () {
         let repo = this.activeRepo;
