@@ -21,14 +21,14 @@ Vue.component('listing', {
   data: function () {
     let sortOrders = {};
     this.columns.forEach(function (key) {
-      sortOrders[key] = 1
+      sortOrders[key] = 1;
     });
     return {
       sortKey: '',
       sortOrders: sortOrders,
       showAllRows: false,
       allChecked: false
-    }
+    };
   },
   computed: {
     filteredData: function () {
@@ -41,8 +41,8 @@ Vue.component('listing', {
         data = data.filter(function (row) {
           return Object.keys(row).some(function (key) {
             return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
-          })
-        })
+          });
+        });
       }
 
       if (sortKey) {
@@ -50,7 +50,7 @@ Vue.component('listing', {
           a = a[sortKey];
           b = b[sortKey];
           return (a === b ? 0 : a > b ? 1 : -1) * order;
-        })
+        });
       }
 
       // Set filterdData in store to be used elsewhere.
@@ -135,7 +135,7 @@ Vue.component('row', {
     selectOptions: {
       type: Object,
       default: function () {
-        return siteConfig.selectOptions
+        return siteConfig.selectOptions;
       }
     },
     callback: String,
@@ -150,7 +150,7 @@ Vue.component('row', {
       specialEditContent: {},
       view: false,
       checked: this.allChecked
-    }
+    };
   },
   created: function () {
     // Accepts own row component and cancels edit mode.
@@ -163,7 +163,7 @@ Vue.component('row', {
       return {
         previous: this.oldData,
         current: this.data,
-      }
+      };
     },
     editContent: function () {
       return store.state.editContent;
@@ -181,7 +181,7 @@ Vue.component('row', {
 
       // Link to full code/site record.
       if (key === 'id') {
-         let atlasEnvironment = store.state.atlasEnvironments[store.state.env];
+        let atlasEnvironment = store.state.atlasEnvironments[store.state.env];
         // Determine site or code record from other key.
         if (this.editKeys.indexOf('commit_hash') !== -1) {
           return '<a href="' + atlasEnvironment + 'code/' + value + '">' + value + '</a>';
@@ -191,11 +191,10 @@ Vue.component('row', {
       }
 
       // Deal with empty packages arrays.
-      if (key === 'packages') {
-        if (value.length === 0) {
-          return 'N/A';
-        }
+      if (typeof value === 'undefined' || value.length === 0) {
+        return 'N/A';
       }
+
       return value;
     },
     selectType: function (index) {
@@ -208,7 +207,10 @@ Vue.component('row', {
       this.checked = !this.checked;
 
       // Add row to sites array for commands.
-      store.commit('addSiteToCommands', {add: this.checked, siteId: this.data.path});
+      store.commit('addSiteToCommands', {
+        add: this.checked,
+        siteId: this.data.path
+      });
 
     },
     showEdit: function (index = null) {
@@ -222,7 +224,7 @@ Vue.component('row', {
     showDefault: function (index = null) {
 
       // Check for user permission to edit row.
-      if(index === null && !userAccess('row:edit')) {
+      if (index === null && !userAccess('row:edit')) {
         return false;
       }
 
@@ -255,7 +257,7 @@ Vue.component('row', {
           that.edit = true;
           // Emit event for other components to act on when row is being edited.
           bus.$emit('rowEdit', that);
-        })
+        });
     },
     cancelEdit: function () {
       bus.$emit('cancelEdit', this);
@@ -283,7 +285,7 @@ Vue.component('confirm-button', {
     row: {
       type: Object,
       default: function () {
-        return {}
+        return {};
       }
     },
     params: Object,
@@ -295,7 +297,7 @@ Vue.component('confirm-button', {
   data: function () {
     return {
       confirmed: this.confirmProp,
-    }
+    };
   },
   methods: {
     callMeMaybe: function (callback, params) {
@@ -363,7 +365,7 @@ Vue.component('autocomplete-input', {
       isOpen: false,
       highlightedPosition: 0,
       keyword: this.model
-    }
+    };
   },
   created () {
     // Allow other autocomplete inputs to interact and update each other.
@@ -373,7 +375,7 @@ Vue.component('autocomplete-input', {
       if (params.key === that.theKey) {
         that.keyword = params.keyword;
       }
-    })
+    });
   },
   computed: {
     fOptions () {

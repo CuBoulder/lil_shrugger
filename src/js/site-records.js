@@ -270,12 +270,15 @@ function formatStatsData(data) {
       // Loop through object.
       for (part in element) {
 
+        // We are splitting out what is in the users section so that it can be filtered by as well as exported in separate columns.
         if (part === 'users') {
           item['username'] = [].concat(element['users']['username']['content_editor'], element['users']['username']['site_contact']);
           item['email_address'] = [].concat(element['users']['email_address']['content_editor'], element['users']['email_address']['site_contact']);
           continue;
         }
 
+        // All other fields get added as is.
+        // @todo create a way for adpaters to be added to format data.
         item[part] = element[part];
       }
 
