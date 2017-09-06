@@ -335,7 +335,7 @@
         let rows = store.state.filteredData;
         let columns = params.columns;
         let headers = {};
-        
+
         // Filter rows to only have keys visible in table. 
         let exportData = rows.map(function (item) {
           let returnItem = {};
@@ -378,7 +378,9 @@
       gridColumns: function () {
         // Merge site and stats keys together.
         let siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
-        let statsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : store.state.statsKeys;
+
+        // Make stats empty if not saved since adding all of those keys makes the table unusable.
+        let statsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [];
 
         return siteKeys.concat(statsKeys);
       },
@@ -538,7 +540,7 @@
     },
     methods: {
       showDefault: function () {
-        return userAccess('createSite')
+        return userAccess('createSite');
       }
     }
   });
