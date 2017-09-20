@@ -273,6 +273,7 @@
       branchReady: false,
       addCode: false,
       codeType: 'module',
+      tag: 'beta_bundle',
       codeVersion: '',
       codeLabel: '',
       isCurrent: false,
@@ -284,6 +285,7 @@
           type: this.codeType,
           label: this.codeLabel,
           is_current: this.isCurrent,
+          tag: this.tag,
         };
       }
     },
@@ -328,6 +330,11 @@
         if (repo.name === 'drupal-7.x') {
           repo.name = 'drupal';
         }
+
+        // Turn tag into array.
+        console.log(input.tag);
+        input.tag = [input['tag']];
+        console.log(input.tag);
 
         let codeAsset = {
           "git_url": repo.ssh_url,
