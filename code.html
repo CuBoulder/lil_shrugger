@@ -72,7 +72,7 @@
                 {{branch.name}}
               </option>
             </select>
-            <label for="code_type">Code Type:</label>
+            <label for="code_type">Type:</label>
             <select name="code_type" id="code_type" v-model="codeType">
               <option v-for="anOption in selectOptions.code_type" :value="anOption">
                 {{anOption}}
@@ -84,10 +84,16 @@
                 {{anOption}}
               </option>
             </select>
-            <label for="code_version">Code Version:</label>
+            <label for="tag">Tag:</label>
+            <select name="tag" id="tag" v-model="tag">
+              <option v-for="anOption in selectOptions.tag" :value="anOption">
+                {{anOption}}
+              </option>
+            </select>
+            <label for="code_version">Version:</label>
             <input type="text" name="code_version" id="code_version"
                    v-model="codeVersion">
-            <label for="code_label">Code Label:</label>
+            <label for="code_label">Label:</label>
             <input type="text" name="code_label" id="code_label"
                    v-model="codeLabel">
           </div>
@@ -143,8 +149,8 @@
       gridData: [],
       cachedRecords: [],
       callback: 'updateCodeRecord',
-      editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash'],
-      selectKeys: ['code_type', 'is_current'],
+      editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
+      selectKeys: ['code_type', 'is_current', 'tag'],
       rowViewContent: {}
     },
     created: function () {
@@ -331,7 +337,8 @@
             "code_type": input.type,
             "name": repo.name,
             "label": input.label,
-            "is_current": input.is_current
+            "is_current": input.is_current,
+            "tag": input.tag,
           }
         };
 

@@ -14,6 +14,7 @@ siteConfig['selectOptions'] = {
   status: ['available', 'installed', 'launching'],
   code_type: ['module', 'core', 'profile'],
   is_current: [true, false],
+  tag: ['addon_bundles', 'request_bundles', 'beta_bundles', 'admin_bundles'],
 };
 
 /**
@@ -60,7 +61,7 @@ const store = new Vuex.Store({
     editContent: {},
     recordsToShow: 10,
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
-    codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
+    codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
     statsKeys: ['instance', 'name', 'status', 'nodes_total', 'nodes_by_type', 'nodes_other', 'days_since_last_edit',
       'beans_total', 'beans_by_type', 'beans_other', 'context', 'context_other_conditions', 'context_other_reactions',
       'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
