@@ -66,20 +66,22 @@
     </transition>
     <transition name="slide-fade">
       <form id="commandsForm" class="row" v-if="showCommands">
-        <label for="sendCommand">Select Command</label>
-        <select name="sendCommand" id="sendCommand" v-model="selectedCommand">
-          <option v-for="(value, index) in commands" :value="value._id">
-            {{value.name}}
-          </option>
-        </select>
-        <div class="commands-button">
-          <confirm-button
-              label="Send Command"
-              :params="{command: selectedCommand}"
-              callback="sendCommand">
-          </confirm-button>
+        <div v-if="userAccessPerm('commands:command')">
+          <label for="sendCommand">Select Command</label>
+          <select name="sendCommand" id="sendCommand" v-model="selectedCommand">
+            <option v-for="(value, index) in commands" :value="value._id">
+              {{value.name}}
+            </option>
+          </select>
+          <div class="commands-button">
+            <confirm-button
+                label="Send Command"
+                :params="{command: selectedCommand}"
+                callback="sendCommand">
+            </confirm-button>
+          </div>
         </div>
-        <div class="export-button">
+        <div class="export-button" v-if="userAccessPerm('commands:export')">
           <confirm-button
               label="Export Table"
               :params="{columns: gridColumns}"
@@ -336,7 +338,7 @@
         let columns = params.columns;
         let headers = {};
 
-        // Filter rows to only have keys visible in table. 
+        // Filter rows to only have keys visible in table.
         let exportData = rows.map(function (item) {
           let returnItem = {};
           columns.forEach(function (element, index) {
@@ -522,6 +524,9 @@
         siteListing.sitesData = siteListing.cachedRecords;
         siteListing.searchQuery = '';
         siteListing.reset = false;
+      },
+      userAccessPerm: function (permission) {
+        return userAccess(permission);
       }
     }
   });
