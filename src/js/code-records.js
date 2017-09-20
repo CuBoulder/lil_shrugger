@@ -34,6 +34,7 @@ function formatCodeData(data) {
       item['code_type'] = element.meta.code_type;
       item['name'] = element.meta.name;
       item['version'] = element.meta.version;
+      item['tag'] = element.meta.tag;
       item['is_current'] = element.meta.is_current;
       item['commit_hash'] = element.commit_hash;
       item['etag'] = element._etag;
@@ -54,7 +55,10 @@ function formatCodeData(data) {
 function updateCodeRecord(params, method = 'PATCH') {
 
   // Define parts of code record that are nested in the meta field.
-  let metaKeys = ['code_type', 'is_current', 'label', 'name', 'version'];
+  let metaKeys = ['code_type', 'is_current', 'label', 'name', 'version', 'tag'];
+
+  // Turn tag into an array.
+  params.current['tag'] = [params.current['tag']];
 
   // Take input values from formData and put into array for comparison.
   // Only return values that are different.

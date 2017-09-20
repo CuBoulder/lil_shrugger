@@ -184,7 +184,7 @@ Vue.component('row', {
         let atlasEnvironment = store.state.atlasEnvironments[store.state.env];
         // Determine site or code record from other key.
         if (this.editKeys.indexOf('commit_hash') !== -1) {
-          return '<a href="' + atlasEnvironment + 'code/' + value + '">' + value + '</a>';
+          return '<a href="' + atlasEnvironment + 'code/' + value + '">(Code Record)</a>';
         } else {
           return '<a href="' + atlasEnvironment + 'sites/' + value + '">' + '(Site)</a><br/>(<a href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
         }
