@@ -69,6 +69,7 @@ const store = new Vuex.Store({
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
       'email_address','bundles', 'webforms'],
     statsQueryOptions: [],
+    currentQuery: null,
     sitesSendCommand: [],
     commands: [],
     filteredData: [],
@@ -82,6 +83,9 @@ const store = new Vuex.Store({
     },
     addRows (state, options) {
       store.state.recordsToShow = options;
+    },
+    storeQuery (state, currentQuery) {
+      state.currentQuery = currentQuery;
     },
     saveQuery (state, queryOption) {
       // Check if query exists and replace if it does.

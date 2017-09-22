@@ -303,19 +303,41 @@
 
         // Since we know that we have queries and titles, we can check the key and
         // make the opposite property match what the user selected.
+        let params2 = {};
         if (params.key === 'title') {
-          let params2 = {
+          params2 = {
             keyword: params.selectedOption.query,
             key: 'query'
           };
           bus.$emit('matchKeys', params2);
         } else {
-          let params2 = {
+          params2 = {
             keyword: params.selectedOption.title,
             key: 'title'
           };
           bus.$emit('matchKeys', params2);
         }
+
+        // Fill in other keys.
+        let currentQuery = {};
+        store.state.statsQueryOptions.forEach(function (element, index) {
+          if (params2.key === 'title' && element.title === params2.keyword) {
+            that.statsQueryDescription = element.description;
+            that.statsQueryEndpoint = element.endpoint;
+            that.statsQueryTags = element.tags.join(',');
+            currentQuery = element;
+          }
+
+          if (params2.key === 'query' && element.query === params2.keyword) {
+            that.statsQueryDescription = element.description;
+            that.statsQueryEndpoint = element.endpoint;
+            that.statsQueryTags = element.tags.join(',');
+            currentQuery = element;
+          }
+        });
+
+        // Save current query for check when updating queries.
+        store.commit('storeQuery', currentQuery);
       });
 
       // Show search and commands when icon in navbar is clicked.
@@ -537,6 +559,9 @@
           }
         });
 
+        // Reset stored query.
+        store.commit('storeQuery', null);
+
         // By using the cached results when the page is loaded, the query can be reverted.
         siteListing.sitesData = siteListing.cachedRecords;
         siteListing.searchQuery = '';
@@ -566,12 +591,20 @@
         queryToSend = queryToSend.replace(new RegExp(/\$/, 'g'), '\\u0024');
 
         // Make tags into string with quotes.
-        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["' + this.statsQueryEndpoint + '"], "query": "' + queryToSend + '", "tags": [' + this.statsQueryTags + '], "rank": 1}';
+        const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
+        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["' + this.statsQueryEndpoint + '"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
+        console.log(data);
 
         // Make request to Atlas.
         let baseURL = store.state.atlasEnvironments[store.state.env];
-        let response = atlasRequest(baseURL, 'query', '', 'POST', data);
-
+        let currentQuery = store.state.currentQuery;
+        if (currentQuery !== null) {
+          let response = atlasRequest(baseURL, 'query/' + currentQuery['_id'], '', 'PATCH', data, currentQuery['_etag']);
+          console.log('current query');
+        } else {
+          let response = atlasRequest(baseURL, 'query', '', 'POST', data);
+          console.log('not current');
+        }
       },
       userAccessPerm: function (permission) {
         return userAccess(permission);
