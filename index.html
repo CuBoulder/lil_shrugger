@@ -62,10 +62,12 @@
               <label for="query-description">Query Description</label>
               <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
             </div>
+            <!-- Comment out until another endpoint other than stats is searched on this page.
             <div class="col-md-4">
               <label for="query-endpoint">Query Endpoint</label>
               <input type="text" name="query_endpoint" id="query-endpoint" class="form-control" v-model="statsQueryEndpoint">
             </div>
+            -->
             <div class="col-md-4">
               <label for="query-tags">Query Tags</label>
               <input type="text" name="query_tags" id="query-tags" class="form-control" v-model="statsQueryTags">
@@ -435,6 +437,13 @@
     },
     methods: {
       initialize: function () {
+
+        // Make sure data table is empty.
+        this.sitesData = [];
+        this.codeData = [];
+        this.statsData = [];
+        this.cachedRecords = [];
+
         getSiteRecords(store.state.atlasEnvironments[store.state.env])
           .then(function (data) {
             siteListing.sitesData = data;
@@ -559,6 +568,11 @@
           }
         });
 
+        // Reset other query fields not in autocomplete component.
+        this.statsQueryDescription = '';
+        this.statsQueryEndpoint = '';
+        this.statsQueryTags = '';
+
         // Reset stored query.
         store.commit('storeQuery', null);
 
@@ -592,7 +606,7 @@
 
         // Make tags into string with quotes.
         const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
-        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["' + this.statsQueryEndpoint + '"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
+        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["statistic"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
         console.log(data);
 
         // Make request to Atlas.
