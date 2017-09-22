@@ -566,10 +566,8 @@
         queryToSend = queryToSend.replace(new RegExp(/\$/, 'g'), '\\u0024');
 
         // Make tags into string with quotes.
-
         const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["' + this.statsQueryEndpoint + '"], "query": "' + queryToSend + '", "tags": [' + this.statsQueryTags + '], "rank": 1}';
 
-        console.log(data);
         // Make request to Atlas.
         let baseURL = store.state.atlasEnvironments[store.state.env];
         let response = atlasRequest(baseURL, 'query', '', 'POST', data);
