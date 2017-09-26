@@ -57,9 +57,26 @@
                 :model="statsQueryName">
             </autocomplete-input>
           </div>
+          <div v-if="userAccessPerm('statsSearch:save')">
+            <div class="col-md-4">
+              <label for="query-description">Query Description</label>
+              <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
+            </div>
+            <!-- Comment out until another endpoint other than stats is searched on this page.
+            <div class="col-md-4">
+              <label for="query-endpoint">Query Endpoint</label>
+              <input type="text" name="query_endpoint" id="query-endpoint" class="form-control" v-model="statsQueryEndpoint">
+            </div>
+            -->
+            <div class="col-md-4">
+              <label for="query-tags">Query Tags</label>
+              <input type="text" name="query_tags" id="query-tags" class="form-control" v-model="statsQueryTags">
+            </div>
+          </div>
         </div>
         <div class="form-group row col-md-6">
           <button class="btn btn-primary" @click.prevent="search()">Search</button>
+          <button class="btn btn-primary" @click.prevent="saveSearch()" v-if="userAccessPerm('statsSearch:save')">Save To Atlas</button>
           <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
         </div>
       </form>
@@ -170,6 +187,9 @@
       searchQuery: '',
       statsQuery: '',
       statsQueryName: '',
+      statsQueryDescription: '',
+      statsQueryEndpoint: '',
+      statsQueryTags: '',
       optionsKey: 'statsQueryOptions',
       sitesData: [],
       statsData: [],
@@ -285,19 +305,41 @@
 
         // Since we know that we have queries and titles, we can check the key and
         // make the opposite property match what the user selected.
+        let params2 = {};
         if (params.key === 'title') {
-          let params2 = {
+          params2 = {
             keyword: params.selectedOption.query,
             key: 'query'
           };
           bus.$emit('matchKeys', params2);
         } else {
-          let params2 = {
+          params2 = {
             keyword: params.selectedOption.title,
             key: 'title'
           };
           bus.$emit('matchKeys', params2);
         }
+
+        // Fill in other keys.
+        let currentQuery = {};
+        store.state.statsQueryOptions.forEach(function (element, index) {
+          if (params2.key === 'title' && element.title === params2.keyword) {
+            that.statsQueryDescription = element.description;
+            that.statsQueryEndpoint = element.endpoint;
+            that.statsQueryTags = element.tags.join(',');
+            currentQuery = element;
+          }
+
+          if (params2.key === 'query' && element.query === params2.keyword) {
+            that.statsQueryDescription = element.description;
+            that.statsQueryEndpoint = element.endpoint;
+            that.statsQueryTags = element.tags.join(',');
+            currentQuery = element;
+          }
+        });
+
+        // Save current query for check when updating queries.
+        store.commit('storeQuery', currentQuery);
       });
 
       // Show search and commands when icon in navbar is clicked.
@@ -395,6 +437,13 @@
     },
     methods: {
       initialize: function () {
+
+        // Make sure data table is empty.
+        this.sitesData = [];
+        this.codeData = [];
+        this.statsData = [];
+        this.cachedRecords = [];
+
         getSiteRecords(store.state.atlasEnvironments[store.state.env])
           .then(function (data) {
             siteListing.sitesData = data;
@@ -475,7 +524,6 @@
             console.log(error);
           });
 
-
         // Grab current list of options.
         let queryOption = {};
         store.state[this.optionsKey].forEach(function (element, index) {
@@ -520,10 +568,72 @@
           }
         });
 
+        // Reset other query fields not in autocomplete component.
+        this.statsQueryDescription = '';
+        this.statsQueryEndpoint = '';
+        this.statsQueryTags = '';
+
+        // Reset stored query.
+        store.commit('storeQuery', null);
+
         // By using the cached results when the page is loaded, the query can be reverted.
         siteListing.sitesData = siteListing.cachedRecords;
         siteListing.searchQuery = '';
         siteListing.reset = false;
+      },
+      saveSearch: function () {
+        // Grab keyword to search for.
+        let queryToSend = null;
+        let name = null;
+        this.$children.forEach(function (element, index) {
+          if (element.theKey === 'query') {
+            queryToSend = element.keyword;
+          }
+          if (element.theKey === 'title') {
+            name = element.keyword;
+          }
+        });
+
+        // Convert to unicode.
+        queryToSend = queryToSend.replace(new RegExp('{', 'g'), '\\u007B');
+        queryToSend = queryToSend.replace(new RegExp('}', 'g'), '\\u007d');
+        queryToSend = queryToSend.replace(new RegExp(/\[/, 'g'), '\\u005B');
+        queryToSend = queryToSend.replace(new RegExp(/\]/, 'g'), '\\u005D');
+        queryToSend = queryToSend.replace(new RegExp('"', 'g'), '\\u0022');
+        queryToSend = queryToSend.replace(new RegExp(':', 'g'), '\\u003a');
+        queryToSend = queryToSend.replace(new RegExp(',', 'g'), '\\u002c');
+        queryToSend = queryToSend.replace(new RegExp(/\$/, 'g'), '\\u0024');
+
+        // Make tags into string with quotes.
+        const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
+        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["statistic"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
+
+        // Make request to Atlas.
+        let baseURL = store.state.atlasEnvironments[store.state.env];
+        let currentQuery = store.state.currentQuery;
+        if (currentQuery !== null) {
+          atlasRequest(baseURL, 'query/' + currentQuery['_id'], '', 'PATCH', data, currentQuery['_etag'])
+            .then((response) => {
+              bus.$emit('onMessage', {
+                text: 'You have sent a PATCH request to a query record. query ID: ' + currentQuery['_id'] + '. Search and reset to add new query.',
+                alertType: 'alert-success'
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          atlasRequest(baseURL, 'query', '', 'POST', data)
+            .then((response) => {
+              bus.$emit('onMessage', {
+                text: 'You have sent a POST request to add query record. Search and reset to add new query.',
+                alertType: 'alert-success'
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       },
       userAccessPerm: function (permission) {
         return userAccess(permission);
