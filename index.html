@@ -389,15 +389,19 @@
             if (Array.isArray(item[element])) {
               item[element] = item[element].join('|');
             }
-
             // If item is still an object, then we need to do more work.
-            if (typeof item[element] === "object") {
+            else if (typeof item[element] === "object") {
 
               let mrString = '';
               for (thing in item[element]) {
                 mrString = mrString + '|' + thing + ':' + item[element][thing];
               }
               item[element] = mrString;
+            }
+            // Strings can have commas.
+            else if (typeof item[element] === 'string') {
+              console.log(item[element]);
+              item[element] = item[element].replace(new RegExp(',', 'g'), '|');
             }
 
             returnItem[element] = item[element];
