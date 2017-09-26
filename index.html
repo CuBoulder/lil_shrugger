@@ -400,7 +400,6 @@
             }
             // Strings can have commas.
             else if (typeof item[element] === 'string') {
-              console.log(item[element]);
               item[element] = item[element].replace(new RegExp(',', 'g'), '|');
             }
 
