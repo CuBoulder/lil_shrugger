@@ -607,17 +607,32 @@
         // Make tags into string with quotes.
         const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
         const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["statistic"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
-        console.log(data);
 
         // Make request to Atlas.
         let baseURL = store.state.atlasEnvironments[store.state.env];
         let currentQuery = store.state.currentQuery;
         if (currentQuery !== null) {
-          let response = atlasRequest(baseURL, 'query/' + currentQuery['_id'], '', 'PATCH', data, currentQuery['_etag']);
-          console.log('current query');
+          atlasRequest(baseURL, 'query/' + currentQuery['_id'], '', 'PATCH', data, currentQuery['_etag'])
+            .then((response) => {
+              bus.$emit('onMessage', {
+                text: 'You have sent a PATCH request to a query record. query ID: ' + currentQuery['_id'] + '. Search and reset to add new query.',
+                alertType: 'alert-success'
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         } else {
-          let response = atlasRequest(baseURL, 'query', '', 'POST', data);
-          console.log('not current');
+          atlasRequest(baseURL, 'query', '', 'POST', data)
+            .then((response) => {
+              bus.$emit('onMessage', {
+                text: 'You have sent a POST request to add query record. Search and reset to add new query.',
+                alertType: 'alert-success'
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         }
       },
       userAccessPerm: function (permission) {
