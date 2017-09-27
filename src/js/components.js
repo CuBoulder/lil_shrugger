@@ -368,8 +368,9 @@ Vue.component('autocomplete-input', {
     };
   },
   created () {
-    // Allow other autocomplete inputs to interact and update each other.
     let that = this;
+
+    // Allow other autocomplete inputs to interact and update each other.
     bus.$on('matchKeys', function (params) {
       // If the key of this component matches then change the desired key.
       if (params.key === that.theKey) {
@@ -413,4 +414,29 @@ Vue.component('autocomplete-input', {
       bus.$emit('select', params);
     }
   }
+});
+
+Vue.component('commands', {
+  template: '#commands',
+  props: {
+    gridColumns: Array,
+  },
+  data () {
+    return {
+      selectedCommand: '',
+    };
+  },
+  created () {
+    let that = this;
+  },
+  computed: {
+    commands: function () {
+      return store.state.commands;
+    },
+  },
+  methods: {
+    userAccessPerm: function (permission) {
+      return userAccess(permission);
+    },
+  },
 });
