@@ -99,6 +99,7 @@
     data: {
       searchQuery: '',
       cachedRecords: [],
+      gridData: [],
       callback: 'updateCodeRecord',
       editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
       selectKeys: ['code_type', 'is_current', 'tag'],
@@ -109,18 +110,12 @@
       let that = this;
 
       bus.$on('switchEnv', function (env) {
-        getCodeRecords(store.state.atlasEnvironments[env])
-          .then(function (data) {
-            codeListing.gridData = data;
-          });
+        that.initialize();
       });
 
       // When a user tries to edit a site record, update data if etags don't match.
       bus.$on('etagFail', function (env) {
-        getCodeRecords(store.state.atlasEnvironments[env])
-          .then(function (data) {
-            codeListing.gridData = data;
-          });
+        that.etagFailListener(env, that);
       });
 
       bus.$on('updateCodeRecord', function (params) {
@@ -133,6 +128,50 @@
 
       // Set anything that needs updated when in edit mode.
       bus.$on('rowEdit', function (row) {
+        that.rowEditListener(row, that);
+      });
+
+      // Display whole record in view area.
+      bus.$on('rowView', function (row) {
+        that.rowViewListener(row, that);
+      });
+
+      bus.$on('rowHide', function (row) {
+        that.rowHideListener(row, that);
+      });
+
+      // Refresh table data.
+      bus.$on('navbarShow', function (component) {
+        that.navbarShowListener(component, that);
+      });
+    },
+    computed: {
+      gridColumns: function () {
+        return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys;
+      },
+    },
+    methods: {
+      initialize: function () {
+        let that = this;
+
+        getCodeRecords(store.state.atlasEnvironments[store.state.env])
+          .then(data => that.gridData = data);
+
+        // Get GitHub data to pass in.
+        getGitHubRepos().then(function (repoList) {
+          store.commit('addGitHubRepos', repoList);
+        });
+      },
+      userAccessPerm: function (permission = null) {
+        return userAccess(permission);
+      },
+      etagFailListener: function (env, that) {
+        getCodeRecords(store.state.atlasEnvironments[env])
+          .then(function (data) {
+            codeListing.gridData = data;
+          });
+      },
+      rowEditListener: function (row, that) {
         let options = {};
 
         // Add special edit content to the row key by key.
@@ -158,11 +197,8 @@
             store.commit('addEditContent', options);
           }
         });
-      });
-
-      // Display whole record in view area.
-      bus.$on('rowView', function (row) {
-
+      },
+      rowViewListener: function (row, that) {
         // Set temp variable for holding what was in the current table.
         // We can't used the cached data as that is a list of all the records.
         codeListing.tempGridData = codeListing.gridData;
@@ -178,43 +214,16 @@
             codeListing.rowViewContent = data;
           })
           .catch(error => error);
-      });
-
-      bus.$on('rowHide', function (row) {
+      },
+      rowHideListener: function (row, that) {
         // Filter table to only show that record.
         codeListing.gridData = codeListing.tempGridData;
         codeListing.rowViewContent = {};
-      });
-
-      // Refresh table data.
-      bus.$on('navbarShow', function (component) {
+      },
+      navbarShowListener: function (component, that) {
         if (component === 'table') {
           that.initialize();
         }
-      });
-    },
-    computed: {
-      gridColumns: function () {
-        return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys;
-      },
-      gridData: function () {
-        return this.codeData;
-      },
-    },
-    methods: {
-      initialize: function () {
-        let that = this;
-
-        getCodeRecords(store.state.atlasEnvironments[store.state.env])
-          .then(data => that.codeData = data);
-
-        // Get GitHub data to pass in.
-        getGitHubRepos().then(function (repoList) {
-          store.commit('addGitHubRepos', repoList);
-        });
-      },
-      userAccessPerm: function (permission = null) {
-        return userAccess(permission);
       }
     }
   });
