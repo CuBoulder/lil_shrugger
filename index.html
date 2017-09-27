@@ -440,6 +440,7 @@
     },
     methods: {
       initialize: function () {
+        let that = this;
 
         // Make sure data table is empty.
         this.sitesData = [];
@@ -458,6 +459,44 @@
 
             // Emit event so other data can be added to the table.
             bus.$emit('tableDataUpdate', data);
+          })
+          .then(function (notUsed) {
+            // Check for query params.
+            if (window.location.search === "") {
+              return;
+            }
+
+            // Format the query params into an array.
+            let queryParams = {};
+            const locationSearch = window.location.search.slice(1).split('&').map(function (item, index) {
+              const parts = item.split('=');
+              queryParams[parts[0]] = parts[1];
+            });
+
+            // Get property names to match to filter and search.
+            const propertyNames = Object.getOwnPropertyNames(queryParams);
+
+            // Set the search.
+            if (propertyNames.indexOf('query') !== -1) {
+              // Find the query name of the ID entered.
+              const storedQueries = store.state.statsQueryOptions;
+              const paramQuery = storedQueries.find(function (element) {
+                return element._id = queryParams.query;
+              });
+
+              // If ID found, then insert query name.
+              if (paramQuery !== 'undefined') {
+                that.statsQueryName = paramQuery.title;
+                that.statsQuery = paramQuery.query;
+                that.search(paramQuery);
+              }
+            }
+
+            // Set filter.
+            if (propertyNames.indexOf('filter') !== -1) {
+              that.searchQuery = queryParams.filter;
+            }
+
           });
 
         // Setup commands for select list.
@@ -465,69 +504,96 @@
 
         // Grab search queries.
         getSearchQueries();
-      },
-      search: function () {
 
-        // Grab keyword to search for.
+
+      },
+      search: function (querySent = null) {
+
         let query = null;
         let name = null;
         let that = this;
-        this.$children.forEach(function (element, index) {
-          if (element.theKey === 'query') {
-            query = element.keyword;
+
+        // If query already passed in, use that.
+        if (querySent !== null) {
+          query = querySent.query;
+          name = querySent.title;
+        }
+        // If no passed in query, then we need to grab it from autocomplete fields.
+        // Autocomplete is another component.
+        else {
+          this.$children.forEach(function (element, index) {
+            if (element.theKey === 'query') {
+              query = element.keyword;
+            }
+            if (element.theKey === 'title') {
+              name = element.keyword;
+            }
+          });
+
+          // If no query, then emit an error message and return.
+          if (query === null) {
+            bus.$emit('onMessage', {
+              text: 'No query found.',
+              alertType: 'alert-danger'
+            });
+            return;
           }
-          if (element.theKey === 'title') {
-            name = element.keyword;
-          }
+        }
+
+        // Set the history to update the query parameters for sharing URLs.
+        // Find the query name of the ID entered.
+        const storedQueries = store.state.statsQueryOptions;
+        const paramQuery = storedQueries.find(function (element) {
+          return element.title = name;
         });
 
-        // If no query, then emit an error message and return.
-        if (query === null) {
-          bus.$emit('onMessage', {
-            text: 'No query found.',
-            alertType: 'alert-danger'
-          });
-          return;
-        }
+        console.log(paramQuery);
+        console.log(querySent);
+        console.log(storedQueries);
+        console.log(name);
+        const queryString = '?filter=' + that.searchQuery + '&query=' + paramQuery._id;
+        history.pushState(null, null, location.origin + location.pathname + queryString);
 
         // Make request to Atlas.
         let baseURL = store.state.atlasEnvironments[store.state.env];
         let response = atlasRequest(baseURL, 'statistics', '?where=' + query);
 
         // Response is a Promise object so we must resolve it to get the data out.
-        response.then(function (objects) {
+        response
+          .then(function (objects) {
 
-          // If no search results returned, catch with error.
-          if (typeof objects["0"]._error !== 'undefined') {
-            bus.$emit('onMessage', {
-              text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
-              alertType: 'alert-danger'
+            // If no search results returned, catch with error.
+            if (typeof objects["0"]._error !== 'undefined') {
+              bus.$emit('onMessage', {
+                text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
+                alertType: 'alert-danger'
+              });
+              that.$options.methods.resetSearch(that);
+            }
+
+            // Get array only of site IDs to check from stats query.
+            let siteIds = [];
+            objects.forEach(function (elements, index) {
+              elements.forEach(function (element, index) {
+                siteIds.push(element['site']);
+              });
             });
-            that.$options.methods.resetSearch(that);
-          }
 
-          // Get array only of site IDs to check from stats query.
-          let siteIds = [];
-          objects.forEach(function (elements, index) {
-            elements.forEach(function (element, index) {
-              siteIds.push(element['site']);
+            // Filter results by using the site ID stored in stats records.
+            let queryResult = siteListing.cachedRecords.filter(function (row) {
+              return siteIds.indexOf(row['id']) > -1;
             });
-          });
 
-          // Filter results by using the site ID stored in stats records.
-          let queryResult = siteListing.cachedRecords.filter(function (row) {
-            return siteIds.indexOf(row['id']) > -1;
-          });
-
-          // By setting the gridData property, the view will automatically update.
-          siteListing.sitesData = queryResult;
-          siteListing.reset = true;
-        })
+            // By setting the gridData property, the view will automatically update.
+            siteListing.sitesData = queryResult;
+            siteListing.reset = true;
+          })
           .catch((error) => {
             console.log(error);
           });
 
         // Grab current list of options.
+        /*
         let queryOption = {};
         store.state[this.optionsKey].forEach(function (element, index) {
 
@@ -555,6 +621,7 @@
         }
 
         store.commit('saveQuery', queryOption);
+        */
       },
       resetSearch: function (that = null) {
         let thing = {};
