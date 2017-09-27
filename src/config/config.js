@@ -73,6 +73,7 @@ const store = new Vuex.Store({
     sitesSendCommand: [],
     commands: [],
     filteredData: [],
+    gitHubRepos: [],
   },
   mutations: {
     addEditContent (state, options) {
@@ -86,23 +87,6 @@ const store = new Vuex.Store({
     },
     storeQuery (state, currentQuery) {
       state.currentQuery = currentQuery;
-    },
-    saveQuery (state, queryOption) {
-      // Check if query exists and replace if it does.
-      let stored = false;
-      store.state.statsQueryOptions.forEach(function (element, index) {
-        if (element.query === queryOption.query) {
-          store.state.statsQueryOptions[index] = queryOption;
-          stored = true;
-        }
-      });
-
-      if (stored === true) {
-        return;
-      }
-
-      // Add query if it doesn't exist.
-      Vue.set(store.state.statsQueryOptions, store.state.statsQueryOptions.length + 1, queryOption)
     },
     switchEnv (state, environment) {
       store.state.env = environment;
@@ -140,6 +124,9 @@ const store = new Vuex.Store({
     },
     addFilteredData (state, data) {
       store.state.filteredData = data;
+    },
+    addGitHubRepos (state, repos) {
+      state.gitHubRepos = repos;
     }
   }
 });

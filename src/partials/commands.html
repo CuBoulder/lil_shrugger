@@ -1,0 +1,27 @@
+<!-- component template -->
+<script type="text/x-template" id="commands">
+<form id="commandsForm" class="row">
+  <div v-if="userAccessPerm('commands:command')">
+    <label for="sendCommand">Select Command</label>
+    <select name="sendCommand" id="sendCommand" v-model="selectedCommand">
+      <option v-for="(value, index) in commands" :value="value._id">
+        {{value.name}}
+      </option>
+    </select>
+    <div class="commands-button">
+      <confirm-button
+          label="Send Command"
+          :params="{command: selectedCommand}"
+          callback="sendCommand">
+      </confirm-button>
+    </div>
+  </div>
+  <div class="export-button" v-if="userAccessPerm('commands:export')">
+    <confirm-button
+        label="Export Table"
+        :params="{columns: gridColumns}"
+        callback="exportTable">
+    </confirm-button>
+  </div>
+</form>
+</script>

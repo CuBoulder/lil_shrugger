@@ -24,6 +24,8 @@
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
   <link rel="import" href="src/partials/autocomplete-input.html">
+  <link rel="import" href="src/partials/commands.html">
+  <link rel="import" href="src/partials/stats-search.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -37,75 +39,13 @@
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="site-listing" class="row">
     <transition name="slide-fade">
-      <form id="statsSearch" class="row" v-if="showStatsSearch">
-        <div class="form-group row">
-          <div class="col-md-6">
-            <label for="query-mongo">Query</label>
-            <autocomplete-input
-                id="query-mongo"
-                :options-key="optionsKey"
-                the-key="query"
-                :model="statsQuery">
-            </autocomplete-input>
-          </div>
-          <div class="col-md-6">
-            <label for="query-name">Query Name</label>
-            <autocomplete-input
-                id="query-name"
-                :options-key="optionsKey"
-                the-key="title"
-                :model="statsQueryName">
-            </autocomplete-input>
-          </div>
-          <div v-if="userAccessPerm('statsSearch:save')">
-            <div class="col-md-4">
-              <label for="query-description">Query Description</label>
-              <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
-            </div>
-            <!-- Comment out until another endpoint other than stats is searched on this page.
-            <div class="col-md-4">
-              <label for="query-endpoint">Query Endpoint</label>
-              <input type="text" name="query_endpoint" id="query-endpoint" class="form-control" v-model="statsQueryEndpoint">
-            </div>
-            -->
-            <div class="col-md-4">
-              <label for="query-tags">Query Tags</label>
-              <input type="text" name="query_tags" id="query-tags" class="form-control" v-model="statsQueryTags">
-            </div>
-          </div>
-        </div>
-        <div class="form-group row col-md-6">
-          <button class="btn btn-primary" @click.prevent="search()">Search</button>
-          <button class="btn btn-primary" @click.prevent="saveSearch()" v-if="userAccessPerm('statsSearch:save')">Save To Atlas</button>
-          <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
-        </div>
-      </form>
+      <stats-search v-if="showStatsSearch"></stats-search>
     </transition>
     <transition name="slide-fade">
-      <form id="commandsForm" class="row" v-if="showCommands">
-        <div v-if="userAccessPerm('commands:command')">
-          <label for="sendCommand">Select Command</label>
-          <select name="sendCommand" id="sendCommand" v-model="selectedCommand">
-            <option v-for="(value, index) in commands" :value="value._id">
-              {{value.name}}
-            </option>
-          </select>
-          <div class="commands-button">
-            <confirm-button
-                label="Send Command"
-                :params="{command: selectedCommand}"
-                callback="sendCommand">
-            </confirm-button>
-          </div>
-        </div>
-        <div class="export-button" v-if="userAccessPerm('commands:export')">
-          <confirm-button
-              label="Export Table"
-              :params="{columns: gridColumns}"
-              callback="exportTable">
-          </confirm-button>
-        </div>
-      </form>
+      <commands
+          :grid-columns="gridColumns"
+          v-if="showCommands">
+      </commands>
     </transition>
     <form id="search" class="row">
       <div class="form-group">
@@ -125,12 +65,12 @@
           :callback="callback">
       </listing>
     </div>
-  </div>
-  <div id="create-site" class="row" v-if="showDefault()">
-    <confirm-button
-        :label="label"
-        :callback="callback">
-    </confirm-button>
+    <div class="row" id="create-site" v-if="userAccessPerm('createSite')">
+      <confirm-button
+          label="Create A Site"
+          callback="createSite">
+      </confirm-button>
+    </div>
   </div>
 </div>
 <script src="src/js/utilities.js"></script>
@@ -151,46 +91,56 @@
   });
 
   /**
-   * Imports Site Listing HTML into DOM of pages using it.
+   * Imports component templates needed for this page.
    *
    * @type {Element}
    */
+
+  // Data Table.
   link = document.querySelector('link[href="src/partials/listing.html"]');
   content = link.import;
   el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
+  // Individual row inside data table.
   link = document.querySelector('link[href="src/partials/row.html"]');
   content = link.import;
   el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
+  // Autocomplete input used in search.
   link = document.querySelector('link[href="src/partials/autocomplete-input.html"]');
   content = link.import;
   el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
-  /**
-   * Imports Button HTML into DOM of pages using it.
-   *
-   * @type {Element}
-   */
+  // Confirm button used for sending commands and creating sites.
   link = document.querySelector('link[href="src/partials/confirm-button.html"]');
   content = link.import;
   el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
-  // Place site data in table via site-listing template located in site-listing.html.
+  // Commands form.
+  link = document.querySelector('link[href="src/partials/commands.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
+  // Search form.
+  link = document.querySelector('link[href="src/partials/stats-search.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
+  /**
+   * Vue instance for the sites page.
+   *
+   * @type {Vue}
+   */
   let siteListing = new Vue({
     el: '#site-listing',
     data: {
       searchQuery: '',
-      statsQuery: '',
-      statsQueryName: '',
-      statsQueryDescription: '',
-      statsQueryEndpoint: '',
-      statsQueryTags: '',
-      optionsKey: 'statsQueryOptions',
       sitesData: [],
       statsData: [],
       codeData: [],
@@ -198,40 +148,16 @@
       editKeys: ['path', 'status'],
       selectKeys: ['status'],
       callback: 'updateSiteRecord',
-      reset: false,
       rowViewContent: {},
-      selectedCommand: '',
+      showStatsSearch: false,
       showCommands: false,
-      showStatsSearch: false
     },
     created: function () {
       // Assign this to that in case needed in events.
       let that = this;
 
       bus.$on('sendCommand', function (params) {
-        // Get site Ids to send.
-        let siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';
-        let queryToSend = '{"path":{"$in":[' + siteIds + ']}}';
-
-        // Convert to unicode.
-        queryToSend = queryToSend.replace(new RegExp('{', 'g'), '\\u007B');
-        queryToSend = queryToSend.replace(new RegExp('}', 'g'), '\\u007d');
-        queryToSend = queryToSend.replace(new RegExp(/\[/, 'g'), '\\u005B');
-        queryToSend = queryToSend.replace(new RegExp(/\]/, 'g'), '\\u005D');
-        queryToSend = queryToSend.replace(new RegExp('"', 'g'), '\\u0022');
-        queryToSend = queryToSend.replace(new RegExp(':', 'g'), '\\u003a');
-        queryToSend = queryToSend.replace(new RegExp(',', 'g'), '\\u002c');
-        queryToSend = queryToSend.replace(new RegExp(/\$/, 'g'), '\\u0024');
-
-        // Don't JSON encode since it escapes too much.
-        let body = '{"query": "' + queryToSend + '"}';
-
-        // Get command data for etag.
-        let command = store.state.commands.filter(function (element, index) {
-          return element._id === params.command;
-        });
-
-        atlasRequest(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, query = '', 'PATCH', body, command[0]._etag);
+        that.sendCommandListener(params, that);
       });
 
       bus.$on('switchEnv', function (env) {
@@ -240,12 +166,7 @@
 
       // When a user tries to edit a site record, update data if etags don't match.
       bus.$on('etagFail', function (env) {
-        getSiteRecords(store.state.atlasEnvironments[env])
-          .then(function (data) {
-            siteListing.gridData = data;
-            // Cache the result until the next request.
-            siteListing.cachedRecords = data;
-          });
+        that.etagFailListener(env, that);
       });
 
       bus.$on('updateSiteRecord', function (params) {
@@ -258,170 +179,41 @@
 
       // Set anything that needs updated when in edit mode.
       bus.$on('rowEdit', function (row) {
-        // Add special edit content to the row key by key.
-        row.editKeys.forEach(function (element, index) {
-          // Need to set edit row options to nothing so they can render in component.
-          let options = {
-            rowId: row.data.id,
-            rowKey: element,
-            content: ''
-          };
-          store.commit('addEditContent', options);
-        });
+        that.rowEditListener(row, that);
       });
 
       // Display whole record in view area.
       bus.$on('rowView', function (row) {
-
-        // Set temp variable for holding what was in the current table.
-        // We can't used the cached data as that is a list of all the records.
-        siteListing.tempGridData = siteListing.gridData;
-
-        // Filter table to only show that record.
-        that.sitesData = [row.oldData];
-        that.statsData = [];
-        that.codeData = [];
-
-        // Make call to stats page to get full data to inject.
-        fetch(store.state.atlasEnvironments[store.state.env] + 'statistics/' + row.data.statistics)
-          .then(handleErrors)
-          .then(response => response.json())
-          .then(function (data) {
-            siteListing.rowViewContent = data;
-          })
-          .catch(error => error);
+        that.rowViewListener(row, that);
       });
 
+      // Hides record view and repopulates data table.
       bus.$on('rowHide', function (row) {
-        // Filter table to only show that record.
-        that.sitesData = siteListing.tempGridData;
-        that.statsData = [];
-        that.codeData = [];
-        that.rowViewContent = {};
+        that.rowHideListener(row, that);
       });
 
-      // Listen for autocomplete selections and match both inputs.
-      bus.$on('select', function (params) {
-
-        // Since we know that we have queries and titles, we can check the key and
-        // make the opposite property match what the user selected.
-        let params2 = {};
-        if (params.key === 'title') {
-          params2 = {
-            keyword: params.selectedOption.query,
-            key: 'query'
-          };
-          bus.$emit('matchKeys', params2);
-        } else {
-          params2 = {
-            keyword: params.selectedOption.title,
-            key: 'title'
-          };
-          bus.$emit('matchKeys', params2);
-        }
-
-        // Fill in other keys.
-        let currentQuery = {};
-        store.state.statsQueryOptions.forEach(function (element, index) {
-          if (params2.key === 'title' && element.title === params2.keyword) {
-            that.statsQueryDescription = element.description;
-            that.statsQueryEndpoint = element.endpoint;
-            that.statsQueryTags = element.tags.join(',');
-            currentQuery = element;
-          }
-
-          if (params2.key === 'query' && element.query === params2.keyword) {
-            that.statsQueryDescription = element.description;
-            that.statsQueryEndpoint = element.endpoint;
-            that.statsQueryTags = element.tags.join(',');
-            currentQuery = element;
-          }
-        });
-
-        // Save current query for check when updating queries.
-        store.commit('storeQuery', currentQuery);
-      });
-
-      // Show search and commands when icon in navbar is clicked.
+      // Show search when icon in navbar is clicked.
       // Also refresh table data.
       bus.$on('navbarShow', function (component) {
-        if (component === 'statsSearch') {
-          that.showStatsSearch = !that.showStatsSearch;
-        }
-
-        if (component === 'commands') {
-          that.showCommands = !that.showCommands;
-        }
-
-        if (component === 'table') {
-          that.initialize();
-        }
+        that.navbarShowListener(component, that);
       });
 
+      // Updates data table after site record data has been grabbed.
+      // Currently adds code and stats records data.
       bus.$on('tableDataUpdate', function (siteRecords) {
-        // Update table with code data once site records have been loaded.
-        let baseURL = store.state.atlasEnvironments[store.state.env];
-        getCodeRecords(baseURL)
-          .then(function (codeRecords) {
-            addCodeToSites(siteRecords, codeRecords);
-          })
-          .catch(error => console.log(error));
-
-        // Update with stats data.
-        getStatsRecords(siteRecords, baseURL)
-          .then(function (statsRecords) {
-            addStatsToSites(siteRecords, statsRecords);
-          })
-          .catch(error => console.log(error));
+        that.tableDataUpdateListener(siteRecords, that);
       });
 
+      // Exports data in table when export button is clicked.
       bus.$on('exportTable', function (params) {
-        let rows = store.state.filteredData;
-        let columns = params.columns;
-        let headers = {};
+        that.exportTableListener(params, that);
+      });
 
-        // Filter rows to only have keys visible in table.
-        let exportData = rows.map(function (item) {
-          let returnItem = {};
-          columns.forEach(function (element, index) {
-
-            // Need to join arrays with different value than comma.
-            if (Array.isArray(item[element])) {
-              item[element] = item[element].join('|');
-            }
-            // If item is still an object, then we need to do more work.
-            else if (typeof item[element] === "object") {
-
-              let mrString = '';
-              for (thing in item[element]) {
-                mrString = mrString + '|' + thing + ':' + item[element][thing];
-              }
-              item[element] = mrString;
-            }
-            // Strings can have commas.
-            else if (typeof item[element] === 'string') {
-              item[element] = item[element].replace(new RegExp(',', 'g'), '|');
-            }
-
-            returnItem[element] = item[element];
-
-            // Also make columns into header objects.
-            headers[element] = element;
-
-          });
-
-          return returnItem;
-        });
-
-        // Export to CSV file.
-        exportCSVFile(headers, exportData, 'report');
-
+      bus.$on('createSite', function (params) {
+        createSite(params);
       });
     },
     computed: {
-      showReset: function () {
-        return siteListing.reset;
-      },
       gridColumns: function () {
         // Merge site and stats keys together.
         let siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
@@ -431,16 +223,12 @@
 
         return siteKeys.concat(statsKeys);
       },
-      commands: function () {
-        return store.state.commands;
-      },
       gridData: function () {
         return [].concat(this.sitesData, this.statsData, this.codeData);
       }
     },
     methods: {
       initialize: function () {
-
         // Make sure data table is empty.
         this.sitesData = [];
         this.codeData = [];
@@ -466,199 +254,142 @@
         // Grab search queries.
         getSearchQueries();
       },
-      search: function () {
-
-        // Grab keyword to search for.
-        let query = null;
-        let name = null;
-        let that = this;
-        this.$children.forEach(function (element, index) {
-          if (element.theKey === 'query') {
-            query = element.keyword;
-          }
-          if (element.theKey === 'title') {
-            name = element.keyword;
-          }
-        });
-
-        // If no query, then emit an error message and return.
-        if (query === null) {
-          bus.$emit('onMessage', {
-            text: 'No query found.',
-            alertType: 'alert-danger'
-          });
-          return;
-        }
-
-        // Make request to Atlas.
-        let baseURL = store.state.atlasEnvironments[store.state.env];
-        let response = atlasRequest(baseURL, 'statistics', '?where=' + query);
-
-        // Response is a Promise object so we must resolve it to get the data out.
-        response.then(function (objects) {
-
-          // If no search results returned, catch with error.
-          if (typeof objects["0"]._error !== 'undefined') {
-            bus.$emit('onMessage', {
-              text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
-              alertType: 'alert-danger'
-            });
-            that.$options.methods.resetSearch(that);
-          }
-
-          // Get array only of site IDs to check from stats query.
-          let siteIds = [];
-          objects.forEach(function (elements, index) {
-            elements.forEach(function (element, index) {
-              siteIds.push(element['site']);
-            });
-          });
-
-          // Filter results by using the site ID stored in stats records.
-          let queryResult = siteListing.cachedRecords.filter(function (row) {
-            return siteIds.indexOf(row['id']) > -1;
-          });
-
-          // By setting the gridData property, the view will automatically update.
-          siteListing.sitesData = queryResult;
-          siteListing.reset = true;
-        })
-          .catch((error) => {
-            console.log(error);
-          });
-
-        // Grab current list of options.
-        let queryOption = {};
-        store.state[this.optionsKey].forEach(function (element, index) {
-
-          // Replace query if it exists.
-          if (element.query === query) {
-            // If name/title isn't the same, then switch to new one.
-            queryOption.title = element.title;
-            queryOption.query = element.query;
-            if (element.title !== name) {
-              queryOption.title = name;
-            }
-
-            // Increment rank.
-            queryOption.rank = element.rank + 1;
-          }
-        });
-
-        // If queryOption is still null, then add this query as new.
-        if (typeof queryOption.title === 'undefined') {
-          queryOption = {
-            title: name,
-            query: query,
-            rank: 1
-          };
-        }
-
-        store.commit('saveQuery', queryOption);
-      },
-      resetSearch: function (that = null) {
-        let thing = {};
-        if (that) {
-          thing = that;
-        } else {
-          thing = this;
-        }
-
-        // Reset keywords in child components.
-        thing.$children.forEach(function (element, index) {
-          if (typeof element.keyword !== 'undefined') {
-            element.keyword = '';
-          }
-        });
-
-        // Reset other query fields not in autocomplete component.
-        this.statsQueryDescription = '';
-        this.statsQueryEndpoint = '';
-        this.statsQueryTags = '';
-
-        // Reset stored query.
-        store.commit('storeQuery', null);
-
-        // By using the cached results when the page is loaded, the query can be reverted.
-        siteListing.sitesData = siteListing.cachedRecords;
-        siteListing.searchQuery = '';
-        siteListing.reset = false;
-      },
-      saveSearch: function () {
-        // Grab keyword to search for.
-        let queryToSend = null;
-        let name = null;
-        this.$children.forEach(function (element, index) {
-          if (element.theKey === 'query') {
-            queryToSend = element.keyword;
-          }
-          if (element.theKey === 'title') {
-            name = element.keyword;
-          }
-        });
-
-        // Convert to unicode.
-        queryToSend = queryToSend.replace(new RegExp('{', 'g'), '\\u007B');
-        queryToSend = queryToSend.replace(new RegExp('}', 'g'), '\\u007d');
-        queryToSend = queryToSend.replace(new RegExp(/\[/, 'g'), '\\u005B');
-        queryToSend = queryToSend.replace(new RegExp(/\]/, 'g'), '\\u005D');
-        queryToSend = queryToSend.replace(new RegExp('"', 'g'), '\\u0022');
-        queryToSend = queryToSend.replace(new RegExp(':', 'g'), '\\u003a');
-        queryToSend = queryToSend.replace(new RegExp(',', 'g'), '\\u002c');
-        queryToSend = queryToSend.replace(new RegExp(/\$/, 'g'), '\\u0024');
-
-        // Make tags into string with quotes.
-        const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
-        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["statistic"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
-
-        // Make request to Atlas.
-        let baseURL = store.state.atlasEnvironments[store.state.env];
-        let currentQuery = store.state.currentQuery;
-        if (currentQuery !== null) {
-          atlasRequest(baseURL, 'query/' + currentQuery['_id'], '', 'PATCH', data, currentQuery['_etag'])
-            .then((response) => {
-              bus.$emit('onMessage', {
-                text: 'You have sent a PATCH request to a query record. query ID: ' + currentQuery['_id'] + '. Search and reset to add new query.',
-                alertType: 'alert-success'
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          atlasRequest(baseURL, 'query', '', 'POST', data)
-            .then((response) => {
-              bus.$emit('onMessage', {
-                text: 'You have sent a POST request to add query record. Search and reset to add new query.',
-                alertType: 'alert-success'
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-      },
       userAccessPerm: function (permission) {
         return userAccess(permission);
-      }
-    }
-  });
+      },
+      rowViewListener: function (row, that) {
 
-  // Add create a site button to page.
-  let siteCreateButton = new Vue({
-    el: '#create-site',
-    data: {
-      label: 'Create A Site',
-      callback: 'createSite',
-    },
-    created: function () {
-      bus.$on('createSite', function (params) {
-        createSite(params);
-      });
-    },
-    methods: {
-      showDefault: function () {
-        return userAccess('createSite');
+        // Set temp variable for holding what was in the current table.
+        // We can't used the cached data as that is a list of all the records.
+        siteListing.tempGridData = siteListing.gridData;
+
+        // Filter table to only show that record.
+        that.sitesData = [row.oldData];
+        that.statsData = [];
+        that.codeData = [];
+
+        // Make call to stats page to get full data to inject.
+        fetch(store.state.atlasEnvironments[store.state.env] + 'statistics/' + row.data.statistics)
+          .then(handleErrors)
+          .then(response => response.json())
+          .then(function (data) {
+            siteListing.rowViewContent = data;
+          })
+          .catch(error => error);
+      },
+      sendCommandListener: function (params, that) {
+        // Get site Ids to send.
+        let siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';
+        let queryToSend = '{"path":{"$in":[' + siteIds + ']}}';
+
+        // Convert to unicode.
+        queryToSend = convertToUnicode(queryToSend);
+
+        // Don't JSON encode since it escapes too much.
+        let body = '{"query": "' + queryToSend + '"}';
+
+        // Get command data for etag.
+        let command = store.state.commands.filter(function (element, index) {
+          return element._id === params.command;
+        });
+
+        atlasRequest(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, query = '', 'PATCH', body, command[0]._etag);
+      },
+      etagFailListener: function (env, that) {
+        getSiteRecords(store.state.atlasEnvironments[env])
+          .then(function (data) {
+            siteListing.gridData = data;
+            // Cache the result until the next request.
+            siteListing.cachedRecords = data;
+          });
+      },
+      rowEditListener: function (row, that) {
+        // Add special edit content to the row key by key.
+        row.editKeys.forEach(function (element, index) {
+          // Need to set edit row options to nothing so they can render in component.
+          let options = {
+            rowId: row.data.id,
+            rowKey: element,
+            content: ''
+          };
+          store.commit('addEditContent', options);
+        });
+      },
+      rowHideListener: function (row, that) {
+        // Filter table to only show that record.
+        that.sitesData = siteListing.tempGridData;
+        that.statsData = [];
+        that.codeData = [];
+        that.rowViewContent = {};
+      },
+
+      navbarShowListener: function (component, that) {
+        if (component === 'statsSearch') {
+          that.showStatsSearch = !that.showStatsSearch;
+        }
+
+        if (component === 'commands') {
+          that.showCommands = !that.showCommands;
+        }
+
+        // Table means the data table and clicking the refresh icon.
+        if (component === 'table') {
+          that.initialize();
+        }
+      },
+      tableDataUpdateListener: function (siteRecords, that) {
+        // Update table with code data once site records have been loaded.
+        let baseURL = store.state.atlasEnvironments[store.state.env];
+        getCodeRecords(baseURL)
+          .then(function (codeRecords) {
+            addCodeToSites(siteRecords, codeRecords);
+          })
+          .catch(error => console.log(error));
+
+        // Update with stats data.
+        getStatsRecords(siteRecords, baseURL)
+          .then(function (statsRecords) {
+            addStatsToSites(siteRecords, statsRecords);
+          })
+          .catch(error => console.log(error));
+      },
+      exportTableListener: function (params, that) {
+        let rows = store.state.filteredData;
+        let columns = params.columns;
+        let headers = {};
+
+        // Filter rows to only have keys visible in table.
+        let exportData = rows.map(function (item) {
+          let returnItem = {};
+          columns.forEach(function (element, index) {
+
+            // Need to join arrays with different value than comma.
+            if (Array.isArray(item[element])) {
+              item[element] = item[element].join('|');
+            }
+            // If item is still an object, then we need to do more work.
+            else if (typeof item[element] === "object") {
+              let mrString = '';
+              for (thing in item[element]) {
+                mrString = mrString + '|' + thing + ':' + item[element][thing];
+              }
+              item[element] = mrString;
+            }
+            // Strings can have commas.
+            else if (typeof item[element] === 'string') {
+              item[element] = item[element].replace(new RegExp(',', 'g'), '|');
+            }
+
+            returnItem[element] = item[element];
+
+            // Also make columns into header objects.
+            headers[element] = element;
+          });
+          return returnItem;
+        });
+
+        // Export to CSV file.
+        exportCSVFile(headers, exportData, 'report');
       }
     }
   });

@@ -187,7 +187,33 @@ const flatten = object => {
  *
  * @returns {boolean}
  */
-function userAccess(permission = NULL) {
+function userAccess(permission = null) {
   // Check to see if permission is in permissions array.
   return store.state.userPermissions.includes(permission);
+}
+
+/**
+ * Converts a string to Unicode based on the Mongo DB query syntax.
+ *
+ * @param string
+ * @returns {*}
+ */
+function convertToUnicode(string = null) {
+  // If no string, then return.
+  if (string === null) {
+    console.log('No string passed into Unicode conversion function.');
+    return null;
+  }
+
+  // These values all come from characters used for queries sent to Atlas.
+  string = string.replace(new RegExp('{', 'g'), '\\u007B');
+  string = string.replace(new RegExp('}', 'g'), '\\u007d');
+  string = string.replace(new RegExp(/\[/, 'g'), '\\u005B');
+  string = string.replace(new RegExp(/\]/, 'g'), '\\u005D');
+  string = string.replace(new RegExp('"', 'g'), '\\u0022');
+  string = string.replace(new RegExp(':', 'g'), '\\u003a');
+  string = string.replace(new RegExp(',', 'g'), '\\u002c');
+  string = string.replace(new RegExp(/\$/, 'g'), '\\u0024');
+
+  return string;
 }
