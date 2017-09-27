@@ -25,6 +25,7 @@
   <link rel="import" href="src/partials/confirm-button.html">
   <link rel="import" href="src/partials/autocomplete-input.html">
   <link rel="import" href="src/partials/commands.html">
+  <link rel="import" href="src/partials/stats-search.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -38,49 +39,7 @@
   <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="site-listing" class="row">
     <transition name="slide-fade">
-      <form id="statsSearch" class="row" v-if="showStatsSearch">
-        <div class="form-group row">
-          <div class="col-md-6">
-            <label for="query-mongo">Query</label>
-            <autocomplete-input
-                id="query-mongo"
-                :options-key="optionsKey"
-                the-key="query"
-                :model="statsQuery">
-            </autocomplete-input>
-          </div>
-          <div class="col-md-6">
-            <label for="query-name">Query Name</label>
-            <autocomplete-input
-                id="query-name"
-                :options-key="optionsKey"
-                the-key="title"
-                :model="statsQueryName">
-            </autocomplete-input>
-          </div>
-          <div v-if="userAccessPerm('statsSearch:save')">
-            <div class="col-md-4">
-              <label for="query-description">Query Description</label>
-              <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
-            </div>
-            <!-- Comment out until another endpoint other than stats is searched on this page.
-            <div class="col-md-4">
-              <label for="query-endpoint">Query Endpoint</label>
-              <input type="text" name="query_endpoint" id="query-endpoint" class="form-control" v-model="statsQueryEndpoint">
-            </div>
-            -->
-            <div class="col-md-4">
-              <label for="query-tags">Query Tags</label>
-              <input type="text" name="query_tags" id="query-tags" class="form-control" v-model="statsQueryTags">
-            </div>
-          </div>
-        </div>
-        <div class="form-group row col-md-6">
-          <button class="btn btn-primary" @click.prevent="search()">Search</button>
-          <button class="btn btn-primary" @click.prevent="saveSearch()" v-if="userAccessPerm('statsSearch:save')">Save To Atlas</button>
-          <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
-        </div>
-      </form>
+      <stats-search v-if="showStatsSearch"></stats-search>
     </transition>
     <transition name="slide-fade">
       <commands
@@ -167,6 +126,12 @@
   el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
+  // Search form.
+  link = document.querySelector('link[href="src/partials/stats-search.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
   /**
    * Vue instance for the sites page.
    *
@@ -176,12 +141,6 @@
     el: '#site-listing',
     data: {
       searchQuery: '',
-      statsQuery: '',
-      statsQueryName: '',
-      statsQueryDescription: '',
-      statsQueryEndpoint: '',
-      statsQueryTags: '',
-      optionsKey: 'statsQueryOptions',
       sitesData: [],
       statsData: [],
       codeData: [],
@@ -189,7 +148,6 @@
       editKeys: ['path', 'status'],
       selectKeys: ['status'],
       callback: 'updateSiteRecord',
-      reset: false,
       rowViewContent: {},
       showStatsSearch: false,
       showCommands: false,
@@ -234,11 +192,6 @@
         that.rowHideListener(row, that);
       });
 
-      // Listen for autocomplete selections and match both inputs.
-      bus.$on('select', function (params) {
-        that.selectListener(params, that);
-      });
-
       // Show search when icon in navbar is clicked.
       // Also refresh table data.
       bus.$on('navbarShow', function (component) {
@@ -261,9 +214,6 @@
       });
     },
     computed: {
-      showReset: function () {
-        return siteListing.reset;
-      },
       gridColumns: function () {
         // Merge site and stats keys together.
         let siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
@@ -271,7 +221,6 @@
         // Make stats empty if not saved since adding all of those keys makes the table unusable.
         let statsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [];
 
-        console.log(siteKeys.concat(statsKeys));
         return siteKeys.concat(statsKeys);
       },
       gridData: function () {
@@ -304,146 +253,6 @@
 
         // Grab search queries.
         getSearchQueries();
-      },
-      search: function () {
-        let query = null;
-        let name = null;
-        let that = this;
-
-        // Grab keyword to search for.
-        // The keywords are in separate unnamed autocomplete components.
-        // @todo See if query and name can be stored in Store object.
-        this.$children.forEach(function (element, index) {
-          if (element.theKey === 'query') {
-            query = element.keyword;
-          }
-          if (element.theKey === 'title') {
-            name = element.keyword;
-          }
-        });
-
-        // If no query, then emit an error message and return.
-        if (query === null) {
-          bus.$emit('onMessage', {
-            text: 'No query found.',
-            alertType: 'alert-danger'
-          });
-          return;
-        }
-
-        // Make request to Atlas.
-        let baseURL = store.state.atlasEnvironments[store.state.env];
-
-        atlasRequest(baseURL, 'statistics', '?where=' + query)
-          .then(function (objects) {
-
-            // If no search results returned, catch with error.
-            if (typeof objects["0"]._error !== 'undefined') {
-              bus.$emit('onMessage', {
-                text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
-                alertType: 'alert-danger'
-              });
-              that.$options.methods.resetSearch(that);
-            }
-
-            // Get array only of site IDs to check from stats query.
-            let siteIds = [];
-            objects.forEach(function (elements, index) {
-              elements.forEach(function (element, index) {
-                siteIds.push(element['site']);
-              });
-            });
-
-            // Filter results by using the site ID stored in stats records.
-            // By setting the gridData property, the view will automatically update.
-            siteListing.sitesData = siteListing.cachedRecords.filter(function (row) {
-              return siteIds.indexOf(row['id']) > -1;
-            });
-            siteListing.reset = true;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
-      resetSearch: function (that = null) {
-        let thing = {};
-        if (that) {
-          thing = that;
-        } else {
-          thing = this;
-        }
-
-        // Reset keywords in child components.
-        // @todo see if this can be stored in Store object.
-        thing.$children.forEach(function (element, index) {
-          if (typeof element.keyword !== 'undefined') {
-            element.keyword = '';
-          }
-        });
-
-        // Reset other query fields not in autocomplete component.
-        this.statsQueryDescription = '';
-        this.statsQueryEndpoint = '';
-        this.statsQueryTags = '';
-
-        // Reset stored query.
-        store.commit('storeQuery', null);
-
-        // By using the cached results when the page is loaded, the query can be reverted.
-        siteListing.sitesData = siteListing.cachedRecords;
-        siteListing.searchQuery = '';
-        siteListing.reset = false;
-      },
-      saveSearch: function () {
-        let queryToSend = null;
-        let name = null;
-
-        // Grab keyword to search for.
-        this.$children.forEach(function (element, index) {
-          if (element.theKey === 'query') {
-            queryToSend = element.keyword;
-          }
-          if (element.theKey === 'title') {
-            name = element.keyword;
-          }
-        });
-
-        // Convert to unicode.
-        queryToSend = convertToUnicode(queryToSend);
-
-        // Make tags into string with quotes.
-        const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
-        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["statistic"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
-
-        // Make request to Atlas.
-        let baseURL = store.state.atlasEnvironments[store.state.env];
-        let currentQuery = store.state.currentQuery;
-
-        // If there is a current query, then we assume we are patching it.
-        if (currentQuery !== null) {
-          atlasRequest(baseURL, 'query/' + currentQuery['_id'], '', 'PATCH', data, currentQuery['_etag'])
-            .then((response) => {
-              bus.$emit('onMessage', {
-                text: 'You have sent a PATCH request to a query record. query ID: ' + currentQuery['_id'] + '. Search and reset to add new query.',
-                alertType: 'alert-success'
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          // If no current query, then we assume we are making a new one.
-          atlasRequest(baseURL, 'query', '', 'POST', data)
-            .then((response) => {
-              bus.$emit('onMessage', {
-                text: 'You have sent a POST request to add query record. Search and reset to add new query.',
-                alertType: 'alert-success'
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
       },
       userAccessPerm: function (permission) {
         return userAccess(permission);
@@ -513,45 +322,7 @@
         that.codeData = [];
         that.rowViewContent = {};
       },
-      selectListener: function (params, that) {
-        // Since we know that we have queries and titles, we can check the key and
-        // make the opposite property match what the user selected.
-        let params2 = {};
-        if (params.key === 'title') {
-          params2 = {
-            keyword: params.selectedOption.query,
-            key: 'query'
-          };
-          bus.$emit('matchKeys', params2);
-        } else {
-          params2 = {
-            keyword: params.selectedOption.title,
-            key: 'title'
-          };
-          bus.$emit('matchKeys', params2);
-        }
 
-        // Fill in other keys.
-        let currentQuery = {};
-        store.state.statsQueryOptions.forEach(function (element, index) {
-          if (params2.key === 'title' && element.title === params2.keyword) {
-            that.statsQueryDescription = element.description;
-            that.statsQueryEndpoint = element.endpoint;
-            that.statsQueryTags = element.tags.join(',');
-            currentQuery = element;
-          }
-
-          if (params2.key === 'query' && element.query === params2.keyword) {
-            that.statsQueryDescription = element.description;
-            that.statsQueryEndpoint = element.endpoint;
-            that.statsQueryTags = element.tags.join(',');
-            currentQuery = element;
-          }
-        });
-
-        // Save current query for check when updating queries.
-        store.commit('storeQuery', currentQuery);
-      },
       navbarShowListener: function (component, that) {
         if (component === 'statsSearch') {
           that.showStatsSearch = !that.showStatsSearch;

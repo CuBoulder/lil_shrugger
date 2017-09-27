@@ -73,6 +73,7 @@ const store = new Vuex.Store({
     sitesSendCommand: [],
     commands: [],
     filteredData: [],
+    gitHubRepos: [],
   },
   mutations: {
     addEditContent (state, options) {
@@ -123,6 +124,9 @@ const store = new Vuex.Store({
     },
     addFilteredData (state, data) {
       store.state.filteredData = data;
+    },
+    addGitHubRepos (state, repos) {
+      state.gitHubRepos = repos;
     }
   }
 });

@@ -22,6 +22,7 @@
   <link rel="import" href="src/partials/listing.html">
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
+  <link rel="import" href="src/partials/create-code.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -37,8 +38,7 @@
     <form id="search">
       <div class="form-group">
         <label for="query">Filter Table</label>
-        <input id="query" class="form-control" name="query"
-               v-model="searchQuery">
+        <input id="query" class="form-control" name="query" v-model="searchQuery">
       </div>
     </form>
     <listing
@@ -50,61 +50,7 @@
         :edit-keys="editKeys"
         :select-keys="selectKeys">
     </listing>
-  </div>
-  <div id="create-code" class="row" v-if="showDefault()">
-    <button v-if="!addCode" class="btn btn-primary" @click="codeButton()">Add
-      Code
-    </button>
-    <transition name="fade">
-      <div v-if="addCode">
-        <label for="addRepo">Select A Repo</label>
-        <select name="addRepo" id="addRepo" @change="changeRepo($event)">
-          <option v-for="(value, index) in repos" :value="index">
-            {{value.name}}
-          </option>
-        </select>
-        <!-- Second dropdown -->
-        <transition name="fade">
-          <div v-if="branchReady">
-            <label for="addBranch">Select A Branch</label>
-            <select name="addBranch" id="addBranch" @change="changeBranch($event)">
-              <option v-for="(branch, index) in branches" :value="index">
-                {{branch.name}}
-              </option>
-            </select>
-            <label for="code_type">Type:</label>
-            <select name="code_type" id="code_type" v-model="codeType">
-              <option v-for="anOption in selectOptions.code_type" :value="anOption">
-                {{anOption}}
-              </option>
-            </select>
-            <label for="is_current">Is Current:</label>
-            <select name="is_current" id="is_current" v-model="isCurrent">
-              <option v-for="anOption in selectOptions.is_current" :value="anOption">
-                {{anOption}}
-              </option>
-            </select>
-            <label for="tag">Tag:</label>
-            <select name="tag" id="tag" v-model="tag">
-              <option v-for="anOption in selectOptions.tag" :value="anOption">
-                {{anOption}}
-              </option>
-            </select>
-            <label for="code_version">Version:</label>
-            <input type="text" name="code_version" id="code_version"
-                   v-model="codeVersion">
-            <label for="code_label">Label:</label>
-            <input type="text" name="code_label" id="code_label"
-                   v-model="codeLabel">
-          </div>
-        </transition>
-        <!-- End Second dropdown -->
-        <button v-if="ready" class="btn btn-primary" @click="createCode()">Create
-          Code Asset
-        </button>
-        <button v-if="addCode" class="btn btn-default" @click="addCode = false">Cancel</button>
-      </div>
-    </transition>
+    <create-code v-if="userAccessPerm('createCode')"></create-code>
   </div>
 </div>
 <script src="src/js/utilities.js"></script>
@@ -141,17 +87,23 @@
   el = content.querySelector('script');
   document.querySelector('body').appendChild(el.cloneNode(true));
 
+  // Imports create code component.
+  link = document.querySelector('link[href="src/partials/create-code.html"]');
+  content = link.import;
+  el = content.querySelector('script');
+  document.querySelector('body').appendChild(el.cloneNode(true));
+
   // Place site data in table via site-listing template located in site-listing.html.
   codeListing = new Vue({
     el: '#code-listing',
     data: {
       searchQuery: '',
-      gridData: [],
       cachedRecords: [],
       callback: 'updateCodeRecord',
       editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
       selectKeys: ['code_type', 'is_current', 'tag'],
-      rowViewContent: {}
+      rowViewContent: {},
+      codeData: [],
     },
     created: function () {
       let that = this;
@@ -240,126 +192,29 @@
           that.initialize();
         }
       });
-
     },
     computed: {
       gridColumns: function () {
         return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys;
-      }
+      },
+      gridData: function () {
+        return this.codeData;
+      },
     },
     methods: {
       initialize: function () {
+        let that = this;
+
         getCodeRecords(store.state.atlasEnvironments[store.state.env])
-          .then(data => codeListing.gridData = data);
+          .then(data => that.codeData = data);
 
         // Get GitHub data to pass in.
         getGitHubRepos().then(function (repoList) {
-          codeCreateButton.repos = repoList;
-        });
-      }
-    }
-  });
-
-  // Add create code button.
-  let codeCreateButton = new Vue({
-    el: '#create-code',
-    data: {
-      selectOptions: siteConfig.selectOptions,
-      repos: [],
-      branches: [],
-      branchToAdd: {},
-      activeRepo: {},
-      ready: false,
-      branchReady: false,
-      addCode: false,
-      codeType: 'module',
-      tag: 'beta_bundle',
-      codeVersion: '',
-      codeLabel: '',
-      isCurrent: false,
-    },
-    computed: {
-      userInput: function () {
-        return {
-          version: this.codeVersion,
-          type: this.codeType,
-          label: this.codeLabel,
-          is_current: this.isCurrent,
-          tag: this.tag,
-        };
-      }
-    },
-    methods: {
-      changeRepo: function (event) {
-        // Set to true for branch select list to appear.
-        this.branchReady = true;
-        this.branches = [];
-        this.activeRepo = this.repos[event.target.value];
-
-        let that = this;
-        let response = getRepoBranches(this.activeRepo.name);
-
-        response.then(function (branchesList) {
-          that.branches = branchesList;
-          // Add a default; otherwise user can't select first element.
-          let first = {
-            name: '-Select-',
-            commit: {
-              hash: null
-            }
-          };
-          that.branches.unshift(first);
+          store.commit('addGitHubRepos', repoList);
         });
       },
-      changeBranch: function (event) {
-        this.ready = true;
-        this.branchToAdd = this.branches[event.target.value];
-      },
-      codeButton: function () {
-        this.addCode = true;
-      },
-      showDefault: function () {
-        return userAccess('createCode');
-      },
-      createCode: function () {
-        let repo = this.activeRepo;
-        let branch = this.branchToAdd;
-        let input = this.userInput;
-
-        // Need to check for special code assets (drupal/express) and set data accordingly.
-        if (repo.name === 'drupal-7.x') {
-          repo.name = 'drupal';
-        }
-
-        // Turn tag into array.
-        input.tag = [input['tag']];
-
-        let codeAsset = {
-          "git_url": repo.ssh_url,
-          "commit_hash": branch.commit.sha,
-          "meta": {
-            "version": input.version,
-            "code_type": input.type,
-            "name": repo.name,
-            "label": input.label,
-            "is_current": input.is_current,
-            "tag": input.tag,
-          }
-        };
-
-        let baseURL = store.state.atlasEnvironments[store.state.env];
-        atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
-          .then((response) => {
-            bus.$emit('onMessage', {
-              text: 'You have created a code asset.',
-              alertType: 'alert-success'
-            });
-            getCodeRecords(store.state.atlasEnvironments[store.state.env])
-              .then(data => codeListing.gridData = data);
-          })
-          .catch(error => console.log(error));
-
-        this.addCode = false;
+      userAccessPerm: function (permission = null) {
+        return userAccess(permission);
       }
     }
   });
