@@ -23,6 +23,7 @@
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
   <link rel="import" href="src/partials/create-code.html">
+  <link rel="import" href="src/partials/message-area.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -33,8 +34,8 @@
   </atlas-navbar>
 </div>
 <div id="app" class="container">
-  <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="code-listing">
+    <message-area</message-area>
     <form id="search">
       <div class="form-group">
         <label for="query">Filter Table</label>
@@ -70,30 +71,22 @@
     codeListing.initialize();
   });
 
-  // Imports Site Listing HTML into DOM of pages using it.
-  link = document.querySelector('link[href="src/partials/listing.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
+  /**
+   * Import component templates needed for this page.
+   */
+  const imports = ['message-area', 'listing', 'row', 'confirm-button', 'create-code'];
+  imports.forEach(function(element) {
+    link = document.querySelector('link[href="src/partials/' + element + '.html"]');
+    content = link.import;
+    el = content.querySelector('script');
+    document.querySelector('body').appendChild(el.cloneNode(true));
+  });
 
-  link = document.querySelector('link[href="src/partials/row.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
-  // Imports Button HTML into DOM of pages using it.
-  link = document.querySelector('link[href="src/partials/confirm-button.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
-  // Imports create code component.
-  link = document.querySelector('link[href="src/partials/create-code.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
-  // Place site data in table via site-listing template located in site-listing.html.
+  /**
+   * Vue instance for the code.html page.
+   *
+   * @type {Vue}
+   */
   codeListing = new Vue({
     el: '#code-listing',
     data: {
@@ -104,6 +97,7 @@
       editKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
       selectKeys: ['code_type', 'is_current', 'tag'],
       rowViewContent: {},
+      messages: [],
     },
     created: function () {
       let that = this;

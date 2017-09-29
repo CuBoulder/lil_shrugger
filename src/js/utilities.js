@@ -217,3 +217,13 @@ function convertToUnicode(string = null) {
 
   return string;
 }
+
+/**
+ * Sets a delay in milliseconds.
+ *
+ * @param time
+ * @returns {Promise}
+ */
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}

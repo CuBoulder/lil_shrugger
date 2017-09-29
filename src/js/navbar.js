@@ -9,7 +9,6 @@ let content = link.import;
 let el = content.querySelector('script');
 document.querySelector('body').appendChild(el.cloneNode(true));
 
-
 /**
  * Creates a button component with comfirm step.
  */
