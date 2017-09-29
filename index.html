@@ -26,6 +26,7 @@
   <link rel="import" href="src/partials/autocomplete-input.html">
   <link rel="import" href="src/partials/commands.html">
   <link rel="import" href="src/partials/stats-search.html">
+  <link rel="import" href="src/partials/message-area.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -36,10 +37,13 @@
   </atlas-navbar>
 </div>
 <div class="page container">
-  <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="site-listing" class="row">
+    <message-area></message-area>
     <transition name="slide-fade">
-      <stats-search v-if="showStatsSearch"></stats-search>
+      <stats-search
+          :filter="searchFilter"
+          v-if="showStatsSearch">
+      </stats-search>
     </transition>
     <transition name="slide-fade">
       <commands
@@ -51,14 +55,14 @@
       <div class="form-group">
         <label for="filter-records">Filter Table</label>
         <input id="filter-records" class="form-control" name="query"
-               v-model="searchQuery">
+               v-model="searchFilter">
       </div>
     </form>
     <div class="row">
       <listing
           :data="gridData"
           :columns="gridColumns"
-          :filter-key="searchQuery"
+          :filter-key="searchFilter"
           :edit-keys="editKeys"
           :select-keys="selectKeys"
           :extra-content="rowViewContent"
@@ -87,50 +91,27 @@
    * changes via the environment selector, the search will update.
    */
   jQuery(document).ready(function () {
+    // Setup commands for select list.
+    getAtlasCommands();
+
+    // Grab search queries.
+    getSearchQueries();
+
     siteListing.initialize();
   });
 
   /**
-   * Imports component templates needed for this page.
-   *
-   * @type {Element}
+   * Import component templates needed for this page.
    */
+  const imports = ['message-area', 'listing', 'row', 'autocomplete-input', 'confirm-button', 'commands', 'stats-search'];
 
-  // Data Table.
-  link = document.querySelector('link[href="src/partials/listing.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
+  imports.forEach(function(element) {
+    link = document.querySelector('link[href="src/partials/' + element + '.html"]');
+    content = link.import;
+    el = content.querySelector('script');
+    document.querySelector('body').appendChild(el.cloneNode(true));
+  });
 
-  // Individual row inside data table.
-  link = document.querySelector('link[href="src/partials/row.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
-  // Autocomplete input used in search.
-  link = document.querySelector('link[href="src/partials/autocomplete-input.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
-  // Confirm button used for sending commands and creating sites.
-  link = document.querySelector('link[href="src/partials/confirm-button.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
-  // Commands form.
-  link = document.querySelector('link[href="src/partials/commands.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
-
-  // Search form.
-  link = document.querySelector('link[href="src/partials/stats-search.html"]');
-  content = link.import;
-  el = content.querySelector('script');
-  document.querySelector('body').appendChild(el.cloneNode(true));
 
   /**
    * Vue instance for the sites page.
@@ -140,7 +121,7 @@
   let siteListing = new Vue({
     el: '#site-listing',
     data: {
-      searchQuery: '',
+      searchFilter: '',
       sitesData: [],
       statsData: [],
       codeData: [],
@@ -149,7 +130,7 @@
       selectKeys: ['status'],
       callback: 'updateSiteRecord',
       rowViewContent: {},
-      showStatsSearch: false,
+      showStatsSearch: true,
       showCommands: false,
     },
     created: function () {
@@ -225,11 +206,12 @@
       },
       gridData: function () {
         return [].concat(this.sitesData, this.statsData, this.codeData);
-      }
+      },
     },
     methods: {
       initialize: function () {
         // Make sure data table is empty.
+        let that = this;
         this.sitesData = [];
         this.codeData = [];
         this.statsData = [];
@@ -246,6 +228,11 @@
 
             // Emit event so other data can be added to the table.
             bus.$emit('tableDataUpdate', data);
+
+            // This event fires for other components to know that the siteListing instance has been loaded.
+            // While not ideal, the delay in making the Atlas request and setting up the data is usually enough time.
+            // @todo use mounted() instead of this.
+            bus.$emit('siteListingMounted', null);
           });
 
         // Setup commands for select list.
@@ -253,6 +240,24 @@
 
         // Grab search queries.
         getSearchQueries();
+
+        // If filter is in URL, then place that in filter input.
+        // Check for query params.
+        if (window.location.search !== "") {
+          // Format the query params into an array.
+          let queryParams = {};
+          window.location.search.slice(1).split('&').map(function (item, index) {
+            const parts = item.split('=');
+            queryParams[parts[0]] = parts[1];
+          });
+
+          // Get property names to match to filter and search.
+          const propertyNames = Object.getOwnPropertyNames(queryParams);
+
+          if (propertyNames.indexOf('filter') !== -1) {
+            that.searchFilter = queryParams.filter;
+          }
+        }
       },
       userAccessPerm: function (permission) {
         return userAccess(permission);

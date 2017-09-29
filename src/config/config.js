@@ -74,6 +74,7 @@ const store = new Vuex.Store({
     commands: [],
     filteredData: [],
     gitHubRepos: [],
+    searchFilter: '',
   },
   mutations: {
     addEditContent (state, options) {
@@ -93,15 +94,15 @@ const store = new Vuex.Store({
       localStorage.setItem('env', environment);
     },
     setQueries (state, queries) {
-      store.state.statsQueryOptions = [];
-      queries.forEach(function (element, index) {
-        store.state.statsQueryOptions = [].concat(store.state.statsQueryOptions,element);
+      state.statsQueryOptions = [];
+      queries.forEach(function (element) {
+        state.statsQueryOptions = [].concat(state.statsQueryOptions, element);
       })
     },
     setCommands (state, sentCommands) {
       store.state.commands = [];
       sentCommands.forEach(function (element, index) {
-        store.state.commands = [].concat(store.state.commands,element);
+        store.state.commands = [].concat(store.state.commands, element);
       })
     },
     addSiteToCommands (state, options) {
@@ -134,6 +135,7 @@ const store = new Vuex.Store({
 /**
  * You can use the code below to fetch a local config file if you need to override any settings.
  */
+/*
 fetch(window.location.origin + localStorage.getItem('baseURL') + '/src/config/config.local.js')
   .then(function (response) {
     if (response.status === 200) {
@@ -144,3 +146,4 @@ fetch(window.location.origin + localStorage.getItem('baseURL') + '/src/config/co
       console.log('Found local configuration file.');
     }
   });
+*/

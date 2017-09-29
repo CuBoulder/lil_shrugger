@@ -320,16 +320,21 @@ Vue.component('confirm-button', {
 });
 
 Vue.component('message-area', {
-  template: '<div><div :class="[bsAlert, message.alertType]" v-for="(message, index) in messages">{{message.text}}<button type="button" class="close" aria-label="Close" @click="close(index)"><span aria-hidden="true">&times;</span></button></div></div>',
-  props: {
-    messages: {
-      type: Array,
-      default: []
-    },
-    bsAlert: {
-      type: String,
-      default: 'alert'
-    }
+  template: '#message-area',
+  data () {
+    return {
+      messages: [],
+      bsAlert: 'alert',
+    };
+  },
+  created() {
+    let that = this;
+
+    // To use this anywhere: bus.$emit('onMessage', {text: 'You have deleted a site.', alertType: 'alert-info'});
+    // You can use any available bootstrap alert classes: alert-info, alert-success, alert-danger, etc.
+    bus.$on('onMessage', function (params) {
+      that.messages.push(params);
+    });
   },
   methods: {
     close: function (index) {
@@ -337,21 +342,6 @@ Vue.component('message-area', {
     }
   }
 });
-
-let alert = new Vue({
-  el: '#alert',
-  data: {
-    messages: []
-  },
-  created() {
-    // To use this anywhere: bus.$emit('onMessage', {text: 'You have deleted a site.', alertType: 'alert-info'});
-    // You can use any available bootstrap alert classes: alert-info, alert-success, alert-danger, etc.
-    bus.$on('onMessage', function (params) {
-      alert.messages.push(params);
-    });
-  }
-});
-
 
 Vue.component('autocomplete-input', {
   template: '#autocomplete-input',
@@ -375,6 +365,17 @@ Vue.component('autocomplete-input', {
       // If the key of this component matches then change the desired key.
       if (params.key === that.theKey) {
         that.keyword = params.keyword;
+      }
+    });
+
+    // Add data from query params for search on page load.
+    bus.$on('searchByQueryParam', function (paramQuery) {
+      if (that.theKey === 'title') {
+        that.keyword = paramQuery.title;
+      }
+
+      if (that.theKey === 'query') {
+        that.keyword = paramQuery.query;
       }
     });
   },
@@ -443,6 +444,9 @@ Vue.component('commands', {
 
 Vue.component('statsSearch', {
   template: '#stats-search',
+  props: {
+    filter: String,
+  },
   data () {
     return {
       statsQuery: '',
@@ -461,6 +465,10 @@ Vue.component('statsSearch', {
     bus.$on('select', function (params) {
       that.selectListener(params, that);
     });
+
+    bus.$on('siteListingMounted', function (params) {
+      that.siteListingMountedListener(params, that);
+    });
   },
   computed: {
     commands: function () {
@@ -468,6 +476,44 @@ Vue.component('statsSearch', {
     },
   },
   methods: {
+    siteListingMountedListener: function (params, that) {
+      // Check for query params.
+      if (window.location.search === "") {
+        return;
+      }
+
+      // Format the query params into an array.
+      let queryParams = {};
+      window.location.search.slice(1).split('&').map(function (item, index) {
+        const parts = item.split('=');
+        queryParams[parts[0]] = parts[1];
+      });
+
+      // Get property names to match to filter and search.
+      const propertyNames = Object.getOwnPropertyNames(queryParams);
+
+      // Set the search.
+      if (propertyNames.indexOf('query') !== -1) {
+        // Find the query name of the ID entered.
+        const storedQueries = store.state.statsQueryOptions;
+
+        let paramQuery = {};
+        storedQueries.forEach(function (element) {
+          if (element._id == queryParams.query) {
+            paramQuery = element;
+            return;
+          }
+        });
+
+        // If ID found, perform search.
+        if (paramQuery !== 'undefined') {
+          that.search(paramQuery);
+
+          // Have to send event to set names since they live in autocomplete inputs.
+          bus.$emit('searchByQueryParam', paramQuery);
+        }
+      }
+    },
     selectListener: function (params, that) {
       // Since we know that we have queries and titles, we can check the key and
       // make the opposite property match what the user selected.
@@ -507,35 +553,54 @@ Vue.component('statsSearch', {
       // Save current query for check when updating queries.
       store.commit('storeQuery', currentQuery);
     },
-    search: function () {
+    search: function (querySent = null) {
       let query = null;
       let name = null;
       let that = this;
 
-      // Grab keyword to search for.
-      // The keywords are in separate unnamed autocomplete components.
-      // @todo See if query and name can be stored in Store object.
-      this.$children.forEach(function (element, index) {
-        if (element.theKey === 'query') {
-          query = element.keyword;
+      // If query already passed in, use that.
+      if (querySent !== null) {
+        query = querySent.query;
+        name = querySent.title;
+      }
+      // If no passed in query, then we need to grab it from autocomplete fields.
+      // Autocomplete is another component.
+      else {
+        this.$children.forEach(function (element, index) {
+          if (element.theKey === 'query') {
+            query = element.keyword;
+          }
+          if (element.theKey === 'title') {
+            name = element.keyword;
+          }
+        });
+
+        // If no query, then emit an error message and return.
+        if (query === null) {
+          bus.$emit('onMessage', {
+            text: 'No query found.',
+            alertType: 'alert-danger'
+          });
+          return;
         }
-        if (element.theKey === 'title') {
-          name = element.keyword;
+      }
+
+      // Find the query name of the ID entered.
+      const storedQueries = store.state.statsQueryOptions;
+      let paramQuery = {};
+      storedQueries.forEach(function (element) {
+        if (element.query == query) {
+          paramQuery = element;
+          return;
         }
       });
 
-      // If no query, then emit an error message and return.
-      if (query === null) {
-        bus.$emit('onMessage', {
-          text: 'No query found.',
-          alertType: 'alert-danger'
-        });
-        return;
-      }
+      // Set the history to update the query parameters for sharing URLs.
+      const queryString = '?filter=' + that.filter + '&query=' + paramQuery._id;
+      history.pushState(null, null, location.origin + location.pathname + queryString);
 
       // Make request to Atlas.
       let baseURL = store.state.atlasEnvironments[store.state.env];
-
       atlasRequest(baseURL, 'statistics', '?where=' + query)
         .then(function (objects) {
 
@@ -590,6 +655,9 @@ Vue.component('statsSearch', {
       siteListing.sitesData = siteListing.cachedRecords;
       siteListing.searchQuery = '';
       that.reset = false;
+
+      // Reset data in query params.
+      history.pushState(null, null, location.origin + location.pathname);
     },
     saveSearch: function () {
       let queryToSend = null;
