@@ -1,5 +1,15 @@
-# IntelliJ files
+# IntelliJ files.
 *.idea
 
-# Ignore node modules
+# Mac OS files.
+*.DS_Store
+
+
+# Ignore node modules.
 node_modules/*
+
+# Ignore any files in Atlas folder.
+atlas/*
+
+# Ignore blank directory for websites.
+web/*
