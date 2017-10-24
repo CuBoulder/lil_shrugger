@@ -425,6 +425,7 @@ Vue.component('commands', {
   data () {
     return {
       selectedCommand: '',
+      exportCallback: 'exportTable',
     };
   },
   created () {
@@ -433,6 +434,9 @@ Vue.component('commands', {
   computed: {
     commands: function () {
       return store.state.commands;
+    },
+    reportsList: function () {
+      return store.state.reportsList;
     },
   },
   methods: {

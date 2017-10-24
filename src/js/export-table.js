@@ -40,7 +40,7 @@ function exportCSVFile(headers, items, fileTitle) {
 
   var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
 
-  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
   if (navigator.msSaveBlob) { // IE 10+
     navigator.msSaveBlob(blob, exportedFilenmae);
   } else {
@@ -55,5 +55,36 @@ function exportCSVFile(headers, items, fileTitle) {
       link.click();
       document.body.removeChild(link);
     }
+  }
+}
+
+/**
+ * Export a string of data to a text file.
+ *
+ * @param data
+ * @param fileTitle
+ *
+ * @returns {null}
+ */
+function exportTextFile(data, fileTitle) {
+
+  const exportedFilename = fileTitle + '.txt' || 'export.txt';
+  const blob = new Blob([data], {type: 'text/plain;charset=utf-8;'});
+
+  if (navigator.msSaveBlob) { // IE 10+
+    navigator.msSaveBlob(blob, exportedFilenmae);
+    return null;
+  }
+
+  const link = document.createElement("a");
+  if (link.download !== undefined) {
+    // Feature detection for Browsers that support HTML5 download attribute.
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", exportedFilename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }
