@@ -59,6 +59,14 @@ function exportTextFile(data, fileTitle) {
   downloadFile(blob, exportedFilename);
 }
 
+/**
+ * Download a file blob via the browser.
+ *
+ * @param data
+ * @param fileName
+ *
+ * @returns {null}
+ */
 function downloadFile(data, fileName) {
 
   if (navigator.msSaveBlob) {
