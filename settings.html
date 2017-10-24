@@ -14,6 +14,7 @@
   <link href="src/css/style.css" media="all" rel="stylesheet"/>
 
   <link rel="import" href="src/partials/navbar.html">
+  <link rel="import" href="src/partials/message-area.html">
 </head>
 <body>
 <div id="atlas-navbar">
@@ -23,8 +24,8 @@
   </atlas-navbar>
 </div>
 <div class="container">
-  <message-area id="alert" :messages="messages" v-if="messages.length > 0"></message-area>
   <div id="user-settings">
+    <message-area></message-area>
     <div v-if="userAccessPerm('settings:credentials')">
       <form>
         <fieldset class="form-group">
@@ -110,6 +111,18 @@
 <script src="src/js/components.js"></script>
 <script src="src/js/navbar.js"></script>
 <script type="text/javascript">
+
+  /**
+   * Import component templates needed for this page.
+   */
+  const imports = ['message-area'];
+
+  imports.forEach(function(element) {
+    link = document.querySelector('link[href="src/partials/' + element + '.html"]');
+    content = link.import;
+    el = content.querySelector('script');
+    document.querySelector('body').appendChild(el.cloneNode(true));
+  });
 
   let settingsForm = new Vue({
     el: '#user-settings',
