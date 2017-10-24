@@ -190,6 +190,11 @@
         that.exportTableListener(params, that);
       });
 
+      // Exports data in table when export button is clicked.
+      bus.$on('exportSiteContactEmail', function (params) {
+        that.exportEmailsListener(params, that);
+      });
+
       bus.$on('createSite', function (params) {
         createSite(params);
       });
@@ -395,6 +400,38 @@
 
         // Export to CSV file.
         exportCSVFile(headers, exportData, 'report');
+      },
+      exportEmailsListener: function (params, that) {
+
+        // Reduce number of emails into one list.
+        let allEmails = [];
+        let exportData = store.state.filteredData.map(function (item) {
+          allEmails.push(item.site_contacts);
+        });
+
+        // The final email list will not have duplicates.
+        let finalEmails = [];
+        allEmails.forEach(function (el, index) {
+
+          // If undefined, then just continue loop.
+          if (typeof el === 'undefined') {
+            return null;
+          }
+
+          // All items should be arrays so we need to also loop through those items.
+          if (Array.isArray(el)) {
+            el.forEach(function (part, index2) {
+              // We need to lowercase and strip text since emails are weird and can have both
+              // lowercase and uppercase versions.
+              if (finalEmails.indexOf(part.toLowerCase().trim()) === -1) {
+                finalEmails.push(part.toLowerCase().trim());
+              }
+            });
+          }
+        });
+
+        // Export to text file.
+        exportTextFile(finalEmails, 'siteContactEmails');
       }
     }
   });

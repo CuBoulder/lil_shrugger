@@ -274,6 +274,7 @@ function formatStatsData(data) {
         if (part === 'users') {
           item['username'] = [].concat(element['users']['username']['content_editor'], element['users']['username']['site_contact']);
           item['email_address'] = [].concat(element['users']['email_address']['content_editor'], element['users']['email_address']['site_contact']);
+          item['site_contacts'] = element['users']['email_address']['site_contact'];
           continue;
         }
 
