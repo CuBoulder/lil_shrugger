@@ -409,6 +409,7 @@
           allEmails.push(item.site_contacts);
         });
 
+        // The final email list will not have duplicates.
         let finalEmails = [];
         allEmails.forEach(function (el, index) {
 
@@ -429,7 +430,7 @@
           }
         });
 
-        // Export to CSV file.
+        // Export to text file.
         exportTextFile(finalEmails, 'siteContactEmails');
       }
     }
