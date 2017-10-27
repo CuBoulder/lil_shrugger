@@ -40,28 +40,34 @@ if (localStorage.getItem('code-query') === null) {
  */
 const store = new Vuex.Store({
   state: {
-    env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
+    actionIcons: {
+      sites: [{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'},{name: 'refresh', component: 'table'}],
+      code: [{name: 'refresh', component: 'table'}]
+    },
     atlasEnvironments: {
       Local: 'https://inventory.local/atlas/',
       Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/'
     },
+    codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
+    commands: [],
+    currentQuery: null,
+    editContent: {},
+    env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     expressEnvironments: {
       Local: 'https://express.local/',
       Dev: 'https://www-dev.colorado.edu/',
       Test: 'https://www-test.colorado.edu/',
       Prod: 'https://www.colorado.edu/'
     },
-    userPermissions: ['row:edit', 'createSite', 'createCode', 'commands:command', 'commands:export'],
-    actionIcons: {
-      sites: [{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'},{name: 'refresh', component: 'table'}],
-      code: [{name: 'refresh', component: 'table'}]
-    },
-    editContent: {},
+    filteredData: [],
+    gitHubRepos: [],
     recordsToShow: 10,
+    reportsList: ['exportTable', 'exportSiteContactEmail'],
+    searchFilter: '',
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
-    codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
+    sitesSendCommand: [],
     statsKeys: ['instance', 'name', 'status', 'nodes_total', 'nodes_by_type', 'nodes_other', 'days_since_last_edit',
       'beans_total', 'beans_by_type', 'beans_other', 'context', 'context_other_conditions', 'context_other_reactions',
       'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
@@ -69,9 +75,8 @@ const store = new Vuex.Store({
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
       'email_address','bundles', 'webforms'],
     statsQueryOptions: [],
-    sitesSendCommand: [],
-    commands: [],
-    filteredData: [],
+    userPermissions: ['row:edit', 'createSite', 'createCode', 'commands:command', 'commands:export', 'statsSearch:save',
+      'settings:credentials'],
   },
   mutations: {
     addEditContent (state, options) {
@@ -83,37 +88,23 @@ const store = new Vuex.Store({
     addRows (state, options) {
       store.state.recordsToShow = options;
     },
-    saveQuery (state, queryOption) {
-      // Check if query exists and replace if it does.
-      let stored = false;
-      store.state.statsQueryOptions.forEach(function (element, index) {
-        if (element.query === queryOption.query) {
-          store.state.statsQueryOptions[index] = queryOption;
-          stored = true;
-        }
-      });
-
-      if (stored === true) {
-        return;
-      }
-
-      // Add query if it doesn't exist.
-      Vue.set(store.state.statsQueryOptions, store.state.statsQueryOptions.length + 1, queryOption)
+    storeQuery (state, currentQuery) {
+      state.currentQuery = currentQuery;
     },
     switchEnv (state, environment) {
       store.state.env = environment;
       localStorage.setItem('env', environment);
     },
     setQueries (state, queries) {
-      store.state.statsQueryOptions = [];
-      queries.forEach(function (element, index) {
-        store.state.statsQueryOptions = [].concat(store.state.statsQueryOptions,element);
+      state.statsQueryOptions = [];
+      queries.forEach(function (element) {
+        state.statsQueryOptions = [].concat(state.statsQueryOptions, element);
       })
     },
     setCommands (state, sentCommands) {
       store.state.commands = [];
       sentCommands.forEach(function (element, index) {
-        store.state.commands = [].concat(store.state.commands,element);
+        store.state.commands = [].concat(store.state.commands, element);
       })
     },
     addSiteToCommands (state, options) {
@@ -136,6 +127,9 @@ const store = new Vuex.Store({
     },
     addFilteredData (state, data) {
       store.state.filteredData = data;
+    },
+    addGitHubRepos (state, repos) {
+      state.gitHubRepos = repos;
     }
   }
 });
@@ -143,6 +137,7 @@ const store = new Vuex.Store({
 /**
  * You can use the code below to fetch a local config file if you need to override any settings.
  */
+/*
 fetch(window.location.origin + localStorage.getItem('baseURL') + '/src/config/config.local.js')
   .then(function (response) {
     if (response.status === 200) {
@@ -153,3 +148,4 @@ fetch(window.location.origin + localStorage.getItem('baseURL') + '/src/config/co
       console.log('Found local configuration file.');
     }
   });
+*/

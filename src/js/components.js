@@ -320,16 +320,21 @@ Vue.component('confirm-button', {
 });
 
 Vue.component('message-area', {
-  template: '<div><div :class="[bsAlert, message.alertType]" v-for="(message, index) in messages">{{message.text}}<button type="button" class="close" aria-label="Close" @click="close(index)"><span aria-hidden="true">&times;</span></button></div></div>',
-  props: {
-    messages: {
-      type: Array,
-      default: []
-    },
-    bsAlert: {
-      type: String,
-      default: 'alert'
-    }
+  template: '#message-area',
+  data () {
+    return {
+      messages: [],
+      bsAlert: 'alert',
+    };
+  },
+  created() {
+    let that = this;
+
+    // To use this anywhere: bus.$emit('onMessage', {text: 'You have deleted a site.', alertType: 'alert-info'});
+    // You can use any available bootstrap alert classes: alert-info, alert-success, alert-danger, etc.
+    bus.$on('onMessage', function (params) {
+      that.messages.push(params);
+    });
   },
   methods: {
     close: function (index) {
@@ -337,21 +342,6 @@ Vue.component('message-area', {
     }
   }
 });
-
-let alert = new Vue({
-  el: '#alert',
-  data: {
-    messages: []
-  },
-  created() {
-    // To use this anywhere: bus.$emit('onMessage', {text: 'You have deleted a site.', alertType: 'alert-info'});
-    // You can use any available bootstrap alert classes: alert-info, alert-success, alert-danger, etc.
-    bus.$on('onMessage', function (params) {
-      alert.messages.push(params);
-    });
-  }
-});
-
 
 Vue.component('autocomplete-input', {
   template: '#autocomplete-input',
@@ -368,12 +358,24 @@ Vue.component('autocomplete-input', {
     };
   },
   created () {
-    // Allow other autocomplete inputs to interact and update each other.
     let that = this;
+
+    // Allow other autocomplete inputs to interact and update each other.
     bus.$on('matchKeys', function (params) {
       // If the key of this component matches then change the desired key.
       if (params.key === that.theKey) {
         that.keyword = params.keyword;
+      }
+    });
+
+    // Add data from query params for search on page load.
+    bus.$on('searchByQueryParam', function (paramQuery) {
+      if (that.theKey === 'title') {
+        that.keyword = paramQuery.title;
+      }
+
+      if (that.theKey === 'query') {
+        that.keyword = paramQuery.query;
       }
     });
   },
@@ -411,6 +413,414 @@ Vue.component('autocomplete-input', {
       let params = {selectedOption};
       params['key'] = this.theKey;
       bus.$emit('select', params);
+    }
+  }
+});
+
+Vue.component('commands', {
+  template: '#commands',
+  props: {
+    gridColumns: Array,
+  },
+  data () {
+    return {
+      selectedCommand: '',
+      exportCallback: 'exportTable',
+    };
+  },
+  created () {
+    let that = this;
+  },
+  computed: {
+    commands: function () {
+      return store.state.commands;
+    },
+    reportsList: function () {
+      return store.state.reportsList;
+    },
+  },
+  methods: {
+    userAccessPerm: function (permission) {
+      return userAccess(permission);
+    },
+  },
+});
+
+Vue.component('statsSearch', {
+  template: '#stats-search',
+  props: {
+    filter: String,
+  },
+  data () {
+    return {
+      statsQuery: '',
+      statsQueryName: '',
+      statsQueryDescription: '',
+      statsQueryEndpoint: '',
+      statsQueryTags: '',
+      optionsKey: 'statsQueryOptions',
+      reset: false,
+    };
+  },
+  created () {
+    let that = this;
+
+    // Listen for autocomplete selections and match both inputs.
+    bus.$on('select', function (params) {
+      that.selectListener(params, that);
+    });
+
+    bus.$on('siteListingMounted', function (params) {
+      that.siteListingMountedListener(params, that);
+    });
+  },
+  computed: {
+    commands: function () {
+      return store.state.commands;
+    },
+  },
+  methods: {
+    siteListingMountedListener: function (params, that) {
+      // Check for query params.
+      if (window.location.search === "") {
+        return;
+      }
+
+      // Format the query params into an array.
+      let queryParams = {};
+      window.location.search.slice(1).split('&').map(function (item, index) {
+        const parts = item.split('=');
+        queryParams[parts[0]] = parts[1];
+      });
+
+      // Get property names to match to filter and search.
+      const propertyNames = Object.getOwnPropertyNames(queryParams);
+
+      // Set the search.
+      if (propertyNames.indexOf('query') !== -1) {
+        // Find the query name of the ID entered.
+        const storedQueries = store.state.statsQueryOptions;
+
+        let paramQuery = {};
+        storedQueries.forEach(function (element) {
+          if (element._id == queryParams.query) {
+            paramQuery = element;
+            return;
+          }
+        });
+
+        // If ID found, perform search.
+        if (paramQuery !== 'undefined') {
+          that.search(paramQuery);
+
+          // Have to send event to set names since they live in autocomplete inputs.
+          bus.$emit('searchByQueryParam', paramQuery);
+        }
+      }
+    },
+    selectListener: function (params, that) {
+      // Since we know that we have queries and titles, we can check the key and
+      // make the opposite property match what the user selected.
+      let params2 = {};
+      if (params.key === 'title') {
+        params2 = {
+          keyword: params.selectedOption.query,
+          key: 'query'
+        };
+        bus.$emit('matchKeys', params2);
+      } else {
+        params2 = {
+          keyword: params.selectedOption.title,
+          key: 'title'
+        };
+        bus.$emit('matchKeys', params2);
+      }
+
+      // Fill in other keys.
+      let currentQuery = {};
+      store.state.statsQueryOptions.forEach(function (element, index) {
+        if (params2.key === 'title' && element.title === params2.keyword) {
+          that.statsQueryDescription = element.description;
+          that.statsQueryEndpoint = element.endpoint;
+          that.statsQueryTags = element.tags.join(',');
+          currentQuery = element;
+        }
+
+        if (params2.key === 'query' && element.query === params2.keyword) {
+          that.statsQueryDescription = element.description;
+          that.statsQueryEndpoint = element.endpoint;
+          that.statsQueryTags = element.tags.join(',');
+          currentQuery = element;
+        }
+      });
+
+      // Save current query for check when updating queries.
+      store.commit('storeQuery', currentQuery);
+    },
+    search: function (querySent = null) {
+      let query = null;
+      let name = null;
+      let that = this;
+
+      // If query already passed in, use that.
+      if (querySent !== null) {
+        query = querySent.query;
+        name = querySent.title;
+      }
+      // If no passed in query, then we need to grab it from autocomplete fields.
+      // Autocomplete is another component.
+      else {
+        this.$children.forEach(function (element, index) {
+          if (element.theKey === 'query') {
+            query = element.keyword;
+          }
+          if (element.theKey === 'title') {
+            name = element.keyword;
+          }
+        });
+
+        // If no query, then emit an error message and return.
+        if (query === null) {
+          bus.$emit('onMessage', {
+            text: 'No query found.',
+            alertType: 'alert-danger'
+          });
+          return;
+        }
+      }
+
+      // Find the query name of the ID entered.
+      const storedQueries = store.state.statsQueryOptions;
+      let paramQuery = {};
+      storedQueries.forEach(function (element) {
+        if (element.query == query) {
+          paramQuery = element;
+          return;
+        }
+      });
+
+      // Set the history to update the query parameters for sharing URLs.
+      const queryString = '?filter=' + that.filter + '&query=' + paramQuery._id;
+      history.pushState(null, null, location.origin + location.pathname + queryString);
+
+      // Make request to Atlas.
+      let baseURL = store.state.atlasEnvironments[store.state.env];
+      atlasRequest(baseURL, 'statistics', '?where=' + query)
+        .then(function (objects) {
+
+          // If no search results returned, catch with error.
+          if (typeof objects["0"]._error !== 'undefined') {
+            bus.$emit('onMessage', {
+              text: 'Error in Atlas Request: ' + objects["0"]._error.message + '. Your search has been reset.',
+              alertType: 'alert-danger'
+            });
+            that.$options.methods.resetSearch(that);
+          }
+
+          // Get array only of site IDs to check from stats query.
+          let siteIds = [];
+          objects.forEach(function (elements, index) {
+            elements.forEach(function (element, index) {
+              siteIds.push(element['site']);
+            });
+          });
+
+          // Filter results by using the site ID stored in stats records.
+          // By setting the gridData property, the view will automatically update.
+          siteListing.sitesData = siteListing.cachedRecords.filter(function (row) {
+            return siteIds.indexOf(row['id']) > -1;
+          });
+          that.reset = true;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    resetSearch: function (thing = null) {
+      let that = thing ? thing : this;
+
+      // Reset keywords in child components.
+      // @todo see if this can be stored in Store object.
+      that.$children.forEach(function (element) {
+        if (typeof element.keyword !== 'undefined') {
+          element.keyword = '';
+        }
+      });
+
+      // Reset other query fields not in autocomplete component.
+      that.statsQueryDescription = '';
+      that.statsQueryEndpoint = '';
+      that.statsQueryTags = '';
+
+      // Reset stored query.
+      store.commit('storeQuery', null);
+
+      // By using the cached results when the page is loaded, the query can be reverted.
+      siteListing.sitesData = siteListing.cachedRecords;
+      siteListing.searchQuery = '';
+      that.reset = false;
+
+      // Reset data in query params.
+      history.pushState(null, null, location.origin + location.pathname);
+    },
+    saveSearch: function () {
+      let queryToSend = null;
+      let name = null;
+
+      // Grab keyword to search for.
+      this.$children.forEach(function (element, index) {
+        if (element.theKey === 'query') {
+          queryToSend = element.keyword;
+        }
+        if (element.theKey === 'title') {
+          name = element.keyword;
+        }
+      });
+
+      // Convert to unicode.
+      queryToSend = convertToUnicode(queryToSend);
+
+      // Make tags into string with quotes.
+      const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
+      const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["statistic"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
+
+      // Make request to Atlas.
+      let baseURL = store.state.atlasEnvironments[store.state.env];
+      let currentQuery = store.state.currentQuery;
+
+      // If there is a current query, then we assume we are patching it.
+      if (currentQuery !== null) {
+        atlasRequest(baseURL, 'query/' + currentQuery['_id'], '', 'PATCH', data, currentQuery['_etag'])
+          .then((response) => {
+            bus.$emit('onMessage', {
+              text: 'You have sent a PATCH request to a query record. query ID: ' + currentQuery['_id'] + '. Search and reset to add new query.',
+              alertType: 'alert-success'
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        // If no current query, then we assume we are making a new one.
+        atlasRequest(baseURL, 'query', '', 'POST', data)
+          .then((response) => {
+            bus.$emit('onMessage', {
+              text: 'You have sent a POST request to add query record. Search and reset to add new query.',
+              alertType: 'alert-success'
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    userAccessPerm: function (permission) {
+      return userAccess(permission);
+    },
+  },
+});
+
+// Add create code button.
+Vue.component('createCode', {
+  template: '#create-code',
+  data () {
+    return {
+      selectOptions: siteConfig.selectOptions,
+      branches: [],
+      branchToAdd: {},
+      activeRepo: {},
+      ready: false,
+      branchReady: false,
+      addCode: false,
+      codeType: 'module',
+      tag: 'beta_bundle',
+      codeVersion: '',
+      codeLabel: '',
+      isCurrent: false,
+    }
+  },
+  computed: {
+    userInput: function () {
+      return {
+        version: this.codeVersion,
+        type: this.codeType,
+        label: this.codeLabel,
+        is_current: this.isCurrent,
+        tag: this.tag,
+      };
+    },
+    repos: function () {
+      return store.state.gitHubRepos;
+    },
+  },
+  methods: {
+    changeRepo: function (event) {
+      // Set to true for branch select list to appear.
+      this.branchReady = true;
+      this.branches = [];
+      this.activeRepo = this.repos[event.target.value];
+
+      let that = this;
+      let response = getRepoBranches(this.activeRepo.name);
+
+      response.then(function (branchesList) {
+        that.branches = branchesList;
+        // Add a default; otherwise user can't select first element.
+        let first = {
+          name: '-Select-',
+          commit: {
+            hash: null
+          }
+        };
+        that.branches.unshift(first);
+      });
+    },
+    changeBranch: function (event) {
+      this.ready = true;
+      this.branchToAdd = this.branches[event.target.value];
+    },
+    codeButton: function () {
+      this.addCode = true;
+    },
+    createCode: function () {
+      let repo = this.activeRepo;
+      let branch = this.branchToAdd;
+      let input = this.userInput;
+
+      // Need to check for special code assets (drupal/express) and set data accordingly.
+      if (repo.name === 'drupal-7.x') {
+        repo.name = 'drupal';
+      }
+
+      // Turn tag into array.
+      input.tag = [input['tag']];
+
+      let codeAsset = {
+        "git_url": repo.ssh_url,
+        "commit_hash": branch.commit.sha,
+        "meta": {
+          "version": input.version,
+          "code_type": input.type,
+          "name": repo.name,
+          "label": input.label,
+          "is_current": input.is_current,
+          "tag": input.tag,
+        }
+      };
+
+      let baseURL = store.state.atlasEnvironments[store.state.env];
+      atlasRequest(baseURL, 'code', query = '', 'POST', JSON.stringify(codeAsset))
+        .then((response) => {
+          bus.$emit('onMessage', {
+            text: 'You have created a code asset.',
+            alertType: 'alert-success'
+          });
+          getCodeRecords(store.state.atlasEnvironments[store.state.env])
+            .then(data => codeListing.gridData = data);
+        })
+        .catch(error => console.log(error));
+
+      this.addCode = false;
     }
   }
 });

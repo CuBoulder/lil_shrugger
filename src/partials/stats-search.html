@@ -1,0 +1,46 @@
+<!-- component template -->
+<script type="text/x-template" id="stats-search">
+<form id="statsSearch" class="row">
+  <div class="form-group row">
+    <div class="col-md-6">
+      <label for="query-mongo">Query</label>
+      <autocomplete-input
+          id="query-mongo"
+          :options-key="optionsKey"
+          the-key="query"
+          :model="statsQuery">
+      </autocomplete-input>
+    </div>
+    <div class="col-md-6">
+      <label for="query-name">Query Name</label>
+      <autocomplete-input
+          id="query-name"
+          :options-key="optionsKey"
+          the-key="title"
+          :model="statsQueryName">
+      </autocomplete-input>
+    </div>
+    <div v-if="userAccessPerm('statsSearch:save')">
+      <div class="col-md-4">
+        <label for="query-description">Query Description</label>
+        <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
+      </div>
+      <!-- Comment out until another endpoint other than stats is searched on this page.
+      <div class="col-md-4">
+        <label for="query-endpoint">Query Endpoint</label>
+        <input type="text" name="query_endpoint" id="query-endpoint" class="form-control" v-model="statsQueryEndpoint">
+      </div>
+      -->
+      <div class="col-md-4">
+        <label for="query-tags">Query Tags</label>
+        <input type="text" name="query_tags" id="query-tags" class="form-control" v-model="statsQueryTags">
+      </div>
+    </div>
+  </div>
+  <div class="form-group row col-md-6">
+    <button class="btn btn-primary" @click.prevent="search()">Search</button>
+    <button class="btn btn-primary" @click.prevent="saveSearch()" v-if="userAccessPerm('statsSearch:save')">Save To Atlas</button>
+    <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
+  </div>
+</form>
+</script>

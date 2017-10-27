@@ -1,0 +1,4 @@
+name: shruggs
+recipe: lemp
+config:
+  webroot: .
