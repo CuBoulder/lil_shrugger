@@ -16,7 +16,7 @@
       </confirm-button>
     </div>
   </div>
-  <div class="export-button" v-if="userAccessPerm('commands:export')" class="col-md-6">
+  <div class="export-button col-md-6" v-if="userAccessPerm('commands:export')">
     <select name="export-list" v-model="exportCallback">
       <option v-for="report in reportsList" :value="report">{{report}}</option>
     </select>
