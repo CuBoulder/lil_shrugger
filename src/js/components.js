@@ -562,7 +562,6 @@ Vue.component('statsSearch', {
       let name = null;
       let that = this;
 
-
       // If query already passed in, use that.
       if (querySent !== null) {
         query = querySent.query;
