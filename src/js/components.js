@@ -562,6 +562,7 @@ Vue.component('statsSearch', {
       let name = null;
       let that = this;
 
+
       // If query already passed in, use that.
       if (querySent !== null) {
         query = querySent.query;
@@ -599,8 +600,22 @@ Vue.component('statsSearch', {
         }
       });
 
-      // Set the history to update the query parameters for sharing URLs.
-      const queryString = '?filter=' + that.filter + '&query=' + paramQuery._id;
+      // Set the history to update the query parameters for sharing URLs.;
+      const filter = that.filter ? '?filter=' + that.filter : '';
+
+      // We have to check for the existence of the first query parameter here.
+      // I'm sure this can be done in a better way, but with only two parameters
+      // this is fine for now.
+      let queryS = '';
+      if (filter) {
+        queryS = paramQuery._id ? '&query=' + paramQuery._id : '';
+      }
+      else {
+        queryS = paramQuery._id ? '?query=' + paramQuery._id : '';
+      }
+
+      // The blank parameters aren't added here.
+      const queryString = filter + queryS;
       history.pushState(null, null, location.origin + location.pathname + queryString);
 
       // Make request to Atlas.
