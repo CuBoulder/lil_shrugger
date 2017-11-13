@@ -28,7 +28,7 @@
       </td>
       <!-- @todo Only add Edit option if there are editKeys -->
       <td>
-        <button v-if="showDefault()" class="btn btn-default" @click="makeEdit()" aria-label="Edit">
+        <button v-if="userAccessPerm('row:edit') && showDefault()" class="btn btn-default" @click="makeEdit()" aria-label="Edit">
           <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
         </button>
         <button v-if="!view" class="btn btn-default" @click="viewRecord()" aria-label="View">
@@ -45,6 +45,7 @@
                           :params="params">
           </confirm-button>
           <confirm-button label="Delete"
+                          v-if="userAccessPerm('row:delete')"
                           :row="this"
                           :edit="edit"
                           callback="deleteRecord"

@@ -75,8 +75,10 @@ const store = new Vuex.Store({
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
       'email_address','bundles', 'webforms'],
     statsQueryOptions: [],
-    userPermissions: ['row:edit', 'createSite', 'createCode', 'commands:command', 'commands:export', 'statsSearch:save',
+    userPermissions: ['row:edit', 'row:delete', 'createSite', 'createCode', 'commands:command', 'commands:export', 'statsSearch:save',
       'settings:credentials'],
+    sitesEditKeys: ['path', 'status'],
+    codeEditKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
   },
   mutations: {
     addEditContent (state, options) {

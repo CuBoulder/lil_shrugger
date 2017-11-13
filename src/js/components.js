@@ -223,11 +223,6 @@ Vue.component('row', {
     },
     showDefault: function (index = null) {
 
-      // Check for user permission to edit row.
-      if (index === null && !userAccess('row:edit')) {
-        return false;
-      }
-
       if (!this.edit || this.editKeys.indexOf(index) === -1 && index !== null) {
         return true;
       }
@@ -270,7 +265,10 @@ Vue.component('row', {
     hideRecord: function () {
       this.view = !this.view;
       bus.$emit('rowHide', this);
-    }
+    },
+    userAccessPerm: function (permission) {
+      return userAccess(permission);
+    },
   }
 });
 
