@@ -1,6 +1,8 @@
 <!-- component template -->
 <script type="text/x-template" id="stats-search">
 <form id="statsSearch" class="row">
+  <h3>Search</h3>
+  <hr>
   <div class="form-group row">
     <div class="col-md-6">
       <label for="query-mongo">Query</label>
@@ -21,7 +23,7 @@
       </autocomplete-input>
     </div>
     <div v-if="userAccessPerm('statsSearch:save')">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <label for="query-description">Query Description</label>
         <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
       </div>
@@ -31,7 +33,7 @@
         <input type="text" name="query_endpoint" id="query-endpoint" class="form-control" v-model="statsQueryEndpoint">
       </div>
       -->
-      <div class="col-md-4">
+      <div class="col-md-6">
         <label for="query-tags">Query Tags</label>
         <input type="text" name="query_tags" id="query-tags" class="form-control" v-model="statsQueryTags">
       </div>

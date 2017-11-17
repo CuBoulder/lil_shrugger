@@ -33,6 +33,10 @@ body {
     margin-bottom: 0.5em;
 }
 
+#commandsForm .btn {
+    margin-top: 0.75em;
+}
+
 /* Export Table */
 .export-button {
     display: inline-block;

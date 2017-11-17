@@ -176,7 +176,7 @@ Vue.component('row', {
     link: function (value, key) {
       // Link path to instance.
       if (key === 'path') {
-        return '<a href="' + store.state.expressEnvironments[store.state.env] + value + '">' + value + '</a>';
+        return '<a href="' + store.state.expressEnvironments[store.state.env] + value + '/user?destination=/admin/people/invite">' + value + '</a>';
       }
 
       // Link to full code/site record.
@@ -223,11 +223,6 @@ Vue.component('row', {
     },
     showDefault: function (index = null) {
 
-      // Check for user permission to edit row.
-      if (index === null && !userAccess('row:edit')) {
-        return false;
-      }
-
       if (!this.edit || this.editKeys.indexOf(index) === -1 && index !== null) {
         return true;
       }
@@ -270,7 +265,10 @@ Vue.component('row', {
     hideRecord: function () {
       this.view = !this.view;
       bus.$emit('rowHide', this);
-    }
+    },
+    userAccessPerm: function (permission) {
+      return userAccess(permission);
+    },
   }
 });
 
@@ -426,6 +424,7 @@ Vue.component('commands', {
     return {
       selectedCommand: '',
       exportCallback: 'exportTable',
+      exportOptions: '',
     };
   },
   created () {
@@ -599,8 +598,22 @@ Vue.component('statsSearch', {
         }
       });
 
-      // Set the history to update the query parameters for sharing URLs.
-      const queryString = '?filter=' + that.filter + '&query=' + paramQuery._id;
+      // Set the history to update the query parameters for sharing URLs.;
+      const filter = that.filter ? '?filter=' + that.filter : '';
+
+      // We have to check for the existence of the first query parameter here.
+      // I'm sure this can be done in a better way, but with only two parameters
+      // this is fine for now.
+      let queryS = '';
+      if (filter) {
+        queryS = paramQuery._id ? '&query=' + paramQuery._id : '';
+      }
+      else {
+        queryS = paramQuery._id ? '?query=' + paramQuery._id : '';
+      }
+
+      // The blank parameters aren't added here.
+      const queryString = filter + queryS;
       history.pushState(null, null, location.origin + location.pathname + queryString);
 
       // Make request to Atlas.
