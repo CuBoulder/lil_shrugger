@@ -12,11 +12,15 @@ Once you clone this repository down, you'll have to take a couple of steps to ge
 1. This app can run anywhere, but there is an included `.lando.yml` file for running it using (Lando)[https://docs.devwithlando.io/]
 
 ```
+# Build the app. 
 lando start
 
 # For any info about the app you would need.
 # Includes URLs to access the app. 
 lando info
+
+# General commands.
+lando
 ```
  
 2. You will need to configure the application to your use case on the settings page. There you will see several fields you need to enter for making requests to Atlas, setting up where your app is located, and making requests to the GitHub API.  
