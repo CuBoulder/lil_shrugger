@@ -105,7 +105,7 @@
    */
   const imports = ['message-area', 'listing', 'row', 'autocomplete-input', 'confirm-button', 'commands', 'stats-search'];
 
-  imports.forEach(function(element) {
+  imports.forEach(function (element) {
     link = document.querySelector('link[href="src/partials/' + element + '.html"]');
     content = link.import;
     el = content.querySelector('script');
@@ -403,10 +403,35 @@
       },
       exportEmailsListener: function (params, that) {
 
+        // Grab the types of emails needed.
+        const emailArray = params.options.split(',');
+
         // Reduce number of emails into one list.
         let allEmails = [];
-        let exportData = store.state.filteredData.map(function (item) {
-          allEmails.push(item.site_contacts);
+        let exportData = store.state.filteredData.filter(function (item) {
+
+          // If site contacts don't exist, then don't do anything.
+          return item.site_contacts;
+
+        }).map(function (item) {
+
+          // If array is empty or just contains "all", then push all emails.
+          let tempEmailArray = [];
+          if (Array.isArray(emailArray) && emailArray.length && emailArray.indexOf('all') === -1) {
+
+            emailArray.forEach(function (element, index) {
+              // Need to check if site has any users of this type.
+              if (item.site_contacts[element]) {
+                tempEmailArray = [].concat(tempEmailArray, item.site_contacts[element]);
+              }
+            });
+
+            allEmails.push(tempEmailArray);
+          } else {
+            // item.email_address will have all email addresses.
+            // @see site_records.js formatStatsData().
+            allEmails.push(item.email_address);
+          }
         });
 
         // The final email list will not have duplicates.
@@ -421,6 +446,11 @@
           // All items should be arrays so we need to also loop through those items.
           if (Array.isArray(el)) {
             el.forEach(function (part, index2) {
+              // Value can be undefined.
+              if (!part) {
+                part = "";
+              }
+
               // We need to lowercase and strip text since emails are weird and can have both
               // lowercase and uppercase versions.
               if (finalEmails.indexOf(part.toLowerCase().trim()) === -1) {
