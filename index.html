@@ -446,8 +446,8 @@
           // All items should be arrays so we need to also loop through those items.
           if (Array.isArray(el)) {
             el.forEach(function (part, index2) {
-              // Value can be undefined.
-              if (!part) {
+              // Value can be undefined or not be an email address.
+              if (!part || !part.includes('@')) {
                 part = "";
               }
 
