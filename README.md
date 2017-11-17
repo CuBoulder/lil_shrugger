@@ -11,7 +11,7 @@ Once you clone this repository down, you'll have to take a couple of steps to ge
 
 1. This app can run anywhere, but there is an included `.lando.yml` file for running it using (Lando)[https://docs.devwithlando.io/]
 
-```
+```bash
 # Build the app. 
 lando start
 
