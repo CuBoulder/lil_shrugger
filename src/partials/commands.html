@@ -1,9 +1,12 @@
 <!-- component template -->
 <script type="text/x-template" id="commands">
 <form id="commandsForm" class="row">
-  <div v-if="userAccessPerm('commands:command')" class="col-md-6">
+  <hr>
+  <div v-if="userAccessPerm('commands:command')" class="col-md-5">
+    <h3>Commands</h3>
+    <hr>
     <label for="sendCommand">Select Command</label>
-    <select name="sendCommand" id="sendCommand" v-model="selectedCommand">
+    <select name="sendCommand" id="sendCommand" class="form-control" v-model="selectedCommand">
       <option v-for="(value, index) in commands" :value="value._id">
         {{value.name}}
       </option>
@@ -17,12 +20,17 @@
     </div>
   </div>
   <div class="export-button col-md-6" v-if="userAccessPerm('commands:export')">
-    <select name="export-list" v-model="exportCallback">
+    <h3>Reports</h3>
+    <hr>
+    <label for="export-list">Export Options</label>
+    <select name="export-list" id="export-list"  class="form-control" v-model="exportCallback">
       <option v-for="report in reportsList" :value="report">{{report}}</option>
     </select>
+    <label for="export-options">Export Options</label>
+    <input type="text" id="export-options" class="form-control" name="export-options" v-model="exportOptions">
     <confirm-button
         label="Export Table"
-        :params="{columns: gridColumns}"
+        :params="{columns: gridColumns, options: exportOptions}"
         :callback="exportCallback">
     </confirm-button>
   </div>

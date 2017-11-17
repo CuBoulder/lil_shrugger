@@ -1,7 +1,7 @@
 <script type="text/x-template" id="a-row">
   <transition name="fade">
     <tr scope="row">
-      <!-- Bulk operations checkbox.-->
+      <!-- Bulk operations checkbox. -->
       <td>
         <input type="checkbox"
                :id="'checkbox-' + data.id"
@@ -20,9 +20,9 @@
             </select>
           </div>
           <div v-else>
-            <input type="text" :name="key" :value="data[key]" v-model="data[key]">
+            <input type="text" :name="key" v-model="data[key]">
           </div>
-          <!-- Adding an editOptions div so that fields can have special things happen when in edit mode.  v-html="editContent[data.id][key]"-->
+          <!-- Adding an editOptions div so that fields can have special things happen when in edit mode. -->
           <div v-html="editContent[data.id][key]"></div>
         </div>
       </td>

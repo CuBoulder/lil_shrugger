@@ -176,7 +176,7 @@ Vue.component('row', {
     link: function (value, key) {
       // Link path to instance.
       if (key === 'path') {
-        return '<a href="' + store.state.expressEnvironments[store.state.env] + value + '">' + value + '</a>';
+        return '<a href="' + store.state.expressEnvironments[store.state.env] + value + '/user?destination=/admin/people/invite">' + value + '</a>';
       }
 
       // Link to full code/site record.
@@ -424,6 +424,7 @@ Vue.component('commands', {
     return {
       selectedCommand: '',
       exportCallback: 'exportTable',
+      exportOptions: '',
     };
   },
   created () {
