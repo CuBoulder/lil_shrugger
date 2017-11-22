@@ -476,10 +476,6 @@ Vue.component('statsSearch', {
     bus.$on('siteListingMounted', function (params) {
       that.siteListingMountedListener(params, that);
     });
-
-    bus.$on('filterKeyChange', function (value) {
-      that.filterKeyChangeListener(value, that);
-    });
   },
   computed: {
     commands: function () {
@@ -566,9 +562,6 @@ Vue.component('statsSearch', {
 
       // Save current query for check when updating queries.
       store.commit('storeQuery', currentQuery);
-    },
-    filterKeyChangeListener: function (value, that) {
-      that.filter = value;
     },
     search: function (querySent = null) {
       let query = null;
