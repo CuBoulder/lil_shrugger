@@ -1,15 +1,14 @@
 /**
  * Creates a listing component for data in a table.
  */
-Vue.component('listing', {
-  template: '#listing',
+Vue.component('data-table', {
+  template: '#data-table',
   props: {
     data: Array,
     columns: {
       type: Array,
       required: true
     },
-    filterKey: String,
     editKeys: Array,
     selectKeys: Array,
     callback: String,
@@ -27,7 +26,7 @@ Vue.component('listing', {
       sortKey: '',
       sortOrders: sortOrders,
       showAllRows: false,
-      allChecked: false
+      allChecked: false,
     };
   },
   computed: {
@@ -57,6 +56,14 @@ Vue.component('listing', {
       store.commit('addFilteredData', data);
 
       return data;
+    },
+    filterKey: {
+      get: function () {
+        return store.state.filterKey;
+      },
+      set: function (value) {
+        store.commit('setFilterKey', value);
+      },
     },
     resultCount: function () {
       return this.filteredData.length;
@@ -115,7 +122,7 @@ Vue.component('listing', {
       } else {
         store.commit('addAllSitesToCommands', []);
       }
-    }
+    },
   }
 });
 
@@ -149,7 +156,7 @@ Vue.component('row', {
       edit: this.editProp,
       specialEditContent: {},
       view: false,
-      checked: this.allChecked
+      checked: this.allChecked,
     };
   },
   created: function () {
@@ -447,9 +454,6 @@ Vue.component('commands', {
 
 Vue.component('statsSearch', {
   template: '#stats-search',
-  props: {
-    filter: String,
-  },
   data () {
     return {
       statsQuery: '',
@@ -472,10 +476,17 @@ Vue.component('statsSearch', {
     bus.$on('siteListingMounted', function (params) {
       that.siteListingMountedListener(params, that);
     });
+
+    bus.$on('filterKeyChange', function (value) {
+      that.filterKeyChangeListener(value, that);
+    });
   },
   computed: {
     commands: function () {
       return store.state.commands;
+    },
+    filter: function () {
+      return store.state.filterKey;
     },
   },
   methods: {
@@ -555,6 +566,9 @@ Vue.component('statsSearch', {
 
       // Save current query for check when updating queries.
       store.commit('storeQuery', currentQuery);
+    },
+    filterKeyChangeListener: function (value, that) {
+      that.filter = value;
     },
     search: function (querySent = null) {
       let query = null;
