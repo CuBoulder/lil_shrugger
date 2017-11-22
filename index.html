@@ -20,7 +20,7 @@
   <link href="src/css/style.css" media="all" rel="stylesheet"/>
 
   <link rel="import" href="src/partials/navbar.html">
-  <link rel="import" href="src/partials/listing.html">
+  <link rel="import" href="src/partials/data-table.html">
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
   <link rel="import" href="src/partials/autocomplete-input.html">
@@ -41,7 +41,6 @@
     <message-area></message-area>
     <transition name="slide-fade">
       <stats-search
-          :filter="searchFilter"
           v-if="showStatsSearch">
       </stats-search>
     </transition>
@@ -51,23 +50,15 @@
           v-if="showCommands">
       </commands>
     </transition>
-    <form id="search" class="row">
-      <div class="form-group">
-        <label for="filter-records">Filter Table</label>
-        <input id="filter-records" class="form-control" name="query"
-               v-model="searchFilter">
-      </div>
-    </form>
-      <listing
+      <data-table
           :data="gridData"
           class="row"
           :columns="gridColumns"
-          :filter-key="searchFilter"
           :edit-keys="editKeys"
           :select-keys="selectKeys"
           :extra-content="rowViewContent"
           :callback="callback">
-      </listing>
+      </data-table>
     <div class="row" id="create-site" v-if="userAccessPerm('createSite')">
       <confirm-button
           label="Create A Site"
@@ -102,7 +93,7 @@
   /**
    * Import component templates needed for this page.
    */
-  const imports = ['message-area', 'listing', 'row', 'autocomplete-input', 'confirm-button', 'commands', 'stats-search'];
+  const imports = ['message-area', 'data-table', 'row', 'autocomplete-input', 'confirm-button', 'commands', 'stats-search'];
 
   imports.forEach(function (element) {
     link = document.querySelector('link[href="src/partials/' + element + '.html"]');
@@ -245,23 +236,8 @@
         // Grab search queries.
         getSearchQueries();
 
-        // If filter is in URL, then place that in filter input.
-        // Check for query params.
-        if (window.location.search !== "") {
-          // Format the query params into an array.
-          let queryParams = {};
-          window.location.search.slice(1).split('&').map(function (item, index) {
-            const parts = item.split('=');
-            queryParams[parts[0]] = parts[1];
-          });
-
-          // Get property names to match to filter and search.
-          const propertyNames = Object.getOwnPropertyNames(queryParams);
-
-          if (propertyNames.indexOf('filter') !== -1) {
-            that.searchFilter = queryParams.filter;
-          }
-        }
+        // If there is a filter query param, then insert it.
+        setFilterFromQuery();
       },
       userAccessPerm: function (permission) {
         return userAccess(permission);

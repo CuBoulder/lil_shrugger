@@ -73,6 +73,7 @@ const store = new Vuex.Store({
       Prod: 'https://www.colorado.edu/'
     },
     filteredData: [],
+    filterKey: '',
     help: {
       sites: 'https://github.com/CuBoulder/lil_shrugger/wiki/Sites',
       code: 'https://github.com/CuBoulder/lil_shrugger/wiki/Code',
@@ -124,6 +125,9 @@ const store = new Vuex.Store({
       sentCommands.forEach(function (element, index) {
         store.state.commands = [].concat(store.state.commands, element);
       })
+    },
+    setFilterKey (state, filter) {
+      state.filterKey = filter;
     },
     addSiteToCommands (state, options) {
       // If option is to add, merge siteId into array.

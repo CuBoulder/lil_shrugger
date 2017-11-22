@@ -19,7 +19,7 @@
   <link href="src/css/style.css" media="all" rel="stylesheet"/>
 
   <link rel="import" href="src/partials/navbar.html">
-  <link rel="import" href="src/partials/listing.html">
+  <link rel="import" href="src/partials/data-table.html">
   <link rel="import" href="src/partials/row.html">
   <link rel="import" href="src/partials/confirm-button.html">
   <link rel="import" href="src/partials/create-code.html">
@@ -36,21 +36,15 @@
 <div id="app" class="container">
   <div id="code-listing">
     <message-area></message-area>
-    <form id="search">
-      <div class="form-group">
-        <label for="query">Filter Table</label>
-        <input id="query" class="form-control" name="query" v-model="searchQuery">
-      </div>
-    </form>
-    <listing
+    <data-table
         :data="gridData"
         :columns="gridColumns"
-        :filter-key="searchQuery"
+        class="row"
         :callback="callback"
         :extra-content="rowViewContent"
         :edit-keys="editKeys"
         :select-keys="selectKeys">
-    </listing>
+    </data-table>
     <create-code v-if="userAccessPerm('createCode')"></create-code>
   </div>
 </div>
@@ -74,7 +68,7 @@
   /**
    * Import component templates needed for this page.
    */
-  const imports = ['message-area', 'listing', 'row', 'confirm-button', 'create-code'];
+  const imports = ['message-area', 'data-table', 'row', 'confirm-button', 'create-code'];
   imports.forEach(function(element) {
     link = document.querySelector('link[href="src/partials/' + element + '.html"]');
     content = link.import;
@@ -154,6 +148,9 @@
         getGitHubRepos().then(function (repoList) {
           store.commit('addGitHubRepos', repoList);
         });
+
+        // If there is a filter query param, then insert it.
+        setFilterFromQuery();
       },
       userAccessPerm: function (permission = null) {
         return userAccess(permission);
