@@ -236,23 +236,8 @@
         // Grab search queries.
         getSearchQueries();
 
-        // If filter is in URL, then place that in filter input.
-        // Check for query params.
-        if (window.location.search !== "") {
-          // Format the query params into an array.
-          let queryParams = {};
-          window.location.search.slice(1).split('&').map(function (item, index) {
-            const parts = item.split('=');
-            queryParams[parts[0]] = parts[1];
-          });
-
-          // Get property names to match to filter and search.
-          const propertyNames = Object.getOwnPropertyNames(queryParams);
-
-          if (propertyNames.indexOf('filter') !== -1) {
-            store.commit('setFilterKey', queryParams.filter);
-          }
-        }
+        // If there is a filter query param, then insert it.
+        setFilterFromQuery();
       },
       userAccessPerm: function (permission) {
         return userAccess(permission);
