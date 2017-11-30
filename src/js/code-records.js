@@ -30,11 +30,18 @@ function formatCodeData(data) {
   data.forEach(function (elements, index) {
     elements.forEach(function (element, index) {
       let item = [];
+
+      // Since the tag field is an array, we have to convert it back to a string.
+      let tag = '';
+      if (Array.isArray(element.meta.tag) && element.meta.tag.length) {
+        tag = element.meta.tag.join();
+      }
+
       item['label'] = element.meta.label;
       item['code_type'] = element.meta.code_type;
       item['name'] = element.meta.name;
       item['version'] = element.meta.version;
-      item['tag'] = element.meta.tag;
+      item['tag'] = tag;
       item['is_current'] = element.meta.is_current;
       item['commit_hash'] = element.commit_hash;
       item['etag'] = element._etag;
