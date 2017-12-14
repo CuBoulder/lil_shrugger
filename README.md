@@ -1,30 +1,27 @@
-# vue-webpack
+# Getting Started
 
-> A Vue.js project
+Once you clone this repository down, you'll have to take a couple of steps to get started.
 
-## Build Setup
-
-``` bash
-# install dependencies
+```bash
+# Install dependencies. 
 npm install
 
-# serve with hot reload at localhost:8080
+# Run dev server. 
 npm run dev
 
-# build for production with minification
+# Build production code.
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
+# Run tests 
 npm run e2e
-
-# run all tests
-npm test
 ```
+## Notes
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+- You will need to configure the application to your use case on the settings page. There you will see several fields you need to enter for making requests to Atlas, setting up where your app is located, and making requests to the GitHub API.  
+
+- You may have to go to "https://inventory.local" and choose to verfiy the SSL cert in order for the listing of sites to show up on your local development environment. 
+
+## Documentation
+
+Documentation for this codebase will [reside in the wiki](https://github.com/CuBoulder/lil_shrugger/wiki).
+
