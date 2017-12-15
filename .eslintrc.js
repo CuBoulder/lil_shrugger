@@ -45,5 +45,6 @@ module.exports = {
     'no-nested-ternary': 0,
     'no-mixed-operators': 0,
     'no-shadow': 0,
+    'quotes': ['error', 'single'],
   }
 };

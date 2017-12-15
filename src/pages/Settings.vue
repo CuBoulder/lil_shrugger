@@ -11,14 +11,6 @@
             <input type="password" id="password" class="form-control" name="password" v-model="password">
           </fieldset>
           <fieldset class="form-group">
-            <label for="base-url">Base URL</label>
-            <input type="text" id="base-url" class="form-control" name="host" v-model="baseURL">
-            <p class="form-text text-muted">
-              If you have this application in sub-directory of your virtual host, then add with beginning slash, e.g "/shrugger".
-              If you have this application at the root-level, then leave blank.
-            </p>
-          </fieldset>
-          <fieldset class="form-group">
             <label for="github-username">GitHub Username</label>
             <input type="text" id="github-username" class="form-control" name="github-username" v-model="gitHub.username">
             <label for="github-token">GitHub Token</label>
