@@ -20,10 +20,7 @@ export default {
     }
 
     // Check for query to add to code request.
-    let query = localStorage.getItem('sites-query');
-    if (query === null) {
-      query = '';
-    }
+    const query = localStorage.getItem('sites-query') ? localStorage.getItem('sites-query') : store.state.defaultSitesQuery;
 
     // Response is a Promise object so we must resolve it to get the data out.
     return atlas.request(envURL, 'sites', query)

@@ -1,0 +1,3062 @@
+{
+  "_items": [
+    {
+      "_updated": "2017-02-02 21:35:28 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "0bd259126cebafb5e19dea04f47e315f9221d16e",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "express_alumi"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a620926f5b1309390bd1",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:28 GMT",
+      "_id": "5893a620926f5b1309390bd1",
+      "_etag": "f4b10f611e2e04a7e9ac05885bff91390a583764",
+      "git_url": "git@github.com:CuBoulder/express_alumni.git"
+    },
+    {
+      "_updated": "2017-12-12 16:29:25 GMT",
+      "_latest_version": 3,
+      "modified_by": "crafts",
+      "commit_hash": "01c7926219a04336920dd68f0bbb3ace025c43d4",
+      "_version": 3,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "Chancellor",
+        "tag": [
+          "admin_bundles"
+        ],
+        "is_current": true,
+        "name": "express_chancellor"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a621926f5b3acd7cd1b8",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:29 GMT",
+      "_id": "5893a621926f5b3acd7cd1b8",
+      "_etag": "5dfc7ce7c225abfc3e31e3fa38bc11d3154f0a76",
+      "git_url": "git@github.com:CuBoulder/express_chancellor.git"
+    },
+    {
+      "_updated": "2017-02-16 21:19:40 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "300540573ca9679b261518ed387b5e4763700479",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.0",
+        "name": "express_crowdfunding"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a622926f5b130a6e99fb",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:29 GMT",
+      "_id": "5893a622926f5b130a6e99fb",
+      "_etag": "a63181347bf467baaf49685b8ad890423a5837c7",
+      "git_url": "git@github.com:CuBoulder/express_crowdfunding.git"
+    },
+    {
+      "_updated": "2017-11-09 18:19:25 GMT",
+      "_latest_version": 3,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "6cfbb45149564fbbbe9e39a531149f9410e593ae",
+      "_version": 3,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.0",
+        "name": "cu_advanced_article_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a622926f5b1309390bd3",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:30 GMT",
+      "_id": "5893a622926f5b1309390bd3",
+      "_etag": "62866f8ece5b8f80eb814ca6d31b6665a13c8a96",
+      "git_url": "git@github.com:CuBoulder/cu_advanced_article_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:31 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "bf6494d0dc377a11fe38f31d3e14333fa874304a",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_advanced_site_building_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a623926f5b137506e34f",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:31 GMT",
+      "_id": "5893a623926f5b137506e34f",
+      "_etag": "48fb23db8fece6828d2a7c5c051c28f27d901cf9",
+      "git_url": "git@github.com:CuBoulder/cu_advanced_site_building_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:31 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "84cca761a8312939f2cb0c3e9ca5cc1893744bb4",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_alumni_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a623926f5b3acd7cd1ba",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:31 GMT",
+      "_id": "5893a623926f5b3acd7cd1ba",
+      "_etag": "817e1d84670f247ef58cd954d182e9db51644299",
+      "git_url": "git@github.com:CuBoulder/cu_alumni_bundle.git"
+    },
+    {
+      "_updated": "2017-05-30 15:51:01 GMT",
+      "_latest_version": 2,
+      "modified_by": "owmo7772",
+      "commit_hash": "7bd013e31f529323b29b2316edf4330454c81527",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "Chemistry Title",
+        "tag": [
+          "request_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_chemistry_titles_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a624926f5b130a6e99fd",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:32 GMT",
+      "_id": "5893a624926f5b130a6e99fd",
+      "_etag": "0e1f9d38777e62912cfb7e98f843e44c3a6f8f77",
+      "git_url": "git@github.com:CuBoulder/cu_chemistry_titles_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:33 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "4b907aa31ed9d48c9d5a1d1a1166879e5fc57fd2",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_class_primer_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a625926f5b1309390bd5",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:33 GMT",
+      "_id": "5893a625926f5b1309390bd5",
+      "_etag": "65b3469d6b5ea184c24a51170f285a19761f21e1",
+      "git_url": "git@github.com:CuBoulder/cu_class_primer_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:33 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "4f5595c42e41948bbc70b6ab64c1a0af92df72f7",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_connect_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a626926f5b137506e351",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:33 GMT",
+      "_id": "5893a626926f5b137506e351",
+      "_etag": "0df2aa7659c14d92f8cbc24d6fd217d1c749bce7",
+      "git_url": "git@github.com:CuBoulder/cu_connect_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:34 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "d9d5b5280394b320bfc2f51bfa681159e65ec8a2",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_countdown_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a626926f5b3acd7cd1bc",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:34 GMT",
+      "_id": "5893a626926f5b3acd7cd1bc",
+      "_etag": "7bd46e2177cb713101e2dd194e9dde435afde5a6",
+      "git_url": "git@github.com:CuBoulder/cu_countdown_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:35 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "4f06293c15c24dd5976e4f71070b0d07e1dc63d7",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_custom_logo_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a627926f5b130a6e99ff",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:35 GMT",
+      "_id": "5893a627926f5b130a6e99ff",
+      "_etag": "711b66ddcb3198a99a0146351a46973c310c6a60",
+      "git_url": "git@github.com:CuBoulder/cu_custom_logo_bundle.git"
+    },
+    {
+      "_updated": "2017-07-28 19:05:33 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "fadeb9c1f1ab1613576da9bf0d059abdc8bcd685",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.0",
+        "name": "cu_demo_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a628926f5b1309390bd7",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:35 GMT",
+      "_id": "5893a628926f5b1309390bd7",
+      "_etag": "3caeb9796c987ecaf8381594a38268c390fc572a",
+      "git_url": "git@github.com:CuBoulder/cu_demo_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:36 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "d79caf018f5936d81e41e3ae286e4ea7e7434d12",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_editor_note_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a629926f5b137506e353",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:36 GMT",
+      "_id": "5893a629926f5b137506e353",
+      "_etag": "91c1588b38e51e175b7831dd9c6ccd568a576ebb",
+      "git_url": "git@github.com:CuBoulder/cu_editor_note_bundle.git"
+    },
+    {
+      "_updated": "2017-10-05 19:48:08 GMT",
+      "_latest_version": 3,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "329c90655b1db353b514554191ce0c2d1d7d38c2",
+      "_version": 3,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.0",
+        "name": "express_homepage"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a629926f5b130bdde605",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:37 GMT",
+      "_id": "5893a629926f5b130bdde605",
+      "_etag": "757af700549f2e88c09c6d2aa59b666e9d56ebff",
+      "git_url": "git@github.com:CuBoulder/express_homepage.git"
+    },
+    {
+      "_updated": "2017-05-31 16:33:10 GMT",
+      "_latest_version": 4,
+      "modified_by": "kere7580",
+      "commit_hash": "63d8e9d1e5a415a3fc250d3c37282704bf097f53",
+      "_version": 4,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "Live Chat",
+        "tag": [
+          "request_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_livechat_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a62a926f5b130c908bf6",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:38 GMT",
+      "_id": "5893a62a926f5b130c908bf6",
+      "_etag": "2ba09aae5fb560aaa3bad9691760deae75f9319b",
+      "git_url": "git@github.com:CuBoulder/cu_livechat_bundle.git"
+    },
+    {
+      "_updated": "2017-05-31 16:33:40 GMT",
+      "_latest_version": 3,
+      "modified_by": "kere7580",
+      "commit_hash": "0f6aafab03209998c23406c9876d3168765d963d",
+      "_version": 3,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "Live Stream",
+        "tag": [
+          "request_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_livestream_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a62b926f5b130893ad0d",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:39 GMT",
+      "_id": "5893a62b926f5b130893ad0d",
+      "_etag": "37fab23b3ac69176e68c640b9068fa26abadcc40",
+      "git_url": "git@github.com:CuBoulder/cu_livestream_bundle.git"
+    },
+    {
+      "_updated": "2017-05-30 15:53:02 GMT",
+      "_latest_version": 3,
+      "modified_by": "owmo7772",
+      "commit_hash": "2be1cd141cca2de591a9b83a51b203cdb51943d6",
+      "_version": 3,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "Newsletter",
+        "tag": [
+          "request_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_newsletter_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a62c926f5b14369b5e23",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:39 GMT",
+      "_id": "5893a62c926f5b14369b5e23",
+      "_etag": "0ea7e2886f1f80a9a77f02d37ab6beaa46e3c969",
+      "git_url": "git@github.com:CuBoulder/cu_newsletter_bundle.git"
+    },
+    {
+      "_updated": "2017-05-31 17:29:02 GMT",
+      "_latest_version": 3,
+      "modified_by": "alfi2595",
+      "commit_hash": "06b2c860d508a016f456a3ab0f2b3fafe16fb2b9",
+      "_version": 3,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "Publication",
+        "tag": [
+          "addon_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_publications_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a62c926f5b3acd7cd1be",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:40 GMT",
+      "_id": "5893a62c926f5b3acd7cd1be",
+      "_etag": "576cf10889a5521e94ef235b485e9683aa535bac",
+      "git_url": "git@github.com:CuBoulder/cu_publications_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:41 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "3aeb71273a0f5b500a93c8ca3e2daee131a1d1d8",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_soundcloud_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a62d926f5b130a6e9a01",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:41 GMT",
+      "_id": "5893a62d926f5b130a6e9a01",
+      "_etag": "d25c43b5f87b107939bd4b09f73bf347e3ea4c0b",
+      "git_url": "git@github.com:CuBoulder/cu_soundcloud_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:42 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "084a1cb595373dc11e81d8588cfb4037ac5c373f",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_storify_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a62e926f5b1309390bd9",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:42 GMT",
+      "_id": "5893a62e926f5b1309390bd9",
+      "_etag": "3d6d93f5ff16bcf0e11e35b4a6ea9ac86b9a254c",
+      "git_url": "git@github.com:CuBoulder/cu_storify_bundle.git"
+    },
+    {
+      "_updated": "2017-12-12 18:37:44 GMT",
+      "_latest_version": 4,
+      "modified_by": "alfi2595",
+      "commit_hash": "f09e0ba35cb6f05493f284bf6e7d871357173e08",
+      "_version": 4,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "VCR Bundle",
+        "tag": [
+          "admin_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_vcr_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a62f926f5b137506e355",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:42 GMT",
+      "_id": "5893a62f926f5b137506e355",
+      "_etag": "e4097b48fc0a65645955dc211fbac10e1f599b70",
+      "git_url": "git@github.com:CuBoulder/cu_vcr_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:43 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "e418162ad2ee994a92255b724b065a68dcb435ea",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "express_leeds"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a630926f5b130bdde607",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:43 GMT",
+      "_id": "5893a630926f5b130bdde607",
+      "_etag": "4e173134022f92cae7a40987f6b37efa8655ecb6",
+      "git_url": "git@github.com:CuBoulder/express_leeds.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:45 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "8ce3aca4ea38f52de8b06b4bf2d1cfa4130429ba",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "library",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "highlightjs"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a631926f5b1309390bdb",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:45 GMT",
+      "_id": "5893a631926f5b1309390bdb",
+      "_etag": "aecbf9046f1300098c7d7d4ccfacb92881df4eb9",
+      "git_url": "git@github.com:CuBoulder/highlightjs.git"
+    },
+    {
+      "_updated": "2017-08-29 21:29:13 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "c0f11ba5f42d6065e1a03eb058b862d3b21facdd",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.0",
+        "name": "cu_campus_news_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a632926f5b137506e357",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:46 GMT",
+      "_id": "5893a632926f5b137506e357",
+      "_etag": "d0c46a585dd848e11fa3dffe45baa8624956d23f",
+      "git_url": "git@github.com:CuBoulder/cu_campus_news_bundle.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:47 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "6cb065fd429dff2b026b37e0a263e4952f1c76b0",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "theme",
+        "is_current": true,
+        "version": "7.x-5.5",
+        "name": "zen"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a633926f5b130bdde609",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:47 GMT",
+      "_id": "5893a633926f5b130bdde609",
+      "_etag": "068fbe1cdfaa379e31af0e404ee679158bb543bc",
+      "git_url": "git://git.drupal.org/project/zen.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:47 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "57fe5fcdf805cae52be7d33115faeed107a01940",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.1",
+        "name": "addressfield"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a634926f5b130c908bfa",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:47 GMT",
+      "_id": "5893a634926f5b130c908bfa",
+      "_etag": "7a093b4b7067e8ee19a9fd677d1d4f4dc66f5a31",
+      "git_url": "git://git.drupal.org/project/addressfield.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:48 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "2d83b6e77befdbf995edf0c4118e03a560b4ca6e",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "behavior_weights"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a634926f5b14369b5e25",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:48 GMT",
+      "_id": "5893a634926f5b14369b5e25",
+      "_etag": "324cbc098ff99a833154591dc03824d784e91271",
+      "git_url": "git://git.drupal.org/project/behavior_weights.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:49 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "f722f7eae0dd39fc056f09b725129fd770ee02ba",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-3.2",
+        "name": "better_exposed_filters"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a635926f5b3acd7cd1c0",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:49 GMT",
+      "_id": "5893a635926f5b3acd7cd1c0",
+      "_etag": "9b7b324aec7dabb849eb155eeada3b8661a4fb72",
+      "git_url": "git://git.drupal.org/project/better_exposed_filters.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:49 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "174bb364b71887a23140efea626d2843b57bd4cf",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-3.1",
+        "name": "backup_migrate"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a636926f5b130a6e9a03",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:49 GMT",
+      "_id": "5893a636926f5b130a6e9a03",
+      "_etag": "7f138487fcd0ea3633c10bc108146088f9e896c0",
+      "git_url": "git://git.drupal.org/project/backup_migrate.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:50 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "38b120eedbf3e340c15976c3e620d0e7d623fc45",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-2.0-rc1",
+        "name": "charts"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a636926f5b130893ad11",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:50 GMT",
+      "_id": "5893a636926f5b130893ad11",
+      "_etag": "be115e8bb1f50a90863b7926cf43220c87f820ca",
+      "git_url": "git://git.drupal.org/project/charts.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:51 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "7207254723a3adb7a1f6e0baa7ed921a9d21ab9d",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.2",
+        "name": "comment_notify"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a637926f5b1309390bdd",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:51 GMT",
+      "_id": "5893a637926f5b1309390bdd",
+      "_etag": "eefeb8b8bbbbb975e50f37d6d99d71f6fe14289d",
+      "git_url": "git://git.drupal.org/project/comment_notify.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:51 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "0edee152962fe275d9c24efcf3fe1417cb1af900",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.3",
+        "name": "context_query_param"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a638926f5b137506e359",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:51 GMT",
+      "_id": "5893a638926f5b137506e359",
+      "_etag": "c7add53fea5437f583ae83fcaabc6d5e1b47042d",
+      "git_url": "git://git.drupal.org/project/context_query_param.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:52 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "79abf3b517cbfe5c1fa6236e69ae490ebe52d197",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.2",
+        "name": "datatables"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a638926f5b130bdde60b",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:52 GMT",
+      "_id": "5893a638926f5b130bdde60b",
+      "_etag": "3a42de51d95985ebc9a7ad3ab5a0ea7e4bca47c6",
+      "git_url": "git://git.drupal.org/project/datatables.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:53 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "c468750bb13c17963e44473366d8149edb345e5f",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-2.0-beta2",
+        "name": "feeds"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a639926f5b130c908bfc",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:53 GMT",
+      "_id": "5893a639926f5b130c908bfc",
+      "_etag": "5dc6ac85fbc94f99abeec077815809073adbdf5f",
+      "git_url": "git://git.drupal.org/project/feeds.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:54 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "c7d29989409a3790ebe2aabbf2f1a8a73e05d0bb",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.2",
+        "name": "geocoder"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63a926f5b14369b5e27",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:54 GMT",
+      "_id": "5893a63a926f5b14369b5e27",
+      "_etag": "041f800f9064ddc106ff239025163d08d9f1c76f",
+      "git_url": "git://git.drupal.org/project/geocoder.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:54 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "b8c3fd126e63a149cd17f247198504ac65f4fbf4",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.7",
+        "name": "geophp"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63b926f5b3acd7cd1c2",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:54 GMT",
+      "_id": "5893a63b926f5b3acd7cd1c2",
+      "_etag": "c190e9e8819421d9926a85413ffab845da622f3a",
+      "git_url": "git://git.drupal.org/project/geophp.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:55 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "ef6f2990ec1be4bb038903b67d6544331e223dc0",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-3.x-dev",
+        "name": "google_analytics_reports"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63b926f5b130a6e9a05",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:55 GMT",
+      "_id": "5893a63b926f5b130a6e9a05",
+      "_etag": "c47cd87a41333ff2ec70b737f051380ff235979d",
+      "git_url": "git://git.drupal.org/project/google_analytics_reports.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:56 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "2583c11eac3109e303621b8679a5d9f7e650920e",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.2",
+        "name": "highlight_js"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63c926f5b130893ad13",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:56 GMT",
+      "_id": "5893a63c926f5b130893ad13",
+      "_etag": "77f4559ada4cd7641d5ed7406b4ad08f31b3c525",
+      "git_url": "git://git.drupal.org/project/highlightjs.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:56 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "7c4806c5bb2e99f0d32b125117d3db6941b10dfd",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.4",
+        "name": "html_title"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63c926f5b1309390bdf",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:56 GMT",
+      "_id": "5893a63c926f5b1309390bdf",
+      "_etag": "42b7d1d051374823ad98831bc777d12c685fb70e",
+      "git_url": "git://git.drupal.org/project/html_title.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:57 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "f09b95da729891c843cd74c3d6262090fbb2fdef",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.4",
+        "name": "image_url_formatter"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63d926f5b137506e35b",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:57 GMT",
+      "_id": "5893a63d926f5b137506e35b",
+      "_etag": "31aed02587c0e9a19cfee0658ea6c97d5ce16a14",
+      "git_url": "git://git.drupal.org/project/image_url_formatter.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:57 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "c2869933f56a89a49f2e7c68cdd1d839c37ad378",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "match_redirect"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63d926f5b130bdde60d",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:57 GMT",
+      "_id": "5893a63d926f5b130bdde60d",
+      "_etag": "97a937d3d9637f286eaa2349164f322542266379",
+      "git_url": "git://git.drupal.org/project/match_redirect.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:58 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "631d846c334587ee412e27f7730eb3b7d3c21220",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.12",
+        "name": "options_element"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63e926f5b130c908bfe",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:58 GMT",
+      "_id": "5893a63e926f5b130c908bfe",
+      "_etag": "3671893832d6ae7e96e1e0295418a0b151de210d",
+      "git_url": "git://git.drupal.org/project/options_element.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:58 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "9ad7ca584ddf3079c2122e18c1ed1bc57e9437b4",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0-rc4",
+        "name": "path_redirect_import"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63e926f5b14369b5e29",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:58 GMT",
+      "_id": "5893a63e926f5b14369b5e29",
+      "_etag": "298b1284dc6076d224b4da32aad9321f2873d9ff",
+      "git_url": "git://git.drupal.org/project/path_redirect_import.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:59 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "baa2c205f429d485acbed4f5ffddee63748de55e",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.9",
+        "name": "postal_code"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63f926f5b3acd7cd1c4",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:59 GMT",
+      "_id": "5893a63f926f5b3acd7cd1c4",
+      "_etag": "4cc808b666007ef6113cae972e7e1da7e6694a9f",
+      "git_url": "git://git.drupal.org/project/postal_code.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:59 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "efe203e5b5e8243316eb2f246177047b5427b34c",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.2",
+        "name": "readmorecontrol"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63f926f5b130a6e9a07",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:59 GMT",
+      "_id": "5893a63f926f5b130a6e9a07",
+      "_etag": "0c7561f143a0d133c2650312fc89866427aa1d19",
+      "git_url": "git://git.drupal.org/project/readmorecontrol.git"
+    },
+    {
+      "_updated": "2017-02-02 21:35:59 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "fd55ba880f0f82bdaf40d64c802a04bbc4895655",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-3.1",
+        "name": "salesforce"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a63f926f5b130893ad15",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:35:59 GMT",
+      "_id": "5893a63f926f5b130893ad15",
+      "_etag": "318255c9ebb017c83bcbf15e3d64ba88b3d87158",
+      "git_url": "git://git.drupal.org/project/salesforce.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:00 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "760a5c75870121aeb898b092236ca3005ad718d2",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.1",
+        "name": "salesforce_webforms"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a640926f5b1309390be1",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:00 GMT",
+      "_id": "5893a640926f5b1309390be1",
+      "_etag": "93aca44f3c1d1f9237dc09d3a87cc5c6c243db73",
+      "git_url": "git://git.drupal.org/project/salesforce_webforms.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:01 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "0b78b249675d5d766c33b7eec96088d620ae9da8",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-2.0",
+        "name": "sfweb2lead_webform"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a641926f5b137506e35d",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:01 GMT",
+      "_id": "5893a641926f5b137506e35d",
+      "_etag": "84c47cc2625b1c300b642b6f8e27728da09ce2fa",
+      "git_url": "git://git.drupal.org/project/sfweb2lead_webform.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:01 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "22ce9c4a723c348812679252ebcb5c3a8ccdd425",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "taxonomy_manager"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a641926f5b130c908c00",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:01 GMT",
+      "_id": "5893a641926f5b130c908c00",
+      "_etag": "3d09bf7e4e3467c005011da9dce533c113f57b7a",
+      "git_url": "git://git.drupal.org/project/taxonomy_manager.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:02 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "a9714bdf0d6eb7a3022c2a53811576a8de1d3a24",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.2",
+        "name": "term_merge"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a642926f5b14369b5e2b",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:02 GMT",
+      "_id": "5893a642926f5b14369b5e2b",
+      "_etag": "ee5acaa630878c98aa31439f98e4c2d47dec8910",
+      "git_url": "git://git.drupal.org/project/term_merge.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:02 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "cbf30baca5c2a522779de8b66168f6a431189b3b",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.10",
+        "name": "term_reference_tree"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a642926f5b3acd7cd1c6",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:02 GMT",
+      "_id": "5893a642926f5b3acd7cd1c6",
+      "_etag": "874ebd1739c6178f4b20657a6d7184d23bbcb788",
+      "git_url": "git://git.drupal.org/project/term_reference_tree.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:02 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "abc95bdfd1a1ca921db35697cd245944f292c22f",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-3.4",
+        "name": "themekey"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a642926f5b130a6e9a09",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:02 GMT",
+      "_id": "5893a642926f5b130a6e9a09",
+      "_etag": "b291c77f71a468ca71d70685ca04c97f5939785a",
+      "git_url": "git://git.drupal.org/project/themekey.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:03 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "7ac586e76728a97422c8fdf5f46fa903423afc51",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0-beta2",
+        "name": "views_block_filter_block"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a643926f5b130893ad17",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:03 GMT",
+      "_id": "5893a643926f5b130893ad17",
+      "_etag": "5b299852710e64265f60f21d7fe08dd8cf721131",
+      "git_url": "git://git.drupal.org/project/views_block_filter_block.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:03 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "9b840da5505ba6ff844b9a2ca7f3f4b1237f8e24",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-3.0-beta9",
+        "name": "views_data_export"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a643926f5b1309390be3",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:03 GMT",
+      "_id": "5893a643926f5b1309390be3",
+      "_etag": "c0a342004ec82e74866d2fdc9d41f94d6d70c502",
+      "git_url": "git://git.drupal.org/project/views_data_export.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:03 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "6549d099d9a960263918cc3ea88db9c156db91b4",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.3",
+        "name": "views_responsive_grid"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a643926f5b137506e35f",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:03 GMT",
+      "_id": "5893a643926f5b137506e35f",
+      "_etag": "c2fe52d99e80bbe4284eb5a9582db8ba6a785ea2",
+      "git_url": "git://git.drupal.org/project/views_responsive_grid.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:03 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "8ee12039fe5324dc98c171a065bfeb4c2ab68a54",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.6-dev",
+        "name": "shs"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a644926f5b130bdde611",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:03 GMT",
+      "_id": "5893a644926f5b130bdde611",
+      "_etag": "bf69a9ae2ca3cdefdd0967afca540989ae2017bb",
+      "git_url": "git://git.drupal.org/project/shs.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:04 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "9dd47c2803f225ad8f9e14677f2b2c240991bf0a",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.1",
+        "name": "simplenews"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a644926f5b130c908c02",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:04 GMT",
+      "_id": "5893a644926f5b130c908c02",
+      "_etag": "af22112c6db76bbcc8cfc3fcd766fc17ff6d5b48",
+      "git_url": "git://git.drupal.org/project/simplenews.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:04 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "363b9e4f869a35ba3072c8c459f3f5c3b0b41754",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "taxonomy_access"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a644926f5b14369b5e2d",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:04 GMT",
+      "_id": "5893a644926f5b14369b5e2d",
+      "_etag": "05ad3037fa5174f3d937aa9316c3fe54ac5bf88a",
+      "git_url": "git://git.drupal.org/project/taxonomy_access.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:04 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "7789f4672df058cad361d9d96d1e3e59fe7b67b9",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "taxonomy_autocomplete_permission"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a644926f5b3acd7cd1c8",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:04 GMT",
+      "_id": "5893a644926f5b3acd7cd1c8",
+      "_etag": "7740b298b5b5818ef458bc0a33e842210527e96b",
+      "git_url": "git://git.drupal.org/project/taxonomy_autocomplete_permission.git"
+    },
+    {
+      "_updated": "2017-08-30 14:47:37 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "e7fa6ea60c112b09abf055b2e908540404d4dc14",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.0",
+        "name": "express_culibraries"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a645926f5b130a6e9a0b",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:05 GMT",
+      "_id": "5893a645926f5b130a6e9a0b",
+      "_etag": "a47182c43d8887d225f9de4177f5c4c97b770c39",
+      "git_url": "git@github.com:CuBoulder/express_culibraries.git"
+    },
+    {
+      "_updated": "2017-08-20 02:54:12 GMT",
+      "_latest_version": 2,
+      "modified_by": "kere7580",
+      "commit_hash": "bc805a3cc10bd0889500a1b2d6a25671f73224d9",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.1",
+        "name": "cu_homepage_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a645926f5b130893ad19",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:05 GMT",
+      "_id": "5893a645926f5b130893ad19",
+      "_etag": "60dac01ee9021df16fee7807f6ff0bf6e9b5355c",
+      "git_url": "git@github.com:CuBoulder/express_homepage.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:05 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "7c5926e6cd16ce6f3dc579041fa4f30ba1b3948d",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_classes_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a645926f5b1309390be5",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:05 GMT",
+      "_id": "5893a645926f5b1309390be5",
+      "_etag": "3dd935816f4936a3ba3f34c85b28de9f33880892",
+      "git_url": "git@github.com:CuBoulder/cu_classes_bundle.git"
+    },
+    {
+      "_updated": "2017-08-21 21:27:49 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "e4a2d7d9946f6239cb988e366fda56fed06d09bb",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "theme",
+        "is_current": false,
+        "version": "7.x-1.0",
+        "name": "express_chancellor_themes"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a646926f5b137506e361",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:05 GMT",
+      "_id": "5893a646926f5b137506e361",
+      "_etag": "b1d46e37ea8435c792a65cfd954a73bba431e30f",
+      "git_url": "git@github.com:CuBoulder/express_chancellor_themes.git"
+    },
+    {
+      "_updated": "2017-05-31 15:57:51 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "d50f47fb690d017f1b85ef233122a863fc487c77",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-2.3",
+        "name": "geofield"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a646926f5b130bdde613",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:06 GMT",
+      "_id": "5893a646926f5b130bdde613",
+      "_etag": "d12b245f7041e58a2b2f49651bdc57748f30cfc1",
+      "git_url": "git@github.com:CuBoulder/geofield.git"
+    },
+    {
+      "_updated": "2017-02-02 21:36:06 GMT",
+      "_latest_version": 1,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "7845b7f260dfb0f86ba3ddc717a0f8fe2556e5a0",
+      "_version": 1,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.1",
+        "name": "feeds_tamper"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a646926f5b130c908c04",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:06 GMT",
+      "_id": "5893a646926f5b130c908c04",
+      "_etag": "24022151647e057ec6b78da5dccfa87d4a8fbb71",
+      "git_url": "git://git.drupal.org/project/feeds_tamper.git"
+    },
+    {
+      "_updated": "2017-03-15 15:07:42 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "730a63933eef11f335d221a72ff7f78c7aca1262",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "core",
+        "is_current": false,
+        "version": "7.53",
+        "name": "drupal"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a647926f5b14369b5e2f",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:06 GMT",
+      "_id": "5893a647926f5b14369b5e2f",
+      "_etag": "a1b9538ac20c4ed1d4393d5a3717d0866d7b929a",
+      "git_url": "git@github.com:CuBoulder/drupal-7.x.git"
+    },
+    {
+      "_updated": "2017-02-16 22:37:19 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "f11ef6a0d97f91bada2b6dc135b9ec17c799666e",
+      "_version": 2,
+      "created_by": "osr_atlas_client",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.0",
+        "name": "community_funded"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5893a647926f5b3acd7cd1ca",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-02 21:36:07 GMT",
+      "_id": "5893a647926f5b3acd7cd1ca",
+      "_etag": "e4134df7353cba605ee542d62b5725174e92778b",
+      "git_url": "git://git.drupal.org/project/community_funded.git"
+    },
+    {
+      "_updated": "2017-02-07 16:53:44 GMT",
+      "_latest_version": 1,
+      "modified_by": "kere7580",
+      "commit_hash": "4845a21920d35a2ccf24aac6452b8fe5e0f73592",
+      "_version": 1,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "third_party_wrappers"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5899fb98926f5b3c2aa3731b",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-07 16:53:44 GMT",
+      "_id": "5899fb98926f5b3c2aa3731b",
+      "_etag": "6c7875ea4793f7376880ad32a58593b029dec926",
+      "git_url": "https://git.drupal.org/project/third_party_wrappers.git"
+    },
+    {
+      "_updated": "2017-09-25 16:17:06 GMT",
+      "_latest_version": 2,
+      "modified_by": "owmo7772",
+      "commit_hash": "79101894af3d8bbcd68b679681fc42b82437ab34",
+      "_version": 2,
+      "created_by": "owmo7772",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.1",
+        "label": "Express Crowdfunding",
+        "dependency": [
+          "5893a647926f5b3acd7cd1ca",
+          "5893a638926f5b137506e359"
+        ],
+        "tag": [
+          "beta_bundles"
+        ],
+        "is_current": true,
+        "name": "express_crowdfunding"
+      },
+      "_links": {
+        "self": {
+          "href": "code/58a6176c926f5b6fd81ab3f8",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-16 21:19:39 GMT",
+      "_id": "58a6176c926f5b6fd81ab3f8",
+      "_etag": "4407b2483b3e8bf4e1eb0bf57e596802414d69e2",
+      "git_url": "git@github.com:CuBoulder/express_crowdfunding.git"
+    },
+    {
+      "_updated": "2017-02-16 22:37:19 GMT",
+      "_latest_version": 1,
+      "modified_by": "owmo7772",
+      "commit_hash": "db5f9e79f7e84d91401ea83c0431582614658363",
+      "_version": 1,
+      "created_by": "owmo7772",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.x-dev",
+        "name": "community_funded"
+      },
+      "_links": {
+        "self": {
+          "href": "code/58a6299f926f5b331b2a90b0",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-02-16 22:37:19 GMT",
+      "_id": "58a6299f926f5b331b2a90b0",
+      "_etag": "44654f7a04cc89dfb7d1337e052484e6c43f44f6",
+      "git_url": "git://git.drupal.org/project/community_funded.git"
+    },
+    {
+      "_updated": "2017-08-07 15:01:43 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "_version": 2,
+      "created_by": "jafu6031",
+      "git_url": "git@github.com:CuBoulder/drupal-7.x.git",
+      "meta": {
+        "code_type": "core",
+        "is_current": false,
+        "version": "7.54",
+        "name": "drupal"
+      },
+      "_links": {
+        "self": {
+          "href": "code/58c958be926f5b09b658ec7a",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-03-15 15:07:41 GMT",
+      "_id": "58c958be926f5b09b658ec7a",
+      "_etag": "68dfa8d8a1e08fe678d6c07007ae055872e31959",
+      "commit_hash": "e60601be099983531bcaeca7217a1d7987763930"
+    },
+    {
+      "_updated": "2017-03-15 15:31:10 GMT",
+      "_latest_version": 1,
+      "modified_by": "jafu6031",
+      "_version": 1,
+      "created_by": "jafu6031",
+      "git_url": "git@github.com:CuBoulder/express_webcentral.git",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-2.1",
+        "name": "express_webcentral"
+      },
+      "_links": {
+        "self": {
+          "href": "code/58c95e3e926f5b0b22642ce7",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-03-15 15:31:10 GMT",
+      "_id": "58c95e3e926f5b0b22642ce7",
+      "_etag": "9e5384fbb972c8cdaed8f5aa59b9441613e41c36",
+      "commit_hash": "d1094296edeb1c1ad814e943abeb81e4849bf059"
+    },
+    {
+      "_updated": "2017-04-07 20:36:39 GMT",
+      "_latest_version": 1,
+      "modified_by": "kere7580",
+      "commit_hash": "b2e3637baef1f01de2e5a07df1f1f852804f4e42",
+      "_version": 1,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "express_output_region_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/58e7f857926f5b09e312b14a",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-04-07 20:36:39 GMT",
+      "_id": "58e7f857926f5b09e312b14a",
+      "_etag": "d415c248eee74d184f0a0b651ffb5954ee5ccd26",
+      "git_url": "git@github.com:CuBoulder/express_output_region_bundle.git"
+    },
+    {
+      "_updated": "2017-04-07 20:41:21 GMT",
+      "_latest_version": 1,
+      "modified_by": "kere7580",
+      "commit_hash": "f14294446cebd280943404949e8529de722d7a4e",
+      "_version": 1,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "theme",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "express_output_region_theme"
+      },
+      "_links": {
+        "self": {
+          "href": "code/58e7f971926f5b538e146f08",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-04-07 20:41:21 GMT",
+      "_id": "58e7f971926f5b538e146f08",
+      "_etag": "166c58876142695afd8d1696c2b2323ba81b1b24",
+      "git_url": "git@github.com:CuBoulder/express_output_region_theme.git"
+    },
+    {
+      "_updated": "2017-04-18 16:02:57 GMT",
+      "_latest_version": 1,
+      "modified_by": "kere7580",
+      "commit_hash": "4ef332bf764e2974366906245001c3913ddb2603",
+      "_version": 1,
+      "created_by": "kere7580",
+      "meta": {
+        "label": "Attachment Links",
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "attachment_links"
+      },
+      "_links": {
+        "self": {
+          "href": "code/58f638b1926f5b7c384ebe8f",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-04-18 16:02:57 GMT",
+      "_id": "58f638b1926f5b7c384ebe8f",
+      "_etag": "d412e225e470b282d75f00651a76ae44342e263d",
+      "git_url": "git@github.com:CuBoulder/attachment_links.git"
+    },
+    {
+      "_updated": "2017-08-16 20:36:39 GMT",
+      "_latest_version": 11,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "f171b87bd2e96a2b679dff4505a586218ac26a49",
+      "_version": 11,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0-beta1",
+        "label": "Digital Campaign",
+        "tag": [
+          "request_bundles"
+        ],
+        "is_current": false,
+        "name": "cu_digital_campaign_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/591def5f926f5b28e7361dc8",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-05-18 19:00:47 GMT",
+      "_id": "591def5f926f5b28e7361dc8",
+      "_etag": "2a16a89fcd392980b011ef57e92b499bcd288794",
+      "git_url": "git@github.com:CuBoulder/cu_digital_campaign_bundle.git"
+    },
+    {
+      "_updated": "2017-05-31 16:14:23 GMT",
+      "_latest_version": 1,
+      "modified_by": "alfi2595",
+      "commit_hash": "ce424474fe676b3401e1806ffb0cb27f0483c5f4",
+      "_version": 1,
+      "created_by": "alfi2595",
+      "meta": {
+        "code_type": "module",
+        "name": "geofield",
+        "label": "Geofield",
+        "dependency": [],
+        "tag": [],
+        "is_current": true,
+        "version": "7.x-2.3-patched2"
+      },
+      "_links": {
+        "self": {
+          "href": "code/592eebdf926f5b1c3ddb51dd",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-05-31 16:14:23 GMT",
+      "_id": "592eebdf926f5b1c3ddb51dd",
+      "_etag": "6cb54d46aa35a4aebc5bd8edda2fa6bc728da9e6",
+      "git_url": "git@github.com:CuBoulder/geofield.git"
+    },
+    {
+      "_updated": "2017-11-07 19:25:52 GMT",
+      "_latest_version": 5,
+      "modified_by": "crafts",
+      "commit_hash": "1a9a4e1c3979a7ddc5531f08bf2d2a08a652292b",
+      "_version": 5,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.1",
+        "label": "Content Sequence",
+        "tag": [
+          "addon_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_content_sequence_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/592eee80926f5b1ca774ec42",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-05-31 16:25:36 GMT",
+      "_id": "592eee80926f5b1ca774ec42",
+      "_etag": "bb2e83bdf068ae87c0dafb29f171482b2ab97671",
+      "git_url": "git@github.com:CuBoulder/cu_content_sequence_bundle.git"
+    },
+    {
+      "_updated": "2017-05-31 21:11:09 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "02607f8a1c3fb6a2f4deb87a824deeebde8bf867",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "Responsive Visibility Bundle",
+        "tag": [
+          "request_bundles"
+        ],
+        "is_current": true,
+        "name": "express_responsive_visibility_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/592f316d926f5b0f4dd8bb73",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-05-31 21:11:09 GMT",
+      "_id": "592f316d926f5b0f4dd8bb73",
+      "_etag": "795f928fea8cefa9a1f5d5964132f33a22e936f6",
+      "git_url": "git@github.com:CuBoulder/express_responsive_visibility_bundle.git"
+    },
+    {
+      "_updated": "2017-06-02 19:51:02 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "f086e70ed67a10ed62c5c1481d8dceb0e296ea47",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "label": "cu_system_theme",
+        "code_type": "theme",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_system_theme"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5931c1a6926f5b6a8829fabc",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-06-02 19:51:02 GMT",
+      "_id": "5931c1a6926f5b6a8829fabc",
+      "_etag": "8cd54db3ab67249eedb2ee393971b18192eb24b5",
+      "git_url": "git@github.com:CuBoulder/cu_system_theme.git"
+    },
+    {
+      "_updated": "2017-07-24 21:04:51 GMT",
+      "_latest_version": 3,
+      "modified_by": "kere7580",
+      "commit_hash": "a60cf59800078c119432f9e5699787f6879b858f",
+      "_version": 3,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0",
+        "label": "Webcentral",
+        "tag": [
+          "custom_bundles"
+        ],
+        "is_current": true,
+        "name": "custom_webcentral_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5939f35e926f5b4293760aaf",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-06-09 01:01:17 GMT",
+      "_id": "5939f35e926f5b4293760aaf",
+      "_etag": "98e55e7ff2eb141a630f1095620876a344b77eb6",
+      "git_url": "git@github.com:CuBoulder/custom_webcentral_bundle.git"
+    },
+    {
+      "_updated": "2017-09-25 15:01:19 GMT",
+      "_latest_version": 6,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "6c94e44e0d1900e5c9e1eb859ba1fd08e382c623",
+      "_version": 6,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.3",
+        "label": "Video Hero Unit",
+        "tag": [
+          "request_bundles"
+        ],
+        "is_current": false,
+        "name": "cu_video_hero_unit_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5963d523926f5b42c7649391",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-07-10 19:27:30 GMT",
+      "_id": "5963d523926f5b42c7649391",
+      "_etag": "8bb6573d22138465a20a17f3804a5729b6814d50",
+      "git_url": "git@github.com:CuBoulder/cu_video_hero_unit_bundle.git"
+    },
+    {
+      "_updated": "2017-08-02 16:33:51 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "0da6b85f87fcb3c51e8f3226b0998b10c1d7796a",
+      "_version": 2,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.2",
+        "label": "Campus Map Bundle",
+        "tag": [
+          "admin_bundles"
+        ],
+        "is_current": false,
+        "name": "cu_campus_map_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5970dbb1926f5b3d638a4cb6",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-07-20 16:34:56 GMT",
+      "_id": "5970dbb1926f5b3d638a4cb6",
+      "_etag": "32abe0bd5b2949292b0ca26f293b0ebd994cf2d1",
+      "git_url": "git@github.com:CuBoulder/cu_campus_map_bundle.git"
+    },
+    {
+      "_updated": "2017-07-28 19:05:32 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "23905c8be237b13bc59bfdf16b3be437a662f816",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.1",
+        "label": "Demo Mode",
+        "tag": [
+          "admin_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_demo_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/597b8afd926f5b756fea49f8",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-07-28 19:05:32 GMT",
+      "_id": "597b8afd926f5b756fea49f8",
+      "_etag": "101108edf662f4e7f40779f2b63774c27cb96663",
+      "git_url": "git@github.com:CuBoulder/cu_demo_bundle.git"
+    },
+    {
+      "_updated": "2017-08-04 22:22:15 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "cd206263b474483ac216930bf714875821d6b885",
+      "_version": 2,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.3",
+        "label": "Campus Map",
+        "tag": [
+          "admin_bundles"
+        ],
+        "is_current": false,
+        "name": "cu_campus_map_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5981fef0926f5b2831a5e7d6",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-02 16:33:51 GMT",
+      "_id": "5981fef0926f5b2831a5e7d6",
+      "_etag": "723e1eea45c70fd6aed48f52e9181381e669323a",
+      "git_url": "git@github.com:CuBoulder/cu_campus_map_bundle.git"
+    },
+    {
+      "_updated": "2017-11-07 16:49:56 GMT",
+      "_latest_version": 2,
+      "modified_by": "crafts",
+      "commit_hash": "4eeee683e76166321a6b25bcd5530f51ad4791fe",
+      "_version": 2,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.4",
+        "label": "Campus Map",
+        "tag": [
+          "admin_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_campus_map_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5984f397926f5b2eefbce351",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-04 22:22:13 GMT",
+      "_id": "5984f397926f5b2eefbce351",
+      "_etag": "a54152f6a4a0ae1bab8c782bb1986d904f14a521",
+      "git_url": "git@github.com:CuBoulder/cu_campus_map_bundle.git"
+    },
+    {
+      "_updated": "2017-08-07 15:01:42 GMT",
+      "_latest_version": 1,
+      "modified_by": "kere7580",
+      "commit_hash": "d928892894fafdf6ffb0ada73f7c2072566f083d",
+      "_version": 1,
+      "created_by": "kere7580",
+      "meta": {
+        "label": "Drupal",
+        "code_type": "core",
+        "is_current": true,
+        "version": "7.56",
+        "name": "drupal"
+      },
+      "_links": {
+        "self": {
+          "href": "code/598880d7926f5b2eefbce443",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-07 15:01:42 GMT",
+      "_id": "598880d7926f5b2eefbce443",
+      "_etag": "0f045448a71c61f40804df7b6f0e127c20219f2c",
+      "git_url": "git@github.com:CuBoulder/drupal-7.x.git"
+    },
+    {
+      "_updated": "2017-08-11 04:18:53 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "f54310cf494e6796bb71ff8e7cb11198506a96fc",
+      "_version": 2,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "theme",
+        "is_current": false,
+        "version": "7.x-1.1",
+        "name": "cu_newsletter_theme",
+        "label": "Email Newsletter Theme"
+      },
+      "_links": {
+        "self": {
+          "href": "code/598d2d0f926f5b46c766ce4e",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-11 04:05:35 GMT",
+      "_id": "598d2d0f926f5b46c766ce4e",
+      "_etag": "5f82d4b72ab5fc5acdce272744cf640a2819b717",
+      "git_url": "git@github.com:CuBoulder/cu_newsletter_theme.git"
+    },
+    {
+      "_updated": "2017-08-11 04:18:53 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "54d2523c2bb89e298a19a2dfd0ba9488ad77219d",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "label": "Email Newsletter Theme",
+        "code_type": "theme",
+        "is_current": true,
+        "version": "7.x-1.2",
+        "name": "cu_newsletter_theme"
+      },
+      "_links": {
+        "self": {
+          "href": "code/598d302d926f5b24e8be752d",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-11 04:18:53 GMT",
+      "_id": "598d302d926f5b24e8be752d",
+      "_etag": "06f574ab87f24f06307a4d6906f00203330acc2c",
+      "git_url": "git@github.com:CuBoulder/cu_newsletter_theme.git"
+    },
+    {
+      "_updated": "2017-08-11 04:32:11 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "2f03263c605ee2990d117673c33a4b75bf670ecb",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.1.1",
+        "label": "Newsletter",
+        "tag": [
+          "request_bundles"
+        ],
+        "is_current": false,
+        "name": "cu_newsletter_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/598d334b926f5b71bde4832a",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-11 04:32:11 GMT",
+      "_id": "598d334b926f5b71bde4832a",
+      "_etag": "d28c56f287bfaca484b74d767a6f5b3a282ae667",
+      "git_url": "git@github.com:CuBoulder/cu_newsletter_bundle.git"
+    },
+    {
+      "_updated": "2017-08-29 14:09:09 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "1b43e7a9531f0f502730ec2f47a88fd5591d0765",
+      "_version": 2,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "theme",
+        "is_current": false,
+        "version": "7.x-1.2",
+        "name": "homepage2017_theme",
+        "label": "Homepage2017 Theme"
+      },
+      "_links": {
+        "self": {
+          "href": "code/599221e9926f5b52cb2a6fa9",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-14 22:19:21 GMT",
+      "_id": "599221e9926f5b52cb2a6fa9",
+      "_etag": "24ee2ad3666816c422df9112c1d837c24847a60a",
+      "git_url": "git@github.com:CuBoulder/homepage2017_theme.git"
+    },
+    {
+      "_updated": "2017-09-15 22:29:44 GMT",
+      "_latest_version": 3,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "5a9efc38099c2ccedafaade9f03edf9466d8cc80",
+      "_version": 3,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.0-beta2",
+        "name": "cu_digital_campaign_bundle",
+        "label": "Digital Campaign Bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5994acd7926f5b431c2865ce",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-16 20:36:39 GMT",
+      "_id": "5994acd7926f5b431c2865ce",
+      "_etag": "fdc8019fd952114ac918a43302137da58334b50c",
+      "git_url": "git@github.com:CuBoulder/cu_digital_campaign_bundle.git"
+    },
+    {
+      "_updated": "2017-08-21 21:27:49 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "3ab4e6d41cd30b335ecda27765f2ff54d32c205f",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "theme",
+        "version": "7.x-1.1",
+        "label": "Chancellor Theme",
+        "tag": [
+          "admin_bundles"
+        ],
+        "is_current": true,
+        "name": "express_chancellor_themes"
+      },
+      "_links": {
+        "self": {
+          "href": "code/599b5056926f5b52a9905686",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-21 21:27:49 GMT",
+      "_id": "599b5056926f5b52a9905686",
+      "_etag": "4330f15a4db0cb65dc7df3bb4e563aff5c2f697b",
+      "git_url": "git@github.com:CuBoulder/express_chancellor_themes.git"
+    },
+    {
+      "_updated": "2017-08-21 21:37:37 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "c4478db6f76707d2c02cd1ac6093a67f0f3c23f2",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "label": "Query Reduction Bundle",
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_query_reduction_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/599b52a1926f5b52ab669954",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-21 21:37:37 GMT",
+      "_id": "599b52a1926f5b52ab669954",
+      "_etag": "5bbc328871f68c6747f7530eb2c22632a6a9437c",
+      "git_url": "git@github.com:CuBoulder/cu_query_reduction_bundle.git"
+    },
+    {
+      "_updated": "2017-08-29 14:09:03 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "c2cd2d7a6cd56d5a96a3263bd0153150c893deab",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "label": "Homepage2017 Theme",
+        "code_type": "theme",
+        "is_current": true,
+        "version": "7.x-1.3",
+        "name": "homepage2017_theme"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59a57587926f5b0ebd253a07",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-29 14:09:03 GMT",
+      "_id": "59a57587926f5b0ebd253a07",
+      "_etag": "a743b1e62cf9b1b40675f4699fa569859b598e65",
+      "git_url": "git@github.com:CuBoulder/homepage2017_theme.git"
+    },
+    {
+      "_updated": "2017-12-05 22:19:43 GMT",
+      "_latest_version": 5,
+      "modified_by": "kere7580",
+      "commit_hash": "ef5c0795ed74900650da5524391bcdbd8ca71fc2",
+      "_version": 5,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.3",
+        "label": "Collections",
+        "tag": [
+          [
+            "addon_bundles"
+          ]
+        ],
+        "is_current": true,
+        "name": "express_collections_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59a59a74926f5b0df3fa64f8",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-29 16:46:32 GMT",
+      "_id": "59a59a74926f5b0df3fa64f8",
+      "_etag": "feea536ebb1ad7aeb46cbac70cff5b4289fad502",
+      "git_url": "git@github.com:CuBoulder/express_collections_bundle.git"
+    },
+    {
+      "_updated": "2017-08-29 21:29:10 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "5c0442484a5b525a0559e17355383c4f46a3d71a",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "label": "Campus News",
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.1",
+        "name": "cu_campus_news_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59a5dca9926f5b69578accd6",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-29 21:29:10 GMT",
+      "_id": "59a5dca9926f5b69578accd6",
+      "_etag": "97a8a0eef8f7889e057bf1b03390a80b622b1cfe",
+      "git_url": "git@github.com:CuBoulder/cu_campus_news_bundle.git"
+    },
+    {
+      "_updated": "2017-08-30 14:54:22 GMT",
+      "_latest_version": 2,
+      "modified_by": "crafts",
+      "commit_hash": "1224cf19452a1ecb213299f32a13d5e2c9f00581",
+      "_version": 2,
+      "created_by": "crafts",
+      "meta": {
+        "label": "Express Libraries",
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.1",
+        "name": "express_culibraries"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59a6d00a926f5b512bfb9850",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-08-30 14:47:36 GMT",
+      "_id": "59a6d00a926f5b512bfb9850",
+      "_etag": "45b321fbc65c3a61dcae324132c0ee58c9996644",
+      "git_url": "git@github.com:CuBoulder/express_culibraries.git"
+    },
+    {
+      "_updated": "2017-10-12 13:52:40 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "e5fd7bb1a2e0d7ec70442afaed6f17be5ed59b10",
+      "_version": 2,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "profile",
+        "is_current": false,
+        "version": "2.6.3",
+        "name": "express",
+        "label": "Express"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59b8882b926f5b0ac91f6be0",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-09-13 01:21:46 GMT",
+      "_id": "59b8882b926f5b0ac91f6be0",
+      "_etag": "dc30befad7afd88cbc56b0762982a5dc45f2e340",
+      "git_url": "git@github.com:CuBoulder/express.git"
+    },
+    {
+      "_updated": "2017-09-20 16:52:58 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "b93097566002a3dfc29768e856d0411bb166863b",
+      "_version": 2,
+      "created_by": "alfi2595",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.2",
+        "name": "cu_digital_campaign_bundle",
+        "label": "Digital Campaign Bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59bc545b926f5b527b041110",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-09-15 22:29:44 GMT",
+      "_id": "59bc545b926f5b527b041110",
+      "_etag": "29dcc7354f58183c481390684678817454c3f23e",
+      "git_url": "git@github.com:CuBoulder/cu_digital_campaign_bundle.git"
+    },
+    {
+      "_updated": "2017-10-11 15:26:48 GMT",
+      "_latest_version": 3,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "b12ae9e7e398ac18279b4766c72539b95e7fb8e5",
+      "_version": 3,
+      "created_by": "alfi2595",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.3",
+        "label": "Digital Campaign",
+        "tag": [
+          "beta_bundles"
+        ],
+        "is_current": false,
+        "name": "cu_digital_campaign_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59c29cea926f5b2f68aa3a58",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-09-20 16:52:57 GMT",
+      "_id": "59c29cea926f5b2f68aa3a58",
+      "_etag": "6faeb75cd276e4870917c64421c1ac57b793be14",
+      "git_url": "git@github.com:CuBoulder/cu_digital_campaign_bundle.git"
+    },
+    {
+      "_updated": "2017-10-11 15:26:46 GMT",
+      "_latest_version": 3,
+      "modified_by": "alfi2595",
+      "commit_hash": "01df5d5fdb07f7395aeff131a55d49bcc7426555",
+      "_version": 3,
+      "created_by": "alfi2595",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.4",
+        "label": "Digital Campaign",
+        "tag": [
+          [
+            [
+              "beta_bundles"
+            ]
+          ]
+        ],
+        "is_current": true,
+        "name": "cu_digital_campaign_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59c3debb926f5b516f7e39bd",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-09-21 15:46:02 GMT",
+      "_id": "59c3debb926f5b516f7e39bd",
+      "_etag": "88be425bfa7690017355b2705cdd8b3b4f631487",
+      "git_url": "git@github.com:CuBoulder/cu_digital_campaign_bundle.git"
+    },
+    {
+      "_updated": "2017-09-27 18:59:44 GMT",
+      "_latest_version": 2,
+      "modified_by": "kere7580",
+      "commit_hash": "bd711420d750e4bebd02bb1c8a4c70428c2db351",
+      "_version": 2,
+      "created_by": "kere7580",
+      "meta": {
+        "label": "Google CSE Admin",
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.0",
+        "name": "cu_google_cse_admin_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59c52a02926f5b257b9b67a2",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-09-22 15:19:30 GMT",
+      "_id": "59c52a02926f5b257b9b67a2",
+      "_etag": "36e871cd86ee790f22025bd29ea19438b3bc03fc",
+      "git_url": "git@github.com:CuBoulder/cu_google_cse_admin_bundle.git"
+    },
+    {
+      "_updated": "2017-10-06 17:03:08 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "45f81b960beac85489bd58c99d9f05999ad5fcf0",
+      "_version": 2,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "is_current": false,
+        "version": "7.x-1.4.3",
+        "name": "cu_video_hero_unit_bundle",
+        "label": "Video Hero Unit"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59c91a40926f5b274b111875",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-09-25 15:01:17 GMT",
+      "_id": "59c91a40926f5b274b111875",
+      "_etag": "1173a5edcfee0f87c3480c598147c5951a21f337",
+      "git_url": "git@github.com:CuBoulder/cu_video_hero_unit_bundle.git"
+    },
+    {
+      "_updated": "2017-09-27 18:34:13 GMT",
+      "_latest_version": 3,
+      "modified_by": "owmo7772",
+      "commit_hash": "3fa74bf0528109066843942b7a9343b369f5ddcb",
+      "_version": 3,
+      "created_by": "owmo7772",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.x",
+        "label": "Crowdfunding",
+        "tag": [],
+        "is_current": true,
+        "name": "custom_crowdfunding_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59c91ce3926f5b1441c6f5ad",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-09-25 15:12:34 GMT",
+      "_id": "59c91ce3926f5b1441c6f5ad",
+      "_etag": "23488af7bbf4f53ad48c5355900978d51bc99092",
+      "git_url": "git@github.com:CuBoulder/custom_crowdfunding_bundle.git"
+    },
+    {
+      "_updated": "2017-10-05 19:48:06 GMT",
+      "_latest_version": 1,
+      "modified_by": "kere7580",
+      "commit_hash": "75123475869b6e9a15701d02c8e766686bed85fd",
+      "_version": 1,
+      "created_by": "kere7580",
+      "meta": {
+        "label": "Custom Homepage",
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.2",
+        "name": "express_homepage"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59d68c78926f5b501c62bd2c",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-10-05 19:48:06 GMT",
+      "_id": "59d68c78926f5b501c62bd2c",
+      "_etag": "8c4e8d0f8a09206c7fa7111bd5c8c163dce51940",
+      "git_url": "git@github.com:CuBoulder/express_homepage.git"
+    },
+    {
+      "_updated": "2017-10-05 20:04:40 GMT",
+      "_latest_version": 1,
+      "modified_by": "kere7580",
+      "commit_hash": "abf06911789ba8043d6b610cb5e9baad1c4e5cb4",
+      "_version": 1,
+      "created_by": "kere7580",
+      "meta": {
+        "label": "Express",
+        "code_type": "profile",
+        "is_current": false,
+        "version": "2.6.4",
+        "name": "express"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59d69058926f5b47f9f69c63",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-10-05 20:04:40 GMT",
+      "_id": "59d69058926f5b47f9f69c63",
+      "_etag": "f91f1908ecca2426eb7c0ef458a51172e014ea7f",
+      "git_url": "git@github.com:CuBoulder/express.git"
+    },
+    {
+      "_updated": "2017-10-06 17:03:07 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "975427decde3e94b6482de3be4938f563c7f8770",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "label": "Video Hero Unit",
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.5",
+        "name": "cu_video_hero_unit_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59d7b74d926f5b4cbb463831",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-10-06 17:03:07 GMT",
+      "_id": "59d7b74d926f5b4cbb463831",
+      "_etag": "25be8f29174229b9404fc1c12159c2f9de173b39",
+      "git_url": "git@github.com:CuBoulder/cu_video_hero_unit_bundle.git"
+    },
+    {
+      "_updated": "2017-10-18 15:19:47 GMT",
+      "_latest_version": 2,
+      "modified_by": "osr_atlas_client",
+      "_version": 2,
+      "created_by": "jafu6031",
+      "git_url": "git@github.com:CuBoulder/express.git",
+      "meta": {
+        "label": "Express",
+        "code_type": "profile",
+        "is_current": false,
+        "version": "2.6.5",
+        "name": "express"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59df73a8926f5b15406d1552",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-10-12 13:52:39 GMT",
+      "_id": "59df73a8926f5b15406d1552",
+      "_etag": "b8543d73ffdb51390e1a31485c272072408d3943",
+      "commit_hash": "89f45e581b43a2de0c2cafd6ce4a01cdde97d3c0"
+    },
+    {
+      "_updated": "2017-11-08 20:00:14 GMT",
+      "_latest_version": 4,
+      "modified_by": "osr_atlas_client",
+      "_version": 4,
+      "created_by": "jafu6031",
+      "git_url": "git@github.com:CuBoulder/express.git",
+      "meta": {
+        "code_type": "profile",
+        "is_current": false,
+        "version": "2.7.0",
+        "name": "express",
+        "label": "Express"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59df80a1926f5b16e37a9633",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-10-12 14:48:01 GMT",
+      "_id": "59df80a1926f5b16e37a9633",
+      "_etag": "c362795d4808cda9bcc4d0b9efe794c3d69147d5",
+      "commit_hash": "c3b2f8d8990c317591a6348f4cc3bc568c93f535"
+    },
+    {
+      "_updated": "2017-12-14 17:01:39 GMT",
+      "_latest_version": 5,
+      "modified_by": "osr_atlas_client",
+      "commit_hash": "850a00389ba13d267aa1b0f2ae80bec070db42ee",
+      "_version": 5,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "profile",
+        "version": "2.8.0",
+        "label": "Express",
+        "tag": [
+          [
+            null
+          ]
+        ],
+        "is_current": false,
+        "name": "express"
+      },
+      "_links": {
+        "self": {
+          "href": "code/59e76f05926f5b39a44ab346",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-10-18 15:11:00 GMT",
+      "_id": "59e76f05926f5b39a44ab346",
+      "_etag": "4086e0e2a2040b36ca9cfc8adc5ededcecd08712",
+      "git_url": "git@github.com:CuBoulder/express.git"
+    },
+    {
+      "_updated": "2017-11-09 18:19:25 GMT",
+      "_latest_version": 1,
+      "modified_by": "jafu6031",
+      "_version": 1,
+      "created_by": "jafu6031",
+      "git_url": "git@github.com:CuBoulder/cu_advanced_article_bundle.git",
+      "meta": {
+        "code_type": "module",
+        "is_current": true,
+        "version": "7.x-1.1",
+        "name": "cu_advanced_article_bundle",
+        "label": "Advanced Article Bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5a049c2d926f5b7a512fc9b2",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-11-09 18:19:25 GMT",
+      "_id": "5a049c2d926f5b7a512fc9b2",
+      "_etag": "9657073ad9c335e428cb26f19ca952e99b715611",
+      "commit_hash": "b0ab688809b2933e1556f0f51ec69884198441ed"
+    },
+    {
+      "_updated": "2017-11-14 23:35:37 GMT",
+      "_latest_version": 1,
+      "modified_by": "crafts",
+      "commit_hash": "4d761611825195afc12c3459a219b892ae0d0ac8",
+      "_version": 1,
+      "created_by": "crafts",
+      "meta": {
+        "label": "Drupal-7.56",
+        "code_type": "core",
+        "is_current": true,
+        "version": "7.56",
+        "name": "drupal-7.56"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5a0b7dc9926f5b3fe0641dc1",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-11-14 23:35:37 GMT",
+      "_id": "5a0b7dc9926f5b3fe0641dc1",
+      "_etag": "f8ef81f479985a65a8badf17d0f6acaa3a4ab3a8",
+      "git_url": "git@github.com:CuBoulder/drupal-7.x.git"
+    },
+    {
+      "_updated": "2017-11-28 16:21:05 GMT",
+      "_latest_version": 2,
+      "modified_by": "crafts",
+      "commit_hash": "eb78b8d9b2bbb907ddf285067a0e8a71a976a493",
+      "_version": 2,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.0-beta1",
+        "label": "Section Page",
+        "tag": [
+          "admin_bundles"
+        ],
+        "is_current": true,
+        "name": "cu_section_page_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5a1d8c7d926f5b102cbe3939",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-11-28 16:19:09 GMT",
+      "_id": "5a1d8c7d926f5b102cbe3939",
+      "_etag": "46c5a46b02158198a3a56a32f11cc54740f7a692",
+      "git_url": "git@github.com:CuBoulder/cu_section_page_bundle.git"
+    },
+    {
+      "_updated": "2017-12-06 23:35:06 GMT",
+      "_latest_version": 5,
+      "modified_by": "crafts",
+      "commit_hash": "0b5d5d828b250fa40af8276f709ffbb03117dff6",
+      "_version": 5,
+      "created_by": "crafts",
+      "meta": {
+        "code_type": "module",
+        "version": "7.x-1.4",
+        "label": "Localist Events",
+        "tag": [
+          "addon_bundles"
+        ],
+        "is_current": true,
+        "name": "express_localist_bundle"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5a1dd6ea926f5b102b05b134",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-11-28 21:36:42 GMT",
+      "_id": "5a1dd6ea926f5b102b05b134",
+      "_etag": "fc905d7a9e3cc3140bec75db25fc58cc76d8c766",
+      "git_url": "git@github.com:CuBoulder/express_localist_bundle.git"
+    },
+    {
+      "_updated": "2017-12-14 17:01:38 GMT",
+      "_latest_version": 1,
+      "modified_by": "kere7580",
+      "commit_hash": "fb92385bf7eb05d0924ea07410cf8dc5c9a15da5",
+      "_version": 1,
+      "created_by": "kere7580",
+      "meta": {
+        "code_type": "profile",
+        "version": "2.8.1",
+        "label": "Express",
+        "tag": [
+          "beta_bundle"
+        ],
+        "is_current": true,
+        "name": "express"
+      },
+      "_links": {
+        "self": {
+          "href": "code/5a32ae73926f5b102cbe5bb3",
+          "title": "code"
+        }
+      },
+      "_deleted": false,
+      "_created": "2017-12-14 17:01:38 GMT",
+      "_id": "5a32ae73926f5b102cbe5bb3",
+      "_etag": "de782819b637129821f4fc1f76c3356f8372c5d5",
+      "git_url": "git@github.com:CuBoulder/express.git"
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "code",
+      "title": "code"
+    },
+    "parent": {
+      "href": "/",
+      "title": "home"
+    }
+  },
+  "_meta": {
+    "max_results": 500,
+    "total": 116,
+    "page": 1
+  }
+}

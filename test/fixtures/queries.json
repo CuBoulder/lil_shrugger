@@ -1,0 +1,461 @@
+{
+  "_items": [
+    {
+      "_updated": "2017-09-22 20:21:46 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "All sites that have errors on their status report including installed.",
+      "tags": [
+        "maintenance"
+      ],
+      "title": "Sites Status",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59c570da926f5b1441c6f494",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-22 20:21:46 GMT",
+      "query": "{\"drupal_system_status\":true}",
+      "_id": "59c570da926f5b1441c6f494",
+      "_etag": "a1d1080fef9b0b1a4e65ff7428958056e6b9f892"
+    },
+    {
+      "_updated": "2017-09-26 16:30:31 GMT",
+      "_latest_version": 2,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Sites with cu_form_bundle enabled that have no webforms.",
+      "tags": [
+        "webform"
+      ],
+      "title": "Forms Bundle Enabled - No Webforms ",
+      "_version": 2,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca7eb1926f5b379ea548e7",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:22:09 GMT",
+      "query": "{\"bundles.cu_forms_bundle\":{\"$exists\":true},\"nodes_by_type.webform\":{\"$exists\":false}}",
+      "_id": "59ca7eb1926f5b379ea548e7",
+      "_etag": "8c2339f3cd820b1994a2360032dff6a6666adfcc"
+    },
+    {
+      "_updated": "2017-09-26 16:25:23 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Sites w/ > 500 nodes and no custom UA code",
+      "tags": [
+        "analytics"
+      ],
+      "title": "Greater Than 500 Nodes - No Custom GA Code",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca7f73926f5b274d1b71aa",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:25:23 GMT",
+      "query": "{\"variable_ga_account\":null,\"nodes_total\":{\"$gt\":200}}",
+      "_id": "59ca7f73926f5b274d1b71aa",
+      "_etag": "8e754498d402c81f5d0da8154c483a09d332a75b"
+    },
+    {
+      "_updated": "2017-09-26 16:33:42 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "",
+      "tags": [
+        "features"
+      ],
+      "title": "Overridden Features",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca8166926f5b4ebf6bdb3c",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:33:42 GMT",
+      "query": "{\"overridden_features\":{\"$exists\":true}}",
+      "_id": "59ca8166926f5b4ebf6bdb3c",
+      "_etag": "1db39318d331d5b8f8bf19ee2a8a618dcf34d250"
+    },
+    {
+      "_updated": "2017-09-26 16:35:14 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Sites with cu_events_bundle enabled that have no calendar blocks.",
+      "tags": [
+        "events"
+      ],
+      "title": "Events Bundle Enabled -  No Events Block",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca81c2926f5b4756e5c5a5",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:35:14 GMT",
+      "query": "{\"bundles.cu_events_bundle\":{\"$exists\":true},\"beans_by_type.cu_events_calendar_block\":{\"$exists\":false}}",
+      "_id": "59ca81c2926f5b4756e5c5a5",
+      "_etag": "cd4115248f6e0199c21c96bd289f2b0ad252967c"
+    },
+    {
+      "_updated": "2017-09-26 16:36:52 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "",
+      "tags": [
+        "archiving"
+      ],
+      "title": "No Edits For 90 Days - Less Than 2 Nodes",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca8224926f5b379ea548e9",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:36:52 GMT",
+      "query": "{\"days_since_last_edit\":{\"$gt\":90},\"nodes_total\":{\"$lt\":2}}",
+      "_id": "59ca8224926f5b379ea548e9",
+      "_etag": "055f5778693873d5862e697b7fa9278549396f43"
+    },
+    {
+      "_updated": "2017-09-26 16:40:22 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Social Media - Sites Running Bundle w/o Social Links, Twitter, Facebook Blocks",
+      "tags": [
+        "social_media"
+      ],
+      "title": "Social Media Bundle Enabled - No Social Links",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca82f6926f5b3796e074e3",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:40:22 GMT",
+      "query": "{\"bundles.cu_social_media_bundle.schema_version\":{\"$ne\":null},\"beans_by_type.facebook_like_button\":{\"$exists\":false},\"beans_by_type.twitter_block\":{\"$exists\":false},\"beans_by_type.social_links\":{\"$exists\":false},\"beans_by_type.facebook_activity\":{\"$exists\":false}}",
+      "_id": "59ca82f6926f5b3796e074e3",
+      "_etag": "688a9cbffe0b98b205da201859ca548b20c034d7"
+    },
+    {
+      "_updated": "2017-09-26 16:43:28 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Sites with more than 10 Quicktabs on them",
+      "tags": [
+        "quicktabs"
+      ],
+      "title": "More Than 10 Quicktabs",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca83b0926f5b4ebf6bdb3e",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:43:28 GMT",
+      "query": "{\"beans_by_type.quicktab\":{\"$gt\":10}}",
+      "_id": "59ca83b0926f5b4ebf6bdb3e",
+      "_etag": "38afe238f1aa35281a34e62cc7e07b565a28ffdb"
+    },
+    {
+      "_updated": "2017-09-26 16:44:58 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Sites that don't have an Express version in stats",
+      "tags": [
+        "express"
+      ],
+      "title": "No Version For Express",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca840a926f5b379ea548eb",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:44:58 GMT",
+      "query": "{\"express_code_version\":{\"$exists\":false}}",
+      "_id": "59ca840a926f5b379ea548eb",
+      "_etag": "55aa890f4e2f2453044217b264e9212bfbda7414"
+    },
+    {
+      "_updated": "2017-09-26 16:46:55 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Archiving - Sites with no edits in > 1 year",
+      "tags": [
+        "archiving"
+      ],
+      "title": "No Edits For More Than 1 Year",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca847f926f5b4ebf6bdb40",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:46:55 GMT",
+      "query": "{\"days_since_last_edit\":{\"$gt\":365}}",
+      "_id": "59ca847f926f5b4ebf6bdb40",
+      "_etag": "0fe95534833026211f04a7a1f9715725236a110a"
+    },
+    {
+      "_updated": "2017-09-26 16:48:18 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Sites - > 1000 nodes",
+      "tags": [
+        "performance"
+      ],
+      "title": "Greater Than 1000 Nodes",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca84d2926f5b4756e5c5a7",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:48:18 GMT",
+      "query": "{\"nodes_total\":{\"$gt\":1000}}",
+      "_id": "59ca84d2926f5b4756e5c5a7",
+      "_etag": "8b41fcbfad2b81da6d96ce24ec34bd1e72e404fc"
+    },
+    {
+      "_updated": "2017-09-26 16:50:34 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Sites - < 10 nodes",
+      "tags": [
+        "performance"
+      ],
+      "title": "Less Than 10 Nodes",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca855a926f5b257b9b68df",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 16:50:34 GMT",
+      "query": "{\"nodes_total\":{\"$lt\":10}}",
+      "_id": "59ca855a926f5b257b9b68df",
+      "_etag": "07d7c0697a06a3cd10b1feb37777669ccb17d8b0"
+    },
+    {
+      "_updated": "2017-09-26 17:13:56 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "Photo Gallery - at least 1 Photo Gallery node",
+      "tags": [
+        "photo_gallery"
+      ],
+      "title": "Photo Gallery Bundle Enabled - At Least 1 Gallery Node",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ca8ad4926f5b4ebf6bdb42",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-09-26 17:13:56 GMT",
+      "query": "{\"nodes_by_type.photo_gallery\":{\"$ne\":null}}",
+      "_id": "59ca8ad4926f5b4ebf6bdb42",
+      "_etag": "34b97b5d16c1c5486f236877c8a944ea54904fb2"
+    },
+    {
+      "_updated": "2017-10-23 21:31:05 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "",
+      "tags": [
+        "events"
+      ],
+      "title": "Events Bundle Enabled - More Than One Block",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ee5f99926f5b57df8b827b",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-10-23 21:31:05 GMT",
+      "query": "{\"bundles.cu_events_bundle\":{\"$exists\":true},\"beans_by_type.cu_events_calendar_block\":{\"$exists\":true}}",
+      "_id": "59ee5f99926f5b57df8b827b",
+      "_etag": "f77eba935352f41ad66d08d28cac5dc4e9e66283"
+    },
+    {
+      "_updated": "2017-10-23 21:39:43 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "alfi2595",
+      "description": "",
+      "tags": [
+        "edits"
+      ],
+      "title": "No Edits For 30 Days - Installed Sites",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/59ee619f926f5b59c35b8c06",
+          "title": "query"
+        }
+      },
+      "created_by": "alfi2595",
+      "_created": "2017-10-23 21:39:43 GMT",
+      "query": "{\"days_since_last_edit\":{\"$gte\":30},\"status\":{\"$in\":[\"installed\"]}}",
+      "_id": "59ee619f926f5b59c35b8c06",
+      "_etag": "4306853c6aa756431309e07d20c01adf93952192"
+    },
+    {
+      "_updated": "2017-11-16 22:30:14 GMT",
+      "_latest_version": 2,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "kere7580",
+      "description": "",
+      "tags": [
+        ""
+      ],
+      "title": "SEO Bundles",
+      "_version": 2,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/5a0e10fa926f5b102cbe21cd",
+          "title": "query"
+        }
+      },
+      "created_by": "kere7580",
+      "_created": "2017-11-16 22:28:10 GMT",
+      "query": "{\"bundles.cu_seo_bundle.schema_version\":7002,\"status\":\"launched\"}",
+      "_id": "5a0e10fa926f5b102cbe21cd",
+      "_etag": "71c203d701f687e523b99a3b3b625ae3c9dd5e09"
+    },
+    {
+      "_updated": "2017-11-29 19:03:01 GMT",
+      "_latest_version": 1,
+      "endpoint": [
+        "statistic"
+      ],
+      "modified_by": "kere7580",
+      "description": "",
+      "tags": [
+        ""
+      ],
+      "title": "Events Bundle Enabled - More Than 5 blocks",
+      "_version": 1,
+      "rank": 1,
+      "_links": {
+        "self": {
+          "href": "query/5a1f0465926f5b102b05b36f",
+          "title": "query"
+        }
+      },
+      "created_by": "kere7580",
+      "_created": "2017-11-29 19:03:01 GMT",
+      "query": "{\"bundles.cu_events_bundle\":{\"$exists\":true},\"beans_by_type.cu_events_calendar_block\":{\"$gt\":5}}",
+      "_id": "5a1f0465926f5b102b05b36f",
+      "_etag": "b8b205ea145dc9f4c7b49e1997760c82264ca967"
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "query",
+      "title": "query"
+    },
+    "parent": {
+      "href": "/",
+      "title": "home"
+    }
+  },
+  "_meta": {
+    "max_results": 500,
+    "total": 17,
+    "page": 1
+  }
+}

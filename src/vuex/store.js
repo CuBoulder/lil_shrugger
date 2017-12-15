@@ -31,6 +31,9 @@ export default new Vuex.Store({
     codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
     commands: [],
     currentQuery: null,
+    defaultSitesQuery: '?where={"type":"express"}',
+    defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages'],
+    defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
     editContent: {},
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     expressEnvironments: {

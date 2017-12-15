@@ -77,14 +77,9 @@
 </template>
 
 <script>
-  import Vue from 'vue';
   import shrugger from '../js/shrugger';
   import store from '../vuex/store';
   import bus from '../js/bus';
-  import MessageArea from '../components/MessageArea';
-
-  // We need to add the component namespace for the template to recognize it.
-  Vue.component('message-area', MessageArea);
 
   export default {
     name: 'Settings',
@@ -97,11 +92,11 @@
           username: localStorage.getItem('github-username') ? localStorage.getItem('github-username') : '',
           token: localStorage.getItem('github-token') ? localStorage.getItem('github-token') : '',
         },
-        sitesQuery: localStorage.getItem('sites-query') ? localStorage.getItem('sites-query') : '?where={"type":"express"}',
+        sitesQuery: localStorage.getItem('sites-query') ? localStorage.getItem('sites-query') : store.state.defaultSitesQuery,
         codeQuery: localStorage.getItem('code-query') ? localStorage.getItem('code-query') : '',
         repoListing: localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false,
-        saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : ['id', 'path', 'status', 'core', 'profile', 'packages'],
-        saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash'],
+        saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys,
+        saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.defaultSelectedCodeKeys,
         saveStatsKeys: localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [],
       };
     },
