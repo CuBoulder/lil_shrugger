@@ -11,7 +11,7 @@ export default {
    *
    * @param envURL
    */
-  getStatsRecords(siteRecords, envURL = null) {
+  get(siteRecords, envURL = null) {
     // If no environment passed in, then get from local storage.
     if (envURL === null) {
       envURL = store.state.atlasEnvironments[store.state.env];
