@@ -1,5 +1,3 @@
-{
-  "_items": [
     {
       "_updated": "2017-02-02 21:35:27 GMT",
       "_latest_version": 6,
@@ -120,12 +118,12 @@
       "_etag": "fed43a5acd75635deec84b428d131aca791b324d"
     },
     {
-      "_updated": "2017-12-13 18:48:47 GMT",
-      "_latest_version": 97,
+      "_updated": "2017-12-28 16:58:59 GMT",
+      "_latest_version": 99,
       "modified_by": "kere7580",
       "name": "run atlas stats",
       "single_server": true,
-      "_version": 97,
+      "_version": 99,
       "created_by": "jafu6031",
       "_links": {
         "self": {
@@ -134,10 +132,10 @@
         }
       },
       "command": "drush core-requirements --severity=2; sudo -u apache drush atst",
-      "query": "{\"path\":{\"$in\":[\"p1f1cc8c5632\",\"studentgroups/asa\",\"metameta\",\"even\",\"degreeinthree\",\"bold\",\"firesurvey\",\"ideaforge\",\"lab/bachtell\",\"ecc\",\"reportit\",\"chancellor\",\"music\",\"webcentral\",\"researchinnovation\",\"coloradoconsortium\",\"move-in\",\"studentgroups/economicsclub\",\"lab/jonasgroup\",\"globalbrigades\",\"business\",\"crowdfunding\",\"today\",\"summer\",\"p16ecc285177\",\"alumni\",\"p120e9f2619c\",\"p1de5c599c9a\",\"studentgroups/international\",\"p16fe034f8f9\",\"atlas\"]}}",
+      "query": "{\"path\":{\"$in\":[\"crowdfunding\"]}}",
       "_created": "2017-06-02 15:49:30 GMT",
       "_id": "5931890a926f5b6713b49a3c",
-      "_etag": "c6e5fe84d6c9f0aff923e790eb3050dea26fb051"
+      "_etag": "bdc2c7587fd7ea1775f2b775fca7670788871e01"
     },
     {
       "_updated": "2017-12-12 17:07:56 GMT",
@@ -179,12 +177,12 @@
       "_etag": "59a83d55d127697728662bbac3b821811795b7ea"
     },
     {
-      "_updated": "2017-12-12 15:44:55 GMT",
-      "_latest_version": 9,
+      "_updated": "2018-01-03 16:14:53 GMT",
+      "_latest_version": 12,
       "modified_by": "kere7580",
       "name": "Module Missing Message Fixer",
       "single_server": true,
-      "_version": 9,
+      "_version": 12,
       "created_by": "kere7580",
       "_links": {
         "self": {
@@ -193,10 +191,10 @@
         }
       },
       "command": "drush en module_missing_message_fixer -y; sudo -u apache drush mmmff --all; sudo -u apache  drush dis module_missing_message_fixer -y",
-      "query": "{\"path\":{\"$in\":[\"rha\",\"p1cc1670bfd9\",\"pendulum-new-music\",\"hr\",\"webcentral\",\"cmci\",\"asmagazine\",\"wgst\",\"commrap\",\"orientation\",\"registrar\",\"geography\",\"studentgroups/bmes\",\"spaceweather\"]}}",
+      "query": "{\"path\":{\"$in\":[\"degreeinthree\"]}}",
       "_created": "2017-07-24 22:12:27 GMT",
       "_id": "597670cb926f5b7558505359",
-      "_etag": "a4a27d47a2b5bde8dd3ae81e17ae2e01fc1bc1a9"
+      "_etag": "678f0520e77db16e9463bce0c2838bd6982d8f18"
     },
     {
       "_updated": "2017-11-30 22:10:29 GMT",
@@ -239,12 +237,12 @@
       "_etag": "7a8f7051a747ff9bec20a4778f840d5befd2eaf2"
     },
     {
-      "_updated": "2017-12-14 18:26:18 GMT",
-      "_latest_version": 5,
+      "_updated": "2017-12-22 20:17:35 GMT",
+      "_latest_version": 6,
       "modified_by": "kere7580",
       "name": "ATLAS - Clear PHP Cache",
       "single_server": false,
-      "_version": 5,
+      "_version": 6,
       "created_by": "kere7580",
       "_links": {
         "self": {
@@ -253,10 +251,10 @@
         }
       },
       "command": "clear_php_cache",
-      "query": "{\"path\":{\"$in\":[\"law\"]}}",
+      "query": "{\"path\":{\"$in\":[\"\"]}}",
       "_created": "2017-12-06 20:37:24 GMT",
       "_id": "5a285504926f5b102b05c1dd",
-      "_etag": "7a6d2e8618cc30129edeef40246e8fe37e009a55"
+      "_etag": "30ab55eaadb794f5a37c2c25781c274908bdc986"
     },
     {
       "_updated": "2017-12-11 23:40:47 GMT",
@@ -317,21 +315,64 @@
       "_created": "2017-12-12 16:02:47 GMT",
       "_id": "5a2ffda7926f5b102b05cf7c",
       "_etag": "8b556b93754605c27b00357fbc570a30df5dd233"
-    }
-  ],
-  "_links": {
-    "self": {
-      "href": "commands",
-      "title": "commands"
     },
-    "parent": {
-      "href": "/",
-      "title": "home"
+    {
+      "_updated": "2018-01-05 18:06:37 GMT",
+      "_latest_version": 2,
+      "modified_by": "kere7580",
+      "name": "DRUSH - Login Lockout",
+      "single_server": true,
+      "_version": 2,
+      "created_by": "kere7580",
+      "_links": {
+        "self": {
+          "href": "commands/5a4fbab5926f5b102b060297",
+          "title": "commands"
+        }
+      },
+      "command": "drush vset login_lockout FALSE",
+      "query": "{\"path\":{\"$in\":[\"techtalks\",\"ptea-curriculum\",\"p10226ef0d50\",\"designforamerica\",\"p1bd7f24600a\",\"cs\",\"p13ce5a0447e\",\"p1090559dfbd\",\"p1960537bcd7\",\"p17e3b273f9d\",\"lab/han\",\"lab/chapl\",\"p161838dffeb\",\"p1bdafcfa641\",\"p174d76e1186\",\"p10c70f5107e\",\"p19a9d2021a6\",\"asfacultystaff\",\"p1ce4f96751f\",\"neuroscience\",\"p161b7d7b156\",\"faculty/hall-kira\",\"p105c6cb9d86\",\"p11fb41d7646\",\"p1442bf9c4f5\",\"p1ddcc10dc1a\",\"p1250d969a31\",\"lab/medlin\",\"campusplanning\",\"p1bfdf2f0e6f\",\"p1d6ac0e7183\",\"faculty/anderson\",\"p10a96d18b84\",\"p1a140aa1f8e\",\"p173976b7cdd\",\"neuromechanics\",\"studentaffairs\",\"p1f33b9d4fdb\",\"p1c7b7faf2f0\",\"lab/sousa\",\"fm\",\"p15a75c78bd6\",\"chbe\",\"studentgroups/appmurj\",\"washsymposium\",\"per\",\"earthlab\",\"computerengineering\",\"herbst\",\"faculty/nakassis\",\"engineering-facultystaff\",\"historyadvising\",\"course-sites/libb/2500\",\"postdoctoralaffairs\",\"pesforum\",\"lab/vance\",\"envd\",\"student-success-office\",\"faculty/frajzyngier\",\"dynamicscontrols\",\"cej\",\"ibg\",\"lightingprogram\",\"mechanical\",\"fmenergy\",\"nvc\",\"fmgreen\",\"opticsnanobio\",\"faculty/fox-barbara\",\"conference/rmihc\",\"hr\",\"engineeringgraduatestudies\",\"faculty/hernandez\",\"coloradan\",\"cuengineering\",\"connect\",\"webcentral\",\"researchinnovation\",\"asmagazine\",\"biden\",\"aerospace\",\"cwest\",\"cnais\",\"pacs\",\"controller\",\"faculty/cowell-andrew\",\"powerelectronics\",\"ceae\",\"ecee\",\"cognitive-psychology\",\"sportsclub/tennis\",\"lab/lisa\",\"artsandsciences\",\"lab/rockpoweredlife\",\"lab/krauter\",\"stampede\",\"faculty/bowers-john\",\"course-sites/ebio/2040-20\",\"winter\",\"emag-research\",\"communications-data-science\",\"chbecapstonedesign\",\"engineering\",\"lab/labbe\",\"firelifesafety\",\"lab/weimer\",\"commencement\",\"emtnano\",\"english\",\"lab/gpo\",\"recreation\",\"p120e9f2619c\",\"p1c4ec1ab091\",\"p1eb80ebb076\",\"studentgroups/forge\",\"p13c45e852db\",\"p14195d958b5\",\"unified-experience\",\"lab/clear\",\"faculty/summers\",\"p1a3a6929ef7\",\"studentgroups/mobilemakers\",\"ova\",\"p184ae4da57a\",\"p125265f773c\",\"p18e163379db\",\"studentgroups/soc-ee\",\"p14f8cd8f523\",\"p163ce6c1986\",\"p1e03056e5e0\",\"p1edee733272\",\"p10c50be5f55\",\"p1e228e3f981\",\"project/maxwellcubesat\",\"p1d518d955a0\",\"p19ba13cab20\",\"p1f9fe9f1e1e\",\"p180d18fa640\",\"p19af0cc00a2\",\"p103af7ea806\",\"p1d807ba140f\",\"p1e1284d88e4\",\"p14425b15fd5\",\"p1bf79fe51a2\",\"p18b8fcc2c6f\",\"studentgroups/international\",\"p1198848cc19\",\"p1eb32091834\",\"p1f3b4005ec5\",\"p1247c33fd35\",\"p19c592fbc12\",\"p127897192f0\",\"p1b473dd4044\",\"p178f89e6148\",\"atlas\",\"p18910a7eb6b\",\"lab/cao\",\"next\",\"p1fa0dcebb4c\",\"p19263cb715e\",\"innovate\",\"map\",\"p19242bfe63b\",\"p12b7d89fc24\",\"p1c2c8fb540e\",\"p1f663366737\",\"p14df9749aa0\",\"faculty/palmer-martha\",\"p1fb41566c41\",\"p11b79fd5861\",\"p19725a1e198\",\"p11c4a1d94d7\",\"undocumentedstudentresources\",\"p1ebfa22e106\",\"sportsclub/mensclubsoccer\",\"lab/corwin-reach\",\"academicfutures\",\"p112df6c93c2\",\"teaching-quality-framework\",\"p121aa24c9f9\",\"p10404b69a09\",\"programs/socialinnovation\",\"p1b6834199a7\",\"p1a28120f125\",\"p1ea3fec4c8c\",\"p12c9bfe3bde\",\"geirs\",\"p1234d7c1646\",\"p161e007180e\",\"faculty/bierhorst\",\"p10a1339cb4a\",\"p1e56f063027\",\"faculty-staff-engagement\",\"p147f2b8483e\",\"p133d88b7bcf\",\"p10d29228c1e\",\"p167b2f471e8\",\"p14472937cc7\",\"p11c3ce98da3\",\"project/dat\",\"rapflc\",\"p19290fa1b47\",\"event/ippw2018\",\"p1d33f713942\",\"p1f4748552bf\",\"p14c55e14671\",\"p17f71ef71fd\",\"nest\",\"p1fc8d4be792\",\"p19ca991757a\",\"p178dd33b69b\",\"p17954f1d622\",\"irt/mfm\",\"p15a013907aa\",\"p1b17a92c2ab\",\"studentgroups/geographyclub\",\"ombuds\",\"p135ce5b333c\",\"p19baa8b6fed\",\"p18fb82771e5\",\"p185e6de0659\",\"p1b2a0d256b9\",\"cha\",\"p130bd606b3d\",\"p1d6a5214341\",\"p1e1b95d168e\",\"p1074e4430f0\",\"p16ddb65637c\",\"topscholarships\",\"p1675cce8aa1\",\"p11102bbf6dc\",\"p161840eafbc\",\"p14f26774315\",\"p1cda1d548ca\",\"p199b126bcec\",\"p160d89c536c\",\"p1be2b48698a\",\"p13c24872765\",\"p1f66a653a55\",\"p17f1bdbb284\"]}}",
+      "_created": "2018-01-05 17:49:41 GMT",
+      "_id": "5a4fbab5926f5b102b060297",
+      "_etag": "275a32a40bf332d3a9b9412714f04f3e535ca289"
+    },
+    {
+      "_updated": "2018-01-05 18:13:44 GMT",
+      "_latest_version": 8,
+      "modified_by": "kere7580",
+      "name": "DRUSH - Lock Login",
+      "single_server": true,
+      "_version": 8,
+      "created_by": "kere7580",
+      "_links": {
+        "self": {
+          "href": "commands/5a4fbaf5926f5b102cbe8a2e",
+          "title": "commands"
+        }
+      },
+      "command": "drush vset login_lockout TRUE",
+      "query": "{\"path\":{\"$in\":[\"lab/flaxman\",\"p172321138a2\",\"studentgroups/aiche\",\"p1e1d179a32d\",\"macky\",\"mrs\",\"p175661fa9f7\",\"bryantgroup\",\"studentgroups/bitcoin\",\"lab/ceqm\",\"lab/georgegroup\",\"symposium/pegmatite\",\"capital-asset-management\",\"lab/parkergroup\",\"symposium/gearrs\",\"firesurvey\",\"mse\",\"studentgroups/swap\",\"career\",\"bfa\",\"studentgroups/cumocktrial\",\"lab/massspec\",\"libbyrap\",\"lab/wanggroup\",\"linguistics\",\"ics\",\"cubequest\",\"reu-mrs\",\"waterpdsm\",\"lab/dukovicgroup\",\"environmentalprogram\",\"property\",\"veterans\",\"behavioral-genetics\",\"lab/bierbaumgroup\",\"lab/pardigroup\",\"lab/cech\",\"hrap\",\"lab/experimentalaerodynamics\",\"chembio\",\"bowmanlab\",\"fis\",\"srap\",\"envs\",\"emergencymanagement\",\"ctrc\",\"lab/neurodegeneration\",\"faculty/ren\",\"conference/greebs\",\"lab/esc\",\"p1b9e382fb7b\",\"p13cc167d2b0\",\"p1c2371c1320\",\"p15ebb4e260d\"]}}",
+      "_created": "2018-01-05 17:50:45 GMT",
+      "_id": "5a4fbaf5926f5b102cbe8a2e",
+      "_etag": "f480844ba10f704c6f4d06a08c44b52af915f055"
+    },
+    {
+      "_updated": "2018-01-08 19:28:42 GMT",
+      "_latest_version": 7,
+      "modified_by": "kere7580",
+      "name": "TEMP - Enable ng_hosting module",
+      "single_server": true,
+      "_version": 7,
+      "created_by": "kere7580",
+      "_links": {
+        "self": {
+          "href": "commands/5a4fc97e926f5b102cbe8b15",
+          "title": "commands"
+        }
+      },
+      "command": "drush en ng_hosting -y",
+      "query": "{\"path\":{\"$in\":[\"p1f1cc8c5632\",\"metameta\",\"firesurvey\",\"reportit\",\"webcentral\",\"coloradoconsortium\",\"move-in\",\"studentgroups/economicsclub\",\"beboulder\",\"libraries\",\"crowdfunding\",\"gsc\",\"today\",\"summer\",\"p16ecc285177\",\"alumni\",\"casa\",\"lab/gpo\",\"lab/zhanggroup\",\"aerospaceventures\",\"seniorvc\",\"dcvf\",\"recreation\",\"isss\",\"studentgroups/ntso\",\"ctrc\",\"studentgroups/buffvex\",\"studentgroups/forge\",\"cuteach\",\"qase\",\"stempathways\",\"studentgroups/vrarclub\",\"origins\",\"unified-experience\",\"anthropology/gradstudy\",\"faculty/summers\",\"studentgroups/boardgameunderground\",\"physics-jila-reu\",\"studentgroups/litg\",\"studentgroups/mobilemakers\",\"ova\",\"lab/amtl\",\"studentgroups/soc-ee\",\"ness\",\"project/maxwellcubesat\",\"chps\",\"geography\",\"program/msol\",\"studentgroups/bmes\",\"infrastructure-safety\",\"studentgroups/champ\",\"designcenter\",\"studentgroups/international\",\"geologicalsciences\",\"ismrc\",\"atlas\",\"conference/acda2018\",\"next\",\"lab/neurodegeneration\",\"education\",\"innovate\",\"aqiq\",\"cmcinow\",\"map\",\"conference/aseezoneiv2018\",\"conference/medievalboulder2018\",\"faculty/palmer-martha\",\"faculty/ren\",\"lab/cems\",\"faculty/rosario-ortiz\",\"studentgroups/asme\",\"education-research-hub\",\"faculty/milford-jana\",\"conference/greebs\",\"sportsclub/mensclubsoccer\",\"lab/corwin-reach\",\"academicfutures\",\"lab/sbs\",\"teaching-quality-framework\",\"programs/chr\",\"programs/socialinnovation\",\"geirs\",\"faculty/bielefeldt\",\"faculty/michaelis\",\"lab/esc\",\"lab/bmmlab\",\"faculty/bierhorst\",\"faculty-staff-engagement\",\"faculty/burns\",\"project/dat\",\"lab/chemtheory\",\"rapflc\",\"event/ippw2018\",\"nest\",\"programs/cuindc\",\"irt/mfm\",\"lab/whiting\",\"studentgroups/geographyclub\",\"ombuds\",\"studentgroups/cufec\",\"cha\",\"spaceweather\",\"topscholarships\",\"irt/wen\"]}}",
+      "_created": "2018-01-05 18:52:46 GMT",
+      "_id": "5a4fc97e926f5b102cbe8b15",
+      "_etag": "9496247450374d121eecd09fbe275bfb023553d8"
     }
-  },
-  "_meta": {
-    "max_results": 500,
-    "total": 16,
-    "page": 1
-  }
-}
