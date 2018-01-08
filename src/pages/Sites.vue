@@ -38,10 +38,10 @@
   import store from '../vuex/store';
   import bus from '../js/bus';
   import atlas from '../js/atlas';
-  import statsService from '../js/statsService';
+  import stats from '../js/stats';
   import sites from '../js/sites';
   import code from '../js/code';
-  import exportService from '../js/exportService';
+  import download from '../js/download';
 
   export default {
     name: 'Sites',
@@ -139,7 +139,9 @@
     },
     methods: {
       initialize() {
-        sites.get(store.state.atlasEnvironments[store.state.env])
+        const baseURL = store.state.atlasEnvironments[store.state.env];
+
+        sites.get(baseURL)
           .then((data) => {
             const options = {
               sitesData: data,
@@ -152,7 +154,23 @@
             bus.$emit('hideRowExtraContent');
 
             // Emit event so other data can be added to the table.
-            bus.$emit('tableDataUpdate', data);
+            // This wasn't working on page load so the code in that function was copied here.
+            // @todo Remove duplicated code and uncomment the line below.
+            // bus.$emit('tableDataUpdate', data);
+
+            // Add data from code endpoint.
+            code.get(baseURL)
+              .then((codeRecords) => {
+                code.addCodeToSites(data, codeRecords);
+              })
+              .catch(error => console.log(error));
+
+            // Update with stats data.
+            stats.get(data, baseURL)
+              .then((statsRecords) => {
+                stats.addStatsToSites(data, statsRecords);
+              })
+              .catch(error => console.log(error));
 
             // This event fires for other components to know that the siteListing
             // instance has been loaded. While not ideal, the delay in making the
@@ -268,9 +286,9 @@
           .catch(error => console.log(error));
 
         // Update with stats data.
-        statsService.getStatsRecords(siteRecords, baseURL)
+        stats.get(siteRecords, baseURL)
           .then((statsRecords) => {
-            statsService.addStatsToSites(siteRecords, statsRecords);
+            stats.addStatsToSites(siteRecords, statsRecords);
           })
           .catch(error => console.log(error));
       },
@@ -306,7 +324,7 @@
         });
 
         // Export to CSV file.
-        exportService.exportCSVFile(headers, exportData, 'report');
+        download.exportCSVFile(headers, exportData, 'report');
       },
       exportEmailsListener(params) {
         // Grab the types of emails needed.
@@ -362,7 +380,7 @@
         });
 
         // Export to text file.
-        exportService.exportTextFile(finalEmails, 'siteContactEmails');
+        download.exportTextFile(finalEmails, 'siteContactEmails');
       },
     },
   };
