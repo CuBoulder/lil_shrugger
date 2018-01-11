@@ -107,12 +107,6 @@
       bus.$on('siteListingMounted', () => {
         that.siteListingMountedListener(that);
       });
-
-      // Hacky way of dealing with blank code/stats on Code update.
-      // @todo Figure out.
-      bus.$on('codeUpdated', () => {
-        that.codeUpdatedListener(that);
-      });
     },
     computed: {
       filteredData() {
@@ -222,11 +216,6 @@
         that.extraContent = { data };
       },
       siteListingMountedListener(that) {
-        const tempKey = that.filterKey;
-        that.filterKey = 'foo';
-        that.filterKey = tempKey;
-      },
-      codeUpdatedListener(that) {
         const tempKey = that.filterKey;
         that.filterKey = 'foo';
         that.filterKey = tempKey;

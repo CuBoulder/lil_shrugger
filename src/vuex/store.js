@@ -146,11 +146,4 @@ const store = new Vuex.Store({
   },
 });
 
-store.state.atlasEnvironments.Local = 'http://atlas.testing:3000/';
-
-localStorage.setItem('atlas-username', 'alfi2595');
-localStorage.setItem('atlas-password', 'Yava1986!!');
-localStorage.setItem('github-username', 'alexfinnarn');
-localStorage.setItem('github-token', '4e582394eb08b6fb599222ec3b01bd40268742dd');
-
 export default store;
