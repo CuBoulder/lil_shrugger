@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "node"
+
+install:
+  - npm install
+
+script:
+  - node_modules/.bin/json-server --watch test/fixtures/db.json --id=_id --host=atlas.testing --middlewares test/atlas-middleware.js --routes test/routes.json
+  - sed -i "149i store.state.atlasEnvironments.Local = 'http://atlas.testing:3000/';" src/vuex/store.js
+  - npm run e2e
+
