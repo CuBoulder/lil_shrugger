@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <tr scope="row">
+    <tr scope="row" :class="'row-id-' + data.id">
       <!-- Bulk operations checkbox. -->
       <td>
         <input type="checkbox"
@@ -11,7 +11,7 @@
                v-model="isChecked">
       </td>
       <!--Row with data and edit/inputs. -->
-      <td v-for="(key, index) in columns">
+      <td v-for="(key, index) in columns" :class="'column-' + key">
         <div v-if="showDefault(key)" v-html="link(data[key],key)"></div>
         <div v-if="showEdit(key)">
           <div v-if="selectType(key)">
@@ -113,6 +113,7 @@
         return {
           previous: this.oldData,
           current: this.data,
+          id: this.data.id,
         };
       },
       editContent() {

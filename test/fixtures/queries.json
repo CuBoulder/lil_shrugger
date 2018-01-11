@@ -1,5 +1,3 @@
-{
-  "_items": [
     {
       "_updated": "2017-09-22 20:21:46 GMT",
       "_latest_version": 1,
@@ -442,20 +440,3 @@
       "_id": "5a1f0465926f5b102b05b36f",
       "_etag": "b8b205ea145dc9f4c7b49e1997760c82264ca967"
     }
-  ],
-  "_links": {
-    "self": {
-      "href": "query",
-      "title": "query"
-    },
-    "parent": {
-      "href": "/",
-      "title": "home"
-    }
-  },
-  "_meta": {
-    "max_results": 500,
-    "total": 17,
-    "page": 1
-  }
-}

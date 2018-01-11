@@ -4,7 +4,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
 
   state: {
     actionIcons: {
@@ -32,7 +32,7 @@ export default new Vuex.Store({
     commands: [],
     currentQuery: null,
     defaultSitesQuery: '?where={"type":"express"}',
-    defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages'],
+    defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
     defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
     editContent: {},
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
@@ -76,8 +76,8 @@ export default new Vuex.Store({
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
       'email_address', 'bundles', 'webforms'],
     statsQueryOptions: [],
-    userPermissions: ['Sites:row:delete', 'Code:row:edit', 'Code:row:delete', 'Sites:createSite', 'Code:createCode', 'Sites:commands:command', 'Sites:commands:export', 'Sites:statsSearch:save',
-      'Settings:credentials'],
+    userPermissions: ['Sites:row:delete', 'Code:row:edit', 'Code:row:delete', 'Sites:createSite', 'Code:createCode',
+      'Sites:commands:command', 'Sites:commands:export', 'Sites:statsSearch:save', 'Settings:credentials'],
     sitesEditKeys: ['path', 'status'],
     codeEditKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
   },
@@ -145,3 +145,5 @@ export default new Vuex.Store({
     },
   },
 });
+
+export default store;
