@@ -69,8 +69,8 @@
             </label>
           </div>
         </fieldset>
-        <button @click="saveCreds()" type="button" class="btn btn-primary">Save</button>
-        <button @click="clearStorage()" type="button" class="btn btn-danger">Clear Local Storage</button>
+        <button @click="saveCreds()" type="button" class="btn btn-primary" aria-label="Save">Save</button>
+        <button @click="clearStorage()" type="button" class="btn btn-danger" aria-label="Clear Local Storage">Clear Local Storage</button>
       </form>
     </div>
   </div>

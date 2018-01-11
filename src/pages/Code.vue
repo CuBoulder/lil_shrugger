@@ -134,7 +134,7 @@
                 options = {
                   rowId: row.data.id,
                   rowKey: element,
-                  content: '<span><strong>Current Hash:</strong> ' + response.hash + '</span>',
+                  content: '<span class="current-hash"><strong>Current Hash:</strong> ' + response.hash + '</span>',
                 };
                 store.commit('addEditContent', options);
               });

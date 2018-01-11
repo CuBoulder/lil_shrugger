@@ -1,5 +1,5 @@
 {
-  "sites":[
+  "sites": [
     {
       "code": {
         "profile": "5a4fc0b7926f5b102b06029c",
@@ -3699,7 +3699,7 @@
       "_etag": "930f6b2696eaa9d24a2a2f43a452f4d4f5bf6d0e"
     }
   ],
-  "code":[
+  "code": [
     {
       "_updated": "2017-02-02 21:35:28 GMT",
       "_latest_version": 1,
@@ -5613,18 +5613,18 @@
       "_updated": "2017-08-16 20:36:39 GMT",
       "_latest_version": 11,
       "modified_by": "osr_atlas_client",
-      "commit_hash": "f171b87bd2e96a2b679dff4505a586218ac26a49",
+      "commit_hash": "01df5d5fdb07f7395aeff131a55d49bcc7426555",
       "_version": 11,
       "created_by": "kere7580",
       "meta": {
-        "code_type": "module",
-        "version": "7.x-1.0-beta1",
         "label": "Digital Campaign",
+        "code_type": "module",
+        "name": "cu_digital_campaign_bundle",
+        "version": "7.x-1.0-beta1",
         "tag": [
           "request_bundles"
         ],
-        "is_current": false,
-        "name": "cu_digital_campaign_bundle"
+        "is_current": false
       },
       "_links": {
         "self": {
@@ -6636,7 +6636,7 @@
       "git_url": "git@github.com:CuBoulder/express.git"
     }
   ],
-  "statistics":[
+  "statistics": [
     {
       "variable_site_404": "navigation404",
       "days_since_last_edit": 20,
@@ -18529,7 +18529,7 @@
       "variable_theme_default": "cumodern"
     }
   ],
-  "query":[
+  "query": [
     {
       "_updated": "2017-09-22 20:21:46 GMT",
       "_latest_version": 1,
@@ -18973,7 +18973,7 @@
       "_etag": "b8b205ea145dc9f4c7b49e1997760c82264ca967"
     }
   ],
-  "commands":[
+  "commands": [
     {
       "_updated": "2017-02-02 21:35:27 GMT",
       "_latest_version": 6,
@@ -19048,7 +19048,7 @@
         }
       },
       "command": "drush cc all",
-      "query": "{\"path\":{\"$in\":[\"law\"]}}",
+      "query": "{\"path\":{\"$in\":[\"law\",\"cuub\",\"sportsclub/cycling\",\"mcneill\"]}}",
       "_created": "2017-02-14 20:02:17 GMT",
       "_id": "58a36249926f5b6fd81ab36a",
       "_etag": "6c07e35d73f8c64da002e26dc171732d4df63aad"
@@ -19108,7 +19108,7 @@
         }
       },
       "command": "drush core-requirements --severity=2; sudo -u apache drush atst",
-      "query": "{\"path\":{\"$in\":[\"crowdfunding\"]}}",
+      "query": "{\"path\":{\"$in\":[\"law\",\"cuub\",\"mcneill\"]}}",
       "_created": "2017-06-02 15:49:30 GMT",
       "_id": "5931890a926f5b6713b49a3c",
       "_etag": "bdc2c7587fd7ea1775f2b775fca7670788871e01"

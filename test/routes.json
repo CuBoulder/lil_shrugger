@@ -1,0 +1,6 @@
+{
+  "/statistics?where={%22beans_by_type.quicktab%22:{%22$gt%22:10}}": "/statistics?beans_by_type.quicktab_gte=10",
+  "/statistics?where={%22variable_ga_account%22:null,%22nodes_total%22:{%22$gt%22:200}}": "/statistics?nodes_total_gte=200&variable_ga_account=null",
+  "/statistics?where={%22nodes_total%22:{%22$lt%22:10}}": "/statistics?nodes_total_lte=10",
+  "/statistics?where={%22nodes_total%22:{%22$gt%22:1000}}": "/statistics?nodes_total_gte=1000"
+}

@@ -7,7 +7,7 @@ export default {
   /**
    * Makes a request to Atlas.
    *
-   * @param baseURL
+   * @param {string} baseURL
    * @param endpoint
    * @param query
    * @param method
@@ -27,6 +27,7 @@ export default {
       headers.set('If-Match', etag);
     }
 
+    const requestURL = baseURL + endpoint + query;
     const myInit = {
       method,
       headers,
@@ -43,7 +44,7 @@ export default {
     // Send different request based on if GET.
     // GET requests can have paging links.
     if (method !== 'GET') {
-      return fetch(baseURL + endpoint + query, myInit)
+      return fetch(requestURL, myInit)
         .then(utilities.handleErrors)
         .then(response => response.json())
         .catch((error) => {
@@ -54,6 +55,7 @@ export default {
           console.log(error);
         });
     }
+
     // This function returns the data based on the current page.
     const foo = function foo(pageLink = null) {
       // Use paging link if it exists.

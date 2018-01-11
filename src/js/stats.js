@@ -5,7 +5,6 @@ import store from '../vuex/store';
 
 export default {
 
-
   /**
    * Gets a list of site records based on environment and pass data to template.
    *
