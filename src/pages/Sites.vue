@@ -18,6 +18,7 @@
            v-if="userAccessPerm('createSite')">
         <confirm-button
             label="Create A Site"
+            :params="{}"
             callback="createSite">
         </confirm-button>
       </div>
@@ -126,7 +127,7 @@
     computed: {
       gridColumns() {
         // Merge site and stats keys together.
-        const siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.siteKeys;
+        const siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys;
 
         // Make stats empty if not saved since adding all of those keys makes the table unusable.
         const statsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [];
@@ -161,22 +162,24 @@
             // Add data from code endpoint.
             code.get(baseURL)
               .then((codeRecords) => {
-                code.addCodeToSites(data, codeRecords);
+                code.addCodeToSites(store.state.sitesGridData.sitesData, codeRecords);
+              })
+              .then(() => {
+                // Update with stats data.
+                stats.get(data, baseURL)
+                  .then((statsRecords) => {
+                    stats.addStatsToSites(store.state.sitesGridData.sitesData, statsRecords);
+                  })
+                  .then(() => {
+                    // This event fires for other components to know that the siteListing
+                    // instance has been loaded. While not ideal, the delay in making the
+                    // Atlas request and setting up the data is usually enough time.
+                    // @todo use mounted() instead of this.
+                    bus.$emit('siteListingMounted', null);
+                  })
+                  .catch(error => console.log(error));
               })
               .catch(error => console.log(error));
-
-            // Update with stats data.
-            stats.get(data, baseURL)
-              .then((statsRecords) => {
-                stats.addStatsToSites(data, statsRecords);
-              })
-              .catch(error => console.log(error));
-
-            // This event fires for other components to know that the siteListing
-            // instance has been loaded. While not ideal, the delay in making the
-            // Atlas request and setting up the data is usually enough time.
-            // @todo use mounted() instead of this.
-            bus.$emit('siteListingMounted', null);
           });
 
         // Setup commands for select list.
@@ -205,7 +208,16 @@
         // Get command data for etag.
         const command = store.state.commands.filter(element => element._id === params.command);
 
-        atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, '', 'PATCH', body, command[0]._etag);
+        atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, '', 'PATCH', body, command[0]._etag)
+        .then(() => {
+          bus.$emit('onMessage', {
+            text: 'Successfully sent "' + command[0].name + '" command to ' + store.state.sitesSendCommand.length + ' site(s): (' + siteIds + ').',
+            alertType: 'alert-success',
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       },
       etagFailListener(env) {
         sites.get(store.state.atlasEnvironments[env])
@@ -324,7 +336,7 @@
         });
 
         // Export to CSV file.
-        download.exportCSVFile(headers, exportData, 'report');
+        download.csv(headers, exportData, 'report');
       },
       exportEmailsListener(params) {
         // Grab the types of emails needed.
@@ -380,7 +392,7 @@
         });
 
         // Export to text file.
-        download.exportTextFile(finalEmails, 'siteContactEmails');
+        download.text(finalEmails, 'siteContactEmails');
       },
     },
   };

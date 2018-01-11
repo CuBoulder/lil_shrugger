@@ -1,3 +1,5 @@
+import bus from './bus';
+
 export default {
 
   /**
@@ -31,7 +33,7 @@ export default {
    * @param items
    * @param fileTitle
    */
-  exportCSVFile(headers, items, fileTitle) {
+  csv(headers, items, fileTitle) {
     if (headers) {
       items.unshift(headers);
     }
@@ -54,7 +56,7 @@ export default {
    *
    * @returns {null}
    */
-  exportTextFile(data, fileTitle) {
+  text(data, fileTitle) {
     const exportedFilename = fileTitle + '.txt' || 'export.txt';
     const blob = new Blob([data], { type: 'text/plain;charset=utf-8;' });
 
@@ -70,6 +72,10 @@ export default {
    * @returns {null}
    */
   downloadFile(data, fileName) {
+    // Console log for debugging and tests.
+    console.log(fileName);
+    console.log(data);
+
     if (navigator.msSaveBlob) {
       // IE 10+.
       navigator.msSaveBlob(data, fileName);
@@ -86,5 +92,10 @@ export default {
         document.body.removeChild(link);
       }
     }
+
+    bus.$emit('onMessage', {
+      text: 'Exported: "' + fileName + '" (' + (data.size / 1000) + ' KB)',
+      alertType: 'alert-success',
+    });
   },
 };

@@ -25,8 +25,8 @@ export default {
   /**
    * Updates a code asset based on user input.
    *
-   * @param params
-   * @param method
+   * @param {object} params
+   * @param {string} method
    */
   update(params, method = 'PATCH') {
     // Define parts of code record that are nested in the meta field.
@@ -35,45 +35,43 @@ export default {
     // Turn tag into an array.
     params.current.tag = [params.current.tag];
 
-    // Take input values from formData and put into array for comparison.
-    // Only return values that are different.
-    const formInput = {};
+    // Capture and delete etag.
+    const etag = params.current.etag;
+    delete params.current.etag;
 
-    Object.keys(params.previous).forEach((key) => {
-      // Check if values are different to add to PATCH.
-      // Don't need to check etag since user can't change that on form.
-      if (params.current[key] !== params.previous[key] && key !== 'etag') {
-        // Need to put meta fields in right place.
-        if (metaKeys.indexOf(key) !== -1) {
-          // Initialize meta field if it doesn't exist yet.
-          if (!formInput.meta) {
-            formInput.meta = {};
-          }
-          formInput.meta[key] = params.current[key];
-        } else {
-          formInput[key] = params.current[key];
+    // Need to put meta fields in right place.
+    Object.keys(params.current).forEach((key) => {
+      if (metaKeys.indexOf(key) !== -1) {
+        // Initialize meta field if it doesn't exist yet.
+        if (!params.current.meta) {
+          params.current.meta = {};
         }
+        params.current.meta[key] = params.current[key];
+        delete params.current[key];
+      } else {
+        params.current[key] = params.current[key];
       }
     });
 
     // If deleting a record, don't send a body.
     let body = null;
     if (method !== 'DELETE') {
-      body = JSON.stringify(formInput);
+      body = JSON.stringify(params.current);
     }
 
     const baseURL = store.state.atlasEnvironments[store.state.env];
-    atlas.request(baseURL, 'code/' + params.current.id, '', method, body, params.current.etag)
+
+    atlas.request(baseURL, 'code/' + params.current.id, '', method, body, etag)
       .then(() => {
         bus.$emit('onMessage', {
           text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
           alertType: 'alert-success',
         });
 
-        this.getCodeRecords(store.state.atlasEnvironments[store.state.env])
+        this.get(store.state.atlasEnvironments[store.state.env])
           .then((data) => {
             const options = {
-              sitesData: data,
+              codeData: data,
               cachedData: data,
             };
             store.commit('addSitesGridData', options);

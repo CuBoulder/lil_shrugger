@@ -27,7 +27,8 @@
         </th>
         <th v-for="key in columns"
             @click="sortBy(key)"
-            :class="{ active: sortKey == key }">
+            :id="'table-header-' + key"
+            :class="{ active: sortKey == key}">
           {{ key | capitalize }}
           <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
           </span>
@@ -99,6 +100,18 @@
 
       bus.$on('viewRowExtraContent', (data) => {
         that.viewRowExtraContentListener(that, data);
+      });
+
+      // Hacky way of dealing with blank code/stats on Sites page load.
+      // @todo Figure out.
+      bus.$on('siteListingMounted', () => {
+        that.siteListingMountedListener(that);
+      });
+
+      // Hacky way of dealing with blank code/stats on Code update.
+      // @todo Figure out.
+      bus.$on('codeUpdated', () => {
+        that.codeUpdatedListener(that);
       });
     },
     computed: {
@@ -207,6 +220,16 @@
       },
       viewRowExtraContentListener(that, data) {
         that.extraContent = { data };
+      },
+      siteListingMountedListener(that) {
+        const tempKey = that.filterKey;
+        that.filterKey = 'foo';
+        that.filterKey = tempKey;
+      },
+      codeUpdatedListener(that) {
+        const tempKey = that.filterKey;
+        that.filterKey = 'foo';
+        that.filterKey = tempKey;
       },
     },
   };
