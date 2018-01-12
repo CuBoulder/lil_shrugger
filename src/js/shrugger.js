@@ -5,6 +5,7 @@
 
 import store from '../vuex/store';
 import Router from '../router/index';
+import bus from './bus';
 
 
 export default {
@@ -18,9 +19,14 @@ export default {
   handleErrors(response) {
     if (!response.ok) {
       // @todo Figure out why the Vue object is being passed in as a response.
-      // console.log(response);
-      // bus.$emit('onMessage',
-      // {text: 'Error in Atlas Request: ' + response, alertType: 'alert-danger'});
+      console.log(response);
+      bus.$emit('onMessage', {
+        text: '<strong>Error in Atlas Request:</strong>' +
+          '<br/>Status Code: ' + response.status +
+          '<br/>Text: ' + response.statusText +
+          '<br/>URL: ' + response.url,
+        alertType: 'alert-danger' },
+      );
       // throw Error(response.statusText);
     }
     return response;

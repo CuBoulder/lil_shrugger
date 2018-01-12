@@ -1,8 +1,10 @@
 <template>
   <div v-if="messages.length > 0">
-    <div :class="[bsAlert, message.alertType, 'message-' + index]" v-for="(message, index) in messages">{{message.text}}
+    <div :class="[bsAlert, message.alertType, 'message-' + index]" v-for="(message, index) in messages">
       <button type="button" class="close" aria-label="Close" @click="close(index)">
-        <span aria-hidden="true">&times;</span></button>
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div v-html="message.text"></div>
     </div>
   </div>
 </template>

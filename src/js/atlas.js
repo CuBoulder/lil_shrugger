@@ -64,7 +64,7 @@ export default {
       if (pageLink !== null) {
         url = baseURL + pageLink;
       } else {
-        url = baseURL + endpoint + query;
+        url = baseURL + 'foo' + endpoint + query;
       }
 
       return Promise.resolve(fetch(url, myInit)
@@ -86,7 +86,6 @@ export default {
       const recursiveFetch = function recursiveFetch(finalData, pageLink) {
         // Call Atlas with the correct page link.
         return foo(pageLink)
-          .then(utilities.handleErrors)
           .then((data) => {
             // This can be a query for just a single asset.
             // If it is, we can tell that from having no data._items.
