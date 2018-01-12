@@ -146,12 +146,4 @@ const store = new Vuex.Store({
   },
 });
 
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-
->>>>>>> aa5a99fac4a124e060962232fbbf6ca6ccb4105f
->>>>>>> 1.x
 export default store;
