@@ -1,0 +1,12 @@
+engines:
+  eslint:
+    enabled: true
+
+exclude_paths:
+- node_modules/
+- test/e2e/reports/
+
+ratings:
+   paths:
+   - src/*
+   - test/e2e/specs/*
