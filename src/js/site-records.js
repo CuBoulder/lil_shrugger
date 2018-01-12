@@ -54,6 +54,7 @@ function formatSiteData(data) {
       item['id'] = element._id;
       item['statistics'] = element.statistics;
       item['code'] = element.code;
+      item['update_group'] = 'group:' + element.update_group;
 
 
       item['core'] = '';

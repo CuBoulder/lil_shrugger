@@ -83,7 +83,7 @@ const store = new Vuex.Store({
     recordsToShow: 10,
     reportsList: ['exportTable', 'exportSiteContactEmail'],
     searchFilter: '',
-    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
+    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'update_group', 'updated', 'created'],
     sitesSendCommand: [],
     statsKeys: ['instance', 'name', 'status', 'nodes_total', 'nodes_by_type', 'nodes_other', 'days_since_last_edit',
       'beans_total', 'beans_by_type', 'beans_other', 'context', 'context_other_conditions', 'context_other_reactions',
