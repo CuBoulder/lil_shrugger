@@ -291,7 +291,8 @@
 
         // Make tags into string with quotes.
         const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
-        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription + '", "endpoint": ["statistic"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
+        const data = '{"title": "' + name + '", "description": "' + this.statsQueryDescription
+          + '", "endpoint": ["statistic"], "query": "' + queryToSend + '", "tags": ["' + tags + '"], "rank": 1}';
 
         // Make request to Atlas.
         const baseURL = store.state.atlasEnvironments[store.state.env];

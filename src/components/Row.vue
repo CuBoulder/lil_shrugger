@@ -127,7 +127,8 @@
       link(value, key) {
         // Link path to instance.
         if (key === 'path') {
-          return '<a href="' + store.state.expressEnvironments[store.state.env] + value + '/user?destination=/admin/people/invite">' + value + '</a>';
+          return '<a target="_blank" href="' + store.state.expressEnvironments[store.state.env] + value
+            + '/user?destination=/admin/people/invite">' + value + '</a>';
         }
 
         // Link to full code/site record.
@@ -135,9 +136,10 @@
           const atlasEnvironment = store.state.atlasEnvironments[store.state.env];
           // Determine site or code record from other key.
           if (this.editKeys.indexOf('commit_hash') !== -1) {
-            return '<a href="' + atlasEnvironment + 'code/' + value + '">(Code Record)</a>';
+            return '<a target="_blank" href="' + atlasEnvironment + 'code/' + value + '">(Code Record)</a>';
           }
-          return '<a href="' + atlasEnvironment + 'sites/' + value + '">' + '(Site)</a><br/>(<a href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
+          return '<a target="_blank" href="' + atlasEnvironment + 'sites/' + value + '">'
+            + '(Site)</a><br/>(<a target="_blank" href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
         }
 
         // Deal with empty packages arrays.
