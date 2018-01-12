@@ -1,9 +1,13 @@
 language: node_js
+<<<<<<< HEAD
 sudo: false
+=======
+>>>>>>> 1.x
 node_js:
   - "node"
 
 install:
+<<<<<<< HEAD
   # Intentionally break tests for now.
   # @todo Add Sauce Connect account.
   - chmod +x foo.txt
@@ -25,4 +29,12 @@ script:
   - sed -i "149i store.state.atlasEnvironments.Local = 'http://localhost:3000/';" src/vuex/store.js
   # Run tests.
   # - npm run e2e
+=======
+  - npm install
+
+script:
+  - node_modules/.bin/json-server --watch test/fixtures/db.json --id=_id --host=atlas.testing --middlewares test/atlas-middleware.js --routes test/routes.json
+  - sed -i "149i store.state.atlasEnvironments.Local = 'http://atlas.testing:3000/';" src/vuex/store.js
+  - npm run e2e
+>>>>>>> 1.x
 
