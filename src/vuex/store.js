@@ -4,6 +4,9 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+/**
+ * Centralized data store for Vue instance.
+ */
 const store = new Vuex.Store({
 
   state: {
