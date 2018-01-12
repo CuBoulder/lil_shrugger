@@ -149,4 +149,6 @@ const store = new Vuex.Store({
   },
 });
 
+store.state.atlasEnvironments.Local = 'http://atlas.testing:3000/';
+
 export default store;
