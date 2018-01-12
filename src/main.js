@@ -6,6 +6,7 @@ import router from './router';
 
 Vue.config.productionTip = false;
 
+// @todo Add initialize functione here.
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
