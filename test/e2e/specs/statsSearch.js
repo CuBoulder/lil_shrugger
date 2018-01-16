@@ -16,8 +16,8 @@ module.exports = {
       // IDs of sites are used here with the checkboxes as an easy way
       // to check which sites are in the list.
       // @todo Make an assertion command where site names are converted to IDs.
-      .assert.visible('#checkbox-5898ef4b926f5b20caa7a2a6')
-      .assert.visible('#checkbox-5899e708926f5b3a332a386b');
+      .assert.visible('.row-id-5898ef4b926f5b20caa7a2a6')
+      .assert.visible('.row-id-5899e708926f5b3a332a386b');
 
     browser
       .click('.navbar-action-icon.glyphicon-search')

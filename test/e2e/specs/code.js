@@ -33,7 +33,7 @@ module.exports = {
     browser
       .click('.row-id-591def5f926f5b28e7361dc8 button[aria-label="Edit"]')
       .pause(2000)
-      // .waitForElementVisible('select[name="tag"]', 5000)
+      .waitForElementVisible('select[name="tag"]', 5000)
       .click('select[name="tag"] option[value="beta_bundles"]')
       .click('.updateCodeRecord.record-id-591def5f926f5b28e7361dc8')
       .waitForElementVisible('.row-id-591def5f926f5b28e7361dc8', 5000)
