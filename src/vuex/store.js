@@ -151,5 +151,4 @@ const store = new Vuex.Store({
 
 /* Insert local config here. */
 
-
 export default store;

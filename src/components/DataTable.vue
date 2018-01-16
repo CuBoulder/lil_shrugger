@@ -2,12 +2,23 @@
   <div class="lisitng-wrapper">
     <form id="search" class="row">
       <div class="form-group">
-        <label for="filter-records">Filter Table</label>
-        <input
+        <div class="col-md-8">
+          <label for="filter-records">Filter Table</label>
+          <input
             id="filter-records"
             class="form-control"
             name="query"
+            @keydown.enter.prevent="selectFilter()"
             v-model="filterKey">
+        </div>
+        <div class="col-md-2">
+          <label for="expression-search">Expression Search</label>
+          <input type="checkbox"
+            id="expression-search"
+            class="form-control"
+            name="expression-search"
+            v-model="expressionFilter">
+        </div>
       </div>
     </form>
     <div class="result-count">Result Count: {{resultCount}}</div>
@@ -90,6 +101,7 @@
         showAllRows: false,
         allChecked: false,
         extraContent: {},
+        expressionFilter: false,
       };
     },
     created() {
@@ -111,13 +123,15 @@
     computed: {
       filteredData() {
         const sortKey = this.sortKey;
-        const filterKey = this.filterKey && this.filterKey.toLowerCase();
+        const filterKey = this.filterKey;
         const order = this.sortOrders[sortKey] || 1;
         let data = this.data;
 
-        if (filterKey) {
-          data = data.filter(row => Object.keys(row)
-            .some(key => String(row[key]).toLowerCase().indexOf(filterKey) > -1));
+        // If using the default fuzzy search, then filter that way.
+        // The JS expression search is performed on enter keydown and not as
+        // the user types.
+        if (filterKey && !this.expressionFilter) {
+          data = this.fuzzyFilterSearch(filterKey, data);
         }
 
         if (sortKey) {
@@ -219,6 +233,44 @@
         const tempKey = that.filterKey;
         that.filterKey = 'foo';
         that.filterKey = tempKey;
+      },
+      fuzzyFilterSearch(filterKey, data) {
+        return data.filter(row => Object.keys(row)
+          .some(key => String(row[key]).toLowerCase().indexOf(filterKey.toLowerCase()) > -1));
+      },
+      expressionFilterSearch(filterKey, data) {
+        let errorMessage = false;
+
+        /* eslint-disable */
+        // Disabling eslint since the JS eval is using the row even though it looks like it isn't.
+        const newData = data.filter((row) => {
+          try {
+            if (eval(filterKey)) {
+              return true;
+            }
+            return false;
+          }
+          catch(error) {
+            console.log(error);
+            errorMessage = true;
+          }
+        });
+        /* eslint-enable */
+
+        // @todo Provide better message here.
+        if (errorMessage) {
+          bus.$emit('onMessage', {
+            text: 'Error in JS expression syntax. Refresh page to search again.',
+            alertType: 'alert-danger',
+          });
+        }
+
+        return newData;
+      },
+      selectFilter() {
+        if (this.expressionFilter) {
+          this.data = this.expressionFilterSearch(this.filterKey, this.data);
+        }
       },
     },
   };

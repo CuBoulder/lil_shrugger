@@ -18,7 +18,6 @@ export default {
    */
   handleErrors(response) {
     if (!response.ok) {
-      // @todo Figure out why the Vue object is being passed in as a response.
       console.log(response);
       bus.$emit('onMessage', {
         text: '<strong>Error in Atlas Request:</strong>' +

@@ -4,7 +4,6 @@
  */
 
 import shrugger from './shrugger';
-import bus from './bus';
 
 export default {
 
@@ -38,17 +37,12 @@ export default {
             data,
           }))
           .catch((error) => {
-            bus.$emit('onMessage', {
-              text: 'Error in Atlas Request: ' + error,
-              alertType: 'alert-danger',
-            });
             console.log(error);
           }));
       }
 
       // Call Atlas with the correct page link.
       return foo(pageLink, passedUrl)
-        .then(shrugger.handleErrors)
         .then((object) => {
           // By pushing the data to an array that exists in recursion, we
           // can return the compiled array.
@@ -125,7 +119,6 @@ export default {
     const currentURL = 'https://api.github.com/repos/CuBoulder/' + repo + '/branches?per_page=100';
 
     return this.fetchData(currentURL)
-      .then(shrugger.handleErrors)
       .then((data) => {
         // Combine data into one array.
         const allData = [];
