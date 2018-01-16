@@ -89,7 +89,6 @@
       editKeys: Array,
       selectKeys: Array,
       callback: String,
-
     },
     data() {
       const sortOrders = {};
