@@ -48,10 +48,6 @@ export default {
         .then(utilities.handleErrors)
         .then(response => response.json())
         .catch((error) => {
-          bus.$emit('onMessage', {
-            text: `Error in Atlas Request: ${error}`,
-            alertType: 'alert-danger',
-          });
           console.log(error);
         });
     }
@@ -71,10 +67,6 @@ export default {
         .then(utilities.handleErrors)
         .then(response => response.json())
         .catch((error) => {
-          bus.$emit('onMessage', {
-            text: `Error in Atlas Request: ${error}`,
-            alertType: 'alert-danger',
-          });
           console.log(error);
         }));
     };
