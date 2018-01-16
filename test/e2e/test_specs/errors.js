@@ -5,8 +5,6 @@ module.exports = {
     // see nightwatch.conf.js
     const devServer = browser.globals.devServerURL;
 
-
-
     browser
       .url(devServer)
       .end();
