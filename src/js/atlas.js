@@ -1,4 +1,4 @@
-import bus from './bus';
+
 import utilities from './shrugger';
 import store from '../vuex/store';
 
@@ -60,7 +60,7 @@ export default {
       if (pageLink !== null) {
         url = baseURL + pageLink;
       } else {
-        url = baseURL + 'foo' + endpoint + query;
+        url = baseURL + endpoint + query;
       }
 
       return Promise.resolve(fetch(url, myInit)

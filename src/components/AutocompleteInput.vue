@@ -111,13 +111,6 @@
     margin: 0 10px;
   }
 
-  /*
-  .autocomplete-input {
-      position: relative;
-      height: 300px;
-  }
-  */
-
   ul.options-list {
     z-index: 999;
     display: flex;
