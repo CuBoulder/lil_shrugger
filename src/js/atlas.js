@@ -1,4 +1,4 @@
-import bus from './bus';
+
 import utilities from './shrugger';
 import store from '../vuex/store';
 
@@ -48,10 +48,6 @@ export default {
         .then(utilities.handleErrors)
         .then(response => response.json())
         .catch((error) => {
-          bus.$emit('onMessage', {
-            text: `Error in Atlas Request: ${error}`,
-            alertType: 'alert-danger',
-          });
           console.log(error);
         });
     }
@@ -71,10 +67,6 @@ export default {
         .then(utilities.handleErrors)
         .then(response => response.json())
         .catch((error) => {
-          bus.$emit('onMessage', {
-            text: `Error in Atlas Request: ${error}`,
-            alertType: 'alert-danger',
-          });
           console.log(error);
         }));
     };
@@ -86,7 +78,6 @@ export default {
       const recursiveFetch = function recursiveFetch(finalData, pageLink) {
         // Call Atlas with the correct page link.
         return foo(pageLink)
-          .then(utilities.handleErrors)
           .then((data) => {
             // This can be a query for just a single asset.
             // If it is, we can tell that from having no data._items.

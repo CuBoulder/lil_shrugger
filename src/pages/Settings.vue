@@ -134,27 +134,12 @@
         localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
         localStorage.setItem('stats-keys', JSON.stringify(this.saveStatsKeys));
 
-        // Send success message.
-        // Not needed because of reload.
-        /*
-        bus.$emit('onMessage', {
-          text: 'Successfully saved settings.',
-          alertType: 'alert-success',
-        }); */
-
         // Redirect user so any settings changes can be reloaded.
         location.reload();
       },
       clearStorage() {
         localStorage.clear();
 
-        // Send success message.
-        // Not needed because of reload.
-        /*
-        bus.$emit('onMessage', {
-          text: 'Cleared localStorage values.',
-          alertType: 'alert-success',
-        }); */
         // Location reload might not be the best. If not, use the below.
         // this.$router.go(this.$router.currentRoute);
         location.reload();
