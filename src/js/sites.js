@@ -60,6 +60,7 @@ export default {
         item.id = element._id;
         item.statistics = element.statistics;
         item.code = element.code;
+        item.update_group = element.update_group;
 
 
         item.core = '';

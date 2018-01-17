@@ -77,7 +77,7 @@ const store = new Vuex.Store({
       'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
       'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
-      'email_address', 'bundles', 'webforms'],
+      'email_address', 'bundles', 'webforms', 'update_group'],
     statsQueryOptions: [],
     userPermissions: ['Sites:row:delete', 'Code:row:edit', 'Code:row:delete', 'Sites:createSite', 'Code:createCode',
       'Sites:commands:command', 'Sites:commands:export', 'Sites:statsSearch:save', 'Settings:credentials'],
