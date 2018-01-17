@@ -235,14 +235,8 @@
         that.filterKey = tempKey;
       },
       fuzzyFilterSearch(filterKey, data) {
-        return data.filter(row =>
-          Object.keys(row).some((key) => {
-            if (this.columns.includes(key)) {
-              return String(row[key]).toLowerCase().indexOf(filterKey.toLowerCase()) > -1;
-            }
-            return false;
-          }),
-        );
+        return data.filter(row => Object.keys(row)
+          .some(key => this.columns.includes(key) && String(row[key]).toLowerCase().indexOf(filterKey.toLowerCase()) > -1));
       },
       expressionFilterSearch(filterKey, data) {
         let errorMessage = false;
