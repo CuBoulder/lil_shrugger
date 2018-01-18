@@ -11,12 +11,18 @@
                v-model="isChecked">
       </td>
       <!--Row with data and edit/inputs. -->
-      <td v-for="(key, index) in columns" :class="'column-' + key">
+      <td v-for="(key, index) in columns"
+          :key="index"
+          :class="'column-' + key">
         <div v-if="showDefault(key)" v-html="link(data[key],key)"></div>
         <div v-if="showEdit(key)">
           <div v-if="selectType(key)">
             <select :name="key" v-model="data[key]">
-              <option v-for="anOption in selectOptions[key]" :value="anOption" :selected=" data[key] == anOption ? true : null">{{anOption}}</option>
+              <option v-for="anOption in selectOptions[key]"
+                      :key="anOption"
+                      :value="anOption" :selected=" data[key] == anOption ? true : null">
+                {{anOption}}
+              </option>
             </select>
           </div>
           <div v-else>

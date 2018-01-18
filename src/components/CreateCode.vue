@@ -176,6 +176,10 @@
         const baseURL = store.state.atlasEnvironments[store.state.env];
         atlas.request(baseURL, 'code', '', 'POST', JSON.stringify(codeAsset))
           .then(() => {
+            setTimeout(() => {
+              console.log('2 second Atlas delay on code update...');
+            }, 2000);
+
             bus.$emit('onMessage', {
               text: 'You have created a code asset.',
               alertType: 'alert-success',

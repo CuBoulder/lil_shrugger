@@ -37,6 +37,7 @@
                  v-model="allChecked">
         </th>
         <th v-for="key in columns"
+            :key="key"
             @click="sortBy(key)"
             :id="'table-header-' + key"
             :class="{ active: sortKey == key}">

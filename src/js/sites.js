@@ -86,18 +86,23 @@ export default {
     });
 
     atlas.request(baseURL, endpoint, '', 'POST', data)
-      .then(() =>
+      .then(() => {
+        setTimeout(() => {
+          console.log('2 second Atlas delay on code update...');
+        }, 2000);
+
         this.get(store.state.atlasEnvironments[store.state.env])
-          .then((records) => {
-            store.commit('addSitesGridData', { sitesData: records });
-            bus.$emit('onMessage', {
-              text: 'Successfully created a site.',
-              alertType: 'alert-success',
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          }));
+        .then((records) => {
+          store.commit('addSitesGridData', { sitesData: records });
+          bus.$emit('onMessage', {
+            text: 'Successfully created a site.',
+            alertType: 'alert-success',
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      });
   },
 
   /**

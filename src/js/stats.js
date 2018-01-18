@@ -71,7 +71,7 @@ export default {
           }
         });
 
-        // Get bundles out
+        // Get bundles out.
         formattedData.push(item);
       });
     });

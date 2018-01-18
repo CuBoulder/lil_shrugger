@@ -12,10 +12,7 @@ export default {
    */
   get() {
     // Check for query to add to code request.
-    let query = localStorage.getItem('code-query');
-    if (query === null) {
-      query = '';
-    }
+    const query = localStorage.getItem('code-query') ? localStorage.getItem('code-query') : '';
 
     // Return a promise with formatted code data.
     return atlas.request(store.state.atlasEnvironments[store.state.env], 'code', query)
@@ -39,30 +36,40 @@ export default {
     const etag = params.current.etag;
     delete params.current.etag;
 
-    // Need to put meta fields in right place.
-    Object.keys(params.current).forEach((key) => {
-      if (metaKeys.indexOf(key) !== -1) {
-        // Initialize meta field if it doesn't exist yet.
-        if (!params.current.meta) {
-          params.current.meta = {};
+    // Take input values from formData and put into array for comparison.
+    // Only return values that are different.
+    const formInput = {};
+    Object.keys(params.previous).forEach((key) => {
+      // Check if values are different to add to PATCH.
+      // Don't need to check etag since user can't change that on form.
+      if (params.current[key] !== params.previous[key] && key !== 'etag') {
+        // Need to put meta fields in right place.
+        if (metaKeys.indexOf(key) !== -1) {
+          // Initialize meta field if it doesn't exist yet.
+          if (!formInput.meta) {
+            formInput.meta = {};
+          }
+          formInput.meta[key] = params.current[key];
+        } else {
+          formInput[key] = params.current[key];
         }
-        params.current.meta[key] = params.current[key];
-        delete params.current[key];
-      } else {
-        params.current[key] = params.current[key];
       }
     });
 
     // If deleting a record, don't send a body.
     let body = null;
     if (method !== 'DELETE') {
-      body = JSON.stringify(params.current);
+      body = JSON.stringify(formInput);
     }
 
     const baseURL = store.state.atlasEnvironments[store.state.env];
 
     atlas.request(baseURL, 'code/' + params.current.id, '', method, body, etag)
       .then(() => {
+        setTimeout(() => {
+          console.log('2 second Atlas delay on code update...');
+        }, 2000);
+
         bus.$emit('onMessage', {
           text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
           alertType: 'alert-success',
@@ -148,7 +155,7 @@ export default {
         // Use name of record as label since the repo name will always be there when labels aren't.
         // For core and profile the names are always the same, so the label is more descriptive.
         label = record.name ? record.name + '-' : '';
-        code.packages[record.id] = label;
+        code.packages[record.id] = label + version;
       }
     });
 
