@@ -26,7 +26,7 @@
       <div class="alert alert-info">Your query returned no results.</div>
     </div>
     <div class="table-responsive">
-      <table class="table table-striped table-hover table-bordered">
+      <table class="table table-striped table-hover table-bordered table-sm">
         <thead>
         <tr>
           <th scope="col" >
@@ -302,3 +302,11 @@
   };
 </script>
 
+<style>
+
+td {
+  max-width: 270px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+</style>

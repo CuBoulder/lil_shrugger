@@ -53,7 +53,6 @@ export default {
         item.code = element.code;
         item.update_group = element.update_group;
 
-
         item.core = '';
         item.profile = '';
         item.packages = [];
