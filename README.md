@@ -18,13 +18,8 @@ npm run build
 Running tests will require a couple of manual steps until they are worked into the test runner command. You will need to start up the test API and load the fixture data before running any tests.
 
 ```bash
-# Startup API from root of project.
+# Startup API from root of project and load fixture data.
 node_modules/.bin/json-server --watch test/fixtures/db.json --id=_id --host=atlas.testing --middlewares test/atlas-middleware.js --routes test/routes.json
-
-# Add http://atlas.testing:3000 as the local Atlas URL.
-# Lookup the line number before "export default store;" and replace "151" if needed.
-# You can also manually add this line but remember to not commit it.
-sed -i "151i store.state.atlasEnvironments.Local = 'http://atlas.testing:3000/';" src/vuex/store.js
 
 # Run the e2e tests using Nightwatch.js.
 npm run e2e
