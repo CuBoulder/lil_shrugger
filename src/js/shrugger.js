@@ -91,16 +91,6 @@ export default {
   },
 
   /**
-   * Sets a delay in milliseconds.
-   *
-   * @param time
-   * @returns {Promise}
-   */
-  sleep(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-  },
-
-  /**
    * Grabs the filter query and sets filterKey if it exists.
    */
   setFilterFromQuery() {
@@ -121,5 +111,38 @@ export default {
         store.commit('setFilterKey', queryParams.filter);
       }
     }
+  },
+
+  /**
+   * Takes a date from Atlas and converts to human-readable.
+   *
+   * @param {String|Object} date
+   */
+  toDate(date) {
+    // Make it so a string can also be passed in.
+    let formattedDate = date;
+    if (Object.prototype.hasOwnProperty.call(date, 'localeCompare')) {
+      formattedDate = new Date(date);
+    }
+
+    const options = {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+    return formattedDate.toLocaleTimeString('en-us', options);
+  },
+
+  /**
+   * Sets a timeout.
+   *
+   * @param {Number} time
+   */
+  wait(time = 5000) {
+    setTimeout(() => {
+      console.log('5 second Atlas delay on code update...');
+    }, time);
   },
 };

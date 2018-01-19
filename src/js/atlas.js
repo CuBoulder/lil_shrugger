@@ -31,8 +31,6 @@ export default {
     const myInit = {
       method,
       headers,
-      mode: 'cors',
-      // cache: 'default',
       timeout: 15,
     };
 

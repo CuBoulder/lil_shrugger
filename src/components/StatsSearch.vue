@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import utilities from '../js/shrugger';
+  import shrugger from '../js/shrugger';
   import store from '../vuex/store';
   import bus from '../js/bus';
   import atlas from '../js/atlas';
@@ -275,11 +275,12 @@
       saveSearch() {
         let queryToSend = null;
         let name = null;
+        let userQuery = null;
 
         // Grab keyword to search for.
         this.$children.forEach((element) => {
           if (element.theKey === 'query') {
-            queryToSend = element.keyword;
+            userQuery = element.keyword;
           }
           if (element.theKey === 'title') {
             name = element.keyword;
@@ -287,7 +288,7 @@
         });
 
         // Convert to unicode.
-        queryToSend = utilities.convertToUnicode(queryToSend);
+        queryToSend = shrugger.convertToUnicode(userQuery);
 
         // Make tags into string with quotes.
         const tags = this.statsQueryTags.replace(new RegExp(',', 'g'), '","');
@@ -299,13 +300,19 @@
         const currentQuery = store.state.currentQuery;
 
         // If there is a current query, then we assume we are patching it.
-        if (currentQuery !== null) {
+        if (currentQuery !== null && userQuery === currentQuery.query) {
           atlas.request(baseURL, 'query/' + currentQuery._id, '', 'PATCH', data, currentQuery._etag)
             .then(() => {
+              // Wait a little so the response has new entries.
+              shrugger.wait(5000);
+
               bus.$emit('onMessage', {
                 text: 'You have sent a PATCH request to a query record. query ID: ' + currentQuery._id + '. Search and reset to add new query.',
                 alertType: 'alert-success',
               });
+
+              // Grab search queries.
+              atlas.getQueries();
             })
             .catch((error) => {
               console.log(error);
@@ -314,10 +321,16 @@
           // If no current query, then we assume we are making a new one.
           atlas.request(baseURL, 'query', '', 'POST', data)
             .then(() => {
+              // Wait a little so the response has new entries.
+              shrugger.wait(5000);
+
               bus.$emit('onMessage', {
                 text: 'You have sent a POST request to add query record. Search and reset to add new query.',
                 alertType: 'alert-success',
               });
+
+              // Grab search queries.
+              atlas.getQueries();
             })
             .catch((error) => {
               console.log(error);
@@ -325,7 +338,7 @@
         }
       },
       userAccessPerm(permission) {
-        return utilities.userAccess(permission);
+        return shrugger.userAccess(permission);
       },
     },
   };

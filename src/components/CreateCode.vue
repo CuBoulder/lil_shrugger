@@ -83,6 +83,7 @@
   import atlas from '../js/atlas';
   import code from '../js/code';
   import github from '../js/github';
+  import shrugger from '../js/shrugger';
 
   export default {
     name: 'CreateCode',
@@ -176,6 +177,9 @@
         const baseURL = store.state.atlasEnvironments[store.state.env];
         atlas.request(baseURL, 'code', '', 'POST', JSON.stringify(codeAsset))
           .then(() => {
+            // Wait a little so the response has new entries.
+            shrugger.wait(5000);
+
             bus.$emit('onMessage', {
               text: 'You have created a code asset.',
               alertType: 'alert-success',
@@ -194,5 +198,4 @@
       },
     },
   };
-
 </script>

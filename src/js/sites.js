@@ -5,7 +5,8 @@
 
 import atlas from './atlas';
 import store from '../vuex/store';
-import bus from '../js/bus';
+import bus from './bus';
+import shrugger from './shrugger';
 
 export default {
   /**
@@ -39,23 +40,13 @@ export default {
     // This is why there are two loops through the data.
     data.forEach((elements) => {
       elements.forEach((element) => {
-        // Format date.
-        const updatedDate = new Date(element._updated);
-        const createdDate = new Date(element._created);
-        const options = {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-        };
-
         const item = [];
+
         // item['id'] = element.sid;
         item.path = element.path;
         item.status = element.status;
-        item.updated = updatedDate.toLocaleTimeString('en-us', options);
-        item.created = createdDate.toLocaleTimeString('en-us', options);
+        item.updated = new Date(element._updated);
+        item.created = new Date(element._created);
         item.etag = element._etag;
         item.id = element._id;
         item.statistics = element.statistics;
@@ -86,18 +77,22 @@ export default {
     });
 
     atlas.request(baseURL, endpoint, '', 'POST', data)
-      .then(() =>
+      .then(() => {
+        // Wait a little so the response has new entries.
+        shrugger.wait(5000);
+
         this.get(store.state.atlasEnvironments[store.state.env])
-          .then((records) => {
-            store.commit('addSitesGridData', { sitesData: records });
-            bus.$emit('onMessage', {
-              text: 'Successfully created a site.',
-              alertType: 'alert-success',
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          }));
+        .then((records) => {
+          store.commit('addSitesGridData', { sitesData: records });
+          bus.$emit('onMessage', {
+            text: 'Successfully created a site.',
+            alertType: 'alert-success',
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      });
   },
 
   /**
@@ -139,6 +134,9 @@ export default {
     const baseURL = store.state.atlasEnvironments[store.state.env];
     atlas.request(baseURL, 'sites/' + params.current.id, '', method, body, params.current.etag)
       .then(() => {
+        // Wait a little so the response has new entries.
+        shrugger.wait(5000);
+
         bus.$emit('onMessage', {
           text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
           alertType: 'alert-success',
