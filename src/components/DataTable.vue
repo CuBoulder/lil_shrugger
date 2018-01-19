@@ -26,7 +26,7 @@
       <div class="alert alert-info">Your query returned no results.</div>
     </div>
     <div class="table-responsive">
-      <table class="table table-striped table-hover">
+      <table class="table table-striped table-hover table-bordered">
         <thead>
         <tr>
           <th scope="col" >
@@ -132,7 +132,7 @@
         const filterKey = this.filterKey;
         // Negative one is DESC; positive one is ASC.
         // I think it is more useful to have the most recent changes first.
-        const order = this.sortOrders[sortKey] || 11;
+        const order = this.sortOrders[sortKey] || 1;
         let data = this.data;
 
         // If using the default fuzzy search, then filter that way.

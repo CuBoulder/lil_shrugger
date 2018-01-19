@@ -42,7 +42,6 @@
 </script>
 
 <style>
-
   /* Needed for sticky navbar at top of pages. */
   body {
     padding-top: 100px;
@@ -66,7 +65,6 @@
     transform: translateY(-10px);
     opacity: 0;
   }
-
 
   /* Commands */
   .commands-button {
@@ -93,6 +91,4 @@
       max-width: 90%;
     }
   }
-
-
 </style>
