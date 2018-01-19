@@ -134,15 +134,37 @@
         localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
         localStorage.setItem('stats-keys', JSON.stringify(this.saveStatsKeys));
 
-        // Redirect user so any settings changes can be reloaded.
-        location.reload();
+        bus.$emit('onMessage', {
+          text: 'Saved credentials.',
+          alertType: 'alert-success',
+        });
       },
       clearStorage() {
         localStorage.clear();
 
-        // Location reload might not be the best. If not, use the below.
-        // this.$router.go(this.$router.currentRoute);
-        location.reload();
+        // Wait in case localStorage needs a little time to clear.
+        shrugger.wait(1500);
+
+        bus.$emit('onMessage', {
+          text: 'Cleared local storage.',
+          alertType: 'alert-success',
+        });
+
+        // This is duplicated from the data object.
+        // @todo abstract to one function.
+        this.username = localStorage.getItem('atlas-username') ? localStorage.getItem('atlas-username') : '';
+        this.password = localStorage.getItem('atlas-password') ? localStorage.getItem('atlas-password') : '';
+        this.baseURL = localStorage.getItem('baseURL') ? localStorage.getItem('baseURL') : '/shrugger';
+        this.gitHub = {
+          username: localStorage.getItem('github-username') ? localStorage.getItem('github-username') : '',
+          token: localStorage.getItem('github-token') ? localStorage.getItem('github-token') : '',
+        };
+        this.sitesQuery = localStorage.getItem('sites-query') ? localStorage.getItem('sites-query') : store.state.defaultSitesQuery;
+        this.codeQuery = localStorage.getItem('code-query') ? localStorage.getItem('code-query') : '';
+        this.repoListing = localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false;
+        this.saveSiteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys;
+        this.saveCodeKeys = localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.defaultSelectedCodeKeys;
+        this.saveStatsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [];
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
