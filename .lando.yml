@@ -1,0 +1,8 @@
+name: lil-shrugger
+proxy:
+  html:
+    - shrugger.lndo.site
+services:
+  html:
+    type: apache:latest
+    webroot: dist
