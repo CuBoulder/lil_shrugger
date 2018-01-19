@@ -1,5 +1,5 @@
 <template>
-  <div class="lisitng-wrapper">
+  <div>
     <form id="search" class="row">
       <div class="form-group">
         <div class="col-md-8">
@@ -25,48 +25,53 @@
     <div v-if="noResults">
       <div class="alert alert-info">Your query returned no results.</div>
     </div>
-    <table class="table table-responsive">
-      <thead>
-      <tr>
-        <th>
-          <input type="checkbox"
-                 id="select-all-checkbox"
-                 name="select-all-checkbox"
-                 value="checked"
-                 @change="selectAll($event)"
-                 v-model="allChecked">
-        </th>
-        <th v-for="key in columns"
-            :key="key"
-            @click="sortBy(key)"
-            :id="'table-header-' + key"
-            :class="{ active: sortKey == key}">
-          {{ key | capitalize }}
-          <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-          </span>
-        </th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <row v-for="(data2, index) in dataObjects"
-           v-if="showRow(index)"
-           :data="data2"
-           :key="data2.id"
-           :old-data="filteredData[index]"
-           :edit-keys="editKeys"
-           :select-keys="selectKeys"
-           :all-checked="allChecked"
-           :callback="callback"
-           :columns="columns">
-      </row>
-      </tbody>
-      <!-- Show More Records Links -->
-      <div v-if="resultCount > showRowCount">
-        <button class="btn btn-default" @click="showMore()" aria-label="Show More">Show More</button>
-        <button class="btn btn-default" @click="showAll()" aria-label="Show All">Show All</button>
-      </div>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col" >
+            <input type="checkbox"
+                  id="select-all-checkbox"
+                  name="select-all-checkbox"
+                  value="checked"
+                  @change="selectAll($event)"
+                  v-model="allChecked">
+          </th>
+          <th v-for="key in columns"
+              :key="key"
+              @click="sortBy(key)"
+              :id="'table-header-' + key"
+              scope="col"
+              :class="{ active: sortKey == key}">
+            {{ key | capitalize }}
+            <span class="arrow"
+                  v-if="sortKey === key"
+                  :class="sortOrders[key] > 0 ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-up'">
+            </span>
+          </th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <row v-for="(data2, index) in dataObjects"
+            v-if="showRow(index)"
+            :data="data2"
+            :key="data2.id"
+            :old-data="filteredData[index]"
+            :edit-keys="editKeys"
+            :select-keys="selectKeys"
+            :all-checked="allChecked"
+            :callback="callback"
+            :columns="columns">
+        </row>
+        </tbody>
+        <!-- Show More Records Links -->
+        <div v-if="resultCount > showRowCount">
+          <button class="btn btn-default" @click="showMore()" aria-label="Show More">Show More</button>
+          <button class="btn btn-default" @click="showAll()" aria-label="Show All">Show All</button>
+        </div>
+      </table>
+    </div>
     <div v-if="Object.keys(extraContent).length > 0">
       <pre>
         {{extraContent}}
@@ -97,7 +102,7 @@
         sortOrders[key] = 1;
       });
       return {
-        sortKey: '',
+        sortKey: store.state.defaultDataTableSortKey ? store.state.defaultDataTableSortKey : '',
         sortOrders,
         showAllRows: false,
         allChecked: false,
@@ -125,7 +130,9 @@
       filteredData() {
         const sortKey = this.sortKey;
         const filterKey = this.filterKey;
-        const order = this.sortOrders[sortKey] || 1;
+        // Negative one is DESC; positive one is ASC.
+        // I think it is more useful to have the most recent changes first.
+        const order = this.sortOrders[sortKey] || 11;
         let data = this.data;
 
         // If using the default fuzzy search, then filter that way.
@@ -137,9 +144,20 @@
 
         if (sortKey) {
           data = data.slice().sort((a, b) => {
-            a = a[sortKey];
-            b = b[sortKey];
-            return (a === b ? 0 : a > b ? 1 : -1) * order;
+            a = typeof a[sortKey] !== 'undefined' ? a[sortKey] : '';
+            b = typeof b[sortKey] !== 'undefined' ? b[sortKey] : '';
+
+            // We need to check
+            if (Object.prototype.hasOwnProperty.call(a, 'localeCompare')) {
+              const sortOptions = {
+                sensitivity: 'base',
+                numeric: true,
+              };
+
+              return b.localeCompare(a, 'en', sortOptions) * order;
+            }
+
+            return (a === b ? 0 : a > b ? -1 : 1) * order;
           });
         }
 
@@ -246,6 +264,7 @@
         // Disabling eslint since the JS eval is using the row even though it looks like it isn't.
         const newData = data.filter((row) => {
           try {
+
             if (eval(filterKey)) {
               return true;
             }
@@ -253,15 +272,21 @@
           }
           catch(error) {
             console.log(error);
-            errorMessage = true;
+            errorMessage = error;
           }
         });
         /* eslint-enable */
 
         // @todo Provide better message here.
         if (errorMessage) {
+          let explanation = '';
+
+          if (errorMessage.message.startsWith('Cannot read property')) {
+            explanation = '<br/>One of the fields queried has rows with properites missing or undefined.';
+          }
+
           bus.$emit('onMessage', {
-            text: 'Error in JS expression syntax. Refresh page to search again.',
+            text: errorMessage.message + explanation + '<br/>Check your query syntax and refresh to search again.',
             alertType: 'alert-danger',
           });
         }

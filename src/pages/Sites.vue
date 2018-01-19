@@ -1,5 +1,5 @@
 <template>
-  <div class="page container">
+  <div>
     <div id="site-listing" class="row">
       <message-area></message-area>
       <transition name="slide-fade">

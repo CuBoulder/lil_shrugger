@@ -1,8 +1,8 @@
 <template>
-  <div id="app" class="page container">
-    <div id="code-listing">
+  <div>
+    <div>
       <message-area></message-area>
-      <div class="row pull-right"
+      <div class="pull-right"
            id="create-code"
            v-if="userAccessPerm('createCode')">
         <create-code v-if="userAccessPerm('createCode')"></create-code>
@@ -10,7 +10,6 @@
       <data-table
           :data="gridData"
           :columns="gridColumns"
-          class="row"
           :callback="callback"
           :extra-content="rowViewContent"
           :edit-keys="editKeys"

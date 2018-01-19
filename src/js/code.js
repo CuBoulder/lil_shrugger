@@ -5,6 +5,7 @@
 import atlas from './atlas';
 import store from '../vuex/store';
 import bus from './bus';
+import shrugger from './shrugger';
 
 export default {
   /**
@@ -57,7 +58,7 @@ export default {
     });
 
     // If deleting a record, don't send a body.
-    let body = null;
+    let body = {};
     if (method !== 'DELETE') {
       body = JSON.stringify(formInput);
     }
@@ -66,9 +67,8 @@ export default {
 
     atlas.request(baseURL, 'code/' + params.current.id, '', method, body, etag)
       .then(() => {
-        setTimeout(() => {
-          console.log('2 second Atlas delay on code update...');
-        }, 2000);
+        // Wait a little so the response has new entries.
+        shrugger.wait(5000);
 
         bus.$emit('onMessage', {
           text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
@@ -118,6 +118,8 @@ export default {
         item.commit_hash = element.commit_hash;
         item.etag = element._etag;
         item.id = element._id;
+        item.created = new Date(element._created);
+        item.updated = new Date(element._updated);
         formattedData.push(item);
       });
     });

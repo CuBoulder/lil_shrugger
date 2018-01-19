@@ -17,7 +17,7 @@
         <div v-if="showDefault(key)" v-html="link(data[key],key)"></div>
         <div v-if="showEdit(key)">
           <div v-if="selectType(key)">
-            <select :name="key" v-model="data[key]">
+            <select :name="key" v-model="data[key]" class="form-control">
               <option v-for="anOption in selectOptions[key]"
                       :key="anOption"
                       :value="anOption" :selected=" data[key] == anOption ? true : null">
@@ -26,7 +26,10 @@
             </select>
           </div>
           <div v-else>
-            <input type="text" :name="key" v-model="data[key]">
+            <input type="text"
+                   :name="key"
+                   class="form-control"
+                   v-model="data[key]">
           </div>
           <!-- Adding an editOptions div so that fields can have special things happen when in edit mode. -->
           <div v-html="editContent[data.id][key]"></div>
@@ -65,7 +68,7 @@
 </template>
 
 <script>
-  import utilities from '../js/shrugger';
+  import shrugger from '../js/shrugger';
   import atlas from '../js/atlas';
   import store from '../vuex/store';
   import bus from '../js/bus';
@@ -148,9 +151,14 @@
             + '(Site)</a><br/>(<a target="_blank" href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
         }
 
+        // Format dates for nicer output.
+        if (key === 'created' || key === 'updated') {
+          return shrugger.toDate(value);
+        }
+
         // Deal with empty packages arrays.
         if (typeof value === 'undefined' || value.length === 0) {
-          return 'N/A';
+          return '';
         }
 
         return value;
@@ -217,7 +225,7 @@
         bus.$emit('rowHide', this);
       },
       userAccessPerm(permission) {
-        return utilities.userAccess(permission);
+        return shrugger.userAccess(permission);
       },
     },
   };

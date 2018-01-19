@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <navbar></navbar>
-    <div class="page container">
-      <router-view class="row"/>
-    </div>
+      <div class="page container">
+        <transition name="fade">
+          <router-view class="row"/>
+        </transition>
+      </div>
   </div>
 </template>
 
@@ -84,5 +86,13 @@
     display: inline-block;
     margin-left: 0.75em;
   }
+
+  @media (min-width: 1200px) {
+    .container {
+      width: 1450px;
+      max-width: 90%;
+    }
+  }
+
 
 </style>
