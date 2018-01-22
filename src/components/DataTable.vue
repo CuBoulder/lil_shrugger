@@ -96,14 +96,16 @@
       editKeys: Array,
       selectKeys: Array,
       callback: String,
+      defaultSortKey: String,
+      defaultSortDirection: String,
     },
     data() {
       const sortOrders = {};
       this.columns.forEach((key) => {
-        sortOrders[key] = 1;
+        sortOrders[key] = Number(this.defaultSortDirection);
       });
       return {
-        sortKey: store.state.defaultDataTableSortKey ? store.state.defaultDataTableSortKey : '',
+        sortKey: this.defaultSortKey ? this.defaultSortKey : '',
         sortOrders,
         showAllRows: false,
         allChecked: false,

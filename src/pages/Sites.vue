@@ -28,6 +28,8 @@
           :columns="gridColumns"
           :edit-keys="editKeys"
           :select-keys="selectKeys"
+          default-sort-key="status"
+          default-sort-direction="-1"
           :callback="callback">
       </data-table>
     </div>

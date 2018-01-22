@@ -13,6 +13,8 @@
           :callback="callback"
           :extra-content="rowViewContent"
           :edit-keys="editKeys"
+          default-sort-key="updated"
+          default-sort-direction="1"
           :select-keys="selectKeys">
       </data-table>
 

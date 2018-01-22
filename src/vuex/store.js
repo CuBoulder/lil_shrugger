@@ -38,7 +38,6 @@ const store = new Vuex.Store({
     defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
     defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
     defaultSitesQuery: '?where={"type":"express"}',
-    defaultDataTableSortKey: 'updated',
     editContent: {},
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     expressEnvironments: {
