@@ -92,7 +92,7 @@
     }
   }
 
-  @media (min-width: 1200px) {
+  @media (min-width: 768px) {
     .row {
       margin-left: 0px;
       margin-right: 0px;
