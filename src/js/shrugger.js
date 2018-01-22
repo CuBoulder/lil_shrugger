@@ -108,7 +108,7 @@ export default {
       const propertyNames = Object.getOwnPropertyNames(queryParams);
 
       if (propertyNames.indexOf('filter') !== -1) {
-        store.commit('setFilterKey', queryParams.filter);
+        store.commit('setFilterKey', atob(decodeURIComponent(queryParams.filter)));
       }
     }
   },

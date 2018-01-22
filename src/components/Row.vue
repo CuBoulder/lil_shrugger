@@ -194,7 +194,7 @@
         }
 
         const that = this;
-        atlas.request(store.state.atlasEnvironments[store.state.env], type + '/' + this.data.id)
+        atlas.request(store.state.atlasEnvironments[store.state.env], type + '/' + that.data.id)
           .then((data) => {
             // Check and see if etags are different and update row data if so.
             if (data[0]._etag !== that.data.etag) {
