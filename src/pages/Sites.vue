@@ -315,20 +315,31 @@
         const exportData = rows.map((item) => {
           const returnItem = {};
           columns.forEach((element) => {
+
+            // Date objects ended up not coming out right.
+            if (item[element] instanceof Date) {
+              item[element] = shrugger.toDate(item[element]);
+            }
+
             // Need to join arrays with different value than comma.
             if (Array.isArray(item[element])) {
               item[element] = item[element].join('|');
-            } else if (typeof item[element] === 'object') {
-              // If item is still an object, then we need to do more work.
+            }
+
+            // If item is still an object, then we need to more to flatten it into a string.
+            if (typeof item[element] === 'object') {
               let mrString = '';
               Object.keys(item[element]).forEach((thing) => {
                 mrString = mrString + '|' + thing + ':' + item[element][thing];
               });
               item[element] = mrString;
-            } else if (typeof item[element] === 'string') {
-              // Strings can have commas.
+            }
+
+            // Strings can have commas.
+            if (typeof item[element] === 'string') {
               item[element] = item[element].replace(new RegExp(',', 'g'), '|');
             }
+
             returnItem[element] = item[element];
 
             // Also make columns into header objects.

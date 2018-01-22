@@ -15,7 +15,7 @@
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li v-for="route in routes">
-            <router-link :to="route.path">{{ route.name }}</router-link>
+            <router-link :id="'route-link-' + route.name" :to="route.path">{{ route.name }}</router-link>
           </li>
         </ul>
         <div class="nav navbar-nav navbar-right">

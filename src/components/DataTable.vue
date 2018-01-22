@@ -150,7 +150,7 @@
             a = typeof a[sortKey] !== 'undefined' ? a[sortKey] : '';
             b = typeof b[sortKey] !== 'undefined' ? b[sortKey] : '';
 
-            // We need to check
+            // We need to check whther the value is a string to use this sorting function.
             if (Object.prototype.hasOwnProperty.call(a, 'localeCompare')) {
               const sortOptions = {
                 sensitivity: 'base',
