@@ -66,7 +66,8 @@
         </row>
         </tbody>
         <!-- Show More Records Links -->
-        <div v-if="resultCount > showRowCount">
+        <div class="show-more-buttons"
+             v-if="resultCount > showRowCount">
           <button class="btn btn-default" @click="showMore()" aria-label="Show More">Show More</button>
           <button class="btn btn-default" @click="showAll()" aria-label="Show All">Show All</button>
         </div>
@@ -260,11 +261,28 @@
       expressionFilterSearch(filterKey, data) {
         let errorMessage = false;
 
-        /* eslint-disable */
         // Disabling eslint since the JS eval is using the row even though it looks like it isn't.
+        /* eslint-disable */
         const newData = data.filter((row) => {
-          try {
+          const bundles = {
+           /* and: (val) => {
+              let match = false;
+              row.forEach((val) => {
 
+              });
+            }, */
+            or: (code) => {
+              const re = new RegExp('(' + code + ')', 'i');
+              return row.packages.some((val) => {
+                if (val) {
+                  return val.match(re);
+                }
+                return false;
+              });
+            },
+          };
+
+          try {
             if (eval(filterKey)) {
               return true;
             }
@@ -290,7 +308,6 @@
             alertType: 'alert-danger',
           });
         }
-
         return newData;
       },
       selectFilter() {
@@ -309,4 +326,5 @@ td {
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
+
 </style>

@@ -172,8 +172,8 @@
       navbarShowListener(component) {
         switch (component) {
           case 'help':
-            // Redirect user to help article.
-            window.location.href = store.state.help.settings;
+            // Open help article.
+            window.open(store.state.help.settings, '_blank');
             break;
           default:
             break;

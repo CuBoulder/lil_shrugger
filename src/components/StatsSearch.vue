@@ -198,7 +198,7 @@
         });
 
         // Set the history to update the query parameters for sharing URLs.;
-        const filter = that.filter ? '?filter=' + that.filter : '';
+        const filter = that.filter ? '?filter=' + btoa(that.filter) : '';
 
         // We have to check for the existence of the first query parameter here.
         // I'm sure this can be done in a better way, but with only two parameters

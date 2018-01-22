@@ -178,8 +178,16 @@
         bus.$emit('hideRowExtraContent');
       },
       navbarShowListener(component, that) {
-        if (component === 'table') {
-          that.initialize();
+        switch (component) {
+          case 'help':
+            // Open help article.
+            window.open(store.state.help.code, '_blank');
+            break;
+          case 'table':
+            that.initialize();
+            break;
+          default:
+            break;
         }
       },
     },

@@ -281,8 +281,8 @@
             that.initialize();
             break;
           case 'help':
-            // Redirect user to help article.
-            window.location.href = store.state.help.sites;
+            // Open help article.
+            window.open(store.state.help.sites, '_blank');
             break;
           default:
             break;

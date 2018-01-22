@@ -91,4 +91,11 @@
       max-width: 90%;
     }
   }
+
+  @media (min-width: 1200px) {
+    .row {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+  }
 </style>
