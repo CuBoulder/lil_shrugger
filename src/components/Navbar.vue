@@ -26,6 +26,10 @@
                   aria-hidden="true"
                   @click="show(icon.component)">
             </span>
+            <!-- Help Link -->
+            <a class="help-link" :href="'https://github.com/CuBoulder/lil_shrugger/wiki/' + currentRoute" target="_blank">
+              <span class="navbar-action-icon glyphicon glyphicon-question-sign"></span>
+            </a>
           </div>
           <!-- Environment Selector -->
           <div class="styled-select" v-if="multipleEnvironments">
@@ -75,6 +79,9 @@
       },
       actionIcons() {
         return store.state.actionIcons[this.$route.name];
+      },
+      currentRoute() {
+        return Router.app._route.name;
       },
     },
     methods: {
@@ -178,5 +185,9 @@
     padding-bottom: 0.25em;
     border-right: 1px solid #e7e7e7;
     height: 100%;
+  }
+
+  .help-link {
+    color: #777;
   }
 </style>

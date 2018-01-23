@@ -181,10 +181,6 @@
       },
       navbarShowListener(component, that) {
         switch (component) {
-          case 'help':
-            // Open help article.
-            window.open(store.state.help.code, '_blank');
-            break;
           case 'table':
             that.initialize();
             break;

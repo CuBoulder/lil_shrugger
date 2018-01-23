@@ -106,7 +106,7 @@
       // Show search when icon in navbar is clicked.
       // Also refresh table data.
       bus.$on('navbarShow', (component) => {
-        that.navbarShowListener(component);
+        that.navbarShowListener(component, that);
       });
     },
     computed: {
@@ -171,10 +171,6 @@
       },
       navbarShowListener(component) {
         switch (component) {
-          case 'help':
-            // Open help article.
-            window.open(store.state.help.settings, '_blank');
-            break;
           default:
             break;
         }
