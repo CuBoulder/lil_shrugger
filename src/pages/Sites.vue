@@ -282,10 +282,6 @@
           case 'table':
             that.initialize();
             break;
-          case 'help':
-            // Open help article.
-            window.open(store.state.help.sites, '_blank');
-            break;
           default:
             break;
         }
@@ -315,7 +311,6 @@
         const exportData = rows.map((item) => {
           const returnItem = {};
           columns.forEach((element) => {
-
             // Date objects ended up not coming out right.
             if (item[element] instanceof Date) {
               item[element] = shrugger.toDate(item[element]);

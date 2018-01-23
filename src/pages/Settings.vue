@@ -171,10 +171,6 @@
       },
       navbarShowListener(component) {
         switch (component) {
-          case 'help':
-            // Open help article.
-            window.open(store.state.help.settings, '_blank');
-            break;
           default:
             break;
         }
