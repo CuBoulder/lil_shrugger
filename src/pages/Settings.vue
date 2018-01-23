@@ -106,7 +106,7 @@
       // Show search when icon in navbar is clicked.
       // Also refresh table data.
       bus.$on('navbarShow', (component) => {
-        that.navbarShowListener(component);
+        that.navbarShowListener(component, that);
       });
     },
     computed: {

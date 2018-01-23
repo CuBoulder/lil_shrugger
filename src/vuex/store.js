@@ -15,14 +15,9 @@ const store = new Vuex.Store({
         { name: 'search', component: 'statsSearch' },
         { name: 'th-list', component: 'commands' },
         { name: 'refresh', component: 'table' },
-        { name: 'question-sign', component: 'help' },
       ],
       Code: [
         { name: 'refresh', component: 'table' },
-        { name: 'question-sign', component: 'help' },
-      ],
-      Settings: [
-        { name: 'question-sign', component: 'help' },
       ],
     },
     atlasEnvironments: {
@@ -48,11 +43,6 @@ const store = new Vuex.Store({
     },
     filteredData: [],
     filterKey: '',
-    help: {
-      sites: 'https://github.com/CuBoulder/lil_shrugger/wiki/Sites',
-      code: 'https://github.com/CuBoulder/lil_shrugger/wiki/Code',
-      settings: 'https://github.com/CuBoulder/lil_shrugger/wiki/Settings',
-    },
     gitHubRepos: [],
     gitHubBranches: [],
     recordsToShow: 10,
