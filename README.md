@@ -10,6 +10,7 @@ npm install
 npm run dev
 
 # Build production code.
+# The build expects the index.html to be placed in the docroot.
 npm run build
 ```
 
