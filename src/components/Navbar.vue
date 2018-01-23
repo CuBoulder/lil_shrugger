@@ -53,8 +53,6 @@
   import store from '../vuex/store';
   import bus from '../js/bus';
 
-  console.log(Router);
-
   export default {
     name: 'Navbar',
     data() {
