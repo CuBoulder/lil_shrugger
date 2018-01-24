@@ -52,34 +52,34 @@
           </select>
         </div>
         <div class="row col-md-12 form-group">
-          <!-- Bundles add select list. -->
-          <div id="bundles-add" class="col-md-6">
-            <label for="bundles-add">Add Packages:</label>
+          <!-- Packages add select list. -->
+          <div id="packages-add" class="col-md-6">
+            <label for="packages-add">Add Packages:</label>
             <div class="form-check"
               :key="asset.id"
               v-for="asset in modules">
               <input class="form-check-input"
                     type="checkbox"
-                    :id="'bundle-' + asset.id"
+                    :id="'package-add' + asset.id"
                     :value="asset.id"
-                    v-model="addBundles">
+                    v-model="addPackages">
               {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
               <span v-if="asset.is_current === true">
                 (Current)
               </span>
             </div>
           </div>
-          <!-- Bundles add select list. -->
-          <div id="bundles-remove" class="col-md-6">
-            <label for="bundles-remove">Remove Packages:</label>
+          <!-- Packages remove select list. -->
+          <div id="packages-remove" class="col-md-6">
+            <label for="packages-remove">Remove Packages:</label>
             <div class="form-check"
               :key="asset.id"
               v-for="asset in modules">
               <input class="form-check-input"
                     type="checkbox"
-                    :id="'bundle-' + asset.id"
+                    :id="'package-remove' + asset.id"
                     :value="asset.id"
-                    v-model="removeBundles">
+                    v-model="removePackages">
               {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
               <span v-if="asset.is_current === true">
                 (Current)
@@ -111,8 +111,8 @@
         modules: [],
         codeTypes: ['core', 'profile', 'package'],
         saveCodeTypes: [],
-        addBundles: [],
-        removeBundles: [],
+        addPackages: [],
+        removePackages: [],
         atlasQuery: '?where={"type":"express","update_group":1}',
         sitesToUpdate: [],
         chosenProfile: '',
@@ -140,7 +140,7 @@
 
           store.commit('addSitesGridData', options);
 
-          // Create buckets of cores, profiles and bundles.
+          // Create buckets of cores, profiles, and packages.
           that.cores = data.filter(asset => asset.code_type === 'core').sort();
           that.profiles = data.filter(asset => asset.code_type === 'profile').sort();
           that.modules = data.filter(asset => asset.code_type === 'module');
@@ -194,13 +194,13 @@
 
               // Loop through each site to update and remove/add packages.
               if (type === 'package') {
-                that.addBundles.forEach((element) => {
+                that.addPackages.forEach((element) => {
                   if (!site.code.package.includes(element)) {
                     site.code.package.push(element);
                   }
                 });
 
-                that.removeBundles.forEach((element) => {
+                that.removePackages.forEach((element) => {
                   if (site.code.package.includes(element)) {
                     site.code.package.splice(site.code.package.indexOf(element), 1);
                   }
@@ -221,7 +221,7 @@
               atlas.request(baseURL, 'sites/' + site._id, '', 'PATCH', body, site._etag)
               .then(() => {
                 bus.$emit('onMessage', {
-                  text: 'You have sent a request to update some code. Good luck in your journey!',
+                  text: 'You have sent a request to update some code. Good luck on your journey!',
                   alertType: 'alert-success',
                 });
               })
