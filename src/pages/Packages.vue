@@ -218,7 +218,16 @@
 
               // Make request to Atlas.
               const body = `{"code":${JSON.stringify(site.code)}}`;
-              atlas.request(baseURL, 'sites/' + site._id, '', 'PATCH', body, site._etag);
+              atlas.request(baseURL, 'sites/' + site._id, '', 'PATCH', body, site._etag)
+              .then(() => {
+                bus.$emit('onMessage', {
+                  text: 'You have sent a request to update some code. Good luck in your journey!',
+                  alertType: 'alert-success',
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
             }
           });
         });
