@@ -31,11 +31,11 @@
         <tr>
           <th scope="col" >
             <input type="checkbox"
-                  id="select-all-checkbox"
-                  name="select-all-checkbox"
-                  value="checked"
-                  @change="selectAll($event)"
-                  v-model="allChecked">
+                   id="select-all-checkbox"
+                   name="select-all-checkbox"
+                   value="checked"
+                   @change="selectAll($event)"
+                   v-model="allChecked">
           </th>
           <th v-for="key in columns"
               :key="key"
@@ -317,7 +317,7 @@
   };
 </script>
 
-<style>
+<style scoped>
 
 td {
   max-width: 270px;
