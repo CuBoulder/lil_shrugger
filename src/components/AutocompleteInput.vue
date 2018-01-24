@@ -100,7 +100,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   ul {
     list-style-type: none;
     padding: 0;

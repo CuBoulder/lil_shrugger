@@ -39,3 +39,11 @@
     },
   };
   </script>
+
+<style scoped>
+
+.alert {
+  word-wrap: break-word;
+}
+
+</style>

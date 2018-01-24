@@ -100,15 +100,6 @@
         saveStatsKeys: localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [],
       };
     },
-    created() {
-      const that = this;
-
-      // Show search when icon in navbar is clicked.
-      // Also refresh table data.
-      bus.$on('navbarShow', (component) => {
-        that.navbarShowListener(component, that);
-      });
-    },
     computed: {
       siteKeys() {
         return store.state.siteKeys;
@@ -168,12 +159,6 @@
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
-      },
-      navbarShowListener(component) {
-        switch (component) {
-          default:
-            break;
-        }
       },
     },
   };

@@ -5,6 +5,7 @@ import Router from 'vue-router';
 import Sites from '@/pages/Sites';
 import Settings from '@/pages/Settings';
 import Code from '@/pages/Code';
+import Packages from '@/pages/Packages';
 
 Vue.use(Router);
 
@@ -21,6 +22,11 @@ export default new Router({
       path: '/code',
       name: 'Code',
       component: Code,
+    },
+    {
+      path: '/packages',
+      name: 'Packages',
+      component: Packages,
     },
     {
       path: '/settings',
