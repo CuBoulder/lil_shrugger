@@ -24,10 +24,13 @@
                 {{type}}
             </div>
           </div>
+        </div>
+        <div class="row col-md-12 form-group">
           <!-- Cores select list. -->
           <label for="selectCore">Cores:</label>
           <select name="selectCore"
                   id="selectCore"
+                  v-model="chosenCore"
                   class="form-control">
             <option :key="asset.id"
                     :value="asset.id"
@@ -36,9 +39,10 @@
             </option>
           </select>
           <!-- Profiles select list. -->
-          <label for="selectCore">Profiles:</label>
-          <select name="selectCore"
-                  id="selectCore"
+          <label for="selectProfile">Profiles:</label>
+          <select name="selectProfile"
+                  id="selectProfile"
+                  v-model="chosenProfile"
                   class="form-control">
             <option :key="asset.id"
                     :value="asset.id"
@@ -109,7 +113,10 @@
         saveCodeTypes: [],
         addBundles: [],
         removeBundles: [],
-        atlasQuery: '?where={"type":"express","status":"installed"}',
+        atlasQuery: '?where={"type":"express","update_group":1}',
+        sitesToUpdate: [],
+        chosenProfile: '',
+        chosenCore: '',
       };
     },
     created() {
@@ -131,8 +138,6 @@
             codeData: data,
           };
 
-          console.log(data);
-
           store.commit('addSitesGridData', options);
 
           // Create buckets of cores, profiles and bundles.
@@ -141,37 +146,31 @@
           that.modules = data.filter(asset => asset.code_type === 'module');
 
           that.modules.sort((a, b) => {
-            /*
-            if (Object.prototype.hasOwnProperty.call(a.name, 'localeCompare')) {
-              const sortOptions = {
-                sensitivity: 'base',
-                numeric: true,
-              };
+            const sortOptions = {
+              sensitivity: 'base',
+              numeric: true,
+            };
 
-              return b.name.localeCompare(a.name, 'en', sortOptions);
-            } */
-
-            return b.name - a.name;
+            return a.name.localeCompare(b.name, 'en', sortOptions);
           });
         });
       },
       search() {
+        const that = this;
         const baseURL = store.state.atlasEnvironments[store.state.env];
-        console.log(this.atlasQuery);
 
-        atlas.request(baseURL, 'sites', this.atlasQuery)
+        atlas.request(baseURL, 'sites', that.atlasQuery)
         .then((data) => {
-          console.log(data);
           let returnedSites = [];
           data.forEach((element) => {
             returnedSites = returnedSites.concat(element);
           });
-          this.sitesToUpdate = returnedSites;
+          that.sitesToUpdate = returnedSites;
 
-          const siteList = this.sitesToUpdate.map(val => val.path);
+          const siteList = that.sitesToUpdate.map(val => val.path);
 
           bus.$emit('onMessage', {
-            text: '<p>You will update the following sites (Site Count:' + this.sitesToUpdate.length + ').</p>' +
+            text: '<p>You will update the following sites (Site Count:' + that.sitesToUpdate.length + ').</p>' +
               '<p><strong>Paths:</strong><br/>' + siteList.join(', ') + '</p>',
             alertType: 'alert-warning',
           });
@@ -181,13 +180,46 @@
         });
       },
       updatePackages(that) {
-        console.log('actual-vue-js', that);
+        const baseURL = store.state.atlasEnvironments[store.state.env];
 
         // Loop through code types that are supposed to change.
         that.saveCodeTypes.forEach((type) => {
-          // Loop through each site to update and remove/add packages.
           that.sitesToUpdate.forEach((site) => {
+            // Skip sites don't have code on them for some reason.
+            if (site.code) {
+              // Need to create empty package array, because it isn't normalized on all sites.
+              if (!site.code.package) {
+                site.code.package = [];
+              }
 
+              // Loop through each site to update and remove/add packages.
+              if (type === 'package') {
+                that.addBundles.forEach((element) => {
+                  if (!site.code.package.includes(element)) {
+                    site.code.package.push(element);
+                  }
+                });
+
+                that.removeBundles.forEach((element) => {
+                  if (site.code.package.includes(element)) {
+                    site.code.package.splice(site.code.package.indexOf(element), 1);
+                  }
+                });
+              }
+
+              // If it is a core or profile, we can just replace the string.
+              if (type === 'core') {
+                site.code.core = that.chosenCore;
+              }
+
+              if (type === 'profile') {
+                site.code.profile = that.chosenProfile;
+              }
+
+              // Make request to Atlas.
+              const body = `{"code":${JSON.stringify(site.code)}}`;
+              atlas.request(baseURL, 'sites/' + site._id, '', 'PATCH', body, site._etag);
+            }
           });
         });
       },
