@@ -11,6 +11,7 @@ Vue.use(Router);
 
 export default new Router({
   mode: 'history',
+  base: process.env.SUBDIRECTORY ? `/${process.env.SUBDIRECTORY}` : '',
   routes: [
     {
       path: '/',
@@ -32,6 +33,5 @@ export default new Router({
       name: 'Settings',
       component: Settings,
     },
-
   ],
 });
