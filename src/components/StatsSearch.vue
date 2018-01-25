@@ -4,13 +4,8 @@
     <hr>
     <div class="form-group row">
       <div class="col-md-6">
-        <label for="query-mongo">Query</label>
-        <autocomplete-input
-            id="query-mongo"
-            :options-key="optionsKey"
-            the-key="query"
-            :model="statsQuery">
-        </autocomplete-input>
+        <label for="mongo-query">Query</label>
+        <input type="text" name="mongo-query" id="mongo-query" class="form-control" v-model="statsQuery">
       </div>
       <div class="col-md-6">
         <label for="query-name">Query Name</label>
@@ -78,9 +73,6 @@
       });
     },
     computed: {
-      commands() {
-        return store.state.commands;
-      },
       filter() {
         return store.state.filterKey;
       },
@@ -118,49 +110,34 @@
           if (paramQuery !== 'undefined') {
             that.search(paramQuery);
 
-            // Have to send event to set names since they live in autocomplete inputs.
+            // Have to send event to set name field since it lives in an autocomplete inputs.
             bus.$emit('searchByQueryParam', paramQuery);
+
+            // Add other fields.
+            that.statsQueryDescription = paramQuery.description;
+            that.statsQueryEndpoint = paramQuery.endpoint;
+            that.statsQueryTags = paramQuery.tags.join(',');
+            that.statsQuery = paramQuery.query;
           }
         }
       },
       selectListener(params, that) {
-        // Since we know that we have queries and titles, we can check the key and
-        // make the opposite property match what the user selected.
-        let params2 = {};
+        // Fill in other fields in stats search.
         if (params.key === 'title') {
-          params2 = {
-            keyword: params.selectedOption.query,
-            key: 'query',
-          };
-          bus.$emit('matchKeys', params2);
-        } else {
-          params2 = {
-            keyword: params.selectedOption.title,
-            key: 'title',
-          };
-          bus.$emit('matchKeys', params2);
+          let currentQuery = {};
+          store.state.statsQueryOptions.forEach((element) => {
+            if (element.title === params.selectedOption.title) {
+              that.statsQueryDescription = element.description;
+              that.statsQueryEndpoint = element.endpoint;
+              that.statsQueryTags = element.tags.join(',');
+              that.statsQuery = element.query;
+              currentQuery = element;
+            }
+          });
+
+          // Save current query for check when updating queries.
+          store.commit('storeQuery', currentQuery);
         }
-
-        // Fill in other keys.
-        let currentQuery = {};
-        store.state.statsQueryOptions.forEach((element) => {
-          if (params2.key === 'title' && element.title === params2.keyword) {
-            that.statsQueryDescription = element.description;
-            that.statsQueryEndpoint = element.endpoint;
-            that.statsQueryTags = element.tags.join(',');
-            currentQuery = element;
-          }
-
-          if (params2.key === 'query' && element.query === params2.keyword) {
-            that.statsQueryDescription = element.description;
-            that.statsQueryEndpoint = element.endpoint;
-            that.statsQueryTags = element.tags.join(',');
-            currentQuery = element;
-          }
-        });
-
-        // Save current query for check when updating queries.
-        store.commit('storeQuery', currentQuery);
       },
       search(querySent = null) {
         let query = null;
@@ -170,22 +147,7 @@
         if (querySent !== null) {
           query = querySent.query;
         } else {
-          // If no passed in query, then we need to grab it from autocomplete fields.
-          // Autocomplete is another component.
-          this.$children.forEach((element) => {
-            if (element.theKey === 'query') {
-              query = element.keyword;
-            }
-          });
-
-          // If no query, then emit an error message and return.
-          if (query === null) {
-            bus.$emit('onMessage', {
-              text: 'No query found.',
-              alertType: 'alert-danger',
-            });
-            return;
-          }
+          query = that.statsQuery;
         }
 
         // Find the query name of the ID entered.
@@ -261,6 +223,7 @@
         that.statsQueryDescription = '';
         that.statsQueryEndpoint = '';
         that.statsQueryTags = '';
+        that.statsQuery = '';
 
         // Reset stored query.
         store.commit('storeQuery', null);
