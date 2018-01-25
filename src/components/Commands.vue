@@ -6,7 +6,9 @@
       <hr>
       <label for="sendCommand">Select Command</label>
       <select name="sendCommand" id="sendCommand" class="form-control" v-model="selectedCommand">
-        <option v-for="(value, index) in commands" :value="value._id">
+        <option v-for="(value, index) in commands"
+                :key="value._id"
+                :value="value._id">
           {{value.name}}
         </option>
       </select>
@@ -23,7 +25,11 @@
       <hr>
       <label for="export-list">Reports List</label>
       <select name="export-list" id="export-list"  class="form-control" v-model="exportCallback">
-        <option v-for="report in reportsList" :value="report">{{report}}</option>
+        <option v-for="report in reportsList"
+                :key="report"
+                :value="report">
+          {{report}}
+        </option>
       </select>
       <label for="export-options">Report Options</label>
       <input type="text" id="export-options" class="form-control" name="export-options" v-model="exportOptions">
@@ -39,7 +45,7 @@
 <script>
 
   import store from '../vuex/store';
-  import utilities from '../js/shrugger';
+  import shrugger from '../js/shrugger';
 
   export default {
     name: 'Commands',
@@ -63,7 +69,7 @@
     },
     methods: {
       userAccessPerm(permission) {
-        return utilities.userAccess(permission);
+        return shrugger.userAccess(permission);
       },
     },
   };
