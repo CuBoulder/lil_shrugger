@@ -1,7 +1,9 @@
 <template>
   <div class="row" >
-    <button v-if="!addCode" class="btn btn-primary" @click="codeButton()">Add
-      Code
+    <button v-if="!addCode"
+            class="btn btn-primary"
+            @click="addCode = true">
+      Add Code
     </button>
     <transition name="fade">
       <div v-if="addCode">
@@ -10,7 +12,9 @@
                 id="addRepo"
                 @change="changeRepo($event)"
                 class="form-control">
-          <option v-for="(value, index) in repos" :value="index">
+          <option v-for="(value, index) in repos"
+                  :key="index"
+                  :value="index">
             {{value.name}}
           </option>
         </select>
@@ -22,7 +26,9 @@
                     id="addBranch"
                     @change="changeBranch($event)"
                     class="form-control">
-              <option v-for="(branch, index) in branches" :value="index">
+              <option v-for="(branch, index) in branches"
+                      :key="index"
+                      :value="index">
                 {{branch.name}}
               </option>
             </select>
@@ -31,7 +37,9 @@
                     id="code_type"
                     v-model="codeType"
                     class="form-control">
-              <option v-for="anOption in selectOptions.code_type" :value="anOption">
+              <option v-for="anOption in selectOptions.code_type"
+                      :key="anOption"
+                      :value="anOption">
                 {{anOption}}
               </option>
             </select>
@@ -40,7 +48,9 @@
                     id="is_current"
                     v-model="isCurrent"
                     class="form-control">
-              <option v-for="anOption in selectOptions.is_current" :value="anOption">
+              <option v-for="anOption in selectOptions.is_current"
+                      :key="anOption"
+                      :value="anOption">
                 {{anOption}}
               </option>
             </select>
@@ -49,7 +59,9 @@
                     id="tag"
                     v-model="tag"
                     class="form-control">
-              <option v-for="anOption in selectOptions.tag" :value="anOption">
+              <option v-for="anOption in selectOptions.tag"
+                      :key="anOption"
+                      :value="anOption">
                 {{anOption}}
               </option>
             </select>
@@ -68,10 +80,16 @@
           </div>
         </transition>
         <!-- End Second dropdown -->
-        <button v-if="ready" class="btn btn-primary" @click="createCode()">Create
-          Code Asset
+        <button v-if="ready"
+                class="btn btn-primary"
+                @click="createCode()">
+          Create Code Asset
         </button>
-        <button v-if="addCode" class="btn btn-default" @click="addCode = false">Cancel</button>
+        <button v-if="addCode"
+                class="btn btn-default"
+                @click="addCode = false">
+          Cancel
+        </button>
       </div>
     </transition>
   </div>
@@ -121,14 +139,17 @@
     },
     methods: {
       changeRepo(event) {
+        const that = this;
+
         // Set to true for branch select list to appear.
         this.branchReady = true;
+
+        // Get a list of branches for the active repo.
         this.branches = [];
         this.activeRepo = this.repos[event.target.value];
-
-        const that = this;
         const response = github.getBranches(this.activeRepo.name);
 
+        // Save branches to the central store.
         response.then((branchesList) => {
           store.commit('addGitHubBranches', branchesList);
           // Add a default; otherwise user can't select first element.
@@ -142,11 +163,9 @@
         });
       },
       changeBranch(event) {
+        // Display the Create Code Asset button.
         this.ready = true;
         this.branchToAdd = this.branches[event.target.value];
-      },
-      codeButton() {
-        this.addCode = true;
       },
       createCode() {
         const repo = this.activeRepo;
@@ -161,6 +180,7 @@
         // Turn tag into array.
         input.tag = [input.tag];
 
+        // Make body to send to Atlas.
         const codeAsset = {
           git_url: repo.ssh_url,
           commit_hash: branch.commit.sha,
@@ -174,6 +194,7 @@
           },
         };
 
+        // Make request to add code to Atlas.
         const baseURL = store.state.atlasEnvironments[store.state.env];
         atlas.request(baseURL, 'code', '', 'POST', JSON.stringify(codeAsset))
           .then(() => {

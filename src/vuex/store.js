@@ -134,6 +134,7 @@ const store = new Vuex.Store({
     },
     addSitesGridData(state, options) {
       Object.keys(options).forEach((el) => {
+        state.sitesGridData[el] = [];
         state.sitesGridData[el] = options[el];
       });
     },
