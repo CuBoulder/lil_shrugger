@@ -8,8 +8,9 @@
            @keydown.up="moveUp"
            @keydown.enter="select"
            v-model="keyword">
-    <ul class="options-list" v-show="isOpen">
+    <ul class="options-list" v-show="isOpen === true">
       <li v-for="(option, index) in fOptions"
+          :key="index"
           @mouseenter="highlightedPosition = index"
           @mousedown="select"
           :class="{'highlighted': index === highlightedPosition}">
@@ -32,30 +33,24 @@
     },
     data() {
       return {
-        isOpen: false,
-        highlightedPosition: 0,
+        isOpen: {
+          type: Boolean,
+          default: false,
+        },
+        highlightedPosition: {
+          type: Number,
+          default: 0,
+        },
         keyword: this.model,
       };
     },
     created() {
       const that = this;
 
-      // Allow other autocomplete inputs to interact and update each other.
-      bus.$on('matchKeys', (params) => {
-      // If the key of this component matches then change the desired key.
-        if (params.key === that.theKey) {
-          that.keyword = params.keyword;
-        }
-      });
-
       // Add data from query params for search on page load.
       bus.$on('searchByQueryParam', (paramQuery) => {
         if (that.theKey === 'title') {
           that.keyword = paramQuery.title;
-        }
-
-        if (that.theKey === 'query') {
-          that.keyword = paramQuery.query;
         }
       });
     },

@@ -131,13 +131,14 @@
     methods: {
       initialize(that) {
         const baseURL = store.state.atlasEnvironments[store.state.env];
+
         // Get all code assets.
         code.get(baseURL)
         .then((data) => {
+          // Save code data in central store.
           const options = {
             codeData: data,
           };
-
           store.commit('addSitesGridData', options);
 
           // Create buckets of cores, profiles, and packages.
@@ -145,12 +146,12 @@
           that.profiles = data.filter(asset => asset.code_type === 'profile').sort();
           that.modules = data.filter(asset => asset.code_type === 'module');
 
+          // Sort the modules/packages alphabetically for easier search.
           that.modules.sort((a, b) => {
             const sortOptions = {
               sensitivity: 'base',
               numeric: true,
             };
-
             return a.name.localeCompare(b.name, 'en', sortOptions);
           });
         });
@@ -159,14 +160,17 @@
         const that = this;
         const baseURL = store.state.atlasEnvironments[store.state.env];
 
+        // Search for sites that match the query.
         atlas.request(baseURL, 'sites', that.atlasQuery)
         .then((data) => {
+          // The results come in multiple arrays.
           let returnedSites = [];
           data.forEach((element) => {
             returnedSites = returnedSites.concat(element);
           });
           that.sitesToUpdate = returnedSites;
 
+          // Build a list of sites by path to show the user before they update packages.
           const siteList = that.sitesToUpdate.map(val => val.path);
 
           bus.$emit('onMessage', {
@@ -184,6 +188,7 @@
 
         // Loop through code types that are supposed to change.
         that.saveCodeTypes.forEach((type) => {
+          // Loop through each site that needs updating.
           that.sitesToUpdate.forEach((site) => {
             // Skip sites don't have code on them for some reason.
             if (site.code) {
