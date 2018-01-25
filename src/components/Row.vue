@@ -48,15 +48,11 @@
         </button>
         <div v-if="showEdit()">
           <confirm-button label="Update"
-                          :row="this"
-                          :edit="edit"
                           :callback="callback"
                           :params="params">
           </confirm-button>
           <confirm-button label="Delete"
                           v-if="userAccessPerm('row:delete')"
-                          :row="this"
-                          :edit="edit"
                           callback="deleteRecord"
                           :params="params">
           </confirm-button>
@@ -90,31 +86,31 @@
         },
       },
       callback: String,
-      editProp: {
-        type: Boolean,
-        default: false,
-      },
     },
     data() {
       return {
-        edit: this.editProp,
+        edit: false,
         specialEditContent: {},
         view: false,
         checked: this.allChecked,
       };
     },
     created() {
+      const that = this;
+
       // Accepts own row component and cancels edit mode.
-      bus.$on('confirmButtonSuccess', (that) => {
-        that.edit = false;
+      bus.$on('confirmButtonSuccess', (params) => {
+        if (params.row) {
+          that.edit = false;
+        }
       });
 
       bus.$on('selectAllRows', () => {
-        this.checked = true;
+        that.checked = true;
       });
 
       bus.$on('clearAllRows', () => {
-        this.checked = false;
+        that.checked = false;
       });
     },
     computed: {
@@ -123,6 +119,7 @@
           previous: this.oldData,
           current: this.data,
           id: this.data.id,
+          row: this,
         };
       },
       editContent() {
