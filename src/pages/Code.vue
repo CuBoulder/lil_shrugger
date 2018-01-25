@@ -61,7 +61,9 @@
       });
 
       bus.$on('deleteRecord', (params) => {
-        code.update(params, 'DELETE');
+        if (params.current.code_type) {
+          code.update(params, 'DELETE');
+        }
       });
 
       // Set anything that needs updated when in edit mode.

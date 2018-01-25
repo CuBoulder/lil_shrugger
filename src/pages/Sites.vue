@@ -82,7 +82,9 @@
       });
 
       bus.$on('deleteRecord', (params) => {
-        sites.update(params, 'DELETE');
+        if (params.current.update_group) {
+          sites.update(params, 'DELETE');
+        }
       });
 
       // Set anything that needs updated when in edit mode.
