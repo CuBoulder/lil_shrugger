@@ -57,7 +57,7 @@
         <row v-for="(data, index) in filteredData"
             v-if="showRow(index)"
             :data="data"
-            :key="data._id"
+            :key="data.id"
             :old-data="filteredData[index]"
             :edit-keys="editKeys"
             :select-keys="selectKeys"
