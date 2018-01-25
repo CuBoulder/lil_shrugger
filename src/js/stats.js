@@ -64,6 +64,8 @@ export default {
               element.users.email_address.edit_my_content,
             );
             item.site_contacts = element.users.email_address;
+          } else if (part === '_id') {
+            item.stats_id = element[part];
           } else {
             // All other fields get added as is.
             // @todo create a way for adapters to be added to format data.

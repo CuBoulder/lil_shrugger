@@ -8,20 +8,22 @@
             id="filter-records"
             class="form-control"
             name="query"
-            @keydown.enter.prevent="selectFilter()"
             v-model="filterKey">
         </div>
-        <div class="col-md-2">
-          <label for="expression-search">Expression Search</label>
-          <input type="checkbox"
-            id="expression-search"
-            class="form-control"
-            name="expression-search"
-            v-model="expressionFilter">
+        <div class="col col-md-2" id="expression-search-buttons">
+        <button v-if="!expressionFilter" class="btn btn-default" @click.prevent="expressionFilter = !expressionFilter" aria-label="Toggle Expression Search">
+          <span class="glyphicon glyphicon-superscript" aria-hidden="true"></span>
+        </button>
+        <button v-if="expressionFilter" class="btn btn-primary" @click.prevent="expressionFilterSearch()" aria-label="Expression Search">
+          Expression Search
+        </button>
+        <button v-if="expressionFilter" class="btn btn-default" @click.prevent="cancelExpressionFilterSearch()" aria-label="Expression Search">
+          Reset
+        </button>
         </div>
       </div>
     </form>
-    <div class="result-count">Result Count: {{resultCount}}</div>
+    <div class="result-count">Result Count: {{ resultCount }}</div>
     <div v-if="noResults">
       <div class="alert alert-info">Your query returned no results.</div>
     </div>
@@ -33,8 +35,7 @@
             <input type="checkbox"
                    id="select-all-checkbox"
                    name="select-all-checkbox"
-                   value="checked"
-                   @change="selectAll($event)"
+                   @change="selectAll()"
                    v-model="allChecked">
           </th>
           <th v-for="key in columns"
@@ -43,7 +44,7 @@
               :id="'table-header-' + key"
               scope="col"
               :class="{ active: sortKey == key}">
-            {{ key | capitalize }}
+            {{ key }}
             <span class="arrow"
                   v-if="sortKey === key"
                   :class="sortOrders[key] > 0 ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-up'">
@@ -53,14 +54,13 @@
         </tr>
         </thead>
         <tbody>
-        <row v-for="(data2, index) in dataObjects"
+        <row v-for="(data, index) in filteredData"
             v-if="showRow(index)"
-            :data="data2"
-            :key="data2.id"
+            :data="data"
+            :key="data.id"
             :old-data="filteredData[index]"
             :edit-keys="editKeys"
             :select-keys="selectKeys"
-            :all-checked="allChecked"
             :callback="callback"
             :columns="columns">
         </row>
@@ -111,6 +111,7 @@
         allChecked: false,
         extraContent: {},
         expressionFilter: false,
+        cachedData: null,
       };
     },
     created() {
@@ -121,12 +122,6 @@
 
       bus.$on('viewRowExtraContent', (data) => {
         that.viewRowExtraContentListener(that, data);
-      });
-
-      // Hacky way of dealing with blank code/stats on Sites page load.
-      // @todo Figure out.
-      bus.$on('siteListingMounted', () => {
-        that.siteListingMountedListener(that);
       });
     },
     computed: {
@@ -156,18 +151,18 @@
                 sensitivity: 'base',
                 numeric: true,
               };
-
               return b.localeCompare(a, 'en', sortOptions) * order;
             }
-
             return (a === b ? 0 : a > b ? -1 : 1) * order;
           });
         }
 
-        // Set filteredData in store to be used elsewhere.
-        store.commit('addFilteredData', data);
+        // Convert array into objects.
+        const savedData = this.dataObjects(data);
 
-        return data;
+        // Set filteredData in store to be used elsewhere.
+        store.commit('addFilteredData', savedData);
+        return savedData;
       },
       filterKey: {
         get() {
@@ -178,16 +173,21 @@
         },
       },
       resultCount() {
-        return this.filteredData.length;
+        return Object.keys(this.filteredData).length;
       },
       noResults() {
         return this.filteredData.length < 1;
       },
-      dataObjects() {
+      showRowCount() {
+        return store.state.recordsToShow;
+      },
+    },
+    methods: {
+      dataObjects(data) {
         // Transform data in array to object for comparison later.
         // @todo Remove this function and do this in filteredData().
         const realData = {};
-        this.filteredData.forEach((element, index) => {
+        data.forEach((element, index) => {
           realData[index] = {};
           Object.keys(element).forEach((part) => {
             realData[index][part] = element[part];
@@ -195,16 +195,6 @@
         });
         return realData;
       },
-      showRowCount() {
-        return store.state.recordsToShow;
-      },
-    },
-    filters: {
-      capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      },
-    },
-    methods: {
       sortBy(key) {
         this.sortKey = key;
         this.sortOrders[key] = this.sortOrders[key] * -1;
@@ -221,27 +211,19 @@
       showAll() {
         this.showAllRows = !this.showAllRows;
       },
-      selectAll(evt) {
-        if (evt) {
-          console.log('evt');
-        }
+      selectAll() {
         // Add all arrays into one.
         const siteIdsSend = [];
-        this.filteredData.forEach((element) => {
-          siteIdsSend.push(element.path);
+        Object.keys(this.filteredData).forEach((element) => {
+          siteIdsSend.push(this.filteredData[element].path);
         });
 
-        // Store the site IDs array.
+        // Store site IDs and emit event for rows to select themselves.
         if (this.allChecked) {
           store.commit('addAllSitesToCommands', siteIdsSend);
-        } else {
-          store.commit('addAllSitesToCommands', []);
-        }
-
-        // Emit event for rows to select themselves.
-        if (this.allChecked) {
           bus.$emit('selectAllRows');
         } else {
+          store.commit('addAllSitesToCommands', []);
           bus.$emit('clearAllRows');
         }
       },
@@ -251,28 +233,33 @@
       viewRowExtraContentListener(that, data) {
         that.extraContent = { data };
       },
-      siteListingMountedListener(that) {
-        const tempKey = that.filterKey;
-        that.filterKey = 'foo';
-        that.filterKey = tempKey;
-      },
       fuzzyFilterSearch(filterKey, data) {
         return data.filter(row => Object.keys(row)
           .some(key => this.columns.includes(key) && String(row[key]).toLowerCase().indexOf(filterKey.toLowerCase()) > -1));
       },
-      expressionFilterSearch(filterKey, data) {
+      expressionFilterSearch() {
         let errorMessage = false;
+        const data = this.data;
+        const filterKey = this.filterKey;
 
         // Disabling eslint since the JS eval is using the row even though it looks like it isn't.
         /* eslint-disable */
         const newData = data.filter((row) => {
-          const bundles = {
-           /* and: (val) => {
-              let match = false;
-              row.forEach((val) => {
+          // We can add helper functions to make it easier to query the code asset records.
 
+          // Add a packages object to help query records.
+          const packages = {
+            /*
+            and: (val) => {
+              let match = true;
+              row.forEach((val) => {
+                if (!this.or(val)) {
+                  return false;
+                }
               });
+              return match;
             }, */
+            // Return true if either value is found, e.g. code = 'digital|news' and returns records with either package.
             or: (code) => {
               const re = new RegExp('(' + code + ')', 'i');
               return row.packages.some((val) => {
@@ -284,6 +271,7 @@
             },
           };
 
+          // Try to evaluate the expression entered into the filter.
           try {
             if (eval(filterKey)) {
               return true;
@@ -306,11 +294,20 @@
             alertType: 'alert-danger',
           });
         }
-        return newData;
+
+        // Set new data and save old data.
+        this.cachedData = this.data;
+        this.data = newData;
       },
-      selectFilter() {
-        if (this.expressionFilter) {
-          this.data = this.expressionFilterSearch(this.filterKey, this.data);
+      cancelExpressionFilterSearch() {
+        this.expressionFilter = !this.expressionFilter;
+
+        // Need to reset filter.
+        store.commit('setFilterKey', '');
+
+        // Add back cached data.
+        if (this.cachedData) {
+          this.data = this.cachedData;
         }
       },
     },
@@ -323,6 +320,15 @@ td {
   max-width: 270px;
   overflow-wrap: break-word;
   word-wrap: break-word;
+}
+
+#expression-search-buttons {
+  padding-top: 25px;
+  padding-left: 0px;
+}
+
+#search {
+  padding-bottom: 20px;
 }
 
 </style>
