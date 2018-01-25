@@ -1,26 +1,25 @@
 <template>
   <transition name="fade">
-    <tr scope="row" :class="'row-id-' + data.id">
+    <tr scope="row" :class="'row-id-' + rowData.id">
       <!-- Bulk operations checkbox. -->
       <td>
         <input type="checkbox"
-               :id="'checkbox-' + data.id"
-               :name="'checkbox-' + data.id"
-               value="checked"
-               @change="selectRow($event)"
-               v-model="isChecked">
+               :id="'checkbox-' + rowData.id"
+               :name="'checkbox-' + rowData.id"
+               @click="selectRow()"
+               v-model="checked">
       </td>
       <!--Row with data and edit/inputs. -->
       <td v-for="(key, index) in columns"
           :key="index"
           :class="'column-' + key">
-        <div v-if="showDefault(key)" v-html="link(data[key],key)"></div>
+        <div v-if="showDefault(key)" v-html="link(rowData[key],key)"></div>
         <div v-if="showEdit(key)">
           <div v-if="selectType(key)">
-            <select :name="key" v-model="data[key]" class="form-control">
+            <select :name="key" v-model="rowData[key]" class="form-control">
               <option v-for="anOption in selectOptions[key]"
                       :key="anOption"
-                      :value="anOption" :selected=" data[key] == anOption ? true : null">
+                      :value="anOption" :selected=" rowData[key] == anOption ? true : null">
                 {{anOption}}
               </option>
             </select>
@@ -29,10 +28,10 @@
             <input type="text"
                    :name="key"
                    class="form-control"
-                   v-model="data[key]">
+                   v-model="rowData[key]">
           </div>
           <!-- Adding an editOptions div so that fields can have special things happen when in edit mode. -->
-          <div v-html="editContent[data.id][key]"></div>
+          <div v-html="editContent[rowData.id][key]"></div>
         </div>
       </td>
       <!-- @todo Only add Edit option if there are editKeys -->
@@ -77,8 +76,7 @@
       editKeys: Array,
       selectKeys: Array,
       columns: Array,
-      oldData: Array,
-      allChecked: Boolean,
+      oldData: Object,
       selectOptions: {
         type: Object,
         default() {
@@ -92,7 +90,8 @@
         edit: false,
         specialEditContent: {},
         view: false,
-        checked: this.allChecked,
+        checked: false,
+        rowData: this.data,
       };
     },
     created() {
@@ -124,9 +123,6 @@
       },
       editContent() {
         return store.state.editContent;
-      },
-      isChecked() {
-        return this.checked;
       },
     },
     methods: {

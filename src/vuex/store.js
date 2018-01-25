@@ -120,7 +120,6 @@ const store = new Vuex.Store({
       }
     },
     addAllSitesToCommands(state, siteIds) {
-      // Search for if site is already in list.
       state.sitesSendCommand = siteIds;
     },
     addFilteredData(state, data) {

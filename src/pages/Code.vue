@@ -8,7 +8,7 @@
         <create-code v-if="userAccessPerm('createCode')"></create-code>
       </div>
       <data-table
-          :data="gridData"
+          :data-Type="codeData"
           :columns="gridColumns"
           :callback="callback"
           :extra-content="rowViewContent"
