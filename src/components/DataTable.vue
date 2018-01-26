@@ -2,7 +2,7 @@
   <div>
     <form id="search" class="row">
       <div class="form-group">
-        <div class="col-md-8">
+        <div class="col col-md-7">
           <label for="filter-records">Filter Table</label>
           <input
             id="filter-records"
@@ -10,7 +10,7 @@
             name="query"
             v-model="filterKey">
         </div>
-        <div class="col col-md-2" id="expression-search-buttons">
+        <div class="col col-md-3" id="expression-search-buttons">
         <button v-if="!expressionFilter" class="btn btn-default" @click.prevent="expressionFilter = !expressionFilter" aria-label="Toggle Expression Search">
           <span class="glyphicon glyphicon-superscript" aria-hidden="true"></span>
         </button>

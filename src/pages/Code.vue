@@ -2,11 +2,9 @@
   <div>
     <div>
       <message-area></message-area>
-      <div class="pull-right"
-           id="create-code"
-           v-if="userAccessPerm('createCode')">
-        <create-code v-if="userAccessPerm('createCode')"></create-code>
-      </div>
+      <create-code :styles="{closed: 'pull-right', open: 'col-md-8'}"
+                   v-if="userAccessPerm('createCode')">
+      </create-code>
       <data-table
           :data="gridData"
           :columns="gridColumns"

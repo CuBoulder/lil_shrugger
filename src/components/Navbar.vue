@@ -14,7 +14,8 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li v-for="route in routes">
+          <li v-for="route in routes"
+               :key="route.name">
             <router-link :id="'route-link-' + route.name" :to="route.path">{{ route.name }}</router-link>
           </li>
         </ul>
@@ -24,17 +25,23 @@
             <span v-for="icon in actionIcons"
                   :class="'navbar-action-icon glyphicon glyphicon-' + icon.name"
                   aria-hidden="true"
+                  :key="icon.name"
                   @click="show(icon.component)">
             </span>
             <!-- Help Link -->
-            <a class="help-link" :href="'https://github.com/CuBoulder/lil_shrugger/wiki/' + currentRoute" target="_blank">
+            <a class="help-link"
+               :href="'https://github.com/CuBoulder/lil_shrugger/wiki/' + currentRoute"
+               target="_blank">
               <span class="navbar-action-icon glyphicon glyphicon-question-sign"></span>
             </a>
           </div>
           <!-- Environment Selector -->
           <div class="styled-select" v-if="multipleEnvironments">
             <select name="selectEnv" id="selectEnv" @change="changeEnv($event)">
-              <option v-for="(env, index) in environments" :value="index" :selected="selectedEnv == env ? true : null">
+              <option v-for="(env, index) in environments"
+                      :value="index"
+                      :key="index"
+                      :selected="selectedEnv == env ? true : null">
                 {{index}}
               </option>
             </select>
@@ -85,14 +92,6 @@
       },
     },
     methods: {
-      callMeMaybe(callback, params) {
-        window[callback](params);
-        this.cancel();
-      },
-      cancel() {
-        this.confirmed = false;
-        this.finaled = false;
-      },
       changeEnv(event) {
         store.commit('switchEnv', event.target.value);
         bus.$emit('switchEnv', event.target.value);
@@ -143,16 +142,16 @@
   .styled-select {
     overflow: hidden;
     background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
-    height: 50px;
-    width: 230px;
+    width: 200px;
     background-color: #ffffff;
     display: inline-block;
+    margin-top: 12px;
   }
 
   .styled-select select {
     border: 1px solid #e7e7e7;
-    height: 97%;
-    width: 268px;
+    height: 30px;
+    width: 250px;
     padding: 5px; /* If you add too much padding here, the options won't show in IE */
     background: transparent;
   }

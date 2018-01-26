@@ -1,5 +1,5 @@
 <template>
-  <div class="row" >
+  <div :class="[classes, 'row create-code']" >
     <button v-if="!addCode"
             class="btn btn-primary"
             @click="addCode = true">
@@ -105,6 +105,9 @@
 
   export default {
     name: 'CreateCode',
+    props: {
+      styles: Object,
+    },
     data() {
       return {
         selectOptions: store.state.selectOptions,
@@ -135,6 +138,9 @@
       },
       branches() {
         return store.state.gitHubBranches;
+      },
+      classes() {
+        return !this.addCode ? this.styles.closed : this.styles.open;
       },
     },
     methods: {
@@ -220,3 +226,15 @@
     },
   };
 </script>
+
+<style scoped>
+
+button {
+  margin-top: 10px;
+}
+
+.create-code {
+  margin-bottom: 25px;
+}
+
+</style>
