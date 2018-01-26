@@ -289,7 +289,7 @@
         if (errorMessage) {
           bus.$emit('onMessage', {
             text: errorMessage.message +
-              '<br/>Check <a href="https://github.com/CuBoulder/lil_shrugger/wiki/Sites#filter-table" target="blank">' +
+              '<br/>Check <a href="https://github.com/CuBoulder/lil_shrugger/wiki/Data-Table#filter-table" target="_blank">' +
               'the search documentation</a> and refresh to search again.',
             alertType: 'alert-danger',
           });
