@@ -1,6 +1,8 @@
 <template>
   <div v-if="messages.length > 0">
-    <div :class="[bsAlert, message.alertType, 'message-' + index]" v-for="(message, index) in messages">
+    <div :class="[bsAlert, message.alertType, 'message-' + index]"
+         :key="index"
+         v-for="(message, index) in messages">
       <button type="button" class="close" aria-label="Close" @click="close(index)">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -8,7 +10,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
   import bus from '../js/bus';
