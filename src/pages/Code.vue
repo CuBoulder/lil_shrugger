@@ -1,22 +1,12 @@
 <template>
   <div>
-    <div>
-      <message-area></message-area>
-      <create-code :styles="{closed: 'pull-right', open: 'col-md-8'}"
-                   v-if="userAccessPerm('createCode')">
-      </create-code>
-      <data-table
-          :data="gridData"
-          :columns="gridColumns"
-          :callback="callback"
-          :extra-content="rowViewContent"
-          :edit-keys="editKeys"
-          default-sort-key="updated"
-          default-sort-direction="1"
-          :select-keys="selectKeys">
-      </data-table>
-
-    </div>
+    <message-area></message-area>
+    <create-code :styles="{closed: 'pull-right', open: 'col-md-8'}"
+                  v-if="userAccessPerm('createCode')">
+    </create-code>
+    <data-table :table-options="tableOptions"
+                v-if="showDataTable !== false">
+    </data-table>
   </div>
 </template>
 
@@ -31,13 +21,17 @@
     name: 'Code',
     data() {
       return {
-        searchQuery: '',
-        cachedRecords: [],
-        callback: 'updateCodeRecord',
-        editKeys: store.state.codeEditKeys,
-        selectKeys: ['code_type', 'is_current', 'tag'],
-        rowViewContent: {},
-        messages: [],
+        showDataTable: false,
+        tableOptions: {
+          dataName: 'codeData',
+          callback: 'updateCodeRecord',
+          columns: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys,
+          editKeys: store.state.codeEditKeys,
+          defaultSortKey: 'updated',
+          defaultSortDirection: '1',
+          formatFunction: this.formatRowDisplay,
+          editListener: this.rowEditListener,
+        },
       };
     },
     created() {
@@ -54,6 +48,10 @@
         that.etagFailListener(env, that);
       });
 
+      bus.$on('editRow', (row) => {
+        that.editRowListener(row, that);
+      });
+
       bus.$on('updateCodeRecord', (params) => {
         code.update(params);
       });
@@ -64,32 +62,10 @@
         }
       });
 
-      // Set anything that needs updated when in edit mode.
-      bus.$on('rowEdit', (row) => {
-        that.rowEditListener(row, that);
-      });
-
-      // Display whole record in view area.
-      bus.$on('rowView', (row) => {
-        that.rowViewListener(row, that);
-      });
-
-      bus.$on('rowHide', (row) => {
-        that.rowHideListener(row, that);
-      });
-
       // Refresh table data.
       bus.$on('navbarShow', (component) => {
         that.navbarShowListener(component, that);
       });
-    },
-    computed: {
-      gridColumns() {
-        return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys;
-      },
-      gridData() {
-        return store.state.sitesGridData.codeData;
-      },
     },
     methods: {
       initialize() {
@@ -100,6 +76,9 @@
             };
 
             store.commit('addSitesGridData', options);
+
+            // Load data table after data is loaded.
+            this.showDataTable = true;
           });
 
         // Get GitHub data to pass in.
@@ -109,6 +88,26 @@
 
         // If there is a filter query param, then insert it.
         shrugger.setFilterFromQuery();
+      },
+      formatRowDisplay(value, key) {
+        const atlasEnvironment = store.state.atlasEnvironments[store.state.env];
+
+        // Link to full code record.
+        if (key === 'id') {
+          return '<a target="_blank" href="' + atlasEnvironment + 'code/' + value + '">(Code Record)</a>';
+        }
+
+        // Format dates for nicer output.
+        if (key === 'created' || key === 'updated') {
+          return shrugger.toDate(value);
+        }
+
+        // Deal with empty packages arrays.
+        if (typeof value === 'undefined' || value.length === 0) {
+          return '';
+        }
+
+        return value;
       },
       userAccessPerm(permission = null) {
         return shrugger.userAccess(permission);
@@ -123,32 +122,17 @@
             store.commit('addSitesGridData', options);
           });
       },
-      rowEditListener(row) {
-        let options = {};
-
-        // Add special edit content to the row key by key.
-        row.editKeys.forEach((element) => {
-          // Get latest commit from GitHub repo.
-          if (element === 'commit_hash') {
-            github.getLatestCommit(row.data.name, row)
-              .then((response) => {
-                options = {
-                  rowId: row.data.id,
-                  rowKey: element,
-                  content: '<span class="current-hash"><strong>Current Hash:</strong> ' + response.hash + '</span>',
-                };
-                store.commit('addEditContent', options);
-              });
-          } else {
-            // Need to set other edit row options to nothing so they can render in component.
-            options = {
-              rowId: row.data.id,
-              rowKey: element,
-              content: '',
+      editRowListener(row) {
+        // Get latest commit from GitHub repo.
+        if (row.commit_hash) {
+          github.getLatestCommit(row.name, row)
+          .then((response) => {
+            const options = {
+              commit_hash: `<strong>Current Hash:</strong> ${response.hash}</span>`,
             };
             store.commit('addEditContent', options);
-          }
-        });
+          });
+        }
       },
       rowViewListener(row) {
         // Set temp variable for holding what was in the current table.
