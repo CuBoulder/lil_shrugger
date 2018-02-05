@@ -30,7 +30,7 @@
           defaultSortKey: 'updated',
           defaultSortDirection: '1',
           formatFunction: this.formatRowDisplay,
-          editListener: this.rowEditListener,
+          editListener: this.editRowListener,
         },
       };
     },
@@ -54,6 +54,7 @@
 
       bus.$on('updateCodeRecord', (params) => {
         code.update(params);
+        bus.$emit('cancelRowEdit', that);
       });
 
       bus.$on('deleteRecord', (params) => {
@@ -124,8 +125,8 @@
       },
       editRowListener(row) {
         // Get latest commit from GitHub repo.
-        if (row.commit_hash) {
-          github.getLatestCommit(row.name, row)
+        if (row.data.commit_hash) {
+          github.getLatestCommit(row.data.name, row)
           .then((response) => {
             const options = {
               commit_hash: `<strong>Current Hash:</strong> ${response.hash}</span>`,
@@ -133,35 +134,6 @@
             store.commit('addEditContent', options);
           });
         }
-      },
-      rowViewListener(row) {
-        // Set temp variable for holding what was in the current table.
-        // We can't used the cached data as that is a list of all the records.
-        const options = {
-          codeData: [row.oldData],
-          tempGridData: store.state.sitesGridData.codeData,
-        };
-
-        store.commit('addSitesGridData', options);
-
-        // Make call to stats page to get full data to inject.
-        fetch(store.state.atlasEnvironments[store.state.env] + 'code/' + row.data.id)
-          .then(shrugger.handleErrors)
-          .then(response => response.json())
-          .then((data) => {
-            // Filter table to only show that record.
-            bus.$emit('viewRowExtraContent', data);
-          })
-          .catch(error => error);
-      },
-      rowHideListener() {
-        const options = {
-          codeData: store.state.sitesGridData.tempGridData,
-        };
-        store.commit('addSitesGridData', options);
-
-        // Filter table to only show that record.
-        bus.$emit('hideRowExtraContent');
       },
       navbarShowListener(component, that) {
         switch (component) {

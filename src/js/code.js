@@ -104,7 +104,7 @@ export default {
         const item = [];
 
         // Since the tag field is an array, we have to convert it back to a string.
-        let tag = '';
+        let tag = 'request_bundles';
         if (Array.isArray(element.meta.tag) && element.meta.tag.length) {
           tag = element.meta.tag.join();
         }

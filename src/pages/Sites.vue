@@ -135,9 +135,6 @@
 
             store.commit('addSitesGridData', options);
 
-            // Hide any row if it was being viewed.
-            bus.$emit('hideRowExtraContent');
-
             // Emit event so other data can be added to the table.
             // This wasn't working on page load so the code in that function was copied here.
             // @todo Remove duplicated code and uncomment the line below.

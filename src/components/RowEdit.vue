@@ -22,7 +22,8 @@
                   v-model="rowData[key]">
           </div>
           <!-- Row description text. -->
-          <span v-html="editContent[key]"></span>
+          <span class="edit-content"
+                v-html="editContent[key]"></span>
         </div>
       </fieldset>
       <confirm-button label="Update"
@@ -54,6 +55,7 @@
     data() {
       return {
         rowData: {},
+        oldData: {},
         rowKeys: this.options.editKeys.canEdit,
         callback: this.options.callback,
         editListener: this.options.editListener,
@@ -63,7 +65,7 @@
       const that = this;
 
       bus.$on('editRow', (row) => {
-        that.editRowListener(row, that);
+        that.editRowListener(that, row);
       });
 
       // Sets row content to display.
@@ -118,13 +120,14 @@
           bus.$emit('rowEdit', that);
         });
       },
-      editRowListener(row, that) {
+      editRowListener(that, row) {
+        // Add row data to component as well as a copy of data.
+        that.oldData = Object.assign({}, row.rowData);
         that.rowData = row.rowData;
 
         // We look for any formatting function passed in.
-        if (Object.keys(that.rowData).length > 1 && that.editListener) {
+        if (Object.keys(row.rowData).length > 1 && typeof that.editListener === 'function') {
           that.editListener(row);
-          console.log(that);
         }
       },
       cancelRowEditListener(that) {
@@ -143,4 +146,7 @@
   margin-right: 5px;
 }
 
+.edit-content {
+  padding-left: 10px;
+}
 </style>
