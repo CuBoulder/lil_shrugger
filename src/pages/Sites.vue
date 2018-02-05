@@ -22,16 +22,16 @@
             callback="createSite">
         </confirm-button>
       </div>
-      <data-table
-          :data="gridData"
-          class="row"
-          :columns="gridColumns"
-          :edit-keys="editKeys"
-          :select-keys="selectKeys"
-          default-sort-key="updated"
-          default-sort-direction="1"
-          :callback="callback">
+      <data-table :table-options="tableOptions"
+                  v-if="showDataTable !== false">
       </data-table>
+      <transition>
+        <button class="btn btn-sm spinner col-md-offset-5"
+                v-if="showDataTable === false">
+          <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+          Loading...
+        </button>
+      </transition>
     </div>
   </div>
 </template>
@@ -50,11 +50,18 @@
     name: 'Sites',
     data() {
       return {
-        editKeys: store.state.sitesEditKeys,
-        selectKeys: ['status'],
-        callback: 'updateSiteRecord',
         showStatsSearch: true,
         showCommands: false,
+        showDataTable: false,
+        tableOptions: {
+          columns: store.state.storedSiteKeys.length > 1 ? store.state.storedSiteKeys : store.state.defaultSelectedSitesKeys,
+          dataName: 'sitesData',
+          callback: 'updateSiteRecord',
+          editKeys: store.state.sitesEditKeys,
+          defaultSortKey: 'updated',
+          defaultSortDirection: '1',
+          formatFunction: this.formatRowDisplay,
+        },
       };
     },
     created() {
@@ -87,21 +94,6 @@
         }
       });
 
-      // Set anything that needs updated when in edit mode.
-      bus.$on('rowEdit', (row) => {
-        that.rowEditListener(row, that);
-      });
-
-      // Display whole record in view area.
-      bus.$on('rowView', (row) => {
-        that.rowViewListener(row, that);
-      });
-
-      // Hides record view and repopulates data table.
-      bus.$on('rowHide', (row) => {
-        that.rowHideListener(row, that);
-      });
-
       // Show search when icon in navbar is clicked.
       // Also refresh table data.
       bus.$on('navbarShow', (component) => {
@@ -129,18 +121,6 @@
       });
     },
     computed: {
-      gridColumns() {
-        // Merge site and stats keys together.
-        const siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys;
-
-        // Make stats empty if not saved since adding all of those keys makes the table unusable.
-        const statsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [];
-
-        return siteKeys.concat(statsKeys);
-      },
-      gridData() {
-        return store.state.sitesGridData.sitesData;
-      },
     },
     methods: {
       initialize() {
@@ -154,9 +134,6 @@
             };
 
             store.commit('addSitesGridData', options);
-
-            // Hide any row if it was being viewed.
-            bus.$emit('hideRowExtraContent');
 
             // Emit event so other data can be added to the table.
             // This wasn't working on page load so the code in that function was copied here.
@@ -180,6 +157,9 @@
                     // Atlas request and setting up the data is usually enough time.
                     // @todo use mounted() instead of this.
                     bus.$emit('siteListingMounted', null);
+
+                    // Load data table after data is loaded.
+                    this.showDataTable = true;
                   })
                   .catch(error => console.log(error));
               })
@@ -194,6 +174,33 @@
 
         // If there is a filter query param, then insert it.
         shrugger.setFilterFromQuery();
+      },
+      formatRowDisplay(value, key) {
+        const atlasEnvironment = store.state.atlasEnvironments[store.state.env];
+
+        // Link path to instance.
+        if (key === 'path') {
+          return '<a target="_blank" href="' + store.state.expressEnvironments[store.state.env] + value
+            + '/user?destination=/admin/people/invite">' + value + '</a>';
+        }
+
+        // Link to full code record.
+        if (key === 'id') {
+          return '<a target="_blank" href="' + atlasEnvironment + 'sites/' + value + '">'
+          + '(Site)</a>';
+        }
+
+        // Format dates for nicer output.
+        if (key === 'created' || key === 'updated') {
+          return shrugger.toDate(value);
+        }
+
+        // Deal with empty packages arrays.
+        if (typeof value === 'undefined' || value.length === 0) {
+          return '';
+        }
+
+        return value;
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
@@ -232,46 +239,6 @@
             };
             store.commit('addSitesGridData', options);
           });
-      },
-      rowEditListener(row) {
-        // Add special edit content to the row key by key.
-        row.editKeys.forEach((element) => {
-          // Need to set edit row options to nothing so they can render in component.
-          const options = {
-            rowId: row.data.id,
-            rowKey: element,
-            content: '',
-          };
-          store.commit('addEditContent', options);
-        });
-      },
-      rowViewListener(row) {
-        // Set temp variable for holding what was in the current table.
-        // We can't used the cached data as that is a list of all the records.
-        const options = {
-          tempGridData: store.state.sitesGridData.sitesData,
-          sitesData: [row.oldData],
-        };
-        store.commit('addSitesGridData', options);
-
-        // Make call to stats page to get full data to inject.
-        fetch(store.state.atlasEnvironments[store.state.env] + 'statistics/' + row.data.statistics)
-          .then(shrugger.handleErrors)
-          .then(response => response.json())
-          .then((data) => {
-            // Filter table to only show that record.
-            bus.$emit('viewRowExtraContent', data);
-          })
-          .catch(error => error);
-      },
-      rowHideListener() {
-        const options = {
-          sitesData: store.state.sitesGridData.tempGridData,
-        };
-        store.commit('addSitesGridData', options);
-
-        // Filter table to only show that record.
-        bus.$emit('hideRowExtraContent');
       },
       navbarShowListener(component, that) {
         switch (component) {
@@ -414,4 +381,24 @@
   #create-site {
     margin-bottom: 0.75em;
   }
+
+/* Spinner CSS */
+.spinner {
+  font-size: 25px;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
 </style>

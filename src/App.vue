@@ -23,6 +23,8 @@
   import Row from './components/Row';
   import StatsSearch from './components/StatsSearch';
   import CreateCode from './components/CreateCode';
+  import RowEdit from './components/RowEdit';
+  import RowView from './components/RowView';
 
 
   // We need to add the component namespace for the template to recognize it.
@@ -35,6 +37,8 @@
   Vue.component('row', Row);
   Vue.component('stats-search', StatsSearch);
   Vue.component('create-code', CreateCode);
+  Vue.component('row-edit', RowEdit);
+  Vue.component('row-view', RowView);
 
   export default {
     name: 'app',
@@ -48,17 +52,17 @@
   }
 
   .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s
+    transition: opacity .3s
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0
   }
 
   .slide-fade-enter-active {
-    transition: all .4s ease;
+    transition: all .2s ease;
   }
   .slide-fade-leave-active {
-    transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
   .slide-fade-enter, .slide-fade-leave-to
     /* .slide-fade-leave-active below version 2.1.8 */ {

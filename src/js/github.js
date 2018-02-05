@@ -151,7 +151,6 @@ export default {
       .then(shrugger.handleErrors)
       .then(response => response.json())
       .then(data =>
-        // Return first listed commit and passed in object if exists.
         ({
           hash: data[0].sha,
           object: that,

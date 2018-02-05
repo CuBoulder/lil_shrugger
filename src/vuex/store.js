@@ -26,6 +26,10 @@ const store = new Vuex.Store({
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/',
     },
+    codeEditKeys: {
+      canEdit: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
+      selectKeys: ['code_type', 'is_current', 'tag'],
+    },
     codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash',
       'tag', 'updated', 'created'],
     commands: [],
@@ -61,6 +65,10 @@ const store = new Vuex.Store({
       statsData: [],
       tempGridData: [],
     },
+    sitesEditKeys: {
+      canEdit: ['path', 'status'],
+      selectKeys: ['status'],
+    },
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
     sitesSendCommand: [],
     statsKeys: ['instance', 'name', 'status', 'nodes_total', 'nodes_by_type', 'nodes_other', 'days_since_last_edit',
@@ -70,17 +78,15 @@ const store = new Vuex.Store({
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
       'email_address', 'bundles', 'webforms', 'update_group'],
     statsQueryOptions: [],
+    storedSiteKeys: [],
     userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:createCode', 'Packages', 'Sites:row:edit', 'Sites:row:delete',
       'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export', 'Sites:statsSearch:save', 'Settings:credentials'],
-    sitesEditKeys: ['path', 'status'],
-    codeEditKeys: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
   },
   mutations: {
     addEditContent(state, options) {
-      if (!state.editContent[options.rowId]) {
-        Vue.set(state.editContent, [options.rowId], {});
-      }
-      Vue.set(state.editContent[options.rowId], [options.rowKey], options.content);
+      Object.keys(options).forEach((element) => {
+        state.editContent[element] = options[element];
+      });
     },
     addRows(state, options) {
       state.recordsToShow = options;

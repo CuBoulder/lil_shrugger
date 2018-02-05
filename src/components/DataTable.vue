@@ -43,7 +43,7 @@
               @click="sortBy(key)"
               :id="'table-header-' + key"
               scope="col"
-              :class="{ active: sortKey == key}">
+              :class="{ active: sortKey === key}">
             {{ key }}
             <span class="arrow"
                   v-if="sortKey === key"
@@ -58,25 +58,18 @@
             v-if="showRow(index)"
             :data="data"
             :key="data.id"
-            :old-data="filteredData[index]"
-            :edit-keys="editKeys"
-            :select-keys="selectKeys"
-            :callback="callback"
-            :columns="columns">
+            :options="rowOptions">
         </row>
         </tbody>
       </table>
+      <row-edit :options="rowEditOptions" v-show="showEdit"></row-edit>
+      <row-view v-show="showView"></row-view>
       <!-- Show More Records Links -->
       <div class="show-more-buttons"
            v-if="resultCount > showRowCount">
         <button class="btn btn-default" @click="showMore()" aria-label="Show More">Show More</button>
         <button class="btn btn-default" @click="showAll()" aria-label="Show All">Show All</button>
       </div>
-    </div>
-    <div v-if="Object.keys(extraContent).length > 0">
-      <pre>
-        {{extraContent}}
-      </pre>
     </div>
   </div>
 </template>
@@ -88,50 +81,71 @@
   export default {
     name: 'DataTable',
     props: {
-      data: Array,
-      columns: {
-        type: Array,
-        required: true,
-      },
-      editKeys: Array,
-      selectKeys: Array,
-      callback: String,
-      defaultSortKey: String,
-      defaultSortDirection: String,
+      tableOptions: Object,
     },
     data() {
       const sortOrders = {};
-      this.columns.forEach((key) => {
-        sortOrders[key] = Number(this.defaultSortDirection);
+      this.tableOptions.columns.forEach((key) => {
+        sortOrders[key] = Number(this.tableOptions.defaultSortDirection);
       });
       return {
-        sortKey: this.defaultSortKey ? this.defaultSortKey : '',
+        rowEditOptions: {
+          editKeys: this.tableOptions.editKeys,
+          callback: this.tableOptions.callback,
+          dataName: this.tableOptions.dataName,
+          editListener: this.tableOptions.editListener,
+        },
+        rowOptions: {
+          columns: this.tableOptions.columns,
+          formatFunction: this.tableOptions.formatFunction,
+        },
+        sortKey: this.tableOptions.defaultSortKey ? this.tableOptions.defaultSortKey : '',
         sortOrders,
         showAllRows: false,
         allChecked: false,
-        extraContent: {},
         expressionFilter: false,
         cachedData: null,
+        showEdit: false,
+        showView: false,
       };
     },
     created() {
       const that = this;
-      bus.$on('hideRowExtraContent', () => {
-        that.hideRowExtraContentListener(that);
+
+      // Sets row content to display.
+      bus.$on('editRow', (row) => {
+        that.rowViewListener(that, row, 'edit');
       });
 
-      bus.$on('viewRowExtraContent', (data) => {
-        that.viewRowExtraContentListener(that, data);
+      // Hides record view and clears content.
+      bus.$on('cancelRowEdit', () => {
+        that.rowHideListener(that, 'edit');
+      });
+
+      // Sets row content to display.
+      bus.$on('rowView', (row) => {
+        that.rowViewListener(that, row, 'view');
+      });
+
+      // Hides record view and clears content.
+      bus.$on('rowHide', () => {
+        that.rowHideListener(that, 'view');
       });
     },
     computed: {
+      gridData() {
+        return store.state.sitesGridData[this.tableOptions.dataName];
+      },
+      columns() {
+        return this.tableOptions.columns;
+      },
       filteredData() {
         const sortKey = this.sortKey;
         const filterKey = this.filterKey;
         // Negative one is DESC; positive one is ASC.
         // I think it is more useful to have the most recent changes first.
         const order = this.sortOrders[sortKey] || 1;
-        let data = this.data;
+        let data = this.gridData;
 
         // If using the default fuzzy search, then filter that way.
         // The JS expression search is performed on enter keydown and not as
@@ -205,6 +219,32 @@
         }
         return true;
       },
+      rowViewListener(that, row, action) {
+        if (action === 'view') {
+          that.showView = true;
+        } else {
+          that.showEdit = true;
+        }
+
+        that.cachedData = that.gridData;
+        const foundRow = Object.values(that.gridData).filter(value => value.id === row.data.id);
+
+        const options = {};
+        options[that.tableOptions.dataName] = foundRow;
+        store.commit('addSitesGridData', options);
+      },
+      rowHideListener(that, action) {
+        if (action === 'view') {
+          that.showView = false;
+        } else {
+          that.showEdit = false;
+        }
+
+        const options = {};
+        options[that.tableOptions.dataName] = that.cachedData;
+
+        store.commit('addSitesGridData', options);
+      },
       showMore() {
         store.commit('addRows', this.showRowCount + 25);
       },
@@ -227,24 +267,19 @@
           bus.$emit('clearAllRows');
         }
       },
-      hideRowExtraContentListener(that) {
-        that.extraContent = {};
-      },
-      viewRowExtraContentListener(that, data) {
-        that.extraContent = { data };
-      },
+
       fuzzyFilterSearch(filterKey, data) {
         return data.filter(row => Object.keys(row)
           .some(key => this.columns.includes(key) && String(row[key]).toLowerCase().indexOf(filterKey.toLowerCase()) > -1));
       },
       expressionFilterSearch() {
         let errorMessage = false;
-        const data = this.data;
+        const data = this.gridData;
         const filterKey = this.filterKey;
 
         // Disabling eslint since the JS eval is using the row even though it looks like it isn't.
         /* eslint-disable */
-        const newData = data.filter((row) => {
+        const newData = data.filter((rowData) => {
           // We can add helper functions to make it easier to query the code asset records.
 
           // Add a packages object to help query records.
@@ -262,7 +297,7 @@
             // Return true if either value is found, e.g. code = 'digital|news' and returns records with either package.
             or: (code) => {
               const re = new RegExp('(' + code + ')', 'i');
-              return row.packages.some((val) => {
+              return rowData.packages && rowData.packages.some((val) => {
                 if (val) {
                   return val.match(re);
                 }
@@ -296,8 +331,8 @@
         }
 
         // Set new data and save old data.
-        this.cachedData = this.data;
-        this.data = newData;
+        this.cachedData = this.gridData;
+        this.gridData = newData;
       },
       cancelExpressionFilterSearch() {
         this.expressionFilter = !this.expressionFilter;
@@ -307,7 +342,7 @@
 
         // Add back cached data.
         if (this.cachedData) {
-          this.data = this.cachedData;
+          this.gridData = this.cachedData;
         }
       },
     },

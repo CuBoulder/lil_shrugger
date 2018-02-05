@@ -9,52 +9,33 @@
                @click="selectRow()"
                v-model="checked">
       </td>
-      <!--Row with data and edit/inputs. -->
+      <!--Row with data. -->
       <td v-for="(key, index) in columns"
           :key="index"
           :class="'column-' + key">
-        <div v-if="showDefault(key)" v-html="link(rowData[key],key)"></div>
-        <div v-if="showEdit(key)">
-          <div v-if="selectType(key)">
-            <select :name="key" v-model="rowData[key]" class="form-control">
-              <option v-for="anOption in selectOptions[key]"
-                      :key="anOption"
-                      :value="anOption" :selected=" rowData[key] == anOption ? true : null">
-                {{anOption}}
-              </option>
-            </select>
-          </div>
-          <div v-else>
-            <input type="text"
-                   :name="key"
-                   class="form-control"
-                   v-model="rowData[key]">
-          </div>
-          <!-- Adding an editOptions div so that fields can have special things happen when in edit mode. -->
-          <div v-html="editContent[rowData.id][key]"></div>
-        </div>
+        <div v-html="formatDisplay(rowData[key], key)"></div>
       </td>
-      <!-- @todo Only add Edit option if there are editKeys -->
+      <!-- Row action icons. -->
       <td>
-        <button v-if="userAccessPerm('row:edit') && showDefault()" class="btn btn-default" @click="makeEdit()" aria-label="Edit">
+        <button v-if="userAccessPerm('row:edit') && !showEdit()"
+                class="btn btn-default"
+                @click="makeEdit(rowData)"
+                aria-label="Edit">
           <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
         </button>
-        <button v-if="!view" class="btn btn-default" @click="viewRecord()" aria-label="View">
+        <button v-if="!view"
+                class="btn btn-default"
+                @click="viewRecord(rowData)"
+                aria-label="View">
           <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
         </button>
-        <button v-if="view" class="btn btn-default" @click="hideRecord()" aria-label="Close View">
+        <button v-if="view"
+                class="btn btn-default"
+                @click="hideRecord()"
+                aria-label="Close View">
           <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
         </button>
         <div v-if="showEdit()">
-          <confirm-button label="Update"
-                          :callback="callback"
-                          :params="params">
-          </confirm-button>
-          <confirm-button label="Delete"
-                          v-if="userAccessPerm('row:delete')"
-                          callback="deleteRecord"
-                          :params="params">
-          </confirm-button>
           <button class="btn btn-default" @click="cancelEdit()">Cancel Edit</button>
         </div>
       </td>
@@ -64,7 +45,6 @@
 
 <script>
   import shrugger from '../js/shrugger';
-  import atlas from '../js/atlas';
   import store from '../vuex/store';
   import bus from '../js/bus';
 
@@ -72,18 +52,7 @@
     name: 'Row',
     props: {
       data: Object,
-      dataArray: Array,
-      editKeys: Array,
-      selectKeys: Array,
-      columns: Array,
-      oldData: Object,
-      selectOptions: {
-        type: Object,
-        default() {
-          return store.state.selectOptions;
-        },
-      },
-      callback: String,
+      options: Object,
     },
     data() {
       return {
@@ -92,6 +61,8 @@
         view: false,
         checked: false,
         rowData: this.data,
+        columns: this.options.columns,
+        formatFunction: this.options.formatFunction,
       };
     },
     created() {
@@ -113,51 +84,18 @@
       });
     },
     computed: {
-      params() {
-        return {
-          previous: this.oldData,
-          current: this.data,
-          id: this.data.id,
-          row: this,
-        };
-      },
       editContent() {
         return store.state.editContent;
       },
     },
     methods: {
-      link(value, key) {
-        // Link path to instance.
-        if (key === 'path') {
-          return '<a target="_blank" href="' + store.state.expressEnvironments[store.state.env] + value
-            + '/user?destination=/admin/people/invite">' + value + '</a>';
-        }
-
-        // Link to full code/site record.
-        if (key === 'id') {
-          const atlasEnvironment = store.state.atlasEnvironments[store.state.env];
-          // Determine site or code record from other key.
-          if (this.editKeys.indexOf('commit_hash') !== -1) {
-            return '<a target="_blank" href="' + atlasEnvironment + 'code/' + value + '">(Code Record)</a>';
-          }
-          return '<a target="_blank" href="' + atlasEnvironment + 'sites/' + value + '">'
-            + '(Site)</a><br/>(<a target="_blank" href="' + atlasEnvironment + 'statistics/' + this.data.statistics + '">Stats</a>)';
-        }
-
-        // Format dates for nicer output.
-        if (key === 'created' || key === 'updated') {
-          return shrugger.toDate(value);
-        }
-
-        // Deal with empty packages arrays.
-        if (typeof value === 'undefined' || value.length === 0) {
-          return '';
+      formatDisplay(value, key) {
+        // We look for any formatting function passed in.
+        if (this.formatFunction) {
+          return this.formatFunction(value, key);
         }
 
         return value;
-      },
-      selectType(index) {
-        return this.selectKeys.includes(index);
       },
       selectRow() {
         this.checked = !this.checked;
@@ -180,33 +118,11 @@
         return !this.edit || this.editKeys.indexOf(index) === -1 && index !== null;
       },
       makeEdit() {
-        // Get row type.
-        let type = 'sites';
-        if (typeof this.data.code_type !== 'undefined') {
-          type = 'code';
-        }
-
-        const that = this;
-        atlas.request(store.state.atlasEnvironments[store.state.env], type + '/' + that.data.id)
-          .then((data) => {
-            // Check and see if etags are different and update row data if so.
-            if (data[0]._etag !== that.data.etag) {
-              bus.$emit('onMessage', {
-                text: 'The etag has changed for this record. The listing of records has been updated with the latest data.',
-                alertType: 'alert-danger',
-              });
-              bus.$emit('etagFail', that);
-              return;
-            }
-
-            // Otherwise, continue with row edit.
-            that.edit = true;
-            // Emit event for other components to act on when row is being edited.
-            bus.$emit('rowEdit', that);
-          });
+        bus.$emit('editRow', this);
+        this.edit = true;
       },
       cancelEdit() {
-        bus.$emit('cancelEdit', this);
+        bus.$emit('cancelRowEdit', this);
         this.edit = false;
       },
       viewRecord() {

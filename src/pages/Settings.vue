@@ -125,6 +125,10 @@
         localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
         localStorage.setItem('stats-keys', JSON.stringify(this.saveStatsKeys));
 
+        // Save a combined set of sites and stats keys for Sites component to pass in.
+        // Hacky for now. @todo unhacky-ness.
+        store.commit('storedSiteKeys', this.saveSiteKeys.concat(this.saveStatsKeys));
+
         bus.$emit('onMessage', {
           text: 'Saved credentials.',
           alertType: 'alert-success',
