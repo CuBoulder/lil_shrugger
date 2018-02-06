@@ -1,16 +1,24 @@
 <template>
   <div class="container">
-    <div id="packages">
+    <div id="packages row">
       <message-area></message-area>
-    <div class="row col-md-12">
-      <label for="atlas-query">Atlas Query</label>
-      <input type="text"
-             id="atlas-query"
-             v-model="atlasQuery"
-             class="form-control">
-      <button class="btn btn-primary pull-right" @click.prevent="search()">Search</button>
-    </div>
-      <form>
+      <div class="row col-md-12">
+        <label for="atlas-query">Atlas Sites Query</label>
+        <input type="text"
+              id="atlas-query"
+              v-model="atlasQuery"
+              class="form-control">
+        <button class="btn btn-primary pull-right"
+                v-if="!showPackageUpdate"
+                @click.prevent="search()">Search</button>
+        <button class="btn btn-default pull-right"
+                v-if="showPackageUpdate"
+                @click.prevent="resetSearch()">Reset</button>
+      </div>
+      <div v-if="!showPackageUpdate" class="col col-md-6">
+        Complete a search before updating packages.
+      </div>
+      <form v-if="showPackageUpdate">
         <div class="row col-md-12 form-group">
           <label for="update-options">Update Assets:</label>
           <div id="update-options">
@@ -117,6 +125,7 @@
         sitesToUpdate: [],
         chosenProfile: '',
         chosenCore: '',
+        showPackageUpdate: false,
       };
     },
     created() {
@@ -178,10 +187,16 @@
               '<p><strong>Paths:</strong><br/>' + siteList.join(', ') + '</p>',
             alertType: 'alert-warning',
           });
+
+          this.showPackageUpdate = true;
         })
         .catch((error) => {
           console.log(error);
         });
+      },
+      resetSearch() {
+        this.showPackageUpdate = false;
+        this.sitesToUpdate = false;
       },
       updatePackages(that) {
         const baseURL = store.state.atlasEnvironments[store.state.env];
@@ -242,6 +257,10 @@
 </script>
 
 <style scoped>
+
+button {
+  margin-top: 10px;
+}
 
 </style>
 
