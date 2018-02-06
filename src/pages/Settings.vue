@@ -42,7 +42,9 @@
           <p class="form-text text-muted">
             Choose which keys you want to include in the site record listing.
           </p>
-          <div class="form-check checkbox-inline" v-for="key in siteKeys">
+          <div class="form-check checkbox-inline"
+               :key="key"
+               v-for="key in siteKeys">
             <label class="form-check-label">
               <input class="form-check-input" type="checkbox" :id="'site-' + key" :value="key" v-model="saveSiteKeys">
               {{key}}
@@ -52,7 +54,9 @@
           <p class="form-text text-muted">
             Choose which keys you want to include in the site record listing.
           </p>
-          <div class="form-check checkbox-inline" v-for="key in statsKeys">
+          <div class="form-check checkbox-inline"
+               :key="key"
+               v-for="key in statsKeys">
             <label class="form-check-label">
               <input class="form-check-input" type="checkbox" :id="'stats-' + key" :value="key" v-model="saveStatsKeys">
               {{key}}
@@ -62,7 +66,9 @@
           <p class="form-text text-muted">
             Choose which keys you want to include in the code record listing.
           </p>
-          <div class="form-check checkbox-inline" v-for="key in codeKeys">
+          <div class="form-check checkbox-inline"
+               :key="key"
+               v-for="key in codeKeys">
             <label class="form-check-label">
               <input class="form-check-input" type="checkbox" :id="'code-' + key" :value="key" v-model="saveCodeKeys">
               {{key}}
@@ -102,13 +108,13 @@
     },
     computed: {
       siteKeys() {
-        return store.state.siteKeys;
+        return this.sortKeys(store.state.siteKeys);
       },
       codeKeys() {
-        return store.state.codeKeys;
+        return this.sortKeys(store.state.codeKeys);
       },
       statsKeys() {
-        return store.state.statsKeys;
+        return this.sortKeys(store.state.statsKeys);
       },
     },
     methods: {
@@ -164,6 +170,22 @@
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
       },
+      sortKeys(keys) {
+        const sortOptions = {
+          sensitivity: 'base',
+          numeric: true,
+        };
+        return keys.sort((a, b) => b.localeCompare(a, 'en', sortOptions) * -1);
+      },
     },
   };
 </script>
+
+<style scoped>
+
+.checkbox-inline {
+  margin-left: 0px;
+  margin-right: 10px;
+}
+
+</style>
