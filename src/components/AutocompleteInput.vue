@@ -47,10 +47,17 @@
     created() {
       const that = this;
 
-      // Add data from query params for search on page load.
-      bus.$on('searchByQueryParam', (paramQuery) => {
-        if (that.theKey === 'title') {
-          that.keyword = paramQuery.title;
+      // Set autocomplete input.
+      bus.$on('setAutocompleteInput', (key, value) => {
+        if (that.theKey === key) {
+          that.keyword = value;
+        }
+      });
+
+      // Clear autocomplete input.
+      bus.$on('clearAutocompleteInput', (key) => {
+        if (that.theKey === key) {
+          that.keyword = '';
         }
       });
     },
@@ -87,9 +94,7 @@
         const selectedOption = this.fOptions[this.highlightedPosition];
         this.keyword = selectedOption[this.theKey];
         this.isOpen = false;
-        const params = { selectedOption };
-        params.key = this.theKey;
-        bus.$emit('select', params);
+        bus.$emit('autocompleteSelect', this.theKey, selectedOption);
       },
     },
   };

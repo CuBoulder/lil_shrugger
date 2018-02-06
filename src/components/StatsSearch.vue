@@ -4,11 +4,11 @@
     <hr>
     <div class="form-group row">
       <div class="col-md-6">
-        <label for="mongo-query">Query</label>
+        <label for="mongo-query">MongoDB Query</label>
         <input type="text" name="mongo-query" id="mongo-query" class="form-control" v-model="statsQuery">
       </div>
       <div class="col-md-6">
-        <label for="query-name">Query Name</label>
+        <label for="query-name">Query Title <a href="#" @click.prevent="showQueryList = !showQueryList">(Show Query List)</a></label>
         <autocomplete-input
             id="query-name"
             :options-key="optionsKey"
@@ -17,6 +17,10 @@
         </autocomplete-input>
       </div>
       <div v-if="userAccessPerm('statsSearch:save')">
+        <div class="col-md-6">
+          <label for="query-edit-name">Add/Edit Query Title</label>
+          <input type="text" name="query_edit_name" id="query-edit-name" class="form-control" v-model="statsEditName">
+        </div>
         <div class="col-md-6">
           <label for="query-description">Query Description</label>
           <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
@@ -35,8 +39,24 @@
     </div>
     <div class="form-group row col-md-6">
       <button class="btn btn-primary" @click.prevent="search()">Search</button>
-      <button class="btn btn-primary" @click.prevent="saveSearch()" v-if="userAccessPerm('statsSearch:save')">Save To Atlas</button>
       <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
+      <button class="btn btn-warning" @click.prevent="saveSearch()" v-if="userAccessPerm('statsSearch:save') && reset">Save</button>
+      <button class="btn btn-danger" @click.prevent="deleteSearch()" v-if="userAccessPerm('statsSearch:save') && reset">Delete</button>
+    </div>
+    <div v-if="showQueryList" class="form-group row col-md-10">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Query List</h4>
+        </div>
+        <ul class="list-group panel-body">
+          <li v-for="query in queryList"
+              :key="query._id"
+              class="list-group-item ">
+          <strong>{{query.title}}</strong> -- {{query.query}}<br />
+            {{query.description}}
+          </li>
+        </ul>
+      </div>
     </div>
   </form>
 </template>
@@ -56,25 +76,36 @@
         statsQueryDescription: '',
         statsQueryEndpoint: '',
         statsQueryTags: '',
+        statsEditName: '',
         optionsKey: 'statsQueryOptions',
         reset: false,
+        showQueryList: false,
       };
     },
     created() {
       const that = this;
 
-      // Listen for autocomplete selections and match both inputs.
-      bus.$on('select', (params) => {
-        that.selectListener(params, that);
-      });
-
+      // Add query options to search/filters.
       bus.$on('siteListingMounted', (params) => {
         that.siteListingMountedListener(params, that);
+      });
+
+      bus.$on('autocompleteSelect', (key, selectedOption) => {
+        that.autocompleteSelectListener(key, selectedOption, that);
       });
     },
     computed: {
       filter() {
         return store.state.filterKey;
+      },
+      queryList() {
+        return store.state.statsQueryOptions.sort((a, b) => {
+          const sortOptions = {
+            sensitivity: 'base',
+            numeric: true,
+          };
+          return b.title.localeCompare(a.title, 'en', sortOptions) * -1;
+        });
       },
     },
     methods: {
@@ -110,27 +141,30 @@
           if (paramQuery !== 'undefined') {
             that.search(paramQuery);
 
-            // Have to send event to set name field since it lives in an autocomplete inputs.
-            bus.$emit('searchByQueryParam', paramQuery);
+            // Have to send event to set name field since it lives in an autocomplete input.
+            bus.$emit('setAutocompleteInput', 'title', paramQuery.title);
 
             // Add other fields.
             that.statsQueryDescription = paramQuery.description;
             that.statsQueryEndpoint = paramQuery.endpoint;
             that.statsQueryTags = paramQuery.tags.join(',');
             that.statsQuery = paramQuery.query;
+            that.statsEditName = paramQuery.title;
           }
         }
       },
-      selectListener(params, that) {
+      autocompleteSelectListener(key, selectedOption, that) {
         // Fill in other fields in stats search.
-        if (params.key === 'title') {
+        if (key === 'title') {
           let currentQuery = {};
           store.state.statsQueryOptions.forEach((element) => {
-            if (element.title === params.selectedOption.title) {
+            if (element.title === selectedOption.title) {
               that.statsQueryDescription = element.description;
               that.statsQueryEndpoint = element.endpoint;
               that.statsQueryTags = element.tags.join(',');
               that.statsQuery = element.query;
+              that.statsQueryName = element.title;
+              that.statsEditName = element.title;
               currentQuery = element;
             }
           });
@@ -211,19 +245,15 @@
       resetSearch(thing = null) {
         const that = thing || this;
 
-        // Reset keywords in child components.
-        // @todo see if this can be stored in Store object.
-        that.$children.forEach((element) => {
-          if (typeof element.keyword !== 'undefined') {
-            element.keyword = '';
-          }
-        });
+        // Reset keyword in autocomplete input.
+        bus.$emit('clearAutocompleteInput', 'title');
 
         // Reset other query fields not in autocomplete component.
         that.statsQueryDescription = '';
         that.statsQueryEndpoint = '';
         that.statsQueryTags = '';
         that.statsQuery = '';
+        that.statsEditName = '';
 
         // Reset stored query.
         store.commit('storeQuery', null);
@@ -234,21 +264,14 @@
 
         // Reset data in query params.
         history.pushState(null, null, location.origin + location.pathname);
+
+        // Grab search queries.
+        atlas.getQueries();
       },
       saveSearch() {
         let queryToSend = null;
-        let name = null;
-        let userQuery = null;
-
-        // Grab keyword to search for.
-        this.$children.forEach((element) => {
-          if (element.theKey === 'query') {
-            userQuery = element.keyword;
-          }
-          if (element.theKey === 'title') {
-            name = element.keyword;
-          }
-        });
+        const name = this.statsEditName;
+        const userQuery = this.statsQuery;
 
         // Convert to unicode.
         queryToSend = shrugger.convertToUnicode(userQuery);
@@ -299,6 +322,29 @@
               console.log(error);
             });
         }
+      },
+      deleteSearch() {
+        // Get the current query object.
+        const currentQuery = this.queryList.find(value => value.query === this.statsQuery);
+
+        // Send request to Atlas.
+        const baseURL = store.state.atlasEnvironments[store.state.env];
+        atlas.request(baseURL, 'query/' + currentQuery._id, '', 'DELETE', null, currentQuery._etag)
+          .then(() => {
+            // Wait a little so the response has new entries.
+            shrugger.wait(5000);
+
+            bus.$emit('onMessage', {
+              text: 'You have sent a DELETE request to a query record. Query ID: ' + currentQuery._id,
+              alertType: 'alert-success',
+            });
+
+            // Grab search queries.
+            atlas.getQueries();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
