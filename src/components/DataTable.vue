@@ -62,8 +62,17 @@
         </row>
         </tbody>
       </table>
-      <row-edit :options="rowEditOptions" v-show="showEdit"></row-edit>
-      <row-view v-show="showView"></row-view>
+      <div v-show="showEdit || showView"
+           class="row col col-md-12">
+        <div :class="rowEditClasses"
+             v-show="showEdit">
+          <row-edit :options="rowEditOptions"></row-edit>
+        </div>
+        <div v-show="showView"
+             :class="rowViewClasses">
+          <row-view></row-view>
+        </div>
+      </div>
       <!-- Show More Records Links -->
       <div class="show-more-buttons"
            v-if="resultCount > showRowCount">
@@ -194,6 +203,12 @@
       },
       showRowCount() {
         return store.state.recordsToShow;
+      },
+      rowViewClasses() {
+        return this.showEdit ? 'col-md-6' : 'col-md-12';
+      },
+      rowEditClasses() {
+        return this.showView ? 'col-md-6' : 'col-md-8';
       },
     },
     methods: {

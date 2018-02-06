@@ -1,8 +1,13 @@
 <template>
-  <div>
-    <pre>
-      {{content}}
-    </pre>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4>View Record: {{ recordName }}</h4>
+    </div>
+    <div class="panel-body">
+      <pre>
+        {{content}}
+      </pre>
+    </div>
   </div>
 </template>
 
@@ -28,6 +33,13 @@
       bus.$on('rowHide', () => {
         that.rowHideListener(that);
       });
+    },
+    computed: {
+      recordName() {
+        // Some records might not have a name so ideally some name key should be passed in.
+        // this.recordNameKey or something like that.
+        return this.content.name ? this.content.name : '';
+      },
     },
     methods: {
       rowViewListener(row, that) {

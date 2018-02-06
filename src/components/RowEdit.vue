@@ -1,10 +1,12 @@
 <template>
-  <div>
-    <form class="row col col-md-6">
-      <h2>Edit Record: {{ rowData.path || (`${rowData.name} - ${rowData.label} (${rowData.version})`) }}</h2>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4>Edit Record: {{ rowData.path || (`${rowData.name} - ${rowData.label} (${rowData.version})`) }}</h4>
+    </div>
+    <form class="row panel-body">
       <fieldset class="form-group">
         <div v-for="key in rowKeys"
-             :key="key">
+            :key="key">
           <label for="key">{{ key }}</label>
           <div v-if="selectType(key)">
             <select :name="key" v-model="rowData[key]" class="form-control">
