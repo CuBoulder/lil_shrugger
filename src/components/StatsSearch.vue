@@ -245,8 +245,7 @@
       resetSearch(thing = null) {
         const that = thing || this;
 
-        // Reset keywords in child components.
-        // @todo see if this can be stored in Store object.
+        // Reset keyword in autocomplete input.
         bus.$emit('clearAutocompleteInput', 'title');
 
         // Reset other query fields not in autocomplete component.
@@ -327,7 +326,6 @@
       deleteSearch() {
         // Get the current query object.
         const currentQuery = this.queryList.find(value => value.query === this.statsQuery);
-        console.log(currentQuery);
 
         // Send request to Atlas.
         const baseURL = store.state.atlasEnvironments[store.state.env];
