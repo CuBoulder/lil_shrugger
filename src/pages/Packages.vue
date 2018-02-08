@@ -1,106 +1,104 @@
 <template>
-  <div class="container">
-    <div id="packages row">
-      <message-area></message-area>
-      <div class="row col-md-12">
-        <label for="atlas-query">Atlas Sites Query</label>
-        <input type="text"
-              id="atlas-query"
-              v-model="atlasQuery"
-              class="form-control">
-        <button class="btn btn-primary pull-right"
-                v-if="!showPackageUpdate"
-                @click.prevent="search()">Search</button>
-        <button class="btn btn-default pull-right"
-                v-if="showPackageUpdate"
-                @click.prevent="resetSearch()">Reset</button>
-      </div>
-      <div v-if="!showPackageUpdate" class="col col-md-6">
-        Complete a search before updating packages.
-      </div>
-      <form v-if="showPackageUpdate">
-        <div class="row col-md-12 form-group">
-          <label for="update-options">Update Assets:</label>
-          <div id="update-options">
-            <div v-for="type in codeTypes"
-                :key="type"
-                class="form-check">
-              <input class="form-check-input"
-                     type="checkbox"
-                     v-model="saveCodeTypes"
-                     :value="type">
-                {{type}}
-            </div>
-          </div>
-        </div>
-        <div class="row col-md-12 form-group">
-          <!-- Cores select list. -->
-          <label for="selectCore">Cores:</label>
-          <select name="selectCore"
-                  id="selectCore"
-                  v-model="chosenCore"
-                  class="form-control">
-            <option :key="asset.id"
-                    :value="asset.id"
-                    v-for="asset in cores">
-              {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
-            </option>
-          </select>
-          <!-- Profiles select list. -->
-          <label for="selectProfile">Profiles:</label>
-          <select name="selectProfile"
-                  id="selectProfile"
-                  v-model="chosenProfile"
-                  class="form-control">
-            <option :key="asset.id"
-                    :value="asset.id"
-                    v-for="asset in profiles">
-              {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
-            </option>
-          </select>
-        </div>
-        <div class="row col-md-12 form-group">
-          <!-- Packages add select list. -->
-          <div id="packages-add" class="col-md-6">
-            <label for="packages-add">Add Packages:</label>
-            <div class="form-check"
-              :key="asset.id"
-              v-for="asset in modules">
-              <input class="form-check-input"
-                    type="checkbox"
-                    :id="'package-add' + asset.id"
-                    :value="asset.id"
-                    v-model="addPackages">
-              {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
-              <span v-if="asset.is_current === true">
-                (Current)
-              </span>
-            </div>
-          </div>
-          <!-- Packages remove select list. -->
-          <div id="packages-remove" class="col-md-6">
-            <label for="packages-remove">Remove Packages:</label>
-            <div class="form-check"
-              :key="asset.id"
-              v-for="asset in modules">
-              <input class="form-check-input"
-                    type="checkbox"
-                    :id="'package-remove' + asset.id"
-                    :value="asset.id"
-                    v-model="removePackages">
-              {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
-              <span v-if="asset.is_current === true">
-                (Current)
-              </span>
-            </div>
-          </div>
-        </div>
-        <confirm-button label="Update Packages"
-                        callback="updatePackages"
-                        :params="{}">
-          </confirm-button>
-      </form>
+  <div id="packages">
+    <message-area></message-area>
+    <div class="row col-md-12">
+      <label for="atlas-query">Atlas Sites Query</label>
+      <input type="text"
+            id="atlas-query"
+            v-model="atlasQuery"
+            class="form-control">
+      <button class="btn btn-primary pull-right"
+              v-if="!showPackageUpdate"
+              @click.prevent="search()">Search</button>
+      <button class="btn btn-default pull-right"
+              v-if="showPackageUpdate"
+              @click.prevent="resetSearch()">Reset</button>
     </div>
+    <div v-if="!showPackageUpdate" class="col col-md-6">
+      Complete a search before updating packages.
+    </div>
+    <form v-if="showPackageUpdate">
+      <div class="row col-md-12 form-group">
+        <label for="update-options">Update Assets:</label>
+        <div id="update-options">
+          <div v-for="type in codeTypes"
+              :key="type"
+              class="form-check">
+            <input class="form-check-input"
+                    type="checkbox"
+                    v-model="saveCodeTypes"
+                    :value="type">
+              {{type}}
+          </div>
+        </div>
+      </div>
+      <div class="row col-md-12 form-group">
+        <!-- Cores select list. -->
+        <label for="selectCore">Cores:</label>
+        <select name="selectCore"
+                id="selectCore"
+                v-model="chosenCore"
+                class="form-control">
+          <option :key="asset.id"
+                  :value="asset.id"
+                  v-for="asset in cores">
+            {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
+          </option>
+        </select>
+        <!-- Profiles select list. -->
+        <label for="selectProfile">Profiles:</label>
+        <select name="selectProfile"
+                id="selectProfile"
+                v-model="chosenProfile"
+                class="form-control">
+          <option :key="asset.id"
+                  :value="asset.id"
+                  v-for="asset in profiles">
+            {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
+          </option>
+        </select>
+      </div>
+      <div class="row col-md-12 form-group">
+        <!-- Packages add select list. -->
+        <div id="packages-add" class="col-md-6">
+          <label for="packages-add">Add Packages:</label>
+          <div class="form-check"
+            :key="asset.id"
+            v-for="asset in modules">
+            <input class="form-check-input"
+                  type="checkbox"
+                  :id="'package-add' + asset.id"
+                  :value="asset.id"
+                  v-model="addPackages">
+            {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
+            <span v-if="asset.is_current === true">
+              (Current)
+            </span>
+          </div>
+        </div>
+        <!-- Packages remove select list. -->
+        <div id="packages-remove" class="col-md-6">
+          <label for="packages-remove">Remove Packages:</label>
+          <div class="form-check"
+            :key="asset.id"
+            v-for="asset in modules">
+            <input class="form-check-input"
+                  type="checkbox"
+                  :id="'package-remove' + asset.id"
+                  :value="asset.id"
+                  v-model="removePackages">
+            {{asset.name}} - {{asset.version}} || Asset ID:{{asset.id}}
+            <span v-if="asset.is_current === true">
+              (Current)
+            </span>
+          </div>
+        </div>
+      </div>
+      <confirm-button label="Update Packages"
+                      callback="updatePackages"
+                      :params="{}">
+        </confirm-button>
+    </form>
   </div>
 </template>
 

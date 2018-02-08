@@ -14,6 +14,7 @@ const store = new Vuex.Store({
       Sites: [
         { name: 'search', component: 'statsSearch' },
         { name: 'th-list', component: 'commands' },
+        { name: 'download-alt', component: 'reports' },
         { name: 'refresh', component: 'table' },
       ],
       Code: [
@@ -50,7 +51,16 @@ const store = new Vuex.Store({
     gitHubRepos: [],
     gitHubBranches: [],
     recordsToShow: 10,
-    reportsList: ['exportTable', 'exportSiteContactEmail'],
+    reportsList: [
+      {
+        name: 'exportTable',
+        options: false,
+      },
+      {
+        name: 'exportSiteContactEmail',
+        options: true,
+      },
+    ],
     searchFilter: '',
     selectOptions: {
       status: ['available', 'installed', 'launching'],

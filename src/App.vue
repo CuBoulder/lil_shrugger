@@ -25,6 +25,7 @@
   import CreateCode from './components/CreateCode';
   import RowEdit from './components/RowEdit';
   import RowView from './components/RowView';
+  import Reports from './components/Reports';
 
 
   // We need to add the component namespace for the template to recognize it.
@@ -39,6 +40,7 @@
   Vue.component('create-code', CreateCode);
   Vue.component('row-edit', RowEdit);
   Vue.component('row-view', RowView);
+  Vue.component('reports', Reports);
 
   export default {
     name: 'app',

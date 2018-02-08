@@ -1,84 +1,85 @@
 <template>
-  <div class="container">
-    <div id="user-settings">
-      <message-area></message-area>
-      <form>
-        <div v-if="userAccessPerm('credentials')">
-          <fieldset class="form-group">
-            <label for="username">Atlas Username</label>
-            <input type="text" id="username" class="form-control" name="username" v-model="username">
-            <label for="password">Atlas Password</label>
-            <input type="password" id="password" class="form-control" name="password" v-model="password">
-          </fieldset>
-          <fieldset class="form-group">
-            <label for="github-username">GitHub Username</label>
-            <input type="text" id="github-username" class="form-control" name="github-username" v-model="gitHub.username">
-            <label for="github-token">GitHub Token</label>
-            <input type="text" id="github-token" class="form-control" name="github-token" v-model="gitHub.token">
-            <p class="form-text text-muted">
-              Need to setup
-              <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> under Personal access tokens.
-            </p>
-          </fieldset>
-        </div>
-        <fieldset class="form-group">
-          <label for="sites-query">Sites Query</label>
-          <input type="text" id="sites-query" class="form-control" name="sites-query" v-model="sitesQuery">
-          <label for="code-query">Code Query</label>
-          <input type="text" id="code-query" class="form-control" name="code-query" v-model="codeQuery">
-        </fieldset>
-        <fieldset class="form-group">
-          <h4>Repositories Listing</h4>
-          <p class="form-text text-muted">
-            You can choose to have the repository list for creating code be chronologically by updated date instead of alphabetically.
-          </p>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" id="chronological" v-model="repoListing">
-              Chronological
-            </label>
-          </div>
-          <h4>Site Record Keys</h4>
-          <p class="form-text text-muted">
-            Choose which keys you want to include in the site record listing.
-          </p>
-          <div class="form-check checkbox-inline"
-               :key="key"
-               v-for="key in siteKeys">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" :id="'site-' + key" :value="key" v-model="saveSiteKeys">
-              {{key}}
-            </label>
-          </div>
-          <h4>Stats Record Keys</h4>
-          <p class="form-text text-muted">
-            Choose which keys you want to include in the site record listing.
-          </p>
-          <div class="form-check checkbox-inline"
-               :key="key"
-               v-for="key in statsKeys">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" :id="'stats-' + key" :value="key" v-model="saveStatsKeys">
-              {{key}}
-            </label>
-          </div>
-          <h4>Code Record Keys</h4>
-          <p class="form-text text-muted">
-            Choose which keys you want to include in the code record listing.
-          </p>
-          <div class="form-check checkbox-inline"
-               :key="key"
-               v-for="key in codeKeys">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" :id="'code-' + key" :value="key" v-model="saveCodeKeys">
-              {{key}}
-            </label>
-          </div>
-        </fieldset>
-        <button @click="saveCreds()" type="button" class="btn btn-primary" aria-label="Save">Save</button>
-        <button @click="clearStorage()" type="button" class="btn btn-danger" aria-label="Clear Local Storage">Clear Local Storage</button>
-      </form>
+  <div class="panel panel-default">
+    <message-area></message-area>
+    <div class="panel-heading">
+      <h4>User Settings</h4>
     </div>
+    <form class="row panel-body">
+      <div v-if="userAccessPerm('credentials')">
+        <fieldset class="form-group">
+          <label for="username">Atlas Username</label>
+          <input type="text" id="username" class="form-control" name="username" v-model="username">
+          <label for="password">Atlas Password</label>
+          <input type="password" id="password" class="form-control" name="password" v-model="password">
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="github-username">GitHub Username</label>
+          <input type="text" id="github-username" class="form-control" name="github-username" v-model="gitHub.username">
+          <label for="github-token">GitHub Token</label>
+          <input type="text" id="github-token" class="form-control" name="github-token" v-model="gitHub.token">
+          <p class="form-text text-muted">
+            Need to setup
+            <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> under Personal access tokens.
+          </p>
+        </fieldset>
+      </div>
+      <fieldset class="form-group">
+        <label for="sites-query">Sites Query</label>
+        <input type="text" id="sites-query" class="form-control" name="sites-query" v-model="sitesQuery">
+        <label for="code-query">Code Query</label>
+        <input type="text" id="code-query" class="form-control" name="code-query" v-model="codeQuery">
+      </fieldset>
+      <fieldset class="form-group">
+        <h4>Repositories Listing</h4>
+        <p class="form-text text-muted">
+          You can choose to have the repository list for creating code be chronologically by updated date instead of alphabetically.
+        </p>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" id="chronological" v-model="repoListing">
+            Chronological
+          </label>
+        </div>
+        <h4>Site Record Keys</h4>
+        <p class="form-text text-muted">
+          Choose which keys you want to include in the site record listing.
+        </p>
+        <div class="form-check checkbox-inline"
+              :key="key"
+              v-for="key in siteKeys">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" :id="'site-' + key" :value="key" v-model="saveSiteKeys">
+            {{key}}
+          </label>
+        </div>
+        <h4>Stats Record Keys</h4>
+        <p class="form-text text-muted">
+          Choose which keys you want to include in the site record listing.
+        </p>
+        <div class="form-check checkbox-inline"
+              :key="key"
+              v-for="key in statsKeys">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" :id="'stats-' + key" :value="key" v-model="saveStatsKeys">
+            {{key}}
+          </label>
+        </div>
+        <h4>Code Record Keys</h4>
+        <p class="form-text text-muted">
+          Choose which keys you want to include in the code record listing.
+        </p>
+        <div class="form-check checkbox-inline"
+              :key="key"
+              v-for="key in codeKeys">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" :id="'code-' + key" :value="key" v-model="saveCodeKeys">
+            {{key}}
+          </label>
+        </div>
+      </fieldset>
+      <button @click="saveCreds()" type="button" class="btn btn-primary" aria-label="Save">Save</button>
+      <button @click="clearStorage()" type="button" class="btn btn-danger" aria-label="Clear Local Storage">Clear Local Storage</button>
+    </form>
   </div>
 </template>
 
@@ -130,10 +131,6 @@
         localStorage.setItem('code-keys', JSON.stringify(this.saveCodeKeys));
         localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
         localStorage.setItem('stats-keys', JSON.stringify(this.saveStatsKeys));
-
-        // Save a combined set of sites and stats keys for Sites component to pass in.
-        // Hacky for now. @todo unhacky-ness.
-        store.commit('storedSiteKeys', this.saveSiteKeys.concat(this.saveStatsKeys));
 
         bus.$emit('onMessage', {
           text: 'Saved credentials.',
