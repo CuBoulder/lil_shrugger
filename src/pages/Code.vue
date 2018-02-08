@@ -7,6 +7,13 @@
     <data-table :table-options="tableOptions"
                 v-if="showDataTable !== false">
     </data-table>
+    <transition>
+      <button class="btn btn-sm spinner col-md-offset-5"
+              v-if="showDataTable === false">
+        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+        Loading...
+      </button>
+    </transition>
   </div>
 </template>
 

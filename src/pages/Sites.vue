@@ -1,38 +1,46 @@
 <template>
   <div>
-    <div id="site-listing" class="row">
-      <message-area></message-area>
-      <transition name="slide-fade">
-        <stats-search
-            v-if="showStatsSearch">
-        </stats-search>
-      </transition>
-      <transition name="slide-fade">
-        <commands
-            :grid-columns="gridColumns"
-            v-if="showCommands">
-        </commands>
-      </transition>
-      <div class="row pull-right"
-           id="create-site"
-           v-if="userAccessPerm('createSite')">
-        <confirm-button
-            label="Create A Site"
-            :params="{}"
-            callback="createSite">
-        </confirm-button>
+    <message-area></message-area>
+    <transition name="slide-fade">
+      <div v-if="showStatsSearch"
+            class="col col-md-12">
+        <stats-search></stats-search>
       </div>
-      <data-table :table-options="tableOptions"
-                  v-if="showDataTable !== false">
-      </data-table>
-      <transition>
-        <button class="btn btn-sm spinner col-md-offset-5"
-                v-if="showDataTable === false">
-          <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-          Loading...
-        </button>
-      </transition>
+    </transition>
+    <transition name="slide-fade">
+      <div v-if="showCommands"
+            class="col col-md-6">
+        <commands></commands>
+      </div>
+    </transition>
+    <transition name="slide-fade">
+      <div class="col col-md-6"
+            v-if="showReports">
+        <reports :grid-columns="tableColumns"></reports>
+      </div>
+    </transition>
+    <div class="row pull-right"
+          id="create-site"
+          v-if="userAccessPerm('createSite')">
+      <confirm-button
+          label="Create A Site"
+          :params="{}"
+          callback="createSite">
+      </confirm-button>
     </div>
+    <div v-if="showDataTable !== false"
+         class="col col-md-12">
+      <data-table :table-options="tableOptions"
+                  :columns="tableColumns">
+      </data-table>
+    </div>
+    <transition>
+      <button class="btn btn-sm spinner col-md-offset-5"
+              v-if="showDataTable === false">
+        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+        Loading...
+      </button>
+    </transition>
   </div>
 </template>
 
@@ -44,7 +52,6 @@
   import stats from '../js/stats';
   import sites from '../js/sites';
   import code from '../js/code';
-  import download from '../js/download';
 
   export default {
     name: 'Sites',
@@ -52,9 +59,9 @@
       return {
         showStatsSearch: true,
         showCommands: false,
+        showReports: false,
         showDataTable: false,
         tableOptions: {
-          columns: store.state.storedSiteKeys.length > 1 ? store.state.storedSiteKeys : store.state.defaultSelectedSitesKeys,
           dataName: 'sitesData',
           callback: 'updateSiteRecord',
           editKeys: store.state.sitesEditKeys,
@@ -70,10 +77,6 @@
 
       // Grab data for data table.
       this.initialize();
-
-      bus.$on('sendCommand', (params) => {
-        that.sendCommandListener(params, that);
-      });
 
       bus.$on('switchEnv', () => {
         that.initialize();
@@ -100,27 +103,20 @@
         that.navbarShowListener(component, that);
       });
 
-      // Updates data table after site record data has been grabbed.
-      // Currently adds code and stats records data.
-      bus.$on('tableDataUpdate', (siteRecords) => {
-        that.tableDataUpdateListener(siteRecords, that);
-      });
-
-      // Exports data in table when export button is clicked.
-      bus.$on('exportTable', (params) => {
-        that.exportTableListener(params, that);
-      });
-
-      // Exports data in table when export button is clicked.
-      bus.$on('exportSiteContactEmail', (params) => {
-        that.exportEmailsListener(params, that);
-      });
-
       bus.$on('createSite', (params) => {
         sites.create(params);
       });
     },
     computed: {
+      tableColumns() {
+        // Merge site and stats keys together.
+        const siteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys;
+
+        // Make stats empty if not saved since adding all of those keys makes the table unusable.
+        const statsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [];
+
+        return siteKeys.concat(statsKeys);
+      },
     },
     methods: {
       initialize() {
@@ -134,11 +130,6 @@
             };
 
             store.commit('addSitesGridData', options);
-
-            // Emit event so other data can be added to the table.
-            // This wasn't working on page load so the code in that function was copied here.
-            // @todo Remove duplicated code and uncomment the line below.
-            // bus.$emit('tableDataUpdate', data);
 
             // Add data from code endpoint.
             code.get(baseURL)
@@ -205,31 +196,6 @@
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
       },
-      sendCommandListener(params) {
-        // Get site Ids to send.
-        const siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';
-        let queryToSend = '{"path":{"$in":[' + siteIds + ']}}';
-
-        // Convert to unicode.
-        queryToSend = shrugger.convertToUnicode(queryToSend);
-
-        // Don't JSON encode since it escapes too much.
-        const body = '{"query": "' + queryToSend + '"}';
-
-        // Get command data for etag.
-        const command = store.state.commands.filter(element => element._id === params.command);
-
-        atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, '', 'PATCH', body, command[0]._etag)
-        .then(() => {
-          bus.$emit('onMessage', {
-            text: 'Successfully sent "' + command[0].name + '" command to ' + store.state.sitesSendCommand.length + ' site(s): (' + siteIds + ').',
-            alertType: 'alert-success',
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      },
       etagFailListener(env) {
         sites.get(store.state.atlasEnvironments[env])
           .then((data) => {
@@ -246,7 +212,14 @@
             that.showStatsSearch = !that.showStatsSearch;
             break;
           case 'commands':
-            that.showCommands = !that.showCommands;
+            if (this.userAccessPerm('commands:export')) {
+              that.showCommands = !that.showCommands;
+            }
+            break;
+          case 'reports':
+            if (this.userAccessPerm('commands:export')) {
+              that.showReports = !that.showReports;
+            }
             break;
           case 'table':
             that.initialize();
@@ -254,122 +227,6 @@
           default:
             break;
         }
-      },
-      tableDataUpdateListener(siteRecords) {
-        // Update table with code data once site records have been loaded.
-        const baseURL = store.state.atlasEnvironments[store.state.env];
-        code.get(baseURL)
-          .then((codeRecords) => {
-            code.addCodeToSites(siteRecords, codeRecords);
-          })
-          .catch(error => console.log(error));
-
-        // Update with stats data.
-        stats.get(siteRecords, baseURL)
-          .then((statsRecords) => {
-            stats.addStatsToSites(siteRecords, statsRecords);
-          })
-          .catch(error => console.log(error));
-      },
-      exportTableListener(params) {
-        const rows = store.state.filteredData;
-        const columns = params.columns;
-        const headers = {};
-
-        // Filter rows to only have keys visible in table.
-        const exportData = rows.map((item) => {
-          const returnItem = {};
-          columns.forEach((element) => {
-            // Date objects ended up not coming out right.
-            if (item[element] instanceof Date) {
-              item[element] = shrugger.toDate(item[element]);
-            }
-
-            // Need to join arrays with different value than comma.
-            if (Array.isArray(item[element])) {
-              item[element] = item[element].join('|');
-            }
-
-            // If item is still an object, then we need to more to flatten it into a string.
-            if (typeof item[element] === 'object') {
-              let mrString = '';
-              Object.keys(item[element]).forEach((thing) => {
-                mrString = mrString + '|' + thing + ':' + item[element][thing];
-              });
-              item[element] = mrString;
-            }
-
-            // Strings can have commas.
-            if (typeof item[element] === 'string') {
-              item[element] = item[element].replace(new RegExp(',', 'g'), '|');
-            }
-
-            returnItem[element] = item[element];
-
-            // Also make columns into header objects.
-            headers[element] = element;
-          });
-          return returnItem;
-        });
-
-        // Export to CSV file.
-        download.csv(headers, exportData, 'report');
-      },
-      exportEmailsListener(params) {
-        // Grab the types of emails needed.
-        let emailArray = params.options.split(',');
-
-        // If email array is blank, then add "all" option.
-        if (emailArray[0] === '') {
-          emailArray = ['all'];
-        }
-
-        // Reduce number of emails into one list.
-        const allEmails = [];
-        // If site contacts don't exist, then don't do anything.
-        const exportData = store.state.filteredData.filter(item => item.site_contacts);
-
-        exportData.map((item) => {
-          // If array is empty or just contains "all", then push all emails.
-          let tempEmailArray = [];
-          if (Array.isArray(emailArray) && emailArray.length && emailArray.indexOf('all') === -1) {
-            emailArray.forEach((element) => {
-              // Need to check if site has any users of this type.
-              if (item.site_contacts[element]) {
-                tempEmailArray = [].concat(tempEmailArray, item.site_contacts[element]);
-              }
-            });
-
-            allEmails.push(tempEmailArray);
-          } else {
-            // item.email_address will have all email addresses.
-            // @see site_records.js formatStatsData().
-            allEmails.push(item.email_address);
-          }
-        });
-
-        // The final email list will not have duplicates.
-        const finalEmails = [];
-        allEmails.forEach((el) => {
-          // All items should be arrays so we need to also loop through those items.
-          if (typeof el !== 'undefined' && Array.isArray(el)) {
-            el.forEach((part) => {
-              // Value can be undefined or not be an email address.
-              if (!part || !part.includes('@')) {
-                part = '';
-              }
-
-              // We need to lowercase and strip text since emails are weird and can have both
-              // lowercase and uppercase versions.
-              if (finalEmails.indexOf(part.toLowerCase().trim()) === -1) {
-                finalEmails.push(part.toLowerCase().trim());
-              }
-            });
-          }
-        });
-
-        // Export to text file.
-        download.text(finalEmails, 'siteContactEmails');
       },
     },
   };
@@ -382,23 +239,23 @@
     margin-bottom: 0.75em;
   }
 
-/* Spinner CSS */
-.spinner {
-  font-size: 25px;
-}
+  /* Spinner CSS */
+  .spinner {
+    font-size: 25px;
+  }
 
-.glyphicon-refresh-animate {
-    -animation: spin .7s infinite linear;
-    -webkit-animation: spin2 .7s infinite linear;
-}
+  .glyphicon-refresh-animate {
+      -animation: spin .7s infinite linear;
+      -webkit-animation: spin2 .7s infinite linear;
+  }
 
-@-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
-}
+  @-webkit-keyframes spin2 {
+      from { -webkit-transform: rotate(0deg);}
+      to { -webkit-transform: rotate(360deg);}
+  }
 
-@keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
-}
+  @keyframes spin {
+      from { transform: scale(1) rotate(0deg);}
+      to { transform: scale(1) rotate(360deg);}
+  }
 </style>

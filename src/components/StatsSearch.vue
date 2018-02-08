@@ -1,64 +1,73 @@
 <template>
-  <form id="statsSearch" class="row">
-    <h3>Search</h3>
-    <hr>
-    <div class="form-group row">
-      <div class="col-md-6">
-        <label for="mongo-query">MongoDB Query</label>
-        <input type="text" name="mongo-query" id="mongo-query" class="form-control" v-model="statsQuery">
-      </div>
-      <div class="col-md-6">
-        <label for="query-name">Query Title <a href="#" @click.prevent="showQueryList = !showQueryList">(Show Query List)</a></label>
-        <autocomplete-input
-            id="query-name"
-            :options-key="optionsKey"
-            the-key="title"
-            :model="statsQueryName">
-        </autocomplete-input>
-      </div>
-      <div v-if="userAccessPerm('statsSearch:save')">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4>
+        Stats Search
+        <a target="_blank"
+           href="https://github.com/CuBoulder/lil_shrugger/wiki/Stats-Search">
+          <span class="navbar-action-icon glyphicon glyphicon-question-sign"></span>
+        </a>
+      </h4>
+    </div>
+    <form class="row panel-body">
+      <div class="form-group row">
         <div class="col-md-6">
-          <label for="query-edit-name">Add/Edit Query Title</label>
-          <input type="text" name="query_edit_name" id="query-edit-name" class="form-control" v-model="statsEditName">
+          <label for="mongo-query">MongoDB Query</label>
+          <input type="text" name="mongo-query" id="mongo-query" class="form-control" v-model="statsQuery">
         </div>
         <div class="col-md-6">
-          <label for="query-description">Query Description</label>
-          <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
+          <label for="query-name">Query Title <a href="#" @click.prevent="showQueryList = !showQueryList">(Show Query List)</a></label>
+          <autocomplete-input
+              id="query-name"
+              :options-key="optionsKey"
+              the-key="title"
+              :model="statsQueryName">
+          </autocomplete-input>
         </div>
-        <!-- Comment out until another endpoint other than stats is searched on this page.
-        <div class="col-md-4">
-          <label for="query-endpoint">Query Endpoint</label>
-          <input type="text" name="query_endpoint" id="query-endpoint" class="form-control" v-model="statsQueryEndpoint">
-        </div>
-        -->
-        <div class="col-md-6">
-          <label for="query-tags">Query Tags</label>
-          <input type="text" name="query_tags" id="query-tags" class="form-control" v-model="statsQueryTags">
+        <div v-if="userAccessPerm('statsSearch:save')">
+          <div class="col-md-6">
+            <label for="query-edit-name">Add/Edit Query Title</label>
+            <input type="text" name="query_edit_name" id="query-edit-name" class="form-control" v-model="statsEditName">
+          </div>
+          <div class="col-md-6">
+            <label for="query-description">Query Description</label>
+            <input type="text" name="query_description" id="query-description" class="form-control" v-model="statsQueryDescription">
+          </div>
+          <!-- Comment out until another endpoint other than stats is searched on this page.
+          <div class="col-md-4">
+            <label for="query-endpoint">Query Endpoint</label>
+            <input type="text" name="query_endpoint" id="query-endpoint" class="form-control" v-model="statsQueryEndpoint">
+          </div>
+          -->
+          <div class="col-md-6">
+            <label for="query-tags">Query Tags</label>
+            <input type="text" name="query_tags" id="query-tags" class="form-control" v-model="statsQueryTags">
+          </div>
         </div>
       </div>
-    </div>
-    <div class="form-group row col-md-6">
-      <button class="btn btn-primary" @click.prevent="search()">Search</button>
-      <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
-      <button class="btn btn-warning" @click.prevent="saveSearch()" v-if="userAccessPerm('statsSearch:save') && reset">Save</button>
-      <button class="btn btn-danger" @click.prevent="deleteSearch()" v-if="userAccessPerm('statsSearch:save') && reset">Delete</button>
-    </div>
-    <div v-if="showQueryList" class="form-group row col-md-10">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4>Query List</h4>
-        </div>
-        <ul class="list-group panel-body">
-          <li v-for="query in queryList"
-              :key="query._id"
-              class="list-group-item ">
-          <strong>{{query.title}}</strong> -- {{query.query}}<br />
-            {{query.description}}
-          </li>
-        </ul>
+      <div class="form-group row col-md-6">
+        <button class="btn btn-primary" @click.prevent="search()">Search</button>
+        <button class="btn btn-default" v-if="reset" @click.prevent="resetSearch()">Reset</button>
+        <button class="btn btn-warning" @click.prevent="saveSearch()" v-if="userAccessPerm('statsSearch:save') && reset">Save</button>
+        <button class="btn btn-danger" @click.prevent="deleteSearch()" v-if="userAccessPerm('statsSearch:save') && reset">Delete</button>
       </div>
-    </div>
-  </form>
+      <div v-if="showQueryList" class="form-group row col-md-10">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>Query List</h4>
+          </div>
+          <ul class="list-group panel-body">
+            <li v-for="query in queryList"
+                :key="query._id"
+                class="list-group-item ">
+            <strong>{{query.title}}</strong> -- {{query.query}}<br />
+              {{query.description}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>

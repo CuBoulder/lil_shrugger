@@ -91,10 +91,11 @@
     name: 'DataTable',
     props: {
       tableOptions: Object,
+      columns: Array,
     },
     data() {
       const sortOrders = {};
-      this.tableOptions.columns.forEach((key) => {
+      this.columns.forEach((key) => {
         sortOrders[key] = Number(this.tableOptions.defaultSortDirection);
       });
       return {
@@ -105,7 +106,7 @@
           editListener: this.tableOptions.editListener,
         },
         rowOptions: {
-          columns: this.tableOptions.columns,
+          columns: this.columns,
           formatFunction: this.tableOptions.formatFunction,
         },
         sortKey: this.tableOptions.defaultSortKey ? this.tableOptions.defaultSortKey : '',
@@ -144,9 +145,6 @@
     computed: {
       gridData() {
         return store.state.sitesGridData[this.tableOptions.dataName];
-      },
-      columns() {
-        return this.tableOptions.columns;
       },
       filteredData() {
         const sortKey = this.sortKey;
