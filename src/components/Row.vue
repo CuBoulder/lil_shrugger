@@ -60,7 +60,6 @@
         specialEditContent: {},
         view: false,
         checked: false,
-        rowData: this.data,
         columns: this.options.columns,
         formatFunction: this.options.formatFunction,
       };
@@ -96,6 +95,9 @@
     computed: {
       editContent() {
         return store.state.editContent;
+      },
+      rowData() {
+        return this.data;
       },
     },
     methods: {

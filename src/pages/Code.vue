@@ -55,7 +55,7 @@
       // Assign this to that because "this" changes context inside an event.
       const that = this;
 
-      that.initialize();
+      this.initialize();
 
       bus.$on('switchEnv', () => {
         that.initialize();
@@ -132,8 +132,10 @@
         return shrugger.userAccess(permission);
       },
       editRowListener(row) {
+        const that = this;
+
         // Check for etag change.
-        console.log(row);
+        shrugger.etagCheck(row, that, 'code');
 
         // Get latest commit from GitHub repo.
         if (row.data.commit_hash) {

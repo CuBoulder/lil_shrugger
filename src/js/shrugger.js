@@ -6,7 +6,7 @@
 import store from '../vuex/store';
 import Router from '../router/index';
 import bus from './bus';
-
+import atlas from './atlas';
 
 export default {
   /**
@@ -26,7 +26,7 @@ export default {
           '<br/>URL: ' + response.url,
         alertType: 'alert-danger' },
       );
-      // throw Error(response.statusText);
+      throw Error(response.statusText);
     }
     return response;
   },
@@ -144,5 +144,33 @@ export default {
     setTimeout(() => {
       console.log('5 second Atlas delay on code update...');
     }, time);
+  },
+
+  etagCheck(row, pageComponent, endpoint) {
+    const baseURL = store.state.atlasEnvironments[store.state.env];
+
+    atlas.request(baseURL, `${endpoint}/${row.data.id}`)
+      .then((record) => {
+        // There should be only one site returned.
+        if (typeof record !== 'undefined'
+            && record.length === 1
+            && record[0]._etag !== row.rowData.etag) {
+          // Show error message.
+          bus.$emit('onMessage', {
+            text: 'The etag for this resource has changed. All data in the table has been refreshed.',
+            alertType: 'alert-danger',
+          });
+
+          // Cancel edit.
+          bus.$emit('cancelRowEdit', pageComponent);
+
+          // Reset all info.
+          pageComponent.initialize();
+          pageComponent.showDataTable = false;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
