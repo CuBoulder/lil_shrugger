@@ -60,7 +60,6 @@
         specialEditContent: {},
         view: false,
         checked: false,
-        rowData: this.data,
         columns: this.options.columns,
         formatFunction: this.options.formatFunction,
       };
@@ -82,10 +81,23 @@
       bus.$on('clearAllRows', () => {
         that.checked = false;
       });
+
+      // Sets row content to display.
+      bus.$on('cancelRowEdit', () => {
+        that.cancelRowEditListener(that);
+      });
+
+      // Hides record view and clears content.
+      bus.$on('rowHide', () => {
+        that.rowHideListener(that);
+      });
     },
     computed: {
       editContent() {
         return store.state.editContent;
+      },
+      rowData() {
+        return this.data;
       },
     },
     methods: {
@@ -123,15 +135,19 @@
       },
       cancelEdit() {
         bus.$emit('cancelRowEdit', this);
-        this.edit = false;
+      },
+      cancelRowEditListener(that) {
+        that.edit = false;
       },
       viewRecord() {
-        this.view = !this.view;
+        this.view = true;
         bus.$emit('rowView', this);
       },
       hideRecord() {
-        this.view = !this.view;
         bus.$emit('rowHide', this);
+      },
+      rowHideListener(that) {
+        that.view = false;
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);

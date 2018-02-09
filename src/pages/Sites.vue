@@ -89,9 +89,8 @@
         that.initialize();
       });
 
-      // When a user tries to edit a site record, update data if etags don't match.
-      bus.$on('etagFail', (env) => {
-        that.etagFailListener(env, that);
+      bus.$on('editRow', (row) => {
+        that.editRowListener(row, that);
       });
 
       bus.$on('updateSiteRecord', (params) => {
@@ -203,15 +202,11 @@
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
       },
-      etagFailListener(env) {
-        sites.get(store.state.atlasEnvironments[env])
-          .then((data) => {
-            const options = {
-              sitesData: data,
-              cachedData: data,
-            };
-            store.commit('addSitesGridData', options);
-          });
+      editRowListener(row) {
+        const that = this;
+
+        // Check for etag change.
+        shrugger.etagCheck(row, that, 'sites');
       },
       navbarShowListener(component, that) {
         switch (component) {

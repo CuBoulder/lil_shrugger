@@ -55,15 +55,10 @@
       // Assign this to that because "this" changes context inside an event.
       const that = this;
 
-      that.initialize();
+      this.initialize();
 
       bus.$on('switchEnv', () => {
         that.initialize();
-      });
-
-      // When a user tries to edit a site record, update data if etags don't match.
-      bus.$on('etagFail', (env) => {
-        that.etagFailListener(env, that);
       });
 
       bus.$on('editRow', (row) => {
@@ -136,17 +131,12 @@
       userAccessPerm(permission = null) {
         return shrugger.userAccess(permission);
       },
-      etagFailListener(env) {
-        code.get(store.state.atlasEnvironments[env])
-          .then((data) => {
-            const options = {
-              codeData: data,
-            };
-
-            store.commit('addSitesGridData', options);
-          });
-      },
       editRowListener(row) {
+        const that = this;
+
+        // Check for etag change.
+        shrugger.etagCheck(row, that, 'code');
+
         // Get latest commit from GitHub repo.
         if (row.data.commit_hash) {
           github.getLatestCommit(row.data.name, row)

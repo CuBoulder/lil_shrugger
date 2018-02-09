@@ -1,5 +1,6 @@
 
 import utilities from './shrugger';
+import bus from './bus';
 import store from '../vuex/store';
 
 export default {
@@ -66,6 +67,22 @@ export default {
         .then(response => response.json())
         .catch((error) => {
           console.log(error);
+
+          // I don't know how to signal CORS errors to the user.
+          // I do know that it will always have the type error below.
+          // Type coercison is used here since the error object is weird to me.
+          /* eslint-disable */
+          if (error == 'TypeError: Failed to fetch') {
+            bus.$emit('onMessage', {
+              text: `<strong>Error in Atlas Request</strong><br>
+                     <strong>Error Message:</strong> ${error}<br>
+                     You can <a href="https://github.com/CuBoulder/lil_shrugger/wiki/TypeError:-Failed-to-fetch">
+                     read more about error messages</a> on the wiki.`,
+              alertType: 'alert-danger' },
+            );
+          }
+          /* eslint-enable */
+          throw Error(error);
         }));
     };
 
