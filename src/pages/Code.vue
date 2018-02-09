@@ -4,9 +4,12 @@
     <create-code :styles="{closed: 'pull-right', open: 'col-md-8'}"
                   v-if="userAccessPerm('createCode')">
     </create-code>
-    <data-table :table-options="tableOptions"
-                v-if="showDataTable !== false">
-    </data-table>
+    <div v-if="showDataTable !== false"
+      class="col col-md-12">
+      <data-table :table-options="tableOptions"
+                  :columns="tableColumns">
+      </data-table>
+    </div>
     <transition>
       <button class="btn btn-sm spinner col-md-offset-5"
               v-if="showDataTable === false">
@@ -50,11 +53,6 @@
         that.initialize();
       });
 
-      // When a user tries to edit a site record, update data if etags don't match.
-      bus.$on('etagFail', (env) => {
-        that.etagFailListener(env, that);
-      });
-
       bus.$on('editRow', (row) => {
         that.editRowListener(row, that);
       });
@@ -74,6 +72,11 @@
       bus.$on('navbarShow', (component) => {
         that.navbarShowListener(component, that);
       });
+    },
+    computed: {
+      tableColumns() {
+        return localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys;
+      },
     },
     methods: {
       initialize() {
@@ -120,17 +123,10 @@
       userAccessPerm(permission = null) {
         return shrugger.userAccess(permission);
       },
-      etagFailListener(env) {
-        code.get(store.state.atlasEnvironments[env])
-          .then((data) => {
-            const options = {
-              codeData: data,
-            };
-
-            store.commit('addSitesGridData', options);
-          });
-      },
       editRowListener(row) {
+        // Check for etag change.
+        console.log(row);
+
         // Get latest commit from GitHub repo.
         if (row.data.commit_hash) {
           github.getLatestCommit(row.data.name, row)

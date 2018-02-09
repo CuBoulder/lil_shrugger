@@ -82,9 +82,8 @@
         that.initialize();
       });
 
-      // When a user tries to edit a site record, update data if etags don't match.
-      bus.$on('etagFail', (env) => {
-        that.etagFailListener(env, that);
+      bus.$on('editRow', (row) => {
+        that.editRowListener(row, that);
       });
 
       bus.$on('updateSiteRecord', (params) => {
@@ -196,14 +195,34 @@
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
       },
-      etagFailListener(env) {
-        sites.get(store.state.atlasEnvironments[env])
-          .then((data) => {
-            const options = {
-              sitesData: data,
-              cachedData: data,
-            };
-            store.commit('addSitesGridData', options);
+      editRowListener(row) {
+        const that = this;
+
+        // Check for etag change.
+        console.log(row);
+
+        const baseURL = store.state.atlasEnvironments[store.state.env];
+        atlas.request(baseURL, 'sites/' + row.data.id)
+          .then((record) => {
+            console.log(record.length);
+            // There should be only one site returned.
+            if (record.length === 1 && record[0]._etag !== row.rowData.etag) {
+              // Show error message.
+              bus.$emit('onMessage', {
+                text: 'Successfully created a site.',
+                alertType: 'alert-success',
+              });
+
+              // Cancel edit.
+              bus.$emit('cancelRowEdit', that);
+
+              // Reset all info.
+              that.initialize();
+              that.showDataTable = false;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
           });
       },
       navbarShowListener(component, that) {
