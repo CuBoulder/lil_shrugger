@@ -31,7 +31,6 @@
 </template>
 
 <script>
-
   import store from '../vuex/store';
   import shrugger from '../js/shrugger';
   import bus from '../js/bus';
@@ -41,22 +40,32 @@
     name: 'Commands',
     data() {
       return {
-        selectedCommand: '',
+        selectedCommand: {
+          type: String,
+          default: '',
+        },
       };
     },
     created() {
       const that = this;
 
+      // Listens for the sendCommand event emitted by the confirm-button component.
       bus.$on('sendCommand', (params) => {
         that.sendCommandListener(params, that);
       });
     },
     computed: {
+      /**
+       * Returns a list of commands from the central store.
+       */
       commands() {
         return store.state.commands;
       },
     },
     methods: {
+      /**
+       * Send a selected command to a certain set of sites.
+       */
       sendCommandListener(params) {
         // Get site Ids to send.
         const siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';
@@ -71,6 +80,7 @@
         // Get command data for etag.
         const command = store.state.commands.filter(element => element._id === params.command);
 
+        // Make request to Atlas and emit message to user.
         atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, '', 'PATCH', body, command[0]._etag)
         .then(() => {
           bus.$emit('onMessage', {
@@ -91,7 +101,6 @@
 </script>
 
 <style scoped>
-
   .commands-button {
     margin-top: 10px;
     margin-left: 0px;

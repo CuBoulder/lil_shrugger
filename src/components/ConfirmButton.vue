@@ -33,10 +33,16 @@
     },
     data() {
       return {
-        confirmed: false,
+       confirmed: {
+          type: Boolean,
+          default: false,
+        },
       };
     },
     computed: {
+      /**
+       * Return an ID of the record for CSS targeting.
+       */
       recordID() {
         if (this.params.id) {
           return this.params.id.toString();
@@ -45,6 +51,9 @@
       },
     },
     methods: {
+      /**
+       * Emit the callback passed in as an event.
+       */
       callMeMaybe(callback, params) {
         // Emit whatever event the button confirmed.
         bus.$emit(callback, params);
@@ -55,9 +64,17 @@
         // Cancel edit mode within confirm button component.
         this.cancel();
       },
+
+      /**
+       * Show Fire! and Cancel buttons.
+       */
       confirm() {
         this.confirmed = true;
       },
+
+      /**
+       * Reset to only show initial button with label.
+       */
       cancel() {
         this.confirmed = false;
       },
