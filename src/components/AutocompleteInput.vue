@@ -41,10 +41,7 @@
           type: Number,
           default: 0,
         },
-        keyword: {
-          type: String,
-          default: this.model,
-        },
+        keyword: this.model,
       };
     },
     created() {
@@ -65,43 +62,26 @@
       });
     },
     computed: {
-      /**
-       * Filter select options by simple regex.
-       */
       fOptions() {
         const re = new RegExp(this.keyword, 'i');
         return this.options.filter(o => o[this.theKey].match(re));
       },
-
-      /**
-       * Returns a list of select options from the central store.
-       */
       options() {
         return store.state[this.optionsKey];
       },
+
     },
     methods: {
-      /**
-       * Opens autocomplete select dropdown.
-       */
       onInput(value) {
         this.isOpen = !!value;
         this.highlightedPosition = 0;
       },
-
-      /**
-       * Reacts to a user pressing the down key by changing the highlighted option.
-       */
       moveDown() {
         if (!this.isOpen) {
           return;
         }
         this.highlightedPosition = (this.highlightedPosition + 1) % this.fOptions.length;
       },
-
-      /**
-       * Reacts to a user pressing the up key by changing the highlighted option.
-       */
       moveUp() {
         if (!this.isOpen) {
           return;
@@ -110,10 +90,6 @@
           ? this.fOptions.length - 1
           : this.highlightedPosition - 1;
       },
-
-      /**
-       * Emits an event when the user selects an option and fills in the input element.
-       */
       select() {
         const selectedOption = this.fOptions[this.highlightedPosition];
         this.keyword = selectedOption[this.theKey];
