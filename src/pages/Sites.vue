@@ -71,8 +71,15 @@
         },
       };
     },
-    created() {
-      // Assign this to that in case needed in events.
+    beforeDestroy() {
+      // Keep this log  for debugging.
+      // Replace with actual logging at some point.
+      console.log('Sites component destroyed.');
+    },
+    mounted() {
+      console.log('Sites component mounted.');
+
+      // Assign this to that because "this" changes context inside an event.
       const that = this;
 
       // Grab data for data table.
