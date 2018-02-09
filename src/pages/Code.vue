@@ -5,7 +5,7 @@
                   v-if="userAccessPerm('createCode')">
     </create-code>
     <div v-if="showDataTable !== false"
-      class="col col-md-12">
+         class="col col-md-12">
       <data-table :table-options="tableOptions"
                   :columns="tableColumns">
       </data-table>
@@ -44,7 +44,15 @@
         },
       };
     },
-    created() {
+    beforeDestroy() {
+      // Keep this log  for debugging.
+      // Replace with actual logging at some point.
+      console.log('Code component destroyed.');
+    },
+    mounted() {
+      console.log('Code component mounted.');
+
+      // Assign this to that because "this" changes context inside an event.
       const that = this;
 
       that.initialize();
