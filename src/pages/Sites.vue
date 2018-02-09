@@ -8,14 +8,14 @@
       </div>
     </transition>
     <transition name="slide-fade">
-      <div v-if="showCommands"
+      <div v-if="showCommands && userAccessPerm('commands:command')"
             class="col col-md-6">
         <commands></commands>
       </div>
     </transition>
     <transition name="slide-fade">
       <div class="col col-md-6"
-            v-if="showReports">
+            v-if="showReports && userAccessPerm('commands:export')">
         <reports :grid-columns="tableColumns"></reports>
       </div>
     </transition>

@@ -213,6 +213,18 @@ if (process.env.EXT_ENV === 'pantheon') {
   store.state.sitesEditKeys = [];
   store.state.codeEditKeys = ['tag'];
   store.state.filterKey = 'available';
+
+  // Limit action icons based on permissions.
+  store.state.actionIcons = {
+    Sites: [
+      { name: 'search', component: 'statsSearch' },
+      { name: 'download-alt', component: 'reports' },
+      { name: 'refresh', component: 'table' },
+    ],
+    Code: [
+      { name: 'refresh', component: 'table' },
+    ],
+  };
 }
 
 export default store;
