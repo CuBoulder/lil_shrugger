@@ -138,6 +138,10 @@
     background: green;
   }
 
+    nav.environment-NewDev:before {
+    background: purple;
+  }
+
   /* Environment Selector */
   .styled-select {
     overflow: hidden;
