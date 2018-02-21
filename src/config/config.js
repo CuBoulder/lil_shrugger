@@ -41,8 +41,19 @@ if (localStorage.getItem('code-query') === null) {
 const store = new Vuex.Store({
   state: {
     actionIcons: {
-      sites: [{name: 'search', component: 'statsSearch'},{name: 'th-list', component: 'commands'},{name: 'refresh', component: 'table'}],
-      code: [{name: 'refresh', component: 'table'}]
+      sites: [
+        {name: 'search', component: 'statsSearch'},
+        {name: 'th-list', component: 'commands'},
+        {name: 'refresh', component: 'table'},
+        {name: 'question-sign', component: 'help'}
+        ],
+      code: [
+        {name: 'refresh', component: 'table'},
+        {name: 'question-sign', component: 'help'}
+        ],
+      settings: [
+        {name: 'question-sign', component: 'help'}
+      ]
     },
     atlasEnvironments: {
       Local: 'https://inventory.local/atlas/',
@@ -62,11 +73,17 @@ const store = new Vuex.Store({
       Prod: 'https://www.colorado.edu/'
     },
     filteredData: [],
+    filterKey: '',
+    help: {
+      sites: 'https://github.com/CuBoulder/lil_shrugger/wiki/Sites',
+      code: 'https://github.com/CuBoulder/lil_shrugger/wiki/Code',
+      settings: 'https://github.com/CuBoulder/lil_shrugger/wiki/Settings',
+    },
     gitHubRepos: [],
     recordsToShow: 10,
     reportsList: ['exportTable', 'exportSiteContactEmail'],
     searchFilter: '',
-    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
+    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'update_group', 'updated', 'created'],
     sitesSendCommand: [],
     statsKeys: ['instance', 'name', 'status', 'nodes_total', 'nodes_by_type', 'nodes_other', 'days_since_last_edit',
       'beans_total', 'beans_by_type', 'beans_other', 'context', 'context_other_conditions', 'context_other_reactions',
@@ -108,6 +125,9 @@ const store = new Vuex.Store({
       sentCommands.forEach(function (element, index) {
         store.state.commands = [].concat(store.state.commands, element);
       })
+    },
+    setFilterKey (state, filter) {
+      state.filterKey = filter;
     },
     addSiteToCommands (state, options) {
       // If option is to add, merge siteId into array.

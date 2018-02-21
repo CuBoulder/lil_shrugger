@@ -54,6 +54,7 @@ function formatSiteData(data) {
       item['id'] = element._id;
       item['statistics'] = element.statistics;
       item['code'] = element.code;
+      item['update_group'] = 'group:' + element.update_group;
 
 
       item['core'] = '';
@@ -279,7 +280,7 @@ function formatStatsData(data) {
           item['email_address'] = [].concat(
             element['users']['email_address']['content_editor'],
             element['users']['email_address']['site_contact'],
-            element['users']['username']['edit_my_content']);
+            element['users']['email_address']['edit_my_content']);
           item['site_contacts'] = element['users']['email_address'];
           continue;
         }

@@ -22,11 +22,11 @@
   <div class="export-button col-md-6" v-if="userAccessPerm('commands:export')">
     <h3>Reports</h3>
     <hr>
-    <label for="export-list">Export Options</label>
+    <label for="export-list">Reports List</label>
     <select name="export-list" id="export-list"  class="form-control" v-model="exportCallback">
       <option v-for="report in reportsList" :value="report">{{report}}</option>
     </select>
-    <label for="export-options">Export Options</label>
+    <label for="export-options">Report Options</label>
     <input type="text" id="export-options" class="form-control" name="export-options" v-model="exportOptions">
     <confirm-button
         label="Export Table"

@@ -1,6 +1,16 @@
 <!-- component template -->
-<script type="text/x-template" id="listing">
+<script type="text/x-template" id="data-table">
   <div class="lisitng-wrapper">
+    <form id="search" class="row">
+      <div class="form-group">
+        <label for="filter-records">Filter Table</label>
+        <input
+            id="filter-records"
+            class="form-control"
+            name="query"
+            v-model="filterKey">
+      </div>
+    </form>
     <div class="result-count">Result Count: {{resultCount}}</div>
     <div v-if="noResults">
       <div class="alert alert-info">Your query returned no results.</div>
