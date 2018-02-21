@@ -23,6 +23,7 @@ const store = new Vuex.Store({
     },
     atlasEnvironments: {
       Local: 'https://python.local/atlas/',
+      NewDev: 'https://osr-dev-atlas01.int.colorado.edu/atlas/',
       Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/',
