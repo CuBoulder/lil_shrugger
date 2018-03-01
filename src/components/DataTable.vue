@@ -143,8 +143,13 @@
       });
     },
     computed: {
-      gridData() {
-        return store.state.sitesGridData[this.tableOptions.dataName];
+      gridData: {
+        get() {
+          return store.state.sitesGridData[this.tableOptions.dataName];
+        },
+        set(value) {
+          store.commit('addSitesGridData', value);
+        },
       },
       filteredData() {
         const sortKey = this.sortKey;
@@ -345,7 +350,11 @@
 
         // Set new data and save old data.
         this.cachedData = this.gridData;
-        this.gridData = newData;
+
+        const options = {};
+        options[this.tableOptions.dataName] = newData;
+
+        this.gridData = options;
       },
       cancelExpressionFilterSearch() {
         this.expressionFilter = !this.expressionFilter;
@@ -355,7 +364,10 @@
 
         // Add back cached data.
         if (this.cachedData) {
-          this.gridData = this.cachedData;
+          const options = {};
+          options[this.tableOptions.dataName] = this.cachedData;
+
+          this.gridData = options;
         }
       },
     },
