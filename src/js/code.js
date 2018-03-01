@@ -71,7 +71,7 @@ export default {
         shrugger.wait(5000);
 
         bus.$emit('onMessage', {
-          text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
+          text: 'You have sent a ' + method + ' request to a code record. Site ID: ' + params.current.id,
           alertType: 'alert-success',
         });
 
