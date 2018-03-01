@@ -285,48 +285,21 @@
           bus.$emit('clearAllRows');
         }
       },
-
       fuzzyFilterSearch(filterKey, data) {
         return data.filter(row => Object.keys(row)
           .some(key => this.columns.includes(key) && String(row[key]).toLowerCase().indexOf(filterKey.toLowerCase()) > -1));
       },
       expressionFilterSearch() {
         let errorMessage = false;
-        const data = this.gridData;
+        const rowData = this.gridData;
         const filterKey = this.filterKey;
 
         // Disabling eslint since the JS eval is using the row even though it looks like it isn't.
         /* eslint-disable */
-        const newData = data.filter((rowData) => {
-          // We can add helper functions to make it easier to query the code asset records.
-
-          // Add a packages object to help query records.
-          const packages = {
-            /*
-            and: (val) => {
-              let match = true;
-              row.forEach((val) => {
-                if (!this.or(val)) {
-                  return false;
-                }
-              });
-              return match;
-            }, */
-            // Return true if either value is found, e.g. code = 'digital|news' and returns records with either package.
-            or: (code) => {
-              const re = new RegExp('(' + code + ')', 'i');
-              return rowData.packages && rowData.packages.some((val) => {
-                if (val) {
-                  return val.match(re);
-                }
-                return false;
-              });
-            },
-          };
-
+        const newData = rowData.filter((row) => {
           // Try to evaluate the expression entered into the filter.
           try {
-            if (eval(filterKey)) {
+            if (this.evaluateExpression(filterKey, row)) {
               return true;
             }
             return false;
@@ -370,6 +343,36 @@
           this.gridData = options;
         }
       },
+      /* eslint-disable */
+      evaluateExpression(filterKey, row) {
+        // We can add helper functions to make it easier to query the code asset records.
+        // Add a packages object to help query records.
+        const packages = {
+          /*
+          and: (val) => {
+            let match = true;
+            row.forEach((val) => {
+              if (!this.or(val)) {
+                return false;
+              }
+            });
+            return match;
+          }, */
+          // Return true if either value is found, e.g. code = 'digital|news' and returns records with either package.
+          or: (code, row) => {
+            const re = new RegExp('(' + code + ')', 'i');
+            return row.packages && row.packages.some((val) => {
+              if (val) {
+                return val.match(re);
+              }
+              return false;
+            });
+          },
+        };
+
+        return eval(filterKey);
+      },
+      /* eslint-enable */
     },
   };
 </script>
