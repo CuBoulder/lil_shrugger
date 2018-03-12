@@ -56,6 +56,7 @@
           dataName: 'sitesData',
           addKeys: store.state.sitesAddKeys,
           addCallback: 'createSite',
+          rowAddComponent: 'row-add',
           editCallback: 'updateSiteRecord',
           editKeys: store.state.sitesEditKeys,
           defaultSortKey: 'updated',

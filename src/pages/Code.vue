@@ -1,9 +1,6 @@
 <template>
   <div>
     <message-area></message-area>
-    <create-code :styles="{closed: 'pull-right', open: 'col-md-8'}"
-                  v-if="userAccessPerm('createCode')">
-    </create-code>
     <div v-if="showDataTable !== false"
          class="col col-md-12">
       <data-table :table-options="tableOptions"
@@ -35,7 +32,7 @@
         tableOptions: {
           dataName: 'codeData',
           callback: 'updateCodeRecord',
-          columns: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.codeKeys,
+          rowAddComponent: 'create-code',
           editKeys: store.state.codeEditKeys,
           defaultSortKey: 'updated',
           defaultSortDirection: '1',

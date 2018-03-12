@@ -1,97 +1,84 @@
 <template>
-  <div :class="[classes, 'row create-code']" >
-    <button v-if="!addCode"
-            class="btn btn-primary"
-            @click="addCode = true">
-      Add Code
-    </button>
+  <div class="row create-code" >
+    <label for="addRepo">Select A Repo</label>
+    <select name="addRepo"
+            id="addRepo"
+            @change="changeRepo($event)"
+            class="form-control">
+      <option v-for="(value, index) in repos"
+              :key="index"
+              :value="index">
+        {{value.name}}
+      </option>
+    </select>
+    <!-- Second dropdown -->
     <transition name="fade">
-      <div v-if="addCode">
-        <label for="addRepo">Select A Repo</label>
-        <select name="addRepo"
-                id="addRepo"
-                @change="changeRepo($event)"
+      <div v-if="branchReady">
+        <label for="addBranch">Select A Branch</label>
+        <select name="addBranch"
+                id="addBranch"
+                @change="changeBranch($event)"
                 class="form-control">
-          <option v-for="(value, index) in repos"
+          <option v-for="(branch, index) in branches"
                   :key="index"
                   :value="index">
-            {{value.name}}
+            {{branch.name}}
           </option>
         </select>
-        <!-- Second dropdown -->
-        <transition name="fade">
-          <div v-if="branchReady">
-            <label for="addBranch">Select A Branch</label>
-            <select name="addBranch"
-                    id="addBranch"
-                    @change="changeBranch($event)"
-                    class="form-control">
-              <option v-for="(branch, index) in branches"
-                      :key="index"
-                      :value="index">
-                {{branch.name}}
-              </option>
-            </select>
-            <label for="code_type">Type:</label>
-            <select name="code_type"
-                    id="code_type"
-                    v-model="codeType"
-                    class="form-control">
-              <option v-for="anOption in selectOptions.code_type"
-                      :key="anOption"
-                      :value="anOption">
-                {{anOption}}
-              </option>
-            </select>
-            <label for="is_current">Is Current:</label>
-            <select name="is_current"
-                    id="is_current"
-                    v-model="isCurrent"
-                    class="form-control">
-              <option v-for="anOption in selectOptions.is_current"
-                      :key="anOption"
-                      :value="anOption">
-                {{anOption}}
-              </option>
-            </select>
-            <label for="tag">Tag:</label>
-            <select name="tag"
-                    id="tag"
-                    v-model="tag"
-                    class="form-control">
-              <option v-for="anOption in selectOptions.tag"
-                      :key="anOption"
-                      :value="anOption">
-                {{anOption}}
-              </option>
-            </select>
-            <label for="code_version">Version:</label>
-            <input type="text"
-                   name="code_version"
-                   id="code_version"
-                   class="form-control"
-                   v-model="codeVersion">
-            <label for="code_label">Label:</label>
-            <input type="text"
-                   name="code_label"
-                   id="code_label"
-                   class="form-control"
-                   v-model="codeLabel">
-          </div>
-        </transition>
-        <!-- End Second dropdown -->
-        <button v-if="ready"
-                class="btn btn-primary"
-                @click="createCode()">
-          Create Code Asset
-        </button>
-        <button v-if="addCode"
-                class="btn btn-default"
-                @click="addCode = false">
-          Cancel
-        </button>
+        <label for="code_type">Type:</label>
+        <select name="code_type"
+                id="code_type"
+                v-model="codeType"
+                class="form-control">
+          <option v-for="anOption in selectOptions.code_type"
+                  :key="anOption"
+                  :value="anOption">
+            {{anOption}}
+          </option>
+        </select>
+        <label for="is_current">Is Current:</label>
+        <select name="is_current"
+                id="is_current"
+                v-model="isCurrent"
+                class="form-control">
+          <option v-for="anOption in selectOptions.is_current"
+                  :key="anOption"
+                  :value="anOption">
+            {{anOption}}
+          </option>
+        </select>
+        <label for="tag">Tag:</label>
+        <select name="tag"
+                id="tag"
+                v-model="tag"
+                class="form-control">
+          <option v-for="anOption in selectOptions.tag"
+                  :key="anOption"
+                  :value="anOption">
+            {{anOption}}
+          </option>
+        </select>
+        <label for="code_version">Version:</label>
+        <input type="text"
+                name="code_version"
+                id="code_version"
+                class="form-control"
+                v-model="codeVersion">
+        <label for="code_label">Label:</label>
+        <input type="text"
+                name="code_label"
+                id="code_label"
+                class="form-control"
+                v-model="codeLabel">
       </div>
     </transition>
+    <!-- End Second dropdown -->
+    <button v-if="ready"
+            class="btn btn-primary"
+            @click="createCode()">
+      Create Code Asset
+    </button>
+    <button class="btn btn-default" @click.prevent="cancelAdd()">Cancel</button>
   </div>
 </template>
 
@@ -105,9 +92,6 @@
 
   export default {
     name: 'CreateCode',
-    props: {
-      styles: Object,
-    },
     data() {
       return {
         selectOptions: store.state.selectOptions,
@@ -222,6 +206,9 @@
           })
           .catch(error => console.log(error));
         this.addCode = false;
+      },
+      cancelAdd() {
+        bus.$emit('cancelRowAdd', this);
       },
     },
   };

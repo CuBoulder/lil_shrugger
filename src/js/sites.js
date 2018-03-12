@@ -66,16 +66,15 @@ export default {
   /**
    * Creates a site record.
    */
-  /*eslint-disable*/
   create(params) {
     const baseURL = store.state.atlasEnvironments[store.state.env];
     const endpoint = 'sites';
     const assets = store.state.codeAssets;
 
-    let body = {
+    const body = {
       status: 'pending',
       code: {},
-    }
+    };
 
     // Match core label to asset id.
     Object.keys(assets.cores).forEach((el) => {

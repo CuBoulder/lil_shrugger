@@ -104,9 +104,9 @@ const store = new Vuex.Store({
       'email_address', 'bundles', 'webforms', 'update_group'],
     statsQueryOptions: [],
     storedSiteKeys: [],
-    userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:createCode', 'Packages', 'Sites:row:edit', 'Sites:row:delete',
-      'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export', 'Sites:statsSearch:save',
-      'Settings:credentials'],
+    userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:addRow', 'Code:createCode', 'Packages', 'Sites:row:edit',
+      'Sites:row:delete', 'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export',
+      'Sites:statsSearch:save', 'Settings:credentials'],
   },
   mutations: {
     addEditContent(state, options) {
