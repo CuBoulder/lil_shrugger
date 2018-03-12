@@ -1,83 +1,102 @@
 <template>
-  <div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4>
+        Data Table
+        <a target="_blank"
+           href="https://github.com/CuBoulder/lil_shrugger/wiki/Data-Table">
+          <span class="navbar-action-icon glyphicon glyphicon-question-sign"></span>
+        </a>
+      </h4>
+    </div>
+    <div class="panel-body">
     <form id="search" class="row">
       <div class="form-group">
-        <div class="col col-md-7">
-          <label for="filter-records">Filter Table</label>
+        <div class="col col-md-7 filter-table">
           <input
-            id="filter-records"
+            id="filter-records-input"
             class="form-control"
             name="query"
             v-model="filterKey">
         </div>
-        <div class="col col-md-3" id="expression-search-buttons">
-        <button v-if="!expressionFilter" class="btn btn-default" @click.prevent="expressionFilter = !expressionFilter" aria-label="Toggle Expression Search">
+        <div class="col col-md-5" id="expression-search-buttons">
+          <button v-if="!expressionFilter" class="btn btn-default" @click.prevent="expressionFilter = !expressionFilter" aria-label="Toggle Expression Search">
           <span class="glyphicon glyphicon-superscript" aria-hidden="true"></span>
-        </button>
-        <button v-if="expressionFilter" class="btn btn-primary" @click.prevent="expressionFilterSearch()" aria-label="Expression Search">
-          Expression Search
-        </button>
-        <button v-if="expressionFilter" class="btn btn-default" @click.prevent="cancelExpressionFilterSearch()" aria-label="Expression Search">
-          Reset
-        </button>
+          </button>
+          <button v-if="expressionFilter" class="btn btn-primary" @click.prevent="expressionFilterSearch()" aria-label="Expression Search">
+            Expression Search
+          </button>
+          <button v-if="expressionFilter" class="btn btn-default" @click.prevent="cancelExpressionFilterSearch()" aria-label="Expression Search">
+            Reset
+          </button>
+          <div class="col pull-right"
+               id="add-row"
+               v-if="userAccessPerm('addRow')">
+            <button @click="addRow()" type="button" class="btn btn-primary" aria-label="Add Row">Add Row</button>
+          </div>
         </div>
       </div>
-    </form>
-    <div class="result-count">Result Count: {{ resultCount }}</div>
-    <div v-if="noResults">
-      <div class="alert alert-info">Your query returned no results.</div>
-    </div>
-    <div class="table-responsive">
-      <table class="table table-striped table-hover table-bordered table-sm">
-        <thead>
-        <tr>
-          <th scope="col" >
-            <input type="checkbox"
-                   id="select-all-checkbox"
-                   name="select-all-checkbox"
-                   @change="selectAll()"
-                   v-model="allChecked">
-          </th>
-          <th v-for="key in columns"
-              :key="key"
-              @click="sortBy(key)"
-              :id="'table-header-' + key"
-              scope="col"
-              :class="{ active: sortKey === key}">
-            {{ key }}
-            <span class="arrow"
-                  v-if="sortKey === key"
-                  :class="sortOrders[key] > 0 ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-up'">
-            </span>
-          </th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <row v-for="(data, index) in filteredData"
-            v-if="showRow(index)"
-            :data="data"
-            :key="data.id"
-            :options="rowOptions">
-        </row>
-        </tbody>
-      </table>
-      <div v-show="showEdit || showView"
-           class="row col col-md-12">
-        <div :class="rowEditClasses"
-             v-show="showEdit">
-          <row-edit :options="rowEditOptions"></row-edit>
-        </div>
-        <div v-show="showView"
-             :class="rowViewClasses">
-          <row-view></row-view>
-        </div>
+      </form>
+      <div class="result-count">Result Count: {{ resultCount }}</div>
+      <div v-if="noResults">
+        <div class="alert alert-info">Your query returned no results.</div>
       </div>
-      <!-- Show More Records Links -->
-      <div class="show-more-buttons"
-           v-if="resultCount > showRowCount">
-        <button class="btn btn-default" @click="showMore()" aria-label="Show More">Show More</button>
-        <button class="btn btn-default" @click="showAll()" aria-label="Show All">Show All</button>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm">
+          <thead>
+          <tr>
+            <th scope="col" >
+              <input type="checkbox"
+                    id="select-all-checkbox"
+                    name="select-all-checkbox"
+                    @change="selectAll()"
+                    v-model="allChecked">
+            </th>
+            <th v-for="key in columns"
+                :key="key"
+                @click="sortBy(key)"
+                :id="'table-header-' + key"
+                scope="col"
+                :class="{ active: sortKey === key}">
+              {{ key }}
+              <span class="arrow"
+                    v-if="sortKey === key"
+                    :class="sortOrders[key] > 0 ? 'glyphicon glyphicon-chevron-down' : 'glyphicon glyphicon-chevron-up'">
+              </span>
+            </th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <row v-for="(data, index) in filteredData"
+              v-if="showRow(index)"
+              :data="data"
+              :key="data.id"
+              :options="rowOptions">
+          </row>
+          </tbody>
+        </table>
+        <div v-show="showAdd || showEdit || showView"
+            class="row col col-md-12">
+          <div :class="rowAddClasses"
+              v-show="showAdd">
+            <row-add :options="rowAddOptions"></row-add>
+          </div>
+          <div :class="rowEditClasses"
+              v-show="showEdit">
+            <row-edit :options="rowEditOptions"></row-edit>
+          </div>
+          <div v-show="showView"
+              :class="rowViewClasses">
+            <row-view></row-view>
+          </div>
+        </div>
+        <!-- Show More Records Links -->
+        <div class="show-more-buttons"
+            v-if="resultCount > showRowCount">
+          <button class="btn btn-default" @click="showMore()" aria-label="Show More">Show More</button>
+          <button class="btn btn-default" @click="showAll()" aria-label="Show All">Show All</button>
+        </div>
       </div>
     </div>
   </div>
@@ -86,6 +105,7 @@
 <script>
   import store from '../vuex/store';
   import bus from '../js/bus';
+  import shrugger from '../js/shrugger';
 
   export default {
     name: 'DataTable',
@@ -99,9 +119,15 @@
         sortOrders[key] = Number(this.tableOptions.defaultSortDirection);
       });
       return {
+        rowAddOptions: {
+          addKeys: this.tableOptions.addKeys,
+          callback: this.tableOptions.addCallback,
+          dataName: this.tableOptions.dataName,
+          addListener: this.tableOptions.addListener,
+        },
         rowEditOptions: {
           editKeys: this.tableOptions.editKeys,
-          callback: this.tableOptions.callback,
+          callback: this.tableOptions.editCallback,
           dataName: this.tableOptions.dataName,
           editListener: this.tableOptions.editListener,
         },
@@ -115,6 +141,7 @@
         allChecked: false,
         expressionFilter: false,
         cachedData: null,
+        showAdd: false,
         showEdit: false,
         showView: false,
       };
@@ -123,23 +150,33 @@
       const that = this;
 
       // Sets row content to display.
+      bus.$on('addRow', (row) => {
+        that.rowViewListener(that, row, 'showAdd');
+      });
+
+            // Hides record view and clears content.
+      bus.$on('cancelRowAdd', () => {
+        that.rowHideListener(that, 'showAdd');
+      });
+
+      // Sets row content to display.
       bus.$on('editRow', (row) => {
-        that.rowViewListener(that, row, 'edit');
+        that.rowViewListener(that, row, 'showEdit');
       });
 
       // Hides record view and clears content.
       bus.$on('cancelRowEdit', () => {
-        that.rowHideListener(that, 'edit');
+        that.rowHideListener(that, 'showEdit');
       });
 
       // Sets row content to display.
       bus.$on('rowView', (row) => {
-        that.rowViewListener(that, row, 'view');
+        that.rowViewListener(that, row, 'showView');
       });
 
       // Hides record view and clears content.
       bus.$on('rowHide', () => {
-        that.rowHideListener(that, 'view');
+        that.rowHideListener(that, 'showView');
       });
     },
     computed: {
@@ -207,6 +244,9 @@
       showRowCount() {
         return store.state.recordsToShow;
       },
+      rowAddClasses() {
+        return 'col-md-12';
+      },
       rowViewClasses() {
         return this.showEdit ? 'col-md-6' : 'col-md-12';
       },
@@ -238,29 +278,28 @@
         return true;
       },
       rowViewListener(that, row, action) {
-        if (action === 'view') {
-          that.showView = true;
-        } else {
-          that.showEdit = true;
+        // Set the "action" row to visible.
+        that[action] = true;
+        that.cachedData = that.gridData;
+
+        // Find row being viewed if not adding a record.
+        let foundRow = [];
+        if (action !== 'showAdd') {
+          foundRow = Object.values(that.gridData).filter(value => value.id === row.data.id);
         }
 
-        that.cachedData = that.gridData;
-        const foundRow = Object.values(that.gridData).filter(value => value.id === row.data.id);
-
-        const options = {};
+        // Only show one static row at a time.
+        const options = [];
         options[that.tableOptions.dataName] = foundRow;
         store.commit('addSitesGridData', options);
       },
       rowHideListener(that, action) {
-        if (action === 'view') {
-          that.showView = false;
-        } else {
-          that.showEdit = false;
-        }
+        // Set the "action" row to visible.
+        that[action] = false;
 
+        // Add back all filtered rows to table.
         const options = {};
         options[that.tableOptions.dataName] = that.cachedData;
-
         store.commit('addSitesGridData', options);
       },
       showMore() {
@@ -373,6 +412,12 @@
         return eval(filterKey);
       },
       /* eslint-enable */
+      userAccessPerm(permission) {
+        return shrugger.userAccess(permission);
+      },
+      addRow() {
+        bus.$emit('addRow', {});
+      },
     },
   };
 </script>
@@ -386,12 +431,16 @@ td {
 }
 
 #expression-search-buttons {
-  padding-top: 25px;
   padding-left: 0px;
 }
 
+
 #search {
   padding-bottom: 20px;
+}
+
+.result-count {
+  padding-left: 15px;
 }
 
 </style>

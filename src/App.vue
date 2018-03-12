@@ -23,6 +23,7 @@
   import Row from './components/Row';
   import StatsSearch from './components/StatsSearch';
   import CreateCode from './components/CreateCode';
+  import RowAdd from './components/RowAdd';
   import RowEdit from './components/RowEdit';
   import RowView from './components/RowView';
   import Reports from './components/Reports';
@@ -39,6 +40,7 @@
   Vue.component('stats-search', StatsSearch);
   Vue.component('create-code', CreateCode);
   Vue.component('row-edit', RowEdit);
+  Vue.component('row-add', RowAdd);
   Vue.component('row-view', RowView);
   Vue.component('reports', Reports);
 

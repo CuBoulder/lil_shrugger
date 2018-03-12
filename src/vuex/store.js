@@ -28,6 +28,11 @@ const store = new Vuex.Store({
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/',
     },
+    codeAssets: {
+      cores: {},
+      profiles: {},
+      packages: {},
+    },
     codeEditKeys: {
       canEdit: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
       selectKeys: ['code_type', 'is_current', 'tag'],
@@ -68,6 +73,9 @@ const store = new Vuex.Store({
       code_type: ['module', 'core', 'profile'],
       is_current: [true, false],
       tag: ['addon_bundles', 'request_bundles', 'beta_bundles', 'admin_bundles'],
+      core: [],
+      profile: [],
+      packages: [],
     },
     sitesGridData: {
       cachedData: [],
@@ -76,9 +84,15 @@ const store = new Vuex.Store({
       statsData: [],
       tempGridData: [],
     },
+    sitesAddKeys: {
+      autocompleteKeys: ['packages'],
+      canEdit: ['core', 'profile', 'packages'],
+      selectKeys: ['core', 'profile'],
+    },
+    sitesAddOptions: [],
     sitesEditKeys: {
-      canEdit: ['path', 'status'],
-      selectKeys: ['status'],
+      canEdit: ['core', 'path', 'profile', 'packages', 'status'],
+      selectKeys: ['core', 'profile', 'packages', 'status'],
     },
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
     sitesSendCommand: [],
@@ -91,7 +105,8 @@ const store = new Vuex.Store({
     statsQueryOptions: [],
     storedSiteKeys: [],
     userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:createCode', 'Packages', 'Sites:row:edit', 'Sites:row:delete',
-      'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export', 'Sites:statsSearch:save', 'Settings:credentials'],
+      'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export', 'Sites:statsSearch:save',
+      'Settings:credentials'],
   },
   mutations: {
     addEditContent(state, options) {
@@ -152,6 +167,21 @@ const store = new Vuex.Store({
       Object.keys(options).forEach((el) => {
         state.sitesGridData[el] = [];
         state.sitesGridData[el] = options[el];
+      });
+    },
+    addCodeAssets(state, assets) {
+      state.codeAssets = {};
+      state.codeAssets = assets;
+
+      // Also need to add as select options in an array.
+      state.selectOptions.core = Object.values(assets.cores);
+      state.selectOptions.profile = Object.values(assets.profiles);
+      state.selectOptions.packages = Object.values(assets.packages);
+
+      state.sitesAddOptions = Object.values(assets.packages).map((el) => {
+        const foo = {};
+        foo.label = el;
+        return foo;
       });
     },
   },
