@@ -116,8 +116,4 @@ export default {
   margin-right: 5px;
 }
 
-.add-package {
-  margin-top: 5px;
-}
-
 </style>

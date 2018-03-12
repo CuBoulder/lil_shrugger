@@ -11,7 +11,7 @@
       model="">
     </autocomplete-input>
     <button
-        class="btn btn-primary add-package"
+        class="btn btn-primary add-tag"
         @click.prevent="addTag()"
         aria-label="Add Package">
       {{ addTagLabel }}
@@ -57,5 +57,9 @@ export default {
 </script>
 
 <style>
+
+.add-tag {
+  margin-top: 5px;
+}
 
 </style>
