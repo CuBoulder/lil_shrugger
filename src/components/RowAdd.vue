@@ -24,23 +24,9 @@
             </select>
           </div>
           <div v-else-if="autocompleteType(key)">
-            <span :key="index"
-                  v-for="(pack, index) in packagesToAdd">
-                  {{ pack }}
-                  <span @click.prevent="removePackage(pack)">[X]</span>
-            </span>
-            <autocomplete-input
-              :id="key + '-autocomplete'"
-              options-key="sitesAddOptions"
-              the-key="label"
-              model="">
-            </autocomplete-input>
-            <button
-                class="btn btn-primary add-package"
-                @click.prevent="addPackage()"
-                aria-label="Add Package">
-              Add Package
-            </button>
+            <tag-input add-tag-label="Add Package"
+                       autocomplete-option-key="sitesAddOptions">
+            </tag-input>
           </div>
           <div v-else>
             <input type="text"
@@ -65,7 +51,6 @@
 <script>
 import store from '../vuex/store';
 import bus from '../js/bus';
-// import atlas from '../js/atlas';
 import shrugger from '../js/shrugger';
 
 export default {
@@ -79,19 +64,13 @@ export default {
       rowKeys: this.options.addKeys.canEdit,
       callback: this.options.callback,
       addListener: this.options.addListener,
-      packageToAdd: '',
-      packagesToAdd: [],
     };
   },
   created() {
-    const that = this;
+    // const that = this;
     /* bus.$on('addRow', (row) => {
       that.addRowListener(that, row);
     }); */
-
-    bus.$on('autocompleteSelect', (key, selectedOption) => {
-      that.autocompleteSelectListener(key, selectedOption, that);
-    });
   },
   computed: {
     params() {
@@ -101,9 +80,6 @@ export default {
     },
     selectOptions() {
       return store.state.selectOptions;
-    },
-    addSitesPackages() {
-      return store.state.codeAssets;
     },
   },
   methods: {
@@ -129,16 +105,6 @@ export default {
     },
     cancelAdd() {
       bus.$emit('cancelRowAdd', this);
-    },
-    autocompleteSelectListener(key, selectedOption, that) {
-      that.packageToAdd = selectedOption.label;
-    },
-    addPackage() {
-      this.packagesToAdd.push(this.packageToAdd);
-    },
-    removePackage(pack) {
-      // There is only one entry per code asset so we can filter only that label out of the array.
-      this.packagesToAdd = this.packagesToAdd.filter(el => el !== pack);
     },
   },
 };
