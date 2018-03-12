@@ -19,15 +19,6 @@
         <reports :grid-columns="tableColumns"></reports>
       </div>
     </transition>
-    <div class="row pull-right"
-          id="create-site"
-          v-if="userAccessPerm('createSite')">
-      <confirm-button
-          label="Create A Site"
-          :params="{}"
-          callback="createSite">
-      </confirm-button>
-    </div>
     <div v-if="showDataTable !== false"
          class="col col-md-12">
       <data-table :table-options="tableOptions"
@@ -63,7 +54,9 @@
         showDataTable: false,
         tableOptions: {
           dataName: 'sitesData',
-          callback: 'updateSiteRecord',
+          addKeys: store.state.sitesAddKeys,
+          addCallback: 'createSite',
+          editCallback: 'updateSiteRecord',
           editKeys: store.state.sitesEditKeys,
           defaultSortKey: 'updated',
           defaultSortDirection: '1',

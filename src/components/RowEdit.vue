@@ -59,7 +59,7 @@
         rowData: {},
         oldData: {},
         rowKeys: this.options.editKeys.canEdit,
-        callback: this.options.callback,
+        callback: this.options.editCallback,
         editListener: this.options.editListener,
       };
     },

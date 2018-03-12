@@ -66,15 +66,39 @@ export default {
   /**
    * Creates a site record.
    */
-  create() {
+  /*eslint-disable*/
+  create(params) {
     const baseURL = store.state.atlasEnvironments[store.state.env];
     const endpoint = 'sites';
+    const assets = store.state.codeAssets;
 
-    // @todo Add more fields here so you can create a site with different assets than current.
-    const data = JSON.stringify({
+    let body = {
       status: 'pending',
+      code: {},
+    }
+
+    // Match core label to asset id.
+    Object.keys(assets.cores).forEach((el) => {
+      if (assets.cores[el] === params.row.core) {
+        body.code.core = el;
+      }
     });
 
+    // Match profile label to asset id.
+    Object.keys(assets.profiles).forEach((el) => {
+      if (assets.profiles[el] === params.row.profile) {
+        body.code.profile = el;
+      }
+    });
+
+    // Match core label to asset id.
+    Object.keys(assets.packages).forEach((el) => {
+      if (assets.packages[el] === params.row.packages) {
+        body.code.package = [el];
+      }
+    });
+
+    const data = JSON.stringify(body);
     atlas.request(baseURL, endpoint, '', 'POST', data)
       .then(() => {
         // Wait a little so the response has new entries.
