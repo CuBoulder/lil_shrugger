@@ -80,11 +80,11 @@
             class="row col col-md-12">
           <div :class="rowAddClasses"
               v-show="showAdd">
-            <row-add :options="rowAddOptions"></row-add>
+            <component :is="rowAddComponent" :options="rowAddOptions"></component>
           </div>
           <div :class="rowEditClasses"
               v-show="showEdit">
-            <row-edit :options="rowEditOptions"></row-edit>
+            <component :is="rowEditComponent" :options="rowEditOptions"></component>
           </div>
           <div v-show="showView"
               :class="rowViewClasses">
@@ -119,6 +119,8 @@
         sortOrders[key] = Number(this.tableOptions.defaultSortDirection);
       });
       return {
+        rowAddComponent: this.tableOptions.rowAddComponent,
+        rowEditComponent: this.tableOptions.rowEditComponent,
         rowAddOptions: {
           addKeys: this.tableOptions.addKeys,
           callback: this.tableOptions.addCallback,
