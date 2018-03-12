@@ -27,7 +27,7 @@
   import RowEdit from './components/RowEdit';
   import RowView from './components/RowView';
   import Reports from './components/Reports';
-
+  import TagInput from './components/TagInput';
 
   // We need to add the component namespace for the template to recognize it.
   Vue.component('autocomplete-input', AutocompleteInput);
@@ -43,6 +43,7 @@
   Vue.component('row-add', RowAdd);
   Vue.component('row-view', RowView);
   Vue.component('reports', Reports);
+  Vue.component('tag-input', TagInput);
 
   export default {
     name: 'app',
