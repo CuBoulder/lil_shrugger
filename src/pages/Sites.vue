@@ -54,9 +54,10 @@
         showDataTable: false,
         tableOptions: {
           dataName: 'sitesData',
+          rowAddComponent: 'row-add',
           addKeys: store.state.sitesAddKeys,
           addCallback: 'createSite',
-          rowAddComponent: 'row-add',
+          rowEditComponent: 'row-edit',
           editCallback: 'updateSiteRecord',
           editKeys: store.state.sitesEditKeys,
           defaultSortKey: 'updated',

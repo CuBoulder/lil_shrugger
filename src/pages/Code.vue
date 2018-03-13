@@ -31,8 +31,9 @@
         showDataTable: false,
         tableOptions: {
           dataName: 'codeData',
-          callback: 'updateCodeRecord',
+          editCallback: 'updateCodeRecord',
           rowAddComponent: 'create-code',
+          rowEditComponent: 'row-edit',
           editKeys: store.state.codeEditKeys,
           defaultSortKey: 'updated',
           defaultSortDirection: '1',
@@ -56,10 +57,6 @@
 
       bus.$on('switchEnv', () => {
         that.initialize();
-      });
-
-      bus.$on('editRow', (row) => {
-        that.editRowListener(row, that);
       });
 
       bus.$on('updateCodeRecord', (params) => {
@@ -136,12 +133,16 @@
 
         // Get latest commit from GitHub repo.
         if (row.data.commit_hash) {
-          github.getLatestCommit(row.data.name, row)
+          // Find current repo's default branch.
+          const repoData = store.state.gitHubRepos.find(el => el.name === row.data.name);
+
+          github.getLatestCommitByRepo(row.data.name, row)
           .then((response) => {
-            const options = {
-              commit_hash: `<strong>Current Hash:</strong> ${response.hash}</span>`,
+            const content = {
+              commit_hash: `<span>Current hash of default <strong>${repoData.default_branch}</strong> branch: ` +
+                `<a href='${repoData.html_url}/commit/${response.hash}' target="_blank">${response.hash}</a></span>`,
             };
-            store.commit('addEditContent', options);
+            store.commit('addEditContent', JSON.stringify(content));
           });
         }
       },

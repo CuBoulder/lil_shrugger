@@ -1,6 +1,7 @@
 
 import Vue from 'vue';
 import Vuex from 'vuex';
+// import bus from '../js/bus';
 
 Vue.use(Vuex);
 
@@ -44,7 +45,7 @@ const store = new Vuex.Store({
     defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
     defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
     defaultSitesQuery: '?where={"type":"express"}',
-    editContent: {},
+    editContent: { content: 'Loading...' },
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     expressEnvironments: {
       Local: 'https://express.local/',
@@ -110,9 +111,10 @@ const store = new Vuex.Store({
   },
   mutations: {
     addEditContent(state, options) {
-      Object.keys(options).forEach((element) => {
+      state.editContent = options;
+      /* Object.keys(options).forEach((element) => {
         state.editContent[element] = options[element];
-      });
+      }); */
     },
     addRows(state, options) {
       state.recordsToShow = options;

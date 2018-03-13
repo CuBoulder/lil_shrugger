@@ -68,6 +68,7 @@ export default {
     // Finally call recursive function and return a promise with the data in it.
     return recursiveFetch([], null, passedUrl);
   },
+
   // Returns an array of CuBoulder repos and branches.
   getRepos() {
     const currentUrl = 'https://api.github.com/orgs/CuBoulder/repos?per_page=100';
@@ -139,7 +140,7 @@ export default {
    * @param that
    * @returns {string}
    */
-  getLatestCommit(repo, that = null) {
+  getLatestCommitByRepo(repo, that = null) {
     const myInit = this.initializeHeaders();
 
     // Need to account for stupid Drupal repo name.

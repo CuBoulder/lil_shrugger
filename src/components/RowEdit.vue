@@ -4,6 +4,11 @@
       <h4>Edit Record: {{ rowData.path || (`${rowData.name} - ${rowData.label} (${rowData.version})`) }}</h4>
     </div>
     <form class="row panel-body">
+      <!-- Row description text. -->
+      <h4>Edit Information:</h4>
+      <span class="edit-content"
+            v-html="editContent"></span>
+      <hr>
       <fieldset class="form-group">
         <div v-for="key in rowKeys"
             :key="key">
@@ -23,9 +28,6 @@
                   class="form-control"
                   v-model="rowData[key]">
           </div>
-          <!-- Row description text. -->
-          <span class="edit-content"
-                v-html="editContent[key]"></span>
         </div>
       </fieldset>
       <confirm-button label="Update"
@@ -59,7 +61,7 @@
         rowData: {},
         oldData: {},
         rowKeys: this.options.editKeys.canEdit,
-        callback: this.options.editCallback,
+        callback: this.options.callback,
         editListener: this.options.editListener,
       };
     },
