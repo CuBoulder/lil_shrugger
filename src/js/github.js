@@ -160,47 +160,6 @@ export default {
   },
 
   /**
-   * Takes a GitHub repo and returns the most recent commit regardless of branch.
-   *
-   * @param repo
-   * @param that
-   * @returns {string}
-   */
-  getLatestCommitByBranch(repo, that = null) {
-    const myInit = this.initializeHeaders();
-
-    // Need to account for stupid Drupal repo name.
-    if (repo === 'drupal') {
-      repo = 'drupal-7.x';
-    }
-
-    return fetch('https://api.github.com/repos/CuBoulder/' + repo + '/commits', myInit)
-      .then(shrugger.handleErrors)
-      .then(response => response.json())
-      .then(data =>
-        ({
-          hash: data[0].sha,
-          object: that,
-        }))
-      .catch(error => error);
-  },
-
-  /**
-   * Takes a GitHub repo and returns the most recent commit regardless of branch.
-   *
-   * @param repo
-   * @param that
-   * @returns {string}
-   */
-  getLatestActiveBranches(repo) {
-    return fetch(`https://github.com/CuBoulder/${repo}/branches/active?page=1`, { method: 'GET', mode: 'cors' })
-    .then(shrugger.handleErrors)
-    .then(response => response.json())
-    .then(data => data)
-    .catch(error => error);
-  },
-
-  /**
    * Initializes common headers used in GitHub requests.
    *
    * @returns {{method: string, headers: Headers, timeout: number}}

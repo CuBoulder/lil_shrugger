@@ -90,9 +90,7 @@
         return store.state.selectOptions;
       },
       editContent() {
-        // const values = store.state.editContent;
         return store.state.editContent;
-        // return Object.values(values).join('<br>');
       },
     },
     methods: {

@@ -135,7 +135,6 @@
         if (row.data.commit_hash) {
           // Find current repo's default branch.
           const repoData = store.state.gitHubRepos.find(el => el.name === row.data.name);
-          console.log(repoData);
 
           github.getLatestCommitByRepo(row.data.name, row)
           .then((response) => {
