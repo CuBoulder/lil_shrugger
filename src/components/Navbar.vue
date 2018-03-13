@@ -10,10 +10,11 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" :href="baseURL">¯\_(ツ)_/¯</a>
       </div>
+      <a class="navbar-brand" :href="baseURL">¯\_(ツ)_/¯</a>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
+          <li><a href="https://github.com/CuBoulder/lil_shrugger/releases" target="_blank"><span :class="shruggerVersionClasses">{{ shruggerVersion }}</span></a></li>
           <li v-for="route in routes"
                :key="route.name">
             <router-link :id="'route-link-' + route.name" :to="route.path">{{ route.name }}</router-link>
@@ -68,6 +69,7 @@
         icons: store.state.actionIcons,
         environments: store.state.atlasEnvironments,
         baseURL: localStorage.getItem('baseURL') ? localStorage.getItem('baseURL') : '/shrugger',
+        shruggerVersionClasses: 'shrugger-default-version',
       };
     },
     computed: {
@@ -89,6 +91,16 @@
       },
       currentRoute() {
         return Router.app._route.name;
+      },
+      shruggerVersion() {
+        console.log(store.state.shruggerLatestRelease.tag_name);
+        console.log(store.state.shruggerVersion);
+        if (store.state.shruggerVersion !== store.state.shruggerLatestRelease.tag_name) {
+          this.shruggerVersionClasses = 'shrugger-old-version';
+          return `v${store.state.shruggerLatestRelease.tag_name} is an old release!`;
+        }
+
+        return `v${store.state.shruggerVersion}`;
       },
     },
     methods: {
@@ -192,5 +204,13 @@
 
   .help-link {
     color: #777;
+  }
+
+  .shrugger-default-version {
+    color: inherit;
+  }
+
+  .shrugger-old-version {
+    color: red;
   }
 </style>

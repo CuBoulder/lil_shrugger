@@ -78,6 +78,8 @@ const store = new Vuex.Store({
       profile: [],
       packages: [],
     },
+    shruggerVersion: '0.5.1',
+    shruggerLatestRelease: { tag_name: '0.5.1' },
     sitesGridData: {
       cachedData: [],
       codeData: [],
@@ -185,6 +187,9 @@ const store = new Vuex.Store({
         foo.label = el;
         return foo;
       });
+    },
+    addLatestShruggeRelease(state, release) {
+      state.shruggerLatestRelease = release;
     },
   },
 });

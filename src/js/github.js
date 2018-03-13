@@ -160,6 +160,23 @@ export default {
   },
 
   /**
+   * Takes a GitHub repo and returns the most recent tagged release.
+   *
+   * @param repo
+   * @param that
+   * @returns {string}
+   */
+  getLatestReleases(repo) {
+    const myInit = this.initializeHeaders();
+
+    return fetch('https://api.github.com/repos/CuBoulder/' + repo + '/releases', myInit)
+      .then(shrugger.handleErrors)
+      .then(response => response.json())
+      .then(data => data)
+      .catch(error => error);
+  },
+
+  /**
    * Initializes common headers used in GitHub requests.
    *
    * @returns {{method: string, headers: Headers, timeout: number}}

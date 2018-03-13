@@ -97,6 +97,12 @@
         // Get GitHub data to pass in.
         github.getRepos().then((repoList) => {
           store.commit('addGitHubRepos', repoList);
+
+          github.getLatestReleases('lil_shrugger').then((releases) => {
+            if (releases[0]) {
+              store.commit('addLatestShruggeRelease', releases[0]);
+            }
+          });
         });
 
         // If there is a filter query param, then insert it.
