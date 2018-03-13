@@ -68,6 +68,7 @@ export default {
     // Finally call recursive function and return a promise with the data in it.
     return recursiveFetch([], null, passedUrl);
   },
+
   // Returns an array of CuBoulder repos and branches.
   getRepos() {
     const currentUrl = 'https://api.github.com/orgs/CuBoulder/repos?per_page=100';
@@ -139,7 +140,7 @@ export default {
    * @param that
    * @returns {string}
    */
-  getLatestCommit(repo, that = null) {
+  getLatestCommitByRepo(repo, that = null) {
     const myInit = this.initializeHeaders();
 
     // Need to account for stupid Drupal repo name.
@@ -156,6 +157,47 @@ export default {
           object: that,
         }))
       .catch(error => error);
+  },
+
+  /**
+   * Takes a GitHub repo and returns the most recent commit regardless of branch.
+   *
+   * @param repo
+   * @param that
+   * @returns {string}
+   */
+  getLatestCommitByBranch(repo, that = null) {
+    const myInit = this.initializeHeaders();
+
+    // Need to account for stupid Drupal repo name.
+    if (repo === 'drupal') {
+      repo = 'drupal-7.x';
+    }
+
+    return fetch('https://api.github.com/repos/CuBoulder/' + repo + '/commits', myInit)
+      .then(shrugger.handleErrors)
+      .then(response => response.json())
+      .then(data =>
+        ({
+          hash: data[0].sha,
+          object: that,
+        }))
+      .catch(error => error);
+  },
+
+  /**
+   * Takes a GitHub repo and returns the most recent commit regardless of branch.
+   *
+   * @param repo
+   * @param that
+   * @returns {string}
+   */
+  getLatestActiveBranches(repo) {
+    return fetch(`https://github.com/CuBoulder/${repo}/branches/active?page=1`, { method: 'GET', mode: 'cors' })
+    .then(shrugger.handleErrors)
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => error);
   },
 
   /**

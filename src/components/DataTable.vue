@@ -13,11 +13,16 @@
     <form id="search" class="row">
       <div class="form-group">
         <div class="col col-md-7 filter-table">
-          <input
-            id="filter-records-input"
-            class="form-control"
-            name="query"
-            v-model="filterKey">
+          <div class="input-group">
+            <span v-if="expressionFilter" class="input-group-addon" id="basic-addon1">></span>
+            <span v-if="!expressionFilter" class="input-group-addon" id="basic-addon1">#</span>
+            <input
+              id="filter-records-input"
+              class="form-control"
+              aria-describedby="basic-addon1"
+              name="query"
+              v-model="filterKey">
+          </div>
         </div>
         <div class="col col-md-5" id="expression-search-buttons">
           <button v-if="!expressionFilter" class="btn btn-default" @click.prevent="expressionFilter = !expressionFilter" aria-label="Toggle Expression Search">

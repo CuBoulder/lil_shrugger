@@ -141,9 +141,7 @@ export default {
    * @param {Number} time
    */
   wait(time = 5000) {
-    setTimeout(() => {
-      console.log('5 second Atlas delay on code update...');
-    }, time);
+    window.setTimeout(() => { console.log(`Waited ${time} milliseconds`); }, time);
   },
 
   etagCheck(row, pageComponent, endpoint) {
