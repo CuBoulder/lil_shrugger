@@ -98,7 +98,7 @@
         github.getRepos().then((repoList) => {
           store.commit('addGitHubRepos', repoList);
 
-          github.getLatestReleaseTag('lil_shrugger').then((releases) => {
+          github.getLatestReleases('lil_shrugger').then((releases) => {
             if (releases[0]) {
               store.commit('addLatestShruggeRelease', releases[0]);
             }

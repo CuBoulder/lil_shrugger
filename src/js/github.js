@@ -166,7 +166,7 @@ export default {
    * @param that
    * @returns {string}
    */
-  getLatestReleaseTag(repo) {
+  getLatestReleases(repo) {
     const myInit = this.initializeHeaders();
 
     return fetch('https://api.github.com/repos/CuBoulder/' + repo + '/releases', myInit)
