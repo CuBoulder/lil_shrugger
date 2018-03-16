@@ -192,6 +192,11 @@
       bus.$on('rowHide', () => {
         that.rowHideListener(that, 'showView');
       });
+
+      // Clear stuff when environments change.
+      bus.$on('switchEnv', () => {
+        that.rowHideListener(that, 'showView');
+      });
     },
     computed: {
       gridData: {

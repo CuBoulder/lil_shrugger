@@ -75,6 +75,11 @@
       bus.$on('rowHide', () => {
         that.rowHideListener(that);
       });
+
+      // Clear stuff when environments change.
+      bus.$on('switchEnv', () => {
+        that.rowHideListener(that);
+      });
     },
     computed: {
       rowData() {

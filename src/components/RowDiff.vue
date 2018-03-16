@@ -13,9 +13,13 @@
         </option>
       </select>
       <div>
-        <pre>
+        <pre v-if="viewFull">
           {{ leftStatObject }}
         </pre>
+        <span v-for="(stat, index) in leftStatObject"
+              :key="index">
+          <strong>{{ index | statPropertyKey }}:</strong> {{ stat }} <br>
+        </span>
       </div>
     </div>
     <div class="col col-md-6">
@@ -30,9 +34,13 @@
         </option>
       </select>
       <div>
-        <pre>
+        <pre v-if="viewFull">
           {{ rightStatObject }}
         </pre>
+        <span v-for="(stat, index) in rightStatObject"
+              :key="index">
+          <strong>{{ index | statPropertyKey }}:</strong> {{ stat }} <br>
+        </span>
       </div>
     </div>
   </div>
@@ -44,7 +52,7 @@
   import store from '../vuex/store';
   import bus from '../js/bus';
   import atlas from '../js/atlas';
-  // import shrugger from '../js/shrugger';
+  import shrugger from '../js/shrugger';
 
   export default {
     name: 'RowDiff',
@@ -56,6 +64,7 @@
         rightStatObject: {},
         leftSelectString: '',
         rightSelectString: '',
+        viewFull: false,
       };
     },
     created() {
@@ -74,6 +83,11 @@
       bus.$on('switchEnv', () => {
         that.clear(that);
       });
+    },
+    filters: {
+      statPropertyKey(value) {
+        return value.substring(1);
+      },
     },
     methods: {
       viewRowListener(that, row) {
@@ -103,8 +117,8 @@
           });
 
           // Add defaults for left and right diff columns.
-          that.leftStatObject = that.statsObjects[1];
-          that.rightStatObject = that.statsObjects[0];
+          that.leftStatObject = shrugger.flatten(that.statsObjects[1]);
+          that.rightStatObject = shrugger.flatten(that.statsObjects[0]);
 
           // The select list option is stored in a string.
           // I originally tried to use the statsObject._updated property, but Vue only
@@ -112,22 +126,15 @@
           that.leftSelectString = that.statsObjects[1]._updated;
           that.rightSelectString = that.statsObjects[0]._updated;
 
-          // acc is an "accumulator array".
-          // The null parameter can be used a prefilter.
-          // @see https://github.com/flitbit/diff
-          const acc = [];
-          console.log(diff.diff(that.leftStatObject, that.rightStatObject, null, acc));
-
-          /* diff.observableDiff(that.leftStatObject, that.rightStatObject, (d) => {
-            console.log(d);
-          }); */
+          that.diffObjects(that.leftStatObject, that.rightStatObject, [], that);
         })
         .catch(error => console.log(error));
       },
       selectChange(side, choice) {
         this[side] = {};
-        this[side] = this.statsObjects.find(el => el._updated === choice);
-        console.log(diff.diff(this.leftStatObject, this.rightStatObject));
+        this[side] = shrugger.flatten(this.statsObjects.find(el => el._updated === choice));
+
+        this.diffObjects(this.leftStatObject, this.rightStatObject);
       },
       clear(that) {
         that.statsObjects = [];
@@ -136,6 +143,24 @@
         that.rightStatObject = { status: 'Loading...' };
         that.leftSelectString = '';
         that.rightSelectString = '';
+      },
+      diffObjects(lhs, rhs, acc = [], that = null) {
+        // Standardize "that" object if passed in.
+        if (this.leftSelectString) {
+          that = this;
+        }
+
+        console.log(that);
+
+        // acc is an "accumulator array".
+        // The null parameter can be used a prefilter.
+        // @see https://github.com/flitbit/diff
+        const currentDiff = diff.diff(lhs, rhs, null, acc);
+        console.log(currentDiff);
+
+        /* diff.observableDiff(that.leftStatObject, that.rightStatObject, (d) => {
+          console.log(d);
+        }); */
       },
     },
   };
