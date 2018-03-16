@@ -104,7 +104,7 @@ const store = new Vuex.Store({
       'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
       'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
-      'email_address', 'bundles', 'webforms', 'update_group'],
+      'email_address', 'bundles', 'webforms', 'update_group', 'content_editor_count', 'site_contact_count', 'edit_my_content_count'],
     statsQueryOptions: [],
     storedSiteKeys: [],
     userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:addRow', 'Code:createCode', 'Packages', 'Sites:row:edit',
