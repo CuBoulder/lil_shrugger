@@ -57,9 +57,22 @@
           rowAddComponent: 'row-add',
           addKeys: store.state.sitesAddKeys,
           addCallback: 'createSite',
-          rowEditComponent: 'row-edit',
-          editCallback: 'updateSiteRecord',
-          editKeys: store.state.sitesEditKeys,
+          rowViewComponents: [
+            {
+              tagName: 'row-edit',
+              tabID: 'tab-row-edit',
+              tabLabel: 'Edit',
+              editKeys: store.state.sitesEditKeys,
+              callback: 'updateSiteRecord',
+              dataName: 'sitesData',
+              editListener: '',
+            },
+            {
+              tagName: 'row-diff',
+              tabID: 'tab-row-diff',
+              tabLabel: 'View Diffs',
+            },
+          ],
           defaultSortKey: 'updated',
           defaultSortDirection: '1',
           formatFunction: this.formatRowDisplay,
@@ -70,6 +83,9 @@
       // Keep this log  for debugging.
       // Replace with actual logging at some point.
       console.log('Sites component destroyed.');
+
+      // Erase anything in editContent variable.
+      store.commit('addEditContent', JSON.stringify({ data: 'no data' }));
     },
     mounted() {
       console.log('Sites component mounted.');

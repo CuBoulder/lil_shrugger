@@ -93,8 +93,6 @@
         return Router.app._route.name;
       },
       shruggerVersion() {
-        console.log(store.state.shruggerLatestRelease.tag_name);
-        console.log(store.state.shruggerVersion);
         if (store.state.shruggerVersion !== store.state.shruggerLatestRelease.tag_name) {
           this.shruggerVersionClasses = 'shrugger-old-version';
           return `v${store.state.shruggerLatestRelease.tag_name} is an old release!`;

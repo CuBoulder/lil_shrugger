@@ -83,17 +83,30 @@
         </table>
         <div v-show="showAdd || showEdit || showView"
             class="row col col-md-12">
-          <div :class="rowAddClasses"
-              v-show="showAdd">
+          <div v-show="showAdd">
             <component :is="rowAddComponent" :options="rowAddOptions"></component>
           </div>
-          <div :class="rowEditClasses"
-              v-show="showEdit">
-            <component :is="rowEditComponent" :options="rowEditOptions"></component>
-          </div>
-          <div v-show="showView"
-              :class="rowViewClasses">
-            <row-view></row-view>
+          <!-- Row View Components in tabs. -->
+          <div v-show="showView">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li v-for="(comp, index) in rowViewComponents"
+                  role="presentation"
+                  :class="index == 0 ? 'active' : 'foop'"
+                  :key="index">
+                <a :href="`#${comp.tabID}`" :aria-controls="comp.tabID" role="tab" data-toggle="tab">{{ comp.tabLabel }}</a>
+              </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <component v-for="(comp, index) in rowViewComponents" 
+                         :key="index"
+                         :class="`tab-pane ${index == 0 ? 'active' : ''}`"
+                         :id="comp.tabID" 
+                         :is="comp.tagName" 
+                         :options="comp">
+              </component>
+            </div>
           </div>
         </div>
         <!-- Show More Records Links -->
@@ -125,18 +138,12 @@
       });
       return {
         rowAddComponent: this.tableOptions.rowAddComponent,
-        rowEditComponent: this.tableOptions.rowEditComponent,
+        rowViewComponents: this.tableOptions.rowViewComponents,
         rowAddOptions: {
           addKeys: this.tableOptions.addKeys,
           callback: this.tableOptions.addCallback,
           dataName: this.tableOptions.dataName,
           addListener: this.tableOptions.addListener,
-        },
-        rowEditOptions: {
-          editKeys: this.tableOptions.editKeys,
-          callback: this.tableOptions.editCallback,
-          dataName: this.tableOptions.dataName,
-          editListener: this.tableOptions.editListener,
         },
         rowOptions: {
           columns: this.columns,
@@ -256,9 +263,6 @@
       },
       rowViewClasses() {
         return this.showEdit ? 'col-md-6' : 'col-md-12';
-      },
-      rowEditClasses() {
-        return this.showView ? 'col-md-6' : 'col-md-8';
       },
     },
     methods: {

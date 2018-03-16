@@ -68,13 +68,8 @@
     created() {
       const that = this;
 
-      bus.$on('editRow', (row) => {
+      bus.$on('rowView', (row) => {
         that.editRowListener(that, row);
-      });
-
-      // Sets row content to display.
-      bus.$on('cancelRowEdit', () => {
-        that.cancelRowEditListener(that);
       });
     },
     computed: {
@@ -133,9 +128,6 @@
         if (Object.keys(row.rowData).length > 1 && typeof that.editListener === 'function') {
           that.editListener(row);
         }
-      },
-      cancelRowEditListener(that) {
-        that.rowData = {};
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);

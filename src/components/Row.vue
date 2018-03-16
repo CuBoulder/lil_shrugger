@@ -17,12 +17,6 @@
       </td>
       <!-- Row action icons. -->
       <td>
-        <button v-if="userAccessPerm('row:edit') && !showEdit()"
-                class="btn btn-default"
-                @click="makeEdit(rowData)"
-                aria-label="Edit">
-          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-        </button>
         <button v-if="!view"
                 class="btn btn-default"
                 @click="viewRecord(rowData)"
@@ -35,9 +29,6 @@
                 aria-label="Close View">
           <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
         </button>
-        <div v-if="showEdit()">
-          <button class="btn btn-default" @click="cancelEdit()">Cancel Edit</button>
-        </div>
       </td>
     </tr>
   </transition>
@@ -56,8 +47,6 @@
     },
     data() {
       return {
-        edit: false,
-        specialEditContent: {},
         view: false,
         checked: false,
         columns: this.options.columns,
@@ -82,20 +71,12 @@
         that.checked = false;
       });
 
-      // Sets row content to display.
-      bus.$on('cancelRowEdit', () => {
-        that.cancelRowEditListener(that);
-      });
-
       // Hides record view and clears content.
       bus.$on('rowHide', () => {
         that.rowHideListener(that);
       });
     },
     computed: {
-      editContent() {
-        return store.state.editContent;
-      },
       rowData() {
         return this.data;
       },
@@ -117,27 +98,6 @@
           add: this.checked,
           siteId: this.data.path,
         });
-      },
-      showEdit(index = null) {
-        if (this.edit) {
-          if (index === null || this.editKeys.indexOf(index) !== -1) {
-            return true;
-          }
-        }
-        return false;
-      },
-      showDefault(index = null) {
-        return !this.edit || this.editKeys.indexOf(index) === -1 && index !== null;
-      },
-      makeEdit() {
-        bus.$emit('editRow', this);
-        this.edit = true;
-      },
-      cancelEdit() {
-        bus.$emit('cancelRowEdit', this);
-      },
-      cancelRowEditListener(that) {
-        that.edit = false;
       },
       viewRecord() {
         this.view = true;

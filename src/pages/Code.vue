@@ -33,12 +33,25 @@
           dataName: 'codeData',
           editCallback: 'updateCodeRecord',
           rowAddComponent: 'create-code',
-          rowEditComponent: 'row-edit',
-          editKeys: store.state.codeEditKeys,
           defaultSortKey: 'updated',
           defaultSortDirection: '1',
           formatFunction: this.formatRowDisplay,
-          editListener: this.editRowListener,
+          rowViewComponents: [
+            {
+              tagName: 'row-edit',
+              tabID: 'tab-row-edit',
+              tabLabel: 'Edit',
+              editKeys: store.state.codeEditKeys,
+              callback: 'updateSiteRecord',
+              dataName: 'sitesData',
+              editListener: this.editRowListener,
+            },
+            {
+              tagName: 'row-diff',
+              tabID: 'tab-row-diff',
+              tabLabel: 'View Diffs',
+            },
+          ],
         },
       };
     },
@@ -46,6 +59,9 @@
       // Keep this log  for debugging.
       // Replace with actual logging at some point.
       console.log('Code component destroyed.');
+
+      // Erase anything in editContent variable.
+      store.commit('addEditContent', JSON.stringify({ data: 'no data' }));
     },
     mounted() {
       console.log('Code component mounted.');
