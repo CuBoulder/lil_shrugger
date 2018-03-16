@@ -212,7 +212,7 @@ if (process.env.EXT_ENV === 'pantheon') {
   // Remove edit keys from code and site assets.
   store.state.sitesEditKeys = [];
   store.state.codeEditKeys = ['tag'];
-  store.state.filterKey = 'available';
+  // store.state.filterKey = 'available';
 }
 
 export default store;

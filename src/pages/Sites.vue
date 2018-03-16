@@ -65,8 +65,8 @@
           dataName: 'sitesData',
           callback: 'updateSiteRecord',
           editKeys: store.state.sitesEditKeys,
-          defaultSortKey: 'updated',
-          defaultSortDirection: '1',
+          defaultSortKey: 'status',
+          defaultSortDirection: '-1',
           formatFunction: this.formatRowDisplay,
         },
       };
