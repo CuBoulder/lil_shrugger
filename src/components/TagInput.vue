@@ -3,7 +3,7 @@
     <span :key="index"
           v-for="(tag, index) in tagsToAdd">
           {{ tag }}
-          <span @click.prevent="removePackage(tag)">[X]</span>
+          <span @click.prevent="removeTag(tag)">[X]</span>
     </span>
     <autocomplete-input
       :options-key="autocompleteOptionKey"
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     addTag() {
-      this.tagsToAdd.push(this.tagsToAdd);
+      this.tagsToAdd.push(this.tagToAdd);
     },
     removeTag(tag) {
       // There is only one entry per code asset so we can filter only that label out of the array.
