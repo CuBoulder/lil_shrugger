@@ -1,47 +1,51 @@
 <template>
-  <div class="row">
-    <h3>View Some Diffs!</h3>
-    <div class="col col-md-6">
-      <label for="statsSelectOld">Older Record</label>
-      <select name="statsSelectOld"
-              @change="selectChange('leftStatObject', leftSelectString)" 
-              v-model="leftSelectString" 
-              class="form-control col col-md-6">
-        <option v-for="(anOption, index) in selectOptions"
-                :key="index"
-                :value="anOption">
-          {{anOption}}
-        </option>
-      </select>
-      <div>
-        <pre v-if="viewFull">
-          {{ leftStatObject }}
-        </pre>
-        <div v-for="(stat, index) in leftStatObject"
-              :key="index">
-          <strong v-html="filteredIndex(index, 'leftStatObject')"></strong>:  <span v-html="stat"></span><br>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4>View Some Diffs!</h4>
+    </div>
+    <div class="row panel-body">
+      <div class="col col-md-6">
+        <label for="statsSelectOld">Older Record</label>
+        <select name="statsSelectOld"
+                @change="selectChange('leftStatObject', leftSelectString)" 
+                v-model="leftSelectString" 
+                class="form-control col col-md-6">
+          <option v-for="(anOption, index) in selectOptions"
+                  :key="index"
+                  :value="anOption">
+            {{anOption}}
+          </option>
+        </select>
+        <div>
+          <pre v-if="viewFull">
+            {{ leftStatObject }}
+          </pre>
+          <div v-for="(stat, index) in leftStatObject"
+                :key="index">
+            <strong v-html="filteredIndex(index, 'leftStatObject')"></strong>:  <span v-html="stat"></span><br>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col col-md-6">
-      <label for="statsSelectOld">Newer Record</label>
-      <select name="statsSelectNew"
-              @change="selectChange('rightStatObject', rightSelectString)"
-              v-model="rightSelectString" 
-              class="form-control col col-md-6">
-        <option v-for="(anOption, index) in selectOptions"
-                :key="index"
-                :value="anOption">
-          {{anOption}}
-        </option>
-      </select>
-      <div>
-        <pre v-if="viewFull">
-          {{ rightStatObject }}
-        </pre>
-        <div v-for="(stat, index) in rightStatObject"
-              :key="index">
-          <strong v-html="filteredIndex(index, 'rightStatObject')"></strong>:  <span v-html="stat"></span><br>
+      <div class="col col-md-6">
+        <label for="statsSelectOld">Newer Record</label>
+        <select name="statsSelectNew"
+                @change="selectChange('rightStatObject', rightSelectString)"
+                v-model="rightSelectString" 
+                class="form-control col col-md-6">
+          <option v-for="(anOption, index) in selectOptions"
+                  :key="index"
+                  :value="anOption">
+            {{anOption}}
+          </option>
+        </select>
+        <div>
+          <pre v-if="viewFull">
+            {{ rightStatObject }}
+          </pre>
+          <div v-for="(stat, index) in rightStatObject"
+                :key="index">
+            <strong v-html="filteredIndex(index, 'rightStatObject')"></strong>:  <span v-html="stat"></span><br>
+          </div>
         </div>
       </div>
     </div>
