@@ -1,7 +1,8 @@
 <template>
   <div class="row">
-    <h3>I'm a diff!</h3>
+    <h3>View Some Diffs!</h3>
     <div class="col col-md-6">
+      <label for="statsSelectOld">Older Record</label>
       <select name="statsSelectOld"
               @change="selectChange('leftStatObject', leftSelectString)" 
               v-model="leftSelectString" 
@@ -16,13 +17,14 @@
         <pre v-if="viewFull">
           {{ leftStatObject }}
         </pre>
-        <span v-for="(stat, index) in leftStatObject"
+        <div v-for="(stat, index) in leftStatObject"
               :key="index">
-          <strong>{{ index | statPropertyKey }}:</strong> {{ stat }} <br>
-        </span>
+          <strong v-html="filteredIndex(index, 'leftStatObject')"></strong>:  <span v-html="stat"></span><br>
+        </div>
       </div>
     </div>
     <div class="col col-md-6">
+      <label for="statsSelectOld">Newer Record</label>
       <select name="statsSelectNew"
               @change="selectChange('rightStatObject', rightSelectString)"
               v-model="rightSelectString" 
@@ -37,16 +39,18 @@
         <pre v-if="viewFull">
           {{ rightStatObject }}
         </pre>
-        <span v-for="(stat, index) in rightStatObject"
+        <div v-for="(stat, index) in rightStatObject"
               :key="index">
-          <strong>{{ index | statPropertyKey }}:</strong> {{ stat }} <br>
-        </span>
+          <strong v-html="filteredIndex(index, 'rightStatObject')"></strong>:  <span v-html="stat"></span><br>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
+  /* eslint-disable */
   import diff from 'deep-diff';
 
   import store from '../vuex/store';
@@ -84,12 +88,23 @@
         that.clear(that);
       });
     },
-    filters: {
-      statPropertyKey(value) {
-        return value.substring(1);
-      },
-    },
     methods: {
+      filteredIndex(value, side) {
+        // Add highlighting to the stats key when displayed.
+        if (value.includes('>>>')) {
+          return `<span class="diff-edit-highlight"> ${value}</span>`;
+        }
+
+        if (value.includes('+++')) {
+          return `<span class="diff-new-highlight"> ${value}</span>`;
+        }
+
+        if (value.includes('xxx')) {
+          return `<span class="diff-delete-highlight"> ${value}</span>`;
+        }
+
+        return value;
+      },
       viewRowListener(that, row) {
         atlas.request(store.state.atlasEnvironments[store.state.env], 'statistics/', `${row.rowData.statistics}?version=all`)
         .then((data) => {
@@ -117,8 +132,8 @@
           });
 
           // Add defaults for left and right diff columns.
-          that.leftStatObject = shrugger.flatten(that.statsObjects[1]);
-          that.rightStatObject = shrugger.flatten(that.statsObjects[0]);
+          that.leftStatObject = that.statsObjects[1];
+          that.rightStatObject = that.statsObjects[0];
 
           // The select list option is stored in a string.
           // I originally tried to use the statsObject._updated property, but Vue only
@@ -131,9 +146,13 @@
         .catch(error => console.log(error));
       },
       selectChange(side, choice) {
-        this[side] = {};
-        this[side] = shrugger.flatten(this.statsObjects.find(el => el._updated === choice));
 
+        // Clear stats objects since Vue is only tracking the top-level object.
+        this.leftStatObject = {}; 
+        this.rightStatObject = {};
+        this.leftStatObject = this.statsObjects.find(el => el._updated === this.leftSelectString);
+        this.rightStatObject = this.statsObjects.find(el => el._updated === this.rightSelectString);
+        
         this.diffObjects(this.leftStatObject, this.rightStatObject);
       },
       clear(that) {
@@ -150,22 +169,92 @@
           that = this;
         }
 
-        console.log(that);
+        // Clear stats objects since Vue is only tracking the top-level object.
+        that.leftStatObject = {}; 
+        that.rightStatObject = {};
 
-        // acc is an "accumulator array".
-        // The null parameter can be used a prefilter.
-        // @see https://github.com/flitbit/diff
-        const currentDiff = diff.diff(lhs, rhs, null, acc);
-        console.log(currentDiff);
+        // Flatten the stats objects for easier comparisons.
+        const flatLhs = shrugger.flatten(lhs);
+        const flatRhs = shrugger.flatten(rhs);
 
-        /* diff.observableDiff(that.leftStatObject, that.rightStatObject, (d) => {
-          console.log(d);
-        }); */
+        diff.observableDiff(lhs, rhs, (d) => {
+          // Since most of the metadata prefixed with an underscore changes, don't highlight those changes.
+          if (!d.path[0].startsWith('_')) {
+            // Deal with edits.
+            if (d.kind === 'E') {
+              // Deal with empty valued.
+              const editFrom = d.rhs !== '' ? d.rhs : 'N/A';
+
+              // Delete the value first so it can be replaced.
+              delete flatRhs['/' + d.path.join('/')];
+
+              // Add a class for targeting via CSS.
+              flatRhs['/' + d.path.join('/') + ' >>>'] = `<span class="diff-edit-highlight"> ${editFrom}</span>`;
+            }
+
+            // Deal with new properties.
+            if (d.kind === 'N') {
+              if (typeof d.rhs === 'object') {
+                // ...
+              } else {
+                // Delete the old property and value to replace content ontop of.
+                delete flatRhs['/' + d.path.join('/')];
+
+                // Add a class for targeting via CSS.
+                flatRhs['/' + d.path.join('/') + ' +++'] = `<span class="diff-new-highlight"> ${d.rhs}</span>`;
+              }
+            }
+
+            // Deal with deletions.
+            if (d.kind === 'D') {
+              // Objects have to be looped through so all the child properties can be deleted as well as the top-level item.
+              if (typeof d.lhs === 'object') {
+                Object.keys(d.lhs).forEach((el) => {
+                  // Delete the old property and add a new one to target via CSS.
+                  // We use the "lhs" object here to display deletions on the left-hand side.
+                  delete flatLhs[`/${d.path.join('/')}/${el}`];
+                  flatLhs[`/${d.path.join('/')}/${el} xxx`] = `<span class="diff-delete-highlight"> ${d.lhs[el]}</span>`;
+                });
+              } else {
+                // Delete the old property and add a new one to target via CSS.
+                delete flatLhs[`/${d.path.join('/')}`];
+                flatLhs[`/${d.path.join('/')} xxx`] = `<span class="diff-delete-highlight"> ${d.lhs}</span>`;
+              }
+            }
+          }
+        });
+
+        // Sort new object so edited keys are next to original keys.
+        const rightSorted = {};
+        Object.keys(flatRhs).sort().forEach((elk) => {
+          rightSorted[elk] = flatRhs[elk];
+        });
+
+        // Sort new object so edited keys are next to original keys.
+        const leftSorted = {};
+        Object.keys(flatLhs).sort().forEach((elk) => {
+          leftSorted[elk] = flatLhs[elk];
+        });
+
+        that.leftStatObject = leftSorted; 
+        that.rightStatObject = rightSorted;
       },
     },
   };
 </script>
 
 <style>
+
+.diff-edit-highlight {
+  color: orange;
+}
+
+.diff-new-highlight {
+  color: green;
+}
+
+.diff-delete-highlight {
+  color: red;
+}
 
 </style>
