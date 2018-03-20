@@ -43,7 +43,9 @@
             {{ rightStatObject }}
           </pre>
           <div v-for="(stat, index) in rightStatObject"
-                :key="index">
+               class="right-hand-side-stat"
+               @click.prevent="drillDown(index, rightSelectString)"
+               :key="index">
             <strong v-html="filteredIndex(index, 'rightStatObject')"></strong>:  <span v-html="stat"></span><br>
           </div>
         </div>
@@ -243,6 +245,10 @@
         that.leftStatObject = leftSorted; 
         that.rightStatObject = rightSorted;
       },
+      drillDown(index, value) {
+        console.log(index);
+        console.log(value);
+      }
     },
   };
 </script>
@@ -259,6 +265,13 @@
 
 .diff-delete-highlight {
   color: red;
+}
+
+.right-hand-side-stat:hover {
+  background-color: rgb(236, 236, 236);
+}
+.right-hand-side-stat:hover:before {
+  content: "<View Changes>  ";
 }
 
 </style>
