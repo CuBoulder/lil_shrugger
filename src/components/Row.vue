@@ -77,17 +77,17 @@
       });
 
       // Clear stuff when environments change.
-      bus.$on('switchEnv', function rowSwitchEnv() {
+      /* bus.$on('switchEnv', function rowSwitchEnv() {
         that.rowHideListener(that);
-      });
+      }); */
     },
     beforeDestroy() {
       // Remove event listeners.
-      // bus.$off(['confirmButtonSuccess', 'rowConfirmButtonSuccess']);
-      // bus.$off(['selectAllRows', 'rowSelectAllRows']);
-      // bus.$off(['clearAllRows', 'rowClearAllRows']);
+      bus.$off(['confirmButtonSuccess', 'rowConfirmButtonSuccess']);
+      bus.$off(['selectAllRows', 'rowSelectAllRows']);
+      bus.$off(['clearAllRows', 'rowClearAllRows']);
       // bus.$off(['rowHide', 'rowRowHide']);
-      bus.$off(['switchEnv', 'rowSwitchEnv']);
+      // bus.$off(['switchEnv', 'rowSwitchEnv']);
     },
     computed: {
       rowData() {

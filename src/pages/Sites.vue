@@ -71,6 +71,8 @@
               tagName: 'row-diff',
               tabID: 'tab-row-diff',
               tabLabel: 'View Diffs',
+              endpoint: 'statistics',
+              recordID: 'statistics',
             },
           ],
           defaultSortKey: 'updated',

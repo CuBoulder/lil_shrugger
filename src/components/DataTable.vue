@@ -194,15 +194,15 @@
       });
 
       // Clear stuff when environments change.
-      bus.$on('switchEnv', function dataTableSwitchEnv() {
+      /* bus.$on('switchEnv', function dataTableSwitchEnv() {
         that.rowHideListener(that, 'showView');
-      });
+      }); */
     },
     beforeDestroy() {
       // Remove event listeners.
       bus.$off(['rowView', 'dataTableRowView']);
       bus.$off(['rowHide', 'dataTableRowHide']);
-      bus.$off(['switchEnv', 'dataTableSwitchEnv']);
+      // bus.$off(['switchEnv', 'dataTableSwitchEnv']);
       bus.$off(['addRow', 'dataTableAddRow']);
       bus.$off(['cancelRowAdd', 'dataTableCancelRowAdd']);
       bus.$off(['editRow', 'dataTableEditRow']);

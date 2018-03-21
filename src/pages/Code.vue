@@ -46,6 +46,13 @@
               dataName: 'sitesData',
               editListener: this.editRowListener,
             },
+            {
+              tagName: 'row-diff',
+              tabID: 'tab-row-diff',
+              tabLabel: 'View Diffs',
+              endpoint: 'code',
+              recordID: 'id',
+            },
           ],
         },
       };
