@@ -179,7 +179,6 @@
       navbarShowListener(component, that) {
         switch (component) {
           case 'table':
-            console.log(component);
             that.initialize();
             break;
           default:
