@@ -69,8 +69,15 @@
             },
             {
               tagName: 'row-diff',
-              tabID: 'tab-row-diff',
+              tabID: 'tab-row-diff-1',
               tabLabel: 'View Diffs',
+              endpoint: 'sites',
+              recordID: 'id',
+            },
+            {
+              tagName: 'row-diff',
+              tabID: 'tab-row-diff-2',
+              tabLabel: 'View Stats Diffs',
               endpoint: 'statistics',
               recordID: 'statistics',
             },

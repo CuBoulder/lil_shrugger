@@ -4,7 +4,7 @@
       <h4>View Some Diffs!</h4>
     </div>
     <div class="row panel-body">
-      <div class="col col-md-6">
+      <div class="col col-md-6 lhs-column">
         <label for="statsSelectOld">Older Record</label>
         <select name="statsSelectOld"
                 @change="selectChange('leftStatObject', leftSelectString)" 
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <div class="col col-md-6">
+      <div class="col col-md-6 rhs-column">
         <label for="statsSelectOld">Newer Record</label>
         <select name="statsSelectNew"
                 @change="selectChange('rightStatObject', rightSelectString)"
@@ -281,6 +281,11 @@
 }
 .right-hand-side-stat:hover:before {
   content: "<View Changes>  ";
+}
+
+.lhs-column, .rhs-column {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 </style>
