@@ -48,18 +48,23 @@
       const that = this;
 
       // Set autocomplete input.
-      bus.$on('setAutocompleteInput', (key, value) => {
+      bus.$on('setAutocompleteInput', function autocompleteSetAutocompleteInput(key, value) {
         if (that.theKey === key) {
           that.keyword = value;
         }
       });
 
       // Clear autocomplete input.
-      bus.$on('clearAutocompleteInput', (key) => {
+      bus.$on('clearAutocompleteInput', function autocompleteClearAutocompleteInput(key) {
         if (that.theKey === key) {
           that.keyword = '';
         }
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['setAutocompleteInput', 'autocompleteSetAutocompleteInput']);
+      bus.$off(['clearAutocompleteInput', 'autocompleteClearAutocompleteInput']);
     },
     computed: {
       fOptions() {

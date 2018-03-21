@@ -95,13 +95,18 @@
       const that = this;
 
       // Add query options to search/filters.
-      bus.$on('siteListingMounted', (params) => {
+      bus.$on('siteListingMounted', function statsSearchSiteListingMounted(params) {
         that.siteListingMountedListener(params, that);
       });
 
-      bus.$on('autocompleteSelect', (key, selectedOption) => {
+      bus.$on('autocompleteSelect', function statsSearchAutocompleteSelect(key, selectedOption) {
         that.autocompleteSelectListener(key, selectedOption, that);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['siteListingMounted', 'statsSearchSiteListingMounted']);
+      bus.$off(['autocompleteSelect', 'statsSearchAutocompleteSelect']);
     },
     computed: {
       filter() {

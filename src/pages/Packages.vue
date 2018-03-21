@@ -131,9 +131,13 @@
 
       this.initialize(that);
 
-      bus.$on('updatePackages', () => {
+      bus.$on('updatePackages', function packagesUpdatePackages() {
         that.updatePackages(that);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['updatePackages', 'packagesUpdatePackages']);
     },
     methods: {
       initialize(that) {

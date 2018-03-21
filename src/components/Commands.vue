@@ -47,9 +47,13 @@
     created() {
       const that = this;
 
-      bus.$on('sendCommand', (params) => {
+      bus.$on('sendCommand', function commandsSendCommand(params) {
         that.sendCommandListener(params, that);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['sendCommand', 'commandsSendCommand']);
     },
     computed: {
       commands() {

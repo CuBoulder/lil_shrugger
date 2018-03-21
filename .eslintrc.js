@@ -47,5 +47,6 @@ module.exports = {
     'no-shadow': 0,
     'quotes': ['error', 'single'],
     'max-len': ['error', { 'code': 150 }],
+    'prefer-arrow-callback': [ "error", { "allowNamedFunctions": true } ],
   }
 };

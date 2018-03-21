@@ -25,14 +25,19 @@
       const that = this;
 
       // Sets row content to display.
-      bus.$on('rowView', (row) => {
+      bus.$on('rowView', function rowViewRowView(row) {
         that.rowViewListener(row, that);
       });
 
       // Hides record view and clears content.
-      bus.$on('rowHide', () => {
+      bus.$on('rowHide', function rowViewRowHide() {
         that.rowHideListener(that);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['rowView', 'rowViewRowView']);
+      bus.$off(['rowHide', 'rowViewRowHide']);
     },
     computed: {
       recordName() {

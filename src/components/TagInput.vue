@@ -37,9 +37,13 @@ export default {
   created() {
     const that = this;
 
-    bus.$on('autocompleteSelect', (key, selectedOption) => {
+    bus.$on('autocompleteSelect', function tagInputAutocompleteSelect(key, selectedOption) {
       that.autocompleteSelectListener(key, selectedOption, that);
     });
+  },
+  beforeDestroy() {
+    // Remove event listeners.
+    bus.$off(['autocompleteSelect', 'tagInputAutocompleteSelect']);
   },
   methods: {
     addTag() {
