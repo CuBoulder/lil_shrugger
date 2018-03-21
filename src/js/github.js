@@ -191,7 +191,7 @@ export default {
       method: 'GET',
       headers,
       // mode: 'cors',
-      // cache: 'default',
+      cache: 'no-store',
       timeout: 15,
     };
   },
