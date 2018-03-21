@@ -66,6 +66,9 @@
 
   export default {
     name: 'RowDiff',
+    props: {
+      options: Object,
+    },
     data() {
       return {
         statsObjects: [],
@@ -118,7 +121,7 @@
         return value;
       },
       viewRowListener(that, row) {
-        atlas.request(store.state.atlasEnvironments[store.state.env], 'statistics/', `${row.rowData.statistics}?version=all`)
+        atlas.request(store.state.atlasEnvironments[store.state.env], `${that.options.endpoint}/`, `${row.rowData[that.options.recordID]}?version=all`)
         .then((data) => {
           // Data has stats objects in an array at the zero-eth position.
           const realData = data[0];

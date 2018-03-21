@@ -35,7 +35,7 @@
     },
     beforeDestroy() {
       // Remove event listeners.
-      bus.$off(['onMessage', 'messageAreaOnMessage']);
+      // bus.$off(['onMessage', 'messageAreaOnMessage']);
     },
     methods: {
       close: function close(index) {
