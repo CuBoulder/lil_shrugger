@@ -90,7 +90,7 @@
       console.log('Code component destroyed.');
 
       // Erase anything in editContent variable.
-      store.commit('addEditContent', JSON.stringify({ data: 'no data' }));
+      store.commit('addEditContent', 'N/A');
     },
     computed: {
       tableColumns() {
