@@ -164,39 +164,49 @@
       const that = this;
 
       // Sets row content to display.
-      bus.$on('addRow', (row) => {
+      bus.$on('addRow', function dataTableAddRow(row) {
         that.rowViewListener(that, row, 'showAdd');
       });
 
             // Hides record view and clears content.
-      bus.$on('cancelRowAdd', () => {
+      bus.$on('cancelRowAdd', function dataTableCancelRowAdd() {
         that.rowHideListener(that, 'showAdd');
       });
 
       // Sets row content to display.
-      bus.$on('editRow', (row) => {
+      bus.$on('editRow', function dataTableEditRow(row) {
         that.rowViewListener(that, row, 'showEdit');
       });
 
       // Hides record view and clears content.
-      bus.$on('cancelRowEdit', () => {
+      bus.$on('cancelRowEdit', function dataTableCancelRowEdit() {
         that.rowHideListener(that, 'showEdit');
       });
 
       // Sets row content to display.
-      bus.$on('rowView', (row) => {
+      bus.$on('rowView', function dataTableRowView(row) {
         that.rowViewListener(that, row, 'showView');
       });
 
       // Hides record view and clears content.
-      bus.$on('rowHide', () => {
+      bus.$on('rowHide', function dataTableRowHide() {
         that.rowHideListener(that, 'showView');
       });
 
       // Clear stuff when environments change.
-      bus.$on('switchEnv', () => {
+      bus.$on('switchEnv', function dataTableSwitchEnv() {
         that.rowHideListener(that, 'showView');
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['rowView', 'dataTableRowView']);
+      bus.$off(['rowHide', 'dataTableRowHide']);
+      bus.$off(['switchEnv', 'dataTableSwitchEnv']);
+      bus.$off(['addRow', 'dataTableAddRow']);
+      bus.$off(['cancelRowAdd', 'dataTableCancelRowAdd']);
+      bus.$off(['editRow', 'dataTableEditRow']);
+      bus.$off(['cancelRowEdit', 'dataTableCancelRowEdit']);
     },
     computed: {
       gridData: {

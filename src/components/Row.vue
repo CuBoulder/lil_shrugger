@@ -57,29 +57,37 @@
       const that = this;
 
       // Accepts own row component and cancels edit mode.
-      bus.$on('confirmButtonSuccess', (params) => {
+      /* bus.$on('confirmButtonSuccess', function rowConfirmButtonSuccess(params) {
         if (params.row) {
           that.edit = false;
         }
-      });
+      }); */
 
-      bus.$on('selectAllRows', () => {
+      bus.$on('selectAllRows', function rowSelectAllRows() {
         that.checked = true;
       });
 
-      bus.$on('clearAllRows', () => {
+      bus.$on('clearAllRows', function rowClearAllRows() {
         that.checked = false;
       });
 
       // Hides record view and clears content.
-      bus.$on('rowHide', () => {
+      bus.$on('rowHide', function rowRowHide() {
         that.rowHideListener(that);
       });
 
       // Clear stuff when environments change.
-      bus.$on('switchEnv', () => {
+      bus.$on('switchEnv', function rowSwitchEnv() {
         that.rowHideListener(that);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      // bus.$off(['confirmButtonSuccess', 'rowConfirmButtonSuccess']);
+      // bus.$off(['selectAllRows', 'rowSelectAllRows']);
+      // bus.$off(['clearAllRows', 'rowClearAllRows']);
+      // bus.$off(['rowHide', 'rowRowHide']);
+      bus.$off(['switchEnv', 'rowSwitchEnv']);
     },
     computed: {
       rowData() {

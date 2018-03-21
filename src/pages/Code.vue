@@ -46,22 +46,9 @@
               dataName: 'sitesData',
               editListener: this.editRowListener,
             },
-            {
-              tagName: 'row-diff',
-              tabID: 'tab-row-diff',
-              tabLabel: 'View Diffs',
-            },
           ],
         },
       };
-    },
-    beforeDestroy() {
-      // Keep this log  for debugging.
-      // Replace with actual logging at some point.
-      console.log('Code component destroyed.');
-
-      // Erase anything in editContent variable.
-      store.commit('addEditContent', JSON.stringify({ data: 'no data' }));
     },
     mounted() {
       console.log('Code component mounted.');
@@ -71,25 +58,39 @@
 
       this.initialize();
 
-      bus.$on('switchEnv', () => {
+      bus.$on('switchEnv', function codeSwitchEnv() {
         that.initialize();
       });
 
-      bus.$on('updateCodeRecord', (params) => {
+      bus.$on('updateCodeRecord', function codeUpdateCodeRecord(params) {
         code.update(params);
         bus.$emit('cancelRowEdit', that);
       });
 
-      bus.$on('deleteRecord', (params) => {
+      bus.$on('deleteRecord', function codeDeleteRecord(params) {
         if (params.current.code_type) {
           code.update(params, 'DELETE');
         }
       });
 
       // Refresh table data.
-      bus.$on('navbarShow', (component) => {
+      bus.$on('navbarShow', function codeNavbarShow(component) {
         that.navbarShowListener(component, that);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['switchEnv', 'codeSwitchEnv']);
+      bus.$off(['updateCodeRecord', 'codeUpdateCodeRecord']);
+      bus.$off(['deleteRecord', 'codeDeleteRecord']);
+      bus.$off(['navbarShow', 'codeNavbarShow']);
+
+      // Keep this log  for debugging.
+      // Replace with actual logging at some point.
+      console.log('Code component destroyed.');
+
+      // Erase anything in editContent variable.
+      store.commit('addEditContent', 'N/A');
     },
     computed: {
       tableColumns() {

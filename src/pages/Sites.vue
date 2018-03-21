@@ -79,14 +79,6 @@
         },
       };
     },
-    beforeDestroy() {
-      // Keep this log  for debugging.
-      // Replace with actual logging at some point.
-      console.log('Sites component destroyed.');
-
-      // Erase anything in editContent variable.
-      store.commit('addEditContent', JSON.stringify({ data: 'no data' }));
-    },
     mounted() {
       console.log('Sites component mounted.');
 
@@ -96,19 +88,19 @@
       // Grab data for data table.
       this.initialize();
 
-      bus.$on('switchEnv', () => {
+      bus.$on('switchEnv', function sitesSwitchEnv() {
         that.initialize();
       });
 
-      bus.$on('editRow', (row) => {
+      bus.$on('editRow', function sitesEditRow(row) {
         that.editRowListener(row, that);
       });
 
-      bus.$on('updateSiteRecord', (params) => {
+      bus.$on('updateSiteRecord', function sitesUpdateSiteRecord(params) {
         sites.update(params);
       });
 
-      bus.$on('deleteRecord', (params) => {
+      bus.$on('deleteRecord', function sitesDeleteRecord(params) {
         if (params.current.update_group) {
           sites.update(params, 'DELETE');
         }
@@ -116,13 +108,29 @@
 
       // Show search when icon in navbar is clicked.
       // Also refresh table data.
-      bus.$on('navbarShow', (component) => {
+      bus.$on('navbarShow', function sitesNavbarShow(component) {
         that.navbarShowListener(component, that);
       });
 
-      bus.$on('createSite', (params) => {
+      bus.$on('createSite', function sitesCreateSite(params) {
         sites.create(params);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['switchEnv', 'sitesSwitchEnv']);
+      bus.$off(['editRow', 'sitesEditRow']);
+      bus.$off(['updateSiteRecord', 'sitesUpdateSiteRecord']);
+      bus.$off(['deleteRecord', 'sitesDeleteRecord']);
+      bus.$off(['navbarShow', 'sitesNavbarShow']);
+      bus.$off(['createSite', 'createSite']);
+
+      // Erase anything in editContent variable.
+      store.commit('addEditContent', 'N/A');
+
+      // Keep this log  for debugging.
+      // Replace with actual logging at some point.
+      console.log('Sites component destroyed.');
     },
     computed: {
       tableColumns() {

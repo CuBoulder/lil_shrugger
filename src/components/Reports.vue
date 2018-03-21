@@ -58,14 +58,19 @@
       const that = this;
 
       // Exports data in table when export button is clicked.
-      bus.$on('exportTable', (params) => {
+      bus.$on('exportTable', function reportsExportTable(params) {
         that.exportTableListener(params, that);
       });
 
       // Exports data in table when export button is clicked.
-      bus.$on('exportSiteContactEmail', (params) => {
+      bus.$on('exportSiteContactEmail', function reportsExportSiteContactEmail(params) {
         that.exportEmailsListener(params, that);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['exportTable', 'reportsExportTable']);
+      bus.$off(['exportSiteContactEmail', 'reportsExportSiteContactEmail']);
     },
     computed: {
       reportsList() {

@@ -80,19 +80,25 @@
     created() {
       const that = this;
 
-      bus.$on('rowView', (row) => {
+      bus.$on('rowView', function rowDiffRowView(row) {
         that.viewRowListener(that, row);
       });
 
       // Erase data when row is hidden.
-      bus.$on('rowHide', () => {
+      bus.$on('rowHide', function rowDiffRowHide() {
         that.clear(that);
       });
 
       // Erase stuff when changing environments.
-      bus.$on('switchEnv', () => {
+      bus.$on('switchEnv', function rowDiffSwitchEnv() {
         that.clear(that);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['rowView', 'rowDiffRowView']);
+      bus.$off(['rowHide', 'rowDiffRowHide']);
+      bus.$off(['switchEnv', 'rowDiffSwitchEnv']);
     },
     methods: {
       filteredIndex(value, side) {

@@ -29,9 +29,13 @@
       // bus.$emit('onMessage', {text: 'You have deleted a site.', alertType: 'alert-info'});
       // You can use any available bootstrap alert classes:
       // alert-info, alert-success, alert-danger, etc.
-      bus.$on('onMessage', (params) => {
+      bus.$on('onMessage', function messageAreaOnMessage(params) {
         that.messages.push(params);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['onMessage', 'messageAreaOnMessage']);
     },
     methods: {
       close: function close(index) {

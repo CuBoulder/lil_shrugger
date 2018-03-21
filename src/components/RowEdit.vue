@@ -5,10 +5,13 @@
     </div>
     <form class="row panel-body">
       <!-- Row description text. -->
-      <h4>Edit Information:</h4>
-      <span class="edit-content"
-            v-html="editContent"></span>
-      <hr>
+      <div v-if="editContent != 'N/A'">
+        <h4>Edit Information:</h4>
+        <span class="edit-content"
+              v-html="editContent"></span>
+        <hr>
+      </div>
+      <!-- Row edit form. -->
       <fieldset class="form-group">
         <div v-for="key in rowKeys"
             :key="key">
@@ -68,9 +71,13 @@
     created() {
       const that = this;
 
-      bus.$on('rowView', (row) => {
+      bus.$on('rowView', function rowEditRowView(row) {
         that.editRowListener(that, row);
       });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['rowView', 'rowEditRowView']);
     },
     computed: {
       params() {
