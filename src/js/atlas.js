@@ -33,6 +33,7 @@ export default {
       method,
       headers,
       timeout: 15,
+      cache: 'no-store',
     };
 
     // If body, then add it.
