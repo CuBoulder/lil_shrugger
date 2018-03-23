@@ -27,6 +27,7 @@
   import RowEdit from './components/RowEdit';
   import RowView from './components/RowView';
   import RowDiff from './components/RowDiff';
+  import DrilldownDiff from './components/DrilldownDiff';
   import Reports from './components/Reports';
   import TagInput from './components/TagInput';
 
@@ -44,6 +45,7 @@
   Vue.component('row-add', RowAdd);
   Vue.component('row-view', RowView);
   Vue.component('row-diff', RowDiff);
+  Vue.component('drilldown-diff', DrilldownDiff);
   Vue.component('reports', Reports);
   Vue.component('tag-input', TagInput);
 
