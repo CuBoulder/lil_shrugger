@@ -66,6 +66,11 @@
       bus.$on('exportSiteContactEmail', function reportsExportSiteContactEmail(params) {
         that.exportEmailsListener(params, that);
       });
+
+      // Exports data in table when export button is clicked.
+      bus.$on('exportBundleStats', function reportsExportBundleStats(params) {
+        that.exportBundleStatsListener(params, that);
+      });
     },
     beforeDestroy() {
       // Remove event listeners.
@@ -180,6 +185,65 @@
 
         // Export to text file.
         download.text(finalEmails, 'siteContactEmails');
+      },
+      exportBundleStatsListener(params) {
+        const assetTypes = params.options ? params.options.split(',') : ['core', 'profile', 'package'];
+
+        // Loop through objects and tally distinct counts.
+        const finalCount = {};
+        store.state.sitesGridData.sitesData.forEach((el) => {
+          // Core.
+          if (finalCount[el.core]) {
+            finalCount[el.core].count += 1;
+            finalCount[el.core].sites.push(el.path);
+          } else {
+            finalCount[el.core] = {
+              count: 1,
+              sites: [el.path],
+              type: 'core',
+            };
+          }
+
+          // Profile.
+          if (finalCount[el.profile]) {
+            finalCount[el.profile].count += 1;
+            finalCount[el.profile].sites.push(el.path);
+          } else {
+            finalCount[el.profile] = {
+              count: 1,
+              sites: [el.path],
+              type: 'profile',
+            };
+          }
+
+          // Packages.
+          if (typeof el.packages !== 'undefined') {
+            el.packages.forEach((elm) => {
+              if (finalCount[elm]) {
+                finalCount[elm].count += 1;
+                finalCount[elm].sites.push(el.path);
+              } else {
+                finalCount[elm] = {
+                  count: 1,
+                  sites: [el.path],
+                  type: 'package',
+                };
+              }
+            });
+          }
+        });
+
+        // Make an array of data to pass to export function, for now.
+        // @todo Clean this up to add arrays instead of objects above.
+        const finalStats = [];
+        Object.keys(finalCount).forEach((el) => {
+          if (el !== 'undefined' && el !== '' && assetTypes.includes(finalCount[el].type)) {
+            finalStats.push([el, finalCount[el].type, finalCount[el].count, finalCount[el].sites.join('|')]);
+          }
+        });
+
+        // Export to CSV file.
+        download.csv(['name', 'type', 'count', 'sites'], finalStats, 'codeAssetsCount');
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);

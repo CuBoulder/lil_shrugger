@@ -4,51 +4,77 @@
       <h4>View Some Diffs!</h4>
     </div>
     <div class="row panel-body">
-      <div class="col col-md-6 lhs-column">
-        <label for="statsSelectOld">Older Record</label>
-        <select name="statsSelectOld"
-                @change="selectChange('leftStatObject', leftSelectString)" 
-                v-model="leftSelectString" 
-                class="form-control col col-md-6">
-          <option v-for="(anOption, index) in selectOptions"
-                  :key="index"
-                  :value="anOption">
-            {{anOption}}
-          </option>
-        </select>
-        <div>
-          <pre v-if="viewFull">
-            {{ leftStatObject }}
-          </pre>
-          <div v-for="(stat, index) in leftStatObject"
+      <div v-show="!drilldownDiffs">
+        <div class="col col-md-6 lhs-column">
+          <label for="statsSelectOld">Older Record</label>
+          <select name="statsSelectOld"
+                  @change="selectChange('leftStatObject', leftSelectString)" 
+                  v-model="leftSelectString" 
+                  class="form-control col col-md-6">
+            <option v-for="(anOption, index) in selectOptions"
+                    :key="index"
+                    :value="anOption">
+              {{anOption}}
+            </option>
+          </select>
+          <div>
+            <pre v-if="viewFull">
+              {{ leftStatObject }}
+            </pre>
+            <div v-for="(stat, index) in leftStatObject"
+                  :key="index">
+              <strong v-html="filteredIndex(index, 'leftStatObject')"></strong>:  <span v-html="stat"></span><br>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-6 rhs-column">
+          <label for="statsSelectOld">Newer Record</label>
+          <select name="statsSelectNew"
+                  @change="selectChange('rightStatObject', rightSelectString)"
+                  v-model="rightSelectString" 
+                  class="form-control col col-md-6">
+            <option v-for="(anOption, index) in selectOptions"
+                    :key="index"
+                    :value="anOption">
+              {{anOption}}
+            </option>
+          </select>
+          <div>
+            <pre v-if="viewFull">
+              {{ rightStatObject }}
+            </pre>
+            <div v-for="(stat, index) in rightStatObject"
+                class="right-hand-side-stat"
                 :key="index">
-            <strong v-html="filteredIndex(index, 'leftStatObject')"></strong>:  <span v-html="stat"></span><br>
+              <div @mouseover="hoverOverRow(index, stat)">
+                <strong v-html="filteredIndex(index, 'rightStatObject')"></strong>:  <span v-html="stat"></span><br>
+              </div>
+              <div v-if="hoverRow === index">
+                <button class="btn btn-primary" @click.prevent="drillDown(index, equalTo, rightSelectString, true)">===</button>
+                <button class="btn btn-primary" @click.prevent="drillDown(index, equalTo, rightSelectString, false)">!==</button>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon3">=</span>
+                  <input
+                    id="filter-records-input"
+                    class="form-control"
+                    aria-describedby="basic-addon3"
+                    name="equalTo"
+                    @keyup.enter="drillDown(index, equalTo, rightSelectString, true)"
+                    v-model="equalTo">
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col col-md-6 rhs-column">
-        <label for="statsSelectOld">Newer Record</label>
-        <select name="statsSelectNew"
-                @change="selectChange('rightStatObject', rightSelectString)"
-                v-model="rightSelectString" 
-                class="form-control col col-md-6">
-          <option v-for="(anOption, index) in selectOptions"
-                  :key="index"
-                  :value="anOption">
-            {{anOption}}
-          </option>
-        </select>
-        <div>
-          <pre v-if="viewFull">
-            {{ rightStatObject }}
-          </pre>
-          <div v-for="(stat, index) in rightStatObject"
-               class="right-hand-side-stat"
-               @click.prevent="drillDown(index, rightSelectString)"
-               :key="index">
-            <strong v-html="filteredIndex(index, 'rightStatObject')"></strong>:  <span v-html="stat"></span><br>
-          </div>
-        </div>
+      <div v-if="drilldownDiffs">
+        <span class="pull-right">
+          <button class="btn btn-primary" @click="cancelDrilldown()">X</button>
+        </span>
+        <drilldown-diff :selected-index="selectedObjectIndex"
+                        :selected-obj="selectedObject"
+                        :objects="differentObjects">
+        </drilldown-diff>
       </div>
     </div>
   </div>
@@ -75,9 +101,16 @@
         selectOptions: [],
         leftStatObject: {},
         rightStatObject: {},
+        differentObjects: [],
+        selectedObject: {},
+        selectedObjectIndex: 0,
         leftSelectString: '',
         rightSelectString: '',
         viewFull: false,
+        drilldownDiffs: false,
+        hoverRow: -1,
+        showEqual: false,
+        equalTo: '',
       };
     },
     created() {
@@ -170,6 +203,12 @@
         
         this.diffObjects(this.leftStatObject, this.rightStatObject);
       },
+      cancelDrilldown() {
+        this.drilldownDiffs = false;
+        this.differentObjects = [];
+        this.selectedObjectIndex = 0;
+        this.selectedObject = {};
+      },
       clear(that) {
         that.statsObjects = [];
         that.selectOptions = [];
@@ -254,10 +293,72 @@
         that.leftStatObject = leftSorted; 
         that.rightStatObject = rightSorted;
       },
-      drillDown(index, value) {
-        console.log(index);
-        console.log(value);
-      }
+      drillDown(index, value, selectString, showEqual) {
+        // console.log(index);
+        // console.log(value);
+        let objects = this.statsObjects;
+
+        // Set drilldown component to show.
+        this.drilldownDiffs = true;
+
+        // Sends state of diff to 
+        this.showEqual = showEqual;
+
+        // Trim whitespace from index since the modified properties contain characters at the end.
+        // Some values have span tags so they must be split and dealt with separately.
+        let splitIndex = this.removeAddedMarkup(index);
+        let splitValue = this.removeAddedMarkup(value);
+
+        // Find the index of the select string in statsObjects.
+        let objectIndex = 0;
+        objects.forEach((el, index) => {
+          if (el._updated === selectString) {
+            objectIndex = index;
+          }
+        });
+
+        // Find all objects where the value is different than the index.
+        let differentObjects = objects.filter((el) => {
+          let flattenedObj = shrugger.flatten(el);
+          console.log(flattenedObj[splitIndex]);
+          console.log(splitValue);
+          if (showEqual) {
+            if (flattenedObj[splitIndex] == splitValue) {
+              return true;
+            }
+          } else {
+            if (flattenedObj[splitIndex] != splitValue || typeof flattenedObj[splitIndex] == 'undefined') {
+              return true;
+            }
+          }
+          return false;
+        });
+
+        console.log(differentObjects);
+        this.differentObjects = differentObjects;
+        this.selectedObjectIndex = objectIndex;
+        this.selectedObject = this.statsObjects.find(el => this.rightStatObject['/_updated'] == el._updated);
+      },
+      hoverOverRow(index, stat) {
+        // console.log(stat);
+        this.hoverRow = index;
+        this.equalTo = this.removeAddedMarkup(stat);
+      },
+      leaveRow(index) {
+        this.hoverRow = -1;
+        this.equalTo = '';
+      },
+      removeAddedMarkup(val) {
+        // Cast val to string for comparison purposes.
+        if (typeof val ==='number' || typeof val === 'boolean') {
+          val = val.toString();
+        }
+
+        if (val.includes('highlight">')) {
+          return val.split('highlight">')[1].split('</span>')[0].trim();
+        } 
+        return val.trim();
+      },
     },
   };
 </script>
@@ -278,9 +379,6 @@
 
 .right-hand-side-stat:hover {
   background-color: rgb(236, 236, 236);
-}
-.right-hand-side-stat:hover:before {
-  content: "<View Changes>  ";
 }
 
 .lhs-column, .rhs-column {

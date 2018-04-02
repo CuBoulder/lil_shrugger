@@ -67,6 +67,10 @@ const store = new Vuex.Store({
         name: 'exportSiteContactEmail',
         options: true,
       },
+      {
+        name: 'exportBundleStats',
+        options: true,
+      },
     ],
     searchFilter: '',
     selectOptions: {
