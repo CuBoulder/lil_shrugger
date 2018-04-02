@@ -66,6 +66,11 @@
       bus.$on('exportSiteContactEmail', function reportsExportSiteContactEmail(params) {
         that.exportEmailsListener(params, that);
       });
+
+      // Exports data in table when export button is clicked.
+      bus.$on('exportBundleStats', function reportsExportBundleStats(params) {
+        that.exportBundleStatsListener(params, that);
+      });
     },
     beforeDestroy() {
       // Remove event listeners.
@@ -180,6 +185,19 @@
 
         // Export to text file.
         download.text(finalEmails, 'siteContactEmails');
+      },
+      exportBundleStatsListener(params, that = null) {
+        console.log(params);
+        console.log(that);
+
+        // Gather list site objects.
+        const siteObjects = store.state.sitesGridData.sitesData;
+
+        // Loop through objects and tally distinct counts.
+        let finalCount = {};
+        siteObjects.forEach((el) => {
+          
+        });
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);
