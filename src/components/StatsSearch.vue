@@ -207,8 +207,11 @@
           }
         });
 
-        // Set the history to update the query parameters for sharing URLs.;
-        const filter = that.filter ? '?filter=' + btoa(that.filter) : '';
+        // Set the history to update the query parameters for sharing URLs.
+
+        // We are hardcoing the filterKey to use since only the Sites component uses this now.
+        // If there is a need to be dynamic then that.$parent.tableOptions.dataName or the router object should work.
+        const filter = that.filter ? '?filter=' + btoa(that.filter.sitesData) : '';
 
         // We have to check for the existence of the first query parameter here.
         // I'm sure this can be done in a better way, but with only two parameters
