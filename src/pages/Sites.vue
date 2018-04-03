@@ -205,8 +205,13 @@
 
         // Link path to instance.
         if (key === 'path') {
+          let pathLabel = value;
+          if (value === store.state.homepageP1) {
+            pathLabel = 'homepage';
+          }
+
           return '<a target="_blank" href="' + store.state.expressEnvironments[store.state.env] + value
-            + '/user?destination=/admin/people/invite">' + value + '</a>';
+            + '/user?destination=/admin/people/invite">' + pathLabel + '</a>';
         }
 
         // Link to full code record.
