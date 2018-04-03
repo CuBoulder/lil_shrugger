@@ -47,6 +47,10 @@
     created() {
       const that = this;
 
+      bus.$on('validate--sendCommand', function commandsValidateCommand(params) {
+        that.validateCommandListener(params, that);
+      });
+
       bus.$on('sendCommand', function commandsSendCommand(params) {
         that.sendCommandListener(params, that);
       });
@@ -61,6 +65,18 @@
       },
     },
     methods: {
+      validateCommandListener(params) {
+        // Get site Ids to send.
+        const siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';
+
+        // Get command data for etag.
+        const command = store.state.commands.filter(element => element._id === params.command);
+
+        bus.$emit('onMessage', {
+          text: `You are about to send the "${command[0].name}" command to ${store.state.sitesSendCommand.length} site(s): ${siteIds}.`,
+          alertType: 'alert-warning',
+        });
+      },
       sendCommandListener(params) {
         // Get site Ids to send.
         const siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';

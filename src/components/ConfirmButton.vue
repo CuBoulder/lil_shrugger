@@ -2,7 +2,7 @@
   <div class="button-wrapper">
     <button :class="[callback, 'record-id-' + recordID ,'btn btn-primary']"
             v-if="!confirmed"
-            @click.prevent="confirm()"
+            @click.prevent="confirm(callback, params)"
             :aria-label="label">
       {{label}}
     </button>
@@ -55,8 +55,11 @@
         // Cancel edit mode within confirm button component.
         this.cancel();
       },
-      confirm() {
+      confirm(callback, params) {
         this.confirmed = true;
+
+        // Emit validation function.
+        bus.$emit(`validate--${callback}`, params);
       },
       cancel() {
         this.confirmed = false;
