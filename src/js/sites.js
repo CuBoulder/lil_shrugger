@@ -42,6 +42,11 @@ export default {
       elements.forEach((element) => {
         const item = [];
 
+        // Add the homepage path so it can be used in the Sites component display.
+        if (typeof element.pool !== 'undefined' && element.pool === 'poolb-homepage') {
+          store.commit('storeHomepageP1', element.path);
+        }
+
         // item['id'] = element.sid;
         item.path = element.path;
         item.status = element.status;

@@ -60,6 +60,7 @@ const store = new Vuex.Store({
     },
     gitHubRepos: [],
     gitHubBranches: [],
+    homepageP1: '',
     recordsToShow: 10,
     reportsList: [
       {
@@ -199,6 +200,9 @@ const store = new Vuex.Store({
     },
     addLatestShruggeRelease(state, release) {
       state.shruggerLatestRelease = release;
+    },
+    storeHomepageP1(state, path) {
+      state.homepageP1 = path;
     },
   },
 });
