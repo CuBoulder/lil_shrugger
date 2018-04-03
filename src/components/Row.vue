@@ -84,8 +84,8 @@
     beforeDestroy() {
       // Remove event listeners.
       bus.$off(['confirmButtonSuccess', 'rowConfirmButtonSuccess']);
-      bus.$off(['selectAllRows', 'rowSelectAllRows']);
-      bus.$off(['clearAllRows', 'rowClearAllRows']);
+      // bus.$off(['selectAllRows', 'rowSelectAllRows']);
+      // bus.$off(['clearAllRows', 'rowClearAllRows']);
       // bus.$off(['rowHide', 'rowRowHide']);
       // bus.$off(['switchEnv', 'rowSwitchEnv']);
     },
