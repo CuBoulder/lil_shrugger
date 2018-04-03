@@ -43,7 +43,7 @@ export default {
         const item = [];
 
         // Add the homepage path so it can be used in the Sites component display.
-        if (typeof element.pool !== 'undefined' && element.pool === 'poolb-homepage') {
+        if (typeof element.pool !== 'undefined' && element.pool === 'poolb-homepage' && element.f5only === false) {
           store.commit('storeHomepageP1', element.path);
         }
 
