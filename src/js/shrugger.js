@@ -108,7 +108,8 @@ export default {
       const propertyNames = Object.getOwnPropertyNames(queryParams);
 
       if (propertyNames.indexOf('filter') !== -1) {
-        store.commit('setFilterKey', atob(decodeURIComponent(queryParams.filter)));
+        // Right now only the Sites component can set a filter in a query.
+        store.commit('setFilterKey', [{ type: 'sitesData', filterString: atob(decodeURIComponent(queryParams.filter)) }]);
       }
     }
   },

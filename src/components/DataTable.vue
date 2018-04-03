@@ -258,10 +258,10 @@
       },
       filterKey: {
         get() {
-          return store.state.filterKey;
+          return store.state.filterKey[this.tableOptions.dataName];
         },
         set(value) {
-          store.commit('setFilterKey', value);
+          store.commit('setFilterKey', [{ type: this.tableOptions.dataName, filterString: value }]);
         },
       },
       resultCount() {
@@ -398,7 +398,7 @@
         this.expressionFilter = !this.expressionFilter;
 
         // Need to reset filter.
-        store.commit('setFilterKey', '');
+        store.commit('setFilterKey', [{ type: this.tableOptions.dataName, filterString: '' }]);
 
         // Add back cached data.
         if (this.cachedData) {

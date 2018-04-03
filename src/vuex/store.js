@@ -54,7 +54,10 @@ const store = new Vuex.Store({
       Prod: 'https://www.colorado.edu/',
     },
     filteredData: [],
-    filterKey: '',
+    filterKey: {
+      sitesData: '',
+      codeData: '',
+    },
     gitHubRepos: [],
     gitHubBranches: [],
     recordsToShow: 10,
@@ -144,8 +147,10 @@ const store = new Vuex.Store({
         state.commands = [].concat(state.commands, element);
       });
     },
-    setFilterKey(state, filter) {
-      state.filterKey = filter;
+    setFilterKey(state, filters) {
+      filters.forEach((el) => {
+        state.filterKey[el.type] = el.filterString;
+      });
     },
     addSiteToCommands(state, options) {
       // If option is to add, merge siteId into array.
