@@ -1,4 +1,8 @@
-# Getting Started
+# Lil' Shrugger
+
+Lil' Shrugger is [Atlas'](https://github.com/CuBoulder/atlas) best friend. He is a front-end UI application built with Vue.js and used to deploy code to the [Web Express service](https://github.com/CuBoulder/express) as well as generating reports about the sites on the service.
+
+## Getting Started
 
 Once you clone this repository down, you'll have to take a couple of steps to get started.
 
