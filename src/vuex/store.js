@@ -91,8 +91,8 @@ const store = new Vuex.Store({
       profile: [],
       packages: [],
     },
-    shruggerVersion: '0.5.1',
-    shruggerLatestRelease: { tag_name: '0.5.1' },
+    shruggerVersion: '0.6.0',
+    shruggerLatestRelease: { tag_name: '0.6.0' },
     sitesGridData: {
       cachedData: [],
       codeData: [],
@@ -123,9 +123,10 @@ const store = new Vuex.Store({
       sitesAddOptions: [],
       codeAddOptions: [],
     },
-    userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:addRow', 'Code:createCode', 'Packages', 'Sites:row:edit',
-      'Sites:row:delete', 'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export',
-      'Sites:statsSearch:save', 'Settings:credentials'],
+    userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:addRow', 'Code:createCode', 'Code:navbar:table', 'Packages',
+      'Sites:row:edit', 'Sites:row:delete', 'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export',
+      'Sites:statsSearch:save', 'Sites:navbar:statsSearch', 'Sites:navbar:commands', 'Sites:navbar:reports', 'Sites:navbar:table',
+      'Settings:credentials'],
   },
   mutations: {
     addEditContent(state, options) {
@@ -266,24 +267,13 @@ if (process.env.EXT_ENV === 'pantheon') {
   }
 
   // Restrict user permissions to exporting reports and editing rows.
-  store.state.userPermissions = ['Sites:commands:export'];
+  store.state.userPermissions = ['Code:navbar:table', 'Sites:commands:export', 'Sites:navbar:statsSearch',
+    'Sites:navbar:reports', 'Sites:navbar:table'];
 
   // Remove edit keys from code and site assets.
-  store.state.sitesEditKeys = [];
-  store.state.codeEditKeys = ['tag'];
+  // store.state.sitesEditKeys = [];
+  // store.state.codeEditKeys = ['tag'];
   store.state.filterKey = 'available';
-
-  // Limit action icons based on permissions.
-  store.state.actionIcons = {
-    Sites: [
-      { name: 'search', component: 'statsSearch' },
-      { name: 'download-alt', component: 'reports' },
-      { name: 'refresh', component: 'table' },
-    ],
-    Code: [
-      { name: 'refresh', component: 'table' },
-    ],
-  };
 }
 
 export default store;

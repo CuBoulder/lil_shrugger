@@ -36,14 +36,12 @@
           </div>
         </div>
       </fieldset>
-      <div class="pull-right">
-        <confirm-button label="Add Row"
-                        class="pull-left add-button"
-                        :callback="callback"
-                        :params="params">
-        </confirm-button>
-        <button class="btn btn-default" @click.prevent="cancelAdd()">Cancel</button>
-      </div>
+      <confirm-button label="Add Row"
+                      class="pull-left add-button"
+                      :callback="callback"
+                      :params="params">
+      </confirm-button>
+      <button class="btn btn-default" @click.prevent="cancelAdd()">Cancel</button>
     </form>
   </div>
 </template>

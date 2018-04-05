@@ -26,6 +26,7 @@
             <span v-for="icon in actionIcons"
                   :class="'navbar-action-icon glyphicon glyphicon-' + icon.name"
                   aria-hidden="true"
+                  :v-if="userAccessPerm(`navbar:${icon.component}`)"
                   :key="icon.name"
                   @click="show(icon.component)">
             </span>
@@ -60,6 +61,7 @@
   import Router from '../router/index';
   import store from '../vuex/store';
   import bus from '../js/bus';
+  import shrugger from '../js/shrugger';
 
   export default {
     name: 'Navbar',
@@ -108,6 +110,9 @@
       },
       show(component) {
         bus.$emit('navbarShow', component);
+      },
+      userAccessPerm(permission) {
+        return shrugger.userAccess(permission);
       },
     },
   };
