@@ -41,7 +41,7 @@ const store = new Vuex.Store({
     codeEditKeys: {
       autocompleteKeys: [],
       canEdit: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
-      selectKeys: ['code_type', 'is_current', 'tag'],
+      selectKeys: ['code_type', 'is_current'],
     },
     codeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash',
       'tag', 'updated', 'created'],
@@ -107,7 +107,7 @@ const store = new Vuex.Store({
     },
     sitesEditKeys: {
       autocompleteKeys: ['packages'],
-      canEdit: ['core', 'path', 'profile', 'packages'],
+      canEdit: ['path', 'status', 'core', 'profile', 'packages'],
       selectKeys: ['core', 'profile', 'status'],
     },
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],

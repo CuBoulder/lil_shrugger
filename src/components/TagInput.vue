@@ -8,14 +8,14 @@
             @click.prevent="removeTag(tag)">[X]</span>
     </span>
     <autocomplete-input
+      class="tag-autocomplete"
       :options-key="autocompleteOptionKey"
       the-key="label"
       model="">
     </autocomplete-input>
-    <button
-        class="btn btn-primary add-tag"
-        @click.prevent="addTag()"
-        aria-label="Add Package">
+    <button class="btn btn-primary add-tag"
+            @click.prevent="addTag()"
+            aria-label="Add Package">
       {{ addTagLabel }}
     </button>
   </div>
@@ -75,6 +75,11 @@ export default {
 
 .add-tag {
   margin-top: 5px;
+}
+
+.tag-autocomplete {
+  display: inline-block;
+  width: 80%;
 }
 
 .label {
