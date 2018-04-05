@@ -76,6 +76,16 @@
             {{key}}
           </label>
         </div>
+        <h4>Developer</h4>
+        <p class="form-text text-muted">
+          These settings only apply to developers who have write access to Atlas.
+        </p>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" id="chronological" v-model="developerMode">
+            Developer Mode
+          </label>
+        </div>
       </fieldset>
       <button @click="saveCreds()" type="button" class="btn btn-primary" aria-label="Save">Save</button>
       <button @click="clearStorage()" type="button" class="btn btn-danger" aria-label="Clear Local Storage">Clear Local Storage</button>
@@ -102,6 +112,7 @@
         sitesQuery: localStorage.getItem('sites-query') ? localStorage.getItem('sites-query') : store.state.defaultSitesQuery,
         codeQuery: localStorage.getItem('code-query') ? localStorage.getItem('code-query') : '',
         repoListing: localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false,
+        developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode')) : false,
         saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys,
         saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.defaultSelectedCodeKeys,
         saveStatsKeys: localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [],
@@ -128,6 +139,7 @@
         localStorage.setItem('sites-query', this.sitesQuery);
         localStorage.setItem('code-query', this.codeQuery);
         localStorage.setItem('repo-listing', JSON.stringify(this.repoListing));
+        localStorage.setItem('developer-mode', JSON.stringify(this.developerMode));
         localStorage.setItem('code-keys', JSON.stringify(this.saveCodeKeys));
         localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
         localStorage.setItem('stats-keys', JSON.stringify(this.saveStatsKeys));
