@@ -57,6 +57,11 @@ export default {
    * @returns {boolean}
    */
   userAccess(permission = null) {
+    // If developer mode is checked, always return true.
+    if (typeof localStorage.getItem('developer-mode') !== 'undefined' && localStorage.getItem('developer-mode') === true) {
+      return true;
+    }
+
     // Add the page component name for more granular permissions.
     const router = Router;
 
