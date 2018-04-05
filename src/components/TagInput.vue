@@ -43,13 +43,6 @@ export default {
     bus.$on('autocompleteSelect', function tagInputAutocompleteSelect(key, selectedOption) {
       that.autocompleteSelectListener(key, selectedOption, that);
     });
-
-    /* bus.$on('rowView', function tagInputRowViewListener() {
-      console.log(that);
-      if (that.passedTags !== []) {
-        that.tagsToAdd = that.passedTags;
-      }
-    }); */
   },
   beforeDestroy() {
     // Remove event listeners.
@@ -62,15 +55,13 @@ export default {
   },
   methods: {
     addTag() {
-      this.tagsToAdd.push(this.tagToAdd);
-
       // Store in central place that other components can use.
+      this.tagsToAdd.push(this.tagToAdd);
       store.commit('addTags', { key: this.autocompleteOptionKey, tags: this.tagsToAdd });
     },
     removeTag(tag) {
       // There is only one entry per code asset so we can filter only that label out of the array.
       this.tagsToAdd = this.tags.filter(el => el !== tag);
-
       store.commit('addTags', { key: this.autocompleteOptionKey, tags: this.tagsToAdd });
     },
     autocompleteSelectListener(key, selectedOption, that) {
