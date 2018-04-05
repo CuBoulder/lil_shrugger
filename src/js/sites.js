@@ -188,7 +188,11 @@ export default {
         }
 
         if (el === 'profile') {
-          // const ID = assets;
+          Object.keys(assets.profiles).forEach((elm) => {
+            if (formInput.code.profile === assets.profiles[elm]) {
+              formInput.code.profile = elm;
+            }
+          });
         }
       });
 
