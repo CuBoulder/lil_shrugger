@@ -14,7 +14,7 @@
     </button>
     <button :class="[callback, 'record-id-' + recordID , 'btn btn-default']"
             v-if="confirmed"
-            @click.prevent="cancel()"
+            @click.prevent="cancel(callback, params)"
             aria-label="Cancel">
       Cancel
     </button>
@@ -61,8 +61,10 @@
         // Emit validation function.
         bus.$emit(`validate--${callback}`, params);
       },
-      cancel() {
+      cancel(callback, params) {
         this.confirmed = false;
+
+        bus.$emit(`cancel--${callback}`, params);
       },
     },
   };

@@ -51,6 +51,10 @@
         that.validateCommandListener(params, that);
       });
 
+      bus.$on('cancel--sendCommand', function commandsCancelCommand() {
+        that.cancelCommandListener();
+      });
+
       bus.$on('sendCommand', function commandsSendCommand(params) {
         that.sendCommandListener(params, that);
       });
@@ -58,6 +62,8 @@
     beforeDestroy() {
       // Remove event listeners.
       bus.$off(['sendCommand', 'commandsSendCommand']);
+      bus.$off(['validate--sendCommand', 'commandsValidateCommand']);
+      bus.$off(['cancel--sendCommand', 'commandsCancelCommand']);
     },
     computed: {
       commands() {
@@ -76,6 +82,10 @@
           text: `You are about to send the "${command[0].name}" command to ${store.state.sitesSendCommand.length} site(s): ${siteIds}.`,
           alertType: 'alert-warning',
         });
+      },
+      cancelCommandListener() {
+        store.commit('addAllSitesToCommands', []);
+        bus.$emit('clearAllRows');
       },
       sendCommandListener(params) {
         // Get site Ids to send.

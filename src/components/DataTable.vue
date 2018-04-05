@@ -198,6 +198,10 @@
       /* bus.$on('switchEnv', function dataTableSwitchEnv() {
         that.rowHideListener(that, 'showView');
       }); */
+
+      bus.$on('cancel--sendCommand', function commandsCancelCommand() {
+        that.cancelCommandListener(that);
+      });
     },
     beforeDestroy() {
       // Remove event listeners.
@@ -444,6 +448,9 @@
       },
       addRow() {
         bus.$emit('addRow', {});
+      },
+      cancelCommandListener(that) {
+        that.allChecked = false;
       },
     },
   };
