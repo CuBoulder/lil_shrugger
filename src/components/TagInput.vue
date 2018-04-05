@@ -1,9 +1,11 @@
 <template>
-  <div>
+  <div class="tag-input">
     <span :key="index"
-          v-for="(tag, index) in tagsToAdd">
-          {{ tag }}
-          <span @click.prevent="removeTag(tag)">[X]</span>
+          class="label label-default"
+          v-for="(tag, index) in tags">
+      {{ tag }}
+      <span class="label label-danger"
+            @click.prevent="removeTag(tag)">[X]</span>
     </span>
     <autocomplete-input
       :options-key="autocompleteOptionKey"
@@ -21,6 +23,7 @@
 
 <script>
 import bus from '../js/bus';
+import store from '../vuex/store';
 
 export default {
   name: 'TagInput',
@@ -31,7 +34,7 @@ export default {
   data() {
     return {
       tagToAdd: '',
-      tagsToAdd: [],
+      tagsToAdd: this.tags ? this.tags : [],
     };
   },
   created() {
@@ -40,18 +43,35 @@ export default {
     bus.$on('autocompleteSelect', function tagInputAutocompleteSelect(key, selectedOption) {
       that.autocompleteSelectListener(key, selectedOption, that);
     });
+
+    /* bus.$on('rowView', function tagInputRowViewListener() {
+      console.log(that);
+      if (that.passedTags !== []) {
+        that.tagsToAdd = that.passedTags;
+      }
+    }); */
   },
   beforeDestroy() {
     // Remove event listeners.
-    bus.$off(['autocompleteSelect', 'tagInputAutocompleteSelect']);
+    // bus.$off(['autocompleteSelect', 'tagInputAutocompleteSelect']);
+  },
+  computed: {
+    tags() {
+      return store.state.tagInputTags[this.autocompleteOptionKey];
+    },
   },
   methods: {
     addTag() {
       this.tagsToAdd.push(this.tagToAdd);
+
+      // Store in central place that other components can use.
+      store.commit('addTags', { key: this.autocompleteOptionKey, tags: this.tagsToAdd });
     },
     removeTag(tag) {
       // There is only one entry per code asset so we can filter only that label out of the array.
-      this.tagsToAdd = this.tagsToAdd.filter(el => el !== tag);
+      this.tagsToAdd = this.tags.filter(el => el !== tag);
+
+      store.commit('addTags', { key: this.autocompleteOptionKey, tags: this.tagsToAdd });
     },
     autocompleteSelectListener(key, selectedOption, that) {
       that.tagToAdd = selectedOption.label;
@@ -60,10 +80,33 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 
 .add-tag {
   margin-top: 5px;
+}
+
+.label {
+  font-size: inherit;
+  display: inline-block;
+  padding-bottom: 0px;
+  margin-right: 5px;
+  margin-bottom: 3px;
+}
+
+/*
+.label-default {
+  background-color: #8a8a8a;
+} */
+
+.label.label-danger {
+  margin-right: -7px;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+
+.autocomplete-input {
+    margin-top: 15px;
 }
 
 </style>

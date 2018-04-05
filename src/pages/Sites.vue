@@ -57,11 +57,13 @@
           rowAddComponent: 'row-add',
           addKeys: store.state.sitesAddKeys,
           addCallback: 'createSite',
+          autocompleteOptionsKey: 'sitesAddOptions',
           rowViewComponents: [
             {
               tagName: 'row-edit',
               tabID: 'tab-row-edit',
               tabLabel: 'Edit',
+              autocompleteOptionsKey: 'sitesAddOptions',
               editKeys: store.state.sitesEditKeys,
               callback: 'updateSiteRecord',
               dataName: 'sitesData',
@@ -105,13 +107,33 @@
         that.editRowListener(row, that);
       });
 
+      bus.$on('createSite', function sitesCreateSite(params) {
+        // Get any tags.
+        params.row.packages = store.state.tagInputTags.sitesAddOptions;
+        sites.create(params);
+
+        // Cancel rowView components.
+        bus.$emit('rowHide');
+        bus.$emit('cancelRowAdd');
+      });
+
       bus.$on('updateSiteRecord', function sitesUpdateSiteRecord(params) {
+        // Get any tags.
+        params.current.packages = store.state.tagInputTags.sitesAddOptions;
         sites.update(params);
+
+        // Cancel rowView components.
+        bus.$emit('rowHide');
+        bus.$emit('cancelRowEdit');
       });
 
       bus.$on('deleteRecord', function sitesDeleteRecord(params) {
         if (params.current.update_group) {
           sites.update(params, 'DELETE');
+
+          // Cancel rowView components.
+          bus.$emit('rowHide');
+          bus.$emit('cancelRowEdit');
         }
       });
 
@@ -121,8 +143,8 @@
         that.navbarShowListener(component, that);
       });
 
-      bus.$on('createSite', function sitesCreateSite(params) {
-        sites.create(params);
+      bus.$on('rowView', function sitesRowView(row) {
+        that.sitesRowViewListener(that, row);
       });
     },
     beforeDestroy() {
@@ -262,6 +284,10 @@
           default:
             break;
         }
+      },
+      sitesRowViewListener(that, row) {
+        // Store in central place that other components can use.
+        store.commit('addTags', { key: that.tableOptions.autocompleteOptionsKey, tags: row.rowData.packages });
       },
     },
   };

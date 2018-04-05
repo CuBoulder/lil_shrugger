@@ -30,6 +30,7 @@
       return {
         showDataTable: false,
         tableOptions: {
+          autocompleteOptionsKey: 'codeAddOptions',
           dataName: 'codeData',
           editCallback: 'updateCodeRecord',
           rowAddComponent: 'create-code',
@@ -42,7 +43,7 @@
               tabID: 'tab-row-edit',
               tabLabel: 'Edit',
               editKeys: store.state.codeEditKeys,
-              callback: 'updateSiteRecord',
+              callback: 'updateCodeRecord',
               dataName: 'sitesData',
               editListener: this.editRowListener,
             },
@@ -71,12 +72,19 @@
 
       bus.$on('updateCodeRecord', function codeUpdateCodeRecord(params) {
         code.update(params);
-        bus.$emit('cancelRowEdit', that);
+
+        // Cancel rowView components.
+        bus.$emit('rowHide');
+        bus.$emit('cancelRowEdit');
       });
 
       bus.$on('deleteRecord', function codeDeleteRecord(params) {
         if (params.current.code_type) {
           code.update(params, 'DELETE');
+
+          // Cancel rowView components.
+          bus.$emit('rowHide');
+          bus.$emit('cancelRowEdit');
         }
       });
 

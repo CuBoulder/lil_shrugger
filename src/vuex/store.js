@@ -29,12 +29,17 @@ const store = new Vuex.Store({
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/',
     },
+    autocompleteOptions: {
+      statsQueryOptions: [],
+      sitesAddOptions: [],
+    },
     codeAssets: {
       cores: {},
       profiles: {},
       packages: {},
     },
     codeEditKeys: {
+      autocompleteKeys: [],
       canEdit: ['label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
       selectKeys: ['code_type', 'is_current', 'tag'],
     },
@@ -100,10 +105,10 @@ const store = new Vuex.Store({
       canEdit: ['core', 'profile', 'packages'],
       selectKeys: ['core', 'profile'],
     },
-    sitesAddOptions: [],
     sitesEditKeys: {
-      canEdit: ['core', 'path', 'profile', 'packages', 'status'],
-      selectKeys: ['core', 'profile', 'packages', 'status'],
+      autocompleteKeys: ['packages'],
+      canEdit: ['core', 'path', 'profile', 'packages'],
+      selectKeys: ['core', 'profile', 'status'],
     },
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
     sitesSendCommand: [],
@@ -113,8 +118,11 @@ const store = new Vuex.Store({
       'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
       'email_address', 'bundles', 'webforms', 'update_group'],
-    statsQueryOptions: [],
     storedSiteKeys: [],
+    tagInputTags: {
+      sitesAddOptions: [],
+      codeAddOptions: [],
+    },
     userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:addRow', 'Code:createCode', 'Packages', 'Sites:row:edit',
       'Sites:row:delete', 'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export',
       'Sites:statsSearch:save', 'Settings:credentials'],
@@ -139,7 +147,7 @@ const store = new Vuex.Store({
     setQueries(state, queries) {
       state.statsQueryOptions = [];
       queries.forEach((element) => {
-        state.statsQueryOptions = [].concat(state.statsQueryOptions, element);
+        state.autocompleteOptions.statsQueryOptions = [].concat(state.statsQueryOptions, element);
       });
     },
     setCommands(state, sentCommands) {
@@ -191,18 +199,18 @@ const store = new Vuex.Store({
       state.selectOptions.core = Object.values(assets.cores);
       state.selectOptions.profile = Object.values(assets.profiles);
       state.selectOptions.packages = Object.values(assets.packages);
-
-      state.sitesAddOptions = Object.values(assets.packages).map((el) => {
-        const foo = {};
-        foo.label = el;
-        return foo;
-      });
     },
     addLatestShruggeRelease(state, release) {
       state.shruggerLatestRelease = release;
     },
     storeHomepageP1(state, path) {
       state.homepageP1 = path;
+    },
+    addAutocompleteOptions(state, params) {
+      state.autocompleteOptions[params.key] = params.options;
+    },
+    addTags(state, params) {
+      state.tagInputTags[params.key] = params.tags;
     },
   },
 });
