@@ -30,7 +30,7 @@ export default {
     const metaKeys = ['code_type', 'is_current', 'label', 'name', 'version', 'tag'];
 
     // Turn tag into an array.
-    params.current.tag = [params.current.tag];
+    params.current.tag = params.current.tag.trim().split(',');
 
     // Capture and delete etag.
     const etag = params.current.etag;
@@ -63,7 +63,6 @@ export default {
     }
 
     const baseURL = store.state.atlasEnvironments[store.state.env];
-
     atlas.request(baseURL, 'code/' + params.current.id, '', method, body, etag)
       .then(() => {
         // Wait a little (2 seconds) so the response has new entries.
