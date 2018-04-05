@@ -212,6 +212,7 @@
       bus.$off(['cancelRowAdd', 'dataTableCancelRowAdd']);
       bus.$off(['editRow', 'dataTableEditRow']);
       bus.$off(['cancelRowEdit', 'dataTableCancelRowEdit']);
+      bus.$off(['cancel--sendCommand', 'commandsCancelCommand']);
     },
     computed: {
       gridData: {

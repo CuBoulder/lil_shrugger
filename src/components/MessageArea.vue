@@ -31,6 +31,9 @@
       // alert-info, alert-success, alert-danger, etc.
       bus.$on('onMessage', function messageAreaOnMessage(params) {
         that.messages.push(params);
+
+        // Force a scroll to the top so users see the message.
+        window.scrollTo(0, 0);
       });
     },
     beforeDestroy() {
