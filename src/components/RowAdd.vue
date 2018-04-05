@@ -25,7 +25,7 @@
           </div>
           <div v-else-if="autocompleteType(key)">
             <tag-input add-tag-label="Add Package"
-                       autocomplete-option-key="sitesAddOptions">
+                       :autocomplete-option-key="autocompleteOptionsKey">
             </tag-input>
           </div>
           <div v-else>
@@ -64,6 +64,7 @@ export default {
       rowKeys: this.options.addKeys.canEdit,
       callback: this.options.callback,
       addListener: this.options.addListener,
+      autocompleteOptionsKey: this.options.autocompleteOptionsKey,
     };
   },
   created() {

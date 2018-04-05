@@ -72,7 +72,7 @@
         return this.options.filter(o => o[this.theKey].match(re));
       },
       options() {
-        return store.state[this.optionsKey];
+        return store.state.autocompleteOptions[this.optionsKey];
       },
 
     },

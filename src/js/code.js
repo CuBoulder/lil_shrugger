@@ -163,6 +163,14 @@ export default {
     // Store code assets.
     store.commit('addCodeAssets', code);
 
+    const sitesAddOptions = Object.values(code.packages).map((el) => {
+      const foo = {};
+      foo.label = el;
+      return foo;
+    });
+
+    store.commit('addAutocompleteOptions', { key: 'sitesAddOptions', options: sitesAddOptions });
+
     // Loop through site records to search for code.
     siteRecords.forEach((element, index) => {
       // Don't do anything if there is no code on the site record.

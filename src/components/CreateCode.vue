@@ -205,7 +205,12 @@
               });
           })
           .catch(error => console.log(error));
+
         this.addCode = false;
+
+        // Cancel rowView components.
+        bus.$emit('rowHide');
+        bus.$emit('cancelRowAdd');
       },
       cancelAdd() {
         bus.$emit('cancelRowAdd', this);

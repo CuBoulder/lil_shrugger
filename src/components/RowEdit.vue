@@ -25,6 +25,11 @@
               </option>
             </select>
           </div>
+          <div v-else-if="autocompleteType(key)">
+            <tag-input add-tag-label="Add Package"
+                       :autocomplete-option-key="autocompleteOptionsKey">
+            </tag-input>
+          </div>
           <div v-else>
             <input type="text"
                   :name="key"
@@ -66,6 +71,7 @@
         rowKeys: this.options.editKeys.canEdit,
         callback: this.options.callback,
         editListener: this.options.editListener,
+        autocompleteOptionsKey: this.options.autocompleteOptionsKey,
       };
     },
     created() {
@@ -99,6 +105,9 @@
       selectType(index) {
         return this.options.editKeys.selectKeys.includes(index);
       },
+      autocompleteType(index) {
+        return this.options.editKeys.autocompleteKeys.includes(index);
+      },
       makeEdit() {
         const that = this;
 
@@ -122,6 +131,7 @@
 
           // Otherwise, continue with row edit.
           that.edit = true;
+
           // Emit event for other components to act on when row is being edited.
           bus.$emit('rowEdit', that);
         });

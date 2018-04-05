@@ -97,8 +97,11 @@ export default {
 
     // Match core label to asset id.
     Object.keys(assets.packages).forEach((el) => {
-      if (assets.packages[el] === params.row.packages) {
-        body.code.package = [el];
+      if (params.row.packages.includes(assets.packages[el])) {
+        if (typeof body.code.package === 'undefined') {
+          body.code.package = [];
+        }
+        body.code.package.push(el);
       }
     });
 
@@ -129,32 +132,70 @@ export default {
    * @param method
    */
   update(params, method = 'PATCH') {
-    // Define parts of code record that are nested in the settings field.
-    const settingsKeys = ['page_cache_maximum_age'];
-
-    // Take input values from formData and put into array for comparison.
-    // Only return values that are different.
-    const formInput = {};
-    Object.keys(params.previous).forEach((key) => {
-      // Check if values are different to add to PATCH.
-      // Don't need to check etag since user can't change that on form.
-      if (params.current[key] !== params.previous[key] && key !== 'etag') {
-        // Need to put meta fields in right place.
-        if (settingsKeys.indexOf(key) !== -1) {
-          // Initialize meta field if it doesn't exist yet.
-          if (!formInput.settings) {
-            formInput.settings = {};
-          }
-          formInput.settings[key] = params.current[key];
-        } else {
-          formInput[key] = params.current[key];
-        }
-      }
-    });
-
     // If deleting a record, don't send a body.
     let body = null;
+
     if (method !== 'DELETE') {
+      // Define parts of code record that are nested in the settings field.
+      const codeKeys = ['core', 'profile', 'packages'];
+
+      // Take input values from formData and put into array for comparison.
+      // Only return values that are different.
+      const formInput = {};
+      Object.keys(params.previous).forEach((key) => {
+        // Check if values are different to add to PATCH.
+        // Don't need to check etag since user can't change that on form.
+        if (params.current[key] !== params.previous[key] && key !== 'etag') {
+          // Need to put meta fields in right place.
+          if (codeKeys.indexOf(key) !== -1) {
+            // Initialize meta field if it doesn't exist yet.
+            if (!formInput.code) {
+              formInput.code = {};
+            }
+            formInput.code[key] = params.current[key];
+          } else {
+            formInput[key] = params.current[key];
+          }
+        }
+      });
+
+      // In Atlas the "package" array is called "packages" when you update it.
+      // So, we will rename that part of the code array to reflect the difference in semantics.
+      if (typeof formInput.code.packages !== 'undefined') {
+        formInput.code.package = formInput.code.packages;
+        delete formInput.code.packages;
+      }
+
+      // Match labels to code asset IDs.
+      const assets = store.state.codeAssets;
+      Object.keys(formInput.code).forEach((el) => {
+        if (el === 'package') {
+          const tempPackages = formInput.code.package;
+          formInput.code.package = [];
+          Object.keys(assets.packages).forEach((elm) => {
+            if (tempPackages.includes(assets.packages[elm])) {
+              formInput.code.package.push(elm);
+            }
+          });
+        }
+
+        if (el === 'core') {
+          Object.keys(assets.cores).forEach((elm) => {
+            if (formInput.code.core === assets.cores[elm]) {
+              formInput.code.core = elm;
+            }
+          });
+        }
+
+        if (el === 'profile') {
+          Object.keys(assets.profiles).forEach((elm) => {
+            if (formInput.code.profile === assets.profiles[elm]) {
+              formInput.code.profile = elm;
+            }
+          });
+        }
+      });
+
       body = JSON.stringify(formInput);
     }
 

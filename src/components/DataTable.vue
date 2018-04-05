@@ -144,6 +144,7 @@
           callback: this.tableOptions.addCallback,
           dataName: this.tableOptions.dataName,
           addListener: this.tableOptions.addListener,
+          autocompleteOptionsKey: this.tableOptions.autocompleteOptionsKey,
         },
         rowOptions: {
           columns: this.columns,
