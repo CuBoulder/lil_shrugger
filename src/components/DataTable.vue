@@ -104,6 +104,7 @@
                          :class="`tab-pane ${index == 0 ? 'active' : ''}`"
                          :id="comp.tabID" 
                          :is="comp.tagName" 
+                         :v-show="false"
                          :options="comp">
               </component>
             </div>

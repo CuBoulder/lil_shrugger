@@ -64,6 +64,13 @@ export default {
               element.users.email_address.edit_my_content,
             );
             item.site_contacts = element.users.email_address;
+
+            // Add counts.
+            if (element.users.counts) {
+              item.content_editor_count = element.users.counts.content_editor;
+              item.site_contact_count = element.users.counts.site_contact;
+              item.edit_my_content_count = element.users.counts.edit_my_content;
+            }
           } else if (part === '_id') {
             item.stats_id = element[part];
           } else {

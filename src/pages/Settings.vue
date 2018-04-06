@@ -144,6 +144,9 @@
         localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
         localStorage.setItem('stats-keys', JSON.stringify(this.saveStatsKeys));
 
+        // Change developer mode.
+        store.commit('editDeveloperMode', this.developerMode);
+
         bus.$emit('onMessage', {
           text: 'Saved credentials.',
           alertType: 'alert-success',

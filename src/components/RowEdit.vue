@@ -4,51 +4,56 @@
       <h4>Edit Record: {{ rowData.path || (`${rowData.name} - ${rowData.label} (${rowData.version})`) }}</h4>
     </div>
     <form class="row panel-body">
-      <!-- Row description text. -->
-      <div v-if="editContent != 'N/A'">
-        <h4>Edit Information:</h4>
-        <span class="edit-content"
-              v-html="editContent"></span>
-        <hr>
+      <div v-show="!userAccessPerm('row:edit')">
+        <h4>Insufficent permissions to edit.</h4>
       </div>
-      <!-- Row edit form. -->
-      <fieldset class="form-group">
-        <div v-for="key in rowKeys"
-            :key="key">
-          <label for="key">{{ key }}</label>
-          <div v-if="selectType(key)">
-            <select :name="key" v-model="rowData[key]" class="form-control">
-              <option v-for="anOption in selectOptions[key]"
-                      :key="anOption"
-                      :value="anOption" :selected=" rowData[key] == anOption ? true : null">
-                {{anOption}}
-              </option>
-            </select>
-          </div>
-          <div v-else-if="autocompleteType(key)">
-            <tag-input add-tag-label="Add Package"
-                       :autocomplete-option-key="autocompleteOptionsKey">
-            </tag-input>
-          </div>
-          <div v-else>
-            <input type="text"
-                  :name="key"
-                  class="form-control"
-                  v-model="rowData[key]">
-          </div>
+      <div v-show="userAccessPerm('row:edit')">
+        <!-- Row description text. -->
+        <div v-if="editContent != 'N/A'">
+          <h4>Edit Information:</h4>
+          <span class="edit-content"
+                v-html="editContent"></span>
+          <hr>
         </div>
-      </fieldset>
-      <confirm-button label="Update"
-                      class="pull-left edit-button"
-                      :callback="callback"
-                      :params="params">
-      </confirm-button>
-      <confirm-button label="Delete"
-                      class="pull-left edit-button"
-                      v-if="userAccessPerm('row:delete')"
-                      callback="deleteRecord"
-                      :params="params">
-      </confirm-button>
+        <!-- Row edit form. -->
+        <fieldset class="form-group">
+          <div v-for="key in rowKeys"
+              :key="key">
+            <label for="key">{{ key }}</label>
+            <div v-if="selectType(key)">
+              <select :name="key" v-model="rowData[key]" class="form-control">
+                <option v-for="anOption in selectOptions[key]"
+                        :key="anOption"
+                        :value="anOption" :selected=" rowData[key] == anOption ? true : null">
+                  {{anOption}}
+                </option>
+              </select>
+            </div>
+            <div v-else-if="autocompleteType(key)">
+              <tag-input add-tag-label="Add Package"
+                        :autocomplete-option-key="autocompleteOptionsKey">
+              </tag-input>
+            </div>
+            <div v-else>
+              <input type="text"
+                    :name="key"
+                    class="form-control"
+                    v-model="rowData[key]">
+            </div>
+          </div>
+        </fieldset>
+        <confirm-button label="Update"
+                        class="pull-left edit-button"
+                        :callback="callback"
+                        :params="params">
+        </confirm-button>
+        <confirm-button label="Delete"
+                        class="pull-left edit-button"
+                        v-if="userAccessPerm('row:delete')"
+                        callback="deleteRecord"
+                        :params="params">
+        </confirm-button>
+      </div>
     </form>
   </div>
 </template>

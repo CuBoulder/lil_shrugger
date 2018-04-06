@@ -60,6 +60,11 @@
           autocompleteOptionsKey: 'sitesAddOptions',
           rowViewComponents: [
             {
+              tagName: 'row-view',
+              tabID: 'tab-row-view',
+              tabLabel: 'View',
+            },
+            {
               tagName: 'row-edit',
               tabID: 'tab-row-edit',
               tabLabel: 'Edit',
@@ -84,8 +89,8 @@
               recordID: 'statistics',
             },
           ],
-          defaultSortKey: 'updated',
-          defaultSortDirection: '1',
+          defaultSortKey: store.state.sortOptions.Sites.defaultSortKey,
+          defaultSortDirection: store.state.sortOptions.Sites.defaultSortDirection,
           formatFunction: this.formatRowDisplay,
         },
       };

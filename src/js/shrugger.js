@@ -58,7 +58,7 @@ export default {
    */
   userAccess(permission = null) {
     // If developer mode is checked, always return true.
-    if (typeof localStorage.getItem('developer-mode') !== 'undefined' && JSON.parse(localStorage.getItem('developer-mode')) === true) {
+    if (store.state.developerMode) {
       return true;
     }
 
