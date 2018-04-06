@@ -60,6 +60,7 @@
   import Router from '../router/index';
   import store from '../vuex/store';
   import bus from '../js/bus';
+  import github from '../js/github';
 
   export default {
     name: 'Navbar',
@@ -71,6 +72,13 @@
         baseURL: localStorage.getItem('baseURL') ? localStorage.getItem('baseURL') : '/shrugger',
         shruggerVersionClasses: 'shrugger-default-version',
       };
+    },
+    created() {
+      github.getLatestReleases('lil_shrugger').then((releases) => {
+        if (releases[0]) {
+          store.commit('addLatestShruggeRelease', releases[0]);
+        }
+      });
     },
     computed: {
       selectedEnv() {
@@ -87,7 +95,15 @@
         return Object.keys(this.environments).length > 1;
       },
       actionIcons() {
-        return store.state.actionIcons[this.$route.name];
+        const icons = store.state.actionIcons[this.$route.name] ? store.state.actionIcons[this.$route.name] : [];
+
+        // If we are on Pantheon then limit the number of icons.
+        // @todo Think of a better way of doing this where the exclusion is more explicit.
+        if (window.location.hostname.includes('pantheonsite') && store.state.developerMode === false) {
+          return icons.filter(el => !['commands'].includes(el.component));
+        }
+
+        return icons;
       },
       currentRoute() {
         return Router.app._route.name;

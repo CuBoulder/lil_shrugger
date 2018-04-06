@@ -34,10 +34,15 @@
           dataName: 'codeData',
           editCallback: 'updateCodeRecord',
           rowAddComponent: 'create-code',
-          defaultSortKey: 'updated',
-          defaultSortDirection: '1',
+          defaultSortKey: store.state.sortOptions.Code.defaultSortKey,
+          defaultSortDirection: store.state.sortOptions.Code.defaultSortDirection,
           formatFunction: this.formatRowDisplay,
           rowViewComponents: [
+            {
+              tagName: 'row-view',
+              tabID: 'tab-row-view',
+              tabLabel: 'View',
+            },
             {
               tagName: 'row-edit',
               tabID: 'tab-row-edit',
@@ -129,12 +134,6 @@
         // Get GitHub data to pass in.
         github.getRepos().then((repoList) => {
           store.commit('addGitHubRepos', repoList);
-
-          github.getLatestReleases('lil_shrugger').then((releases) => {
-            if (releases[0]) {
-              store.commit('addLatestShruggeRelease', releases[0]);
-            }
-          });
         });
 
         // If there is a filter query param, then insert it.

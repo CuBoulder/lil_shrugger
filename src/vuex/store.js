@@ -50,6 +50,7 @@ const store = new Vuex.Store({
     defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
     defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
     defaultSitesQuery: '?where={"type":"express"}',
+    developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode')) : false,
     editContent: 'N/A',
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     expressEnvironments: {
@@ -91,8 +92,8 @@ const store = new Vuex.Store({
       profile: [],
       packages: [],
     },
-    shruggerVersion: '0.5.1',
-    shruggerLatestRelease: { tag_name: '0.5.1' },
+    shruggerVersion: '0.6.0',
+    shruggerLatestRelease: { tag_name: '0.6.0' },
     sitesGridData: {
       cachedData: [],
       codeData: [],
@@ -112,20 +113,31 @@ const store = new Vuex.Store({
     },
     siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
     sitesSendCommand: [],
+    sortOptions: {
+      Sites: {
+        defaultSortKey: 'updated',
+        defaultSortDirection: '1',
+      },
+      Code: {
+        defaultSortKey: 'updated',
+        defaultSortDirection: '1',
+      },
+    },
     statsKeys: ['instance', 'name', 'status', 'nodes_total', 'nodes_by_type', 'nodes_other', 'days_since_last_edit',
       'beans_total', 'beans_by_type', 'beans_other', 'context', 'context_other_conditions', 'context_other_reactions',
       'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
       'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
-      'email_address', 'bundles', 'webforms', 'update_group'],
+      'email_address', 'bundles', 'webforms', 'update_group', 'content_editor_count', 'site_contact_count', 'edit_my_content_count'],
     storedSiteKeys: [],
     tagInputTags: {
       sitesAddOptions: [],
       codeAddOptions: [],
     },
-    userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:addRow', 'Code:createCode', 'Packages', 'Sites:row:edit',
-      'Sites:row:delete', 'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export',
-      'Sites:statsSearch:save', 'Settings:credentials'],
+    userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:addRow', 'Code:createCode', 'Code:navbar:table', 'Packages',
+      'Sites:row:edit', 'Sites:row:delete', 'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export',
+      'Sites:statsSearch:save', 'Sites:navbar:statsSearch', 'Sites:navbar:commands', 'Sites:navbar:reports', 'Sites:navbar:table',
+      'Settings:credentials'],
   },
   mutations: {
     addEditContent(state, options) {
@@ -212,6 +224,9 @@ const store = new Vuex.Store({
     addTags(state, params) {
       state.tagInputTags[params.key] = params.tags;
     },
+    editDeveloperMode(state, mode) {
+      state.developerMode = mode;
+    },
   },
 });
 
@@ -266,24 +281,12 @@ if (process.env.EXT_ENV === 'pantheon') {
   }
 
   // Restrict user permissions to exporting reports and editing rows.
-  store.state.userPermissions = ['Sites:commands:export'];
+  store.state.userPermissions = ['Code:navbar:table', 'Sites:commands:export', 'Sites:navbar:statsSearch',
+    'Sites:navbar:reports', 'Sites:navbar:table'];
 
-  // Remove edit keys from code and site assets.
-  store.state.sitesEditKeys = [];
-  store.state.codeEditKeys = ['tag'];
-  store.state.filterKey = 'available';
-
-  // Limit action icons based on permissions.
-  store.state.actionIcons = {
-    Sites: [
-      { name: 'search', component: 'statsSearch' },
-      { name: 'download-alt', component: 'reports' },
-      { name: 'refresh', component: 'table' },
-    ],
-    Code: [
-      { name: 'refresh', component: 'table' },
-    ],
-  };
+  // Sort by the status on Pantheon to look like the Webcentral dashboard did.
+  store.state.sortOptions.Sites.defaultSortKey = 'status';
+  store.state.sortOptions.Sites.defaultSortDirection = '-1';
 }
 
 export default store;

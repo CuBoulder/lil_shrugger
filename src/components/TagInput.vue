@@ -73,10 +73,6 @@ export default {
 
 <style scoped>
 
-.add-tag {
-  margin-top: 5px;
-}
-
 .tag-autocomplete {
   display: inline-block;
   width: 80%;
