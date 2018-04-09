@@ -17,17 +17,19 @@
               {{anOption}}
             </option>
           </select>
-          <div>
-            <pre v-if="viewFull">
-              {{ leftStatObject }}
-            </pre>
-            <div v-for="(stat, index) in leftStatObject"
-                  :key="index">
-              <strong v-html="filteredIndex(index, 'leftStatObject')"></strong>:  <span v-html="stat"></span><br>
-            </div>
+          <div v-for="(stat, index) in leftStatObject"
+               class="left-hand-side-stat"
+               :key="index">
+            <strong v-html="filteredIndex(index, 'leftStatObject')"></strong>:  <span v-html="stat"></span><br>
           </div>
         </div>
         <div class="col col-md-6 rhs-column">
+          <div class="form-check pull-right">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" id="chronological" v-model="enableDrilldown">
+              Drilldown
+            </label>
+          </div>
           <label for="statsSelectOld">Newer Record</label>
           <select name="statsSelectNew"
                   @change="selectChange('rightStatObject', rightSelectString)"
@@ -39,39 +41,35 @@
               {{anOption}}
             </option>
           </select>
-          <div>
-            <pre v-if="viewFull">
-              {{ rightStatObject }}
-            </pre>
-            <div v-for="(stat, index) in rightStatObject"
-                class="right-hand-side-stat"
-                :key="index">
-              <div @mouseover="hoverOverRow(index, stat)">
-                <strong v-html="filteredIndex(index, 'rightStatObject')"></strong>:  <span v-html="stat"></span><br>
-              </div>
-              <div v-if="hoverRow === index">
-                <button class="btn btn-primary" @click.prevent="drillDown(index, equalTo, rightSelectString, true)">===</button>
-                <button class="btn btn-primary" @click.prevent="drillDown(index, equalTo, rightSelectString, false)">!==</button>
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon3">=</span>
-                  <input
-                    id="filter-records-input"
-                    class="form-control"
-                    aria-describedby="basic-addon3"
-                    name="equalTo"
-                    @keyup.enter="drillDown(index, equalTo, rightSelectString, true)"
-                    v-model="equalTo">
-                </div>
+          <div v-for="(stat, index) in rightStatObject"
+              class="right-hand-side-stat"
+              :key="index">
+            <div @mouseover="hoverOverRow(index, stat)">
+              <strong v-html="filteredIndex(index, 'rightStatObject')"></strong>:  <span v-html="stat"></span><br>
+            </div>
+            <div v-if="hoverRow === index && enableDrilldown">
+              <button class="btn btn-primary pull-right drill-btn" @click.prevent="drillDown(index, equalTo, rightSelectString, true)">===</button>
+              <button class="btn btn-primary pull-right drill-btn" @click.prevent="drillDown(index, equalTo, rightSelectString, false)">!==</button>
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">{{ filteredIndex(index, 'rightStatObject')| stripHTML }} =</span>
+                <input
+                  id="filter-records-input"
+                  class="form-control"
+                  aria-describedby="basic-addon3"
+                  name="equalTo"
+                  @keyup.enter="drillDown(index, equalTo, rightSelectString, true)"
+                  v-model="equalTo">
               </div>
             </div>
           </div>
         </div>
       </div>
       <div v-if="drilldownDiffs">
-        <span class="pull-right">
+        <span class="row cancel-drilldown pull-right">
           <button class="btn btn-primary" @click="cancelDrilldown()">X</button>
         </span>
-        <drilldown-diff :selected-index="selectedObjectIndex"
+        <drilldown-diff class="row"
+                        :selected-index="selectedObjectIndex"
                         :selected-obj="selectedObject"
                         :objects="differentObjects">
         </drilldown-diff>
@@ -106,7 +104,7 @@
         selectedObjectIndex: 0,
         leftSelectString: '',
         rightSelectString: '',
-        viewFull: false,
+        enableDrilldown: false,
         drilldownDiffs: false,
         hoverRow: -1,
         showEqual: false,
@@ -135,6 +133,12 @@
       bus.$off(['rowView', 'rowDiffRowView']);
       bus.$off(['rowHide', 'rowDiffRowHide']);
       bus.$off(['switchEnv', 'rowDiffSwitchEnv']);
+    },
+    filters: {
+      stripHTML(value) {
+        const reg = /(<([^>]+)>)/ig;
+        return value.replace(reg, '');
+      },
     },
     methods: {
       filteredIndex(value, side) {
@@ -377,6 +381,7 @@
   color: red;
 }
 
+.left-hand-side-stat:hover,
 .right-hand-side-stat:hover {
   background-color: rgb(236, 236, 236);
 }
@@ -384,6 +389,10 @@
 .lhs-column, .rhs-column {
   overflow-wrap: break-word;
   word-wrap: break-word;
+}
+
+.drill-btn {
+  margin-left: 2px;
 }
 
 </style>
