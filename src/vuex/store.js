@@ -92,8 +92,8 @@ const store = new Vuex.Store({
       profile: [],
       packages: [],
     },
-    shruggerVersion: '0.6.0',
-    shruggerLatestRelease: { tag_name: '0.6.0' },
+    shruggerVersion: '0.6.1',
+    shruggerLatestRelease: { tag_name: '0.6.1' },
     sitesGridData: {
       cachedData: [],
       codeData: [],
