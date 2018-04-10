@@ -1,9 +1,18 @@
 <template>
-<div class="row">
+<div class="drilldown-diff-container">
   <div class="col col-md-4 lhs-column">
-    <div :key="obj._updated"
-         v-for="obj in objects">
-      <span @click="changeRhs(obj)">{{ obj._updated }}</span> 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Change Dates:</h3>
+      </div>
+      <div class="panel-body"
+           :key="obj._updated"
+           v-for="obj in objects">
+        <span class="lhs-option"
+              @click="changeRhs(obj)">
+          {{ obj._updated }}
+        </span> 
+      </div>
     </div>
   </div>
   <div class="col col-md-8 rhs-column">
@@ -32,19 +41,32 @@ export default {
   },
   methods: {
     changeRhs(obj) {
+      this.rhsObject = {};
       this.rhsObject = obj;
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+
+.drilldown-diff-container {
+  margin-top: 5px;
+}
 
 pre {
   /* overflow-wrap: break-word;
   word-wrap: break-word; */
   text-overflow: ellipsis;
   overflow-x: hidden;
+}
+
+.panel-body {
+  cursor: pointer;
+}
+
+.panel-body:hover {
+    background-color: rgb(236, 236, 236);
 }
 
 </style>

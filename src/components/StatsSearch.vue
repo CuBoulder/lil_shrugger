@@ -113,7 +113,7 @@
         return store.state.filterKey;
       },
       queryList() {
-        return store.state.statsQueryOptions.sort((a, b) => {
+        return store.state.autocompleteOptions.statsQueryOptions.sort((a, b) => {
           const sortOptions = {
             sensitivity: 'base',
             numeric: true,
@@ -171,7 +171,7 @@
         // Fill in other fields in stats search.
         if (key === 'title') {
           let currentQuery = {};
-          store.state.statsQueryOptions.forEach((element) => {
+          store.state.autocompleteOptions.statsQueryOptions.forEach((element) => {
             if (element.title === selectedOption.title) {
               that.statsQueryDescription = element.description;
               that.statsQueryEndpoint = element.endpoint;
