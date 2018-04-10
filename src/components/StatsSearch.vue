@@ -142,7 +142,7 @@
         // Set the search.
         if (propertyNames.indexOf('query') !== -1) {
           // Find the query name of the ID entered.
-          const storedQueries = store.state.statsQueryOptions;
+          const storedQueries = store.state.autocompleteOptions.statsQueryOptions;
 
           let paramQuery = {};
           storedQueries.forEach((element) => {
@@ -199,7 +199,7 @@
         }
 
         // Find the query name of the ID entered.
-        const storedQueries = store.state.statsQueryOptions;
+        const storedQueries = store.state.autocompleteOptions.statsQueryOptions;
         let paramQuery = {};
         storedQueries.forEach((element) => {
           if (element.query === query) {
