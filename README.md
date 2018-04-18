@@ -20,6 +20,7 @@ npm run build
 # There are a couple of environmental variables you can set to alter the build.
 # SUBDIRECTORY is where you want the base path to exist.
 # EXT_ENV is where you can specifiy a hosting environment for targeted configurations.
+# The build will end up in the "/dist" folder.
 SUBDIRECTORY=shrugger EXT_ENV=pantheon npm run build 
 ```
 
