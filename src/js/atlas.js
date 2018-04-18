@@ -1,6 +1,6 @@
 
 import utilities from './shrugger';
-import bus from './bus';
+// import bus from './bus';
 import store from '../vuex/store';
 
 export default {
@@ -73,6 +73,7 @@ export default {
           // I do know that it will always have the type error below.
           // Type coercison is used here since the error object is weird to me.
           /* eslint-disable */
+          /*
           if (error == 'TypeError: Failed to fetch') {
             bus.$emit('onMessage', {
               text: `<strong>Error in Atlas Request</strong><br>
@@ -81,7 +82,7 @@ export default {
                      read more about error messages</a> on the wiki.`,
               alertType: 'alert-danger' },
             );
-          }
+          } */
           /* eslint-enable */
           throw Error(error);
         }));

@@ -241,11 +241,14 @@
               // Make request to Atlas.
               const body = `{"code":${JSON.stringify(site.code)}}`;
               atlas.request(baseURL, 'sites/' + site._id, '', 'PATCH', body, site._etag)
-              .then(() => {
-                bus.$emit('onMessage', {
-                  text: 'You have sent a request to update some code. Good luck on your journey!',
-                  alertType: 'alert-success',
-                });
+              .then((resp) => {
+                console.log(resp);
+                if (typeof resp !== 'undefined') {
+                  bus.$emit('onMessage', {
+                    text: 'You have sent a request to update some code. Good luck on your journey!',
+                    alertType: 'alert-success',
+                  });
+                }
               })
               .catch((error) => {
                 console.log(error);

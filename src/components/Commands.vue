@@ -102,11 +102,14 @@
         const command = store.state.commands.filter(element => element._id === params.command);
 
         atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, '', 'PATCH', body, command[0]._etag)
-        .then(() => {
-          bus.$emit('onMessage', {
-            text: 'Successfully sent "' + command[0].name + '" command to ' + store.state.sitesSendCommand.length + ' site(s): (' + siteIds + ').',
-            alertType: 'alert-success',
-          });
+        .then((resp) => {
+          console.log(resp);
+          if (typeof resp !== 'undefined') {
+            bus.$emit('onMessage', {
+              text: 'Successfully sent "' + command[0].name + '" command to ' + store.state.sitesSendCommand.length + ' site(s): (' + siteIds + ').',
+              alertType: 'alert-success',
+            });
+          }
         })
         .catch((error) => {
           console.log(error);
