@@ -19,14 +19,20 @@ export default {
   handleErrors(response) {
     if (!response.ok) {
       console.log(response);
-      bus.$emit('onMessage', {
-        text: '<strong>Error in Atlas Request:</strong>' +
-          '<br/>Status Code: ' + response.status +
-          '<br/>Text: ' + response.statusText +
-          '<br/>URL: ' + response.url,
-        alertType: 'alert-danger' },
-      );
-      throw Error(response.statusText);
+      // console.log();
+      response.json().then((resp) => {
+        console.log(resp);
+        bus.$emit('onMessage', {
+          text: '<strong>Error in Atlas Request:</strong>' +
+            '<br/>Status Code: ' + response.status +
+            '<br/>Text: ' + response.statusText +
+            '<br/>URL: ' + response.url +
+            '<br/>Atlas Response: <pre>' + JSON.stringify(resp) + '</pre>',
+          alertType: 'alert-danger' },
+        );
+        return null;
+        // throw Error(response.statusText);
+      });
     }
     return response;
   },

@@ -64,23 +64,26 @@ export default {
 
     const baseURL = store.state.atlasEnvironments[store.state.env];
     atlas.request(baseURL, 'code/' + params.current.id, '', method, body, etag)
-      .then(() => {
-        // Wait a little (2 seconds) so the response has new entries.
-        setTimeout(() => {
-          bus.$emit('onMessage', {
-            text: 'You have sent a ' + method + ' request to a code record. Site ID: ' + params.current.id,
-            alertType: 'alert-success',
-          });
-
-          this.get(store.state.atlasEnvironments[store.state.env])
-            .then((data) => {
-              const options = {
-                codeData: data,
-                cachedData: data,
-              };
-              store.commit('addSitesGridData', options);
+      .then((resp) => {
+        console.log(resp);
+        if (typeof resp !== 'undefined') {
+          // Wait a little (2 seconds) so the response has new entries.
+          setTimeout(() => {
+            bus.$emit('onMessage', {
+              text: 'You have sent a ' + method + ' request to a code record. Site ID: ' + params.current.id,
+              alertType: 'alert-success',
             });
-        }, 2000);
+
+            this.get(store.state.atlasEnvironments[store.state.env])
+              .then((data) => {
+                const options = {
+                  codeData: data,
+                  cachedData: data,
+                };
+                store.commit('addSitesGridData', options);
+              });
+          }, 2000);
+        }
       })
       .catch((error) => {
         console.log(error);

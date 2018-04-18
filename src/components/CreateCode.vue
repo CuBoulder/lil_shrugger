@@ -20,7 +20,7 @@
                 @change="changeBranch($event)"
                 class="form-control">
           <option v-for="(branch, index) in branches"
-                  :key="index"
+                  :key="branch.commit.sha"
                   :value="index">
             {{branch.name}}
           </option>
@@ -133,9 +133,11 @@
 
         // Set to true for branch select list to appear.
         this.branchReady = true;
+        this.ready = false;
+        this.branchToAdd = {};
 
         // Get a list of branches for the active repo.
-        this.branches = [];
+        store.commit('addGitHubBranches', []);
         this.activeRepo = this.repos[event.target.value];
         const response = github.getBranches(this.activeRepo.name);
 
@@ -155,7 +157,9 @@
       changeBranch(event) {
         // Display the Create Code Asset button.
         this.ready = true;
-        this.branchToAdd = this.branches[event.target.value];
+        this.branchToAdd = {};
+        this.branchToAdd = store.state.gitHubBranches[event.target.value];
+        console.log(this.branchToAdd);
       },
       createCode() {
         const repo = this.activeRepo;
@@ -187,22 +191,25 @@
         // Make request to add code to Atlas.
         const baseURL = store.state.atlasEnvironments[store.state.env];
         atlas.request(baseURL, 'code', '', 'POST', JSON.stringify(codeAsset))
-          .then(() => {
-            // Wait a little so the response has new entries.
-            shrugger.wait(5000);
+          .then((resp) => {
+            console.log(resp);
+            if (typeof resp !== 'undefined') {
+              // Wait a little so the response has new entries.
+              shrugger.wait(5000);
 
-            bus.$emit('onMessage', {
-              text: 'You have created a code asset.',
-              alertType: 'alert-success',
-            });
-            code.get(store.state.atlasEnvironments[store.state.env])
-              .then((data) => {
-                const options = {
-                  codeData: data,
-                };
-
-                store.commit('addSitesGridData', options);
+              bus.$emit('onMessage', {
+                text: 'You have created a code asset.',
+                alertType: 'alert-success',
               });
+              code.get(store.state.atlasEnvironments[store.state.env])
+                .then((data) => {
+                  const options = {
+                    codeData: data,
+                  };
+
+                  store.commit('addSitesGridData', options);
+                });
+            }
           })
           .catch(error => console.log(error));
 

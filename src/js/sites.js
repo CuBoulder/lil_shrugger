@@ -107,21 +107,24 @@ export default {
 
     const data = JSON.stringify(body);
     atlas.request(baseURL, endpoint, '', 'POST', data)
-      .then(() => {
-        // Wait a little so the response has new entries.
-        shrugger.wait(5000);
+      .then((resp) => {
+        console.log(resp);
+        if (typeof resp !== 'undefined') {
+          // Wait a little so the response has new entries.
+          shrugger.wait(5000);
 
-        this.get(store.state.atlasEnvironments[store.state.env])
-        .then((records) => {
-          store.commit('addSitesGridData', { sitesData: records });
-          bus.$emit('onMessage', {
-            text: 'Successfully created a site.',
-            alertType: 'alert-success',
+          this.get(store.state.atlasEnvironments[store.state.env])
+          .then((records) => {
+            store.commit('addSitesGridData', { sitesData: records });
+            bus.$emit('onMessage', {
+              text: 'Successfully created a site.',
+              alertType: 'alert-success',
+            });
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        }
       });
   },
 
@@ -201,19 +204,22 @@ export default {
 
     const baseURL = store.state.atlasEnvironments[store.state.env];
     atlas.request(baseURL, 'sites/' + params.current.id, '', method, body, params.current.etag)
-      .then(() => {
-        // Wait a little so the response has new entries.
-        shrugger.wait(5000);
+      .then((resp) => {
+        console.log(resp);
+        if (typeof resp !== 'undefined') {
+          // Wait a little so the response has new entries.
+          shrugger.wait(5000);
 
-        bus.$emit('onMessage', {
-          text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
-          alertType: 'alert-success',
-        });
-
-        this.get(store.state.atlasEnvironments[store.state.env])
-          .then((data) => {
-            store.commit('addSitesGridData', { sitesData: data });
+          bus.$emit('onMessage', {
+            text: 'You have sent a ' + method + ' request to a site record. Site ID: ' + params.current.id,
+            alertType: 'alert-success',
           });
+
+          this.get(store.state.atlasEnvironments[store.state.env])
+            .then((data) => {
+              store.commit('addSitesGridData', { sitesData: data });
+            });
+        }
       })
       .catch((error) => {
         console.log(error);
