@@ -13,13 +13,13 @@ const store = new Vuex.Store({
   state: {
     actionIcons: {
       Sites: [
-        { name: 'search', component: 'statsSearch' },
-        { name: 'th-list', component: 'commands' },
-        { name: 'download-alt', component: 'reports' },
-        { name: 'refresh', component: 'table' },
+        { name: 'search', component: 'statsSearch', title: 'Search' },
+        { name: 'th-list', component: 'commands', title: 'Commands' },
+        { name: 'download-alt', component: 'reports', title: 'Reports' },
+        { name: 'refresh', component: 'table', title: 'Refresh' },
       ],
       Code: [
-        { name: 'refresh', component: 'table' },
+        { name: 'refresh', component: 'table', title: 'Refresh' },
       ],
     },
     atlasEnvironments: {

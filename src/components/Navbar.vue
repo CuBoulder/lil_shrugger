@@ -27,11 +27,13 @@
                   :class="'navbar-action-icon glyphicon glyphicon-' + icon.name"
                   aria-hidden="true"
                   :key="icon.name"
+                  :title="icon.title"
                   @click="show(icon.component)">
             </span>
             <!-- Help Link -->
             <a class="help-link"
                :href="'https://github.com/CuBoulder/lil_shrugger/wiki/' + currentRoute"
+               title="Help Link"
                target="_blank">
               <span class="navbar-action-icon glyphicon glyphicon-question-sign"></span>
             </a>
@@ -214,6 +216,7 @@
     padding-bottom: 0.25em;
     border-right: 1px solid #e7e7e7;
     height: 100%;
+    cursor: pointer;
   }
 
   .help-link {
@@ -227,4 +230,5 @@
   .shrugger-old-version {
     color: red;
   }
+
 </style>
