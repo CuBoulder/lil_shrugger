@@ -48,16 +48,11 @@
           </option>
         </select>
         <label for="tag">Tag:</label>
-        <select name="tag"
+        <input type="text"
+                name="tag"
                 id="tag"
-                v-model="tag"
-                class="form-control">
-          <option v-for="anOption in selectOptions.tag"
-                  :key="anOption"
-                  :value="anOption">
-            {{anOption}}
-          </option>
-        </select>
+                class="form-control"
+                v-model="tag">
         <label for="code_version">Version:</label>
         <input type="text"
                 name="code_version"
