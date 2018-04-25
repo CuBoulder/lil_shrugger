@@ -63,8 +63,13 @@
       });
 
       // Exports data in table when export button is clicked.
-      bus.$on('exportSiteContactEmail', function reportsExportSiteContactEmail(params) {
-        that.exportEmailsListener(params, that);
+      bus.$on('exportSiteEmails', function reportsExportSiteEmails(params) {
+        that.exportUsersListener(params, 'email_address');
+      });
+
+      // Exports data in table when export button is clicked.
+      bus.$on('exportSiteIdentikeys', function reportsExportSiteIdentikeys(params) {
+        that.exportUsersListener(params, 'username');
       });
 
       // Exports data in table when export button is clicked.
@@ -130,61 +135,62 @@
         // Export to CSV file.
         download.csv(headers, exportData, 'report');
       },
-      exportEmailsListener(params) {
-        // Grab the types of emails needed.
-        let emailArray = params.options.split(',');
+      exportUsersListener(params, type = 'email_address') {
+        // Grab the types of users needed.
+        let optionsArray = params.options.split(',');
 
-        // If email array is blank, then add "all" option.
-        if (emailArray[0] === '') {
-          emailArray = ['all'];
+        // If options array is blank, then add "all" option.
+        if (optionsArray[0] === '') {
+          optionsArray = ['all'];
         }
 
-        // Reduce number of emails into one list.
-        const allEmails = [];
+        // Reduce number of users into one list.
+        const allUsers = [];
         // If site contacts don't exist, then don't do anything.
-        const exportData = Object.values(store.state.filteredData).filter(item => item.site_contacts);
+        const exportData = Object.values(store.state.filteredData).filter(item => item[`site_${type}`]);
 
         exportData.map((item) => {
-          // If array is empty or just contains "all", then push all emails.
-          let tempEmailArray = [];
-          if (Array.isArray(emailArray) && emailArray.length && emailArray.indexOf('all') === -1) {
-            emailArray.forEach((element) => {
+          // If array is empty or just contains "all", then push all users.
+          let tempUsersArray = [];
+          if (Array.isArray(optionsArray) && optionsArray.length && optionsArray.indexOf('all') === -1) {
+            optionsArray.forEach((element) => {
               // Need to check if site has any users of this type.
-              if (item.site_contacts[element]) {
-                tempEmailArray = [].concat(tempEmailArray, item.site_contacts[element]);
+              if (item[`site_${type}`][element]) {
+                tempUsersArray = [].concat(tempUsersArray, item[`site_${type}`][element]);
               }
             });
 
-            allEmails.push(tempEmailArray);
+            allUsers.push(tempUsersArray);
           } else {
             // item.email_address will have all email addresses.
+            // item.username will have all identikeys.
             // @see site_records.js formatStatsData().
-            allEmails.push(item.email_address);
+            allUsers.push(item[type]);
           }
         });
 
-        // The final email list will not have duplicates.
-        const finalEmails = [];
-        allEmails.forEach((el) => {
+        // The final users list will not have duplicates.
+        const finalUsers = [];
+        allUsers.forEach((el) => {
           // All items should be arrays so we need to also loop through those items.
           if (typeof el !== 'undefined' && Array.isArray(el)) {
             el.forEach((part) => {
-              // Value can be undefined or not be an email address.
-              if (!part || !part.includes('@')) {
+              // Value can be undefined.
+              if (!part || (type === 'email_address' && !part.includes('@'))) {
                 part = '';
               }
 
               // We need to lowercase and strip text since emails are weird and can have both
               // lowercase and uppercase versions.
-              if (finalEmails.indexOf(part.toLowerCase().trim()) === -1) {
-                finalEmails.push(part.toLowerCase().trim());
+              if (finalUsers.indexOf(part.toLowerCase().trim()) === -1) {
+                finalUsers.push(part.toLowerCase().trim());
               }
             });
           }
         });
 
         // Export to text file.
-        download.text(finalEmails, 'siteContactEmails');
+        download.text(finalUsers, `site_${type}_export`);
       },
       exportBundleStatsListener(params) {
         const assetTypes = params.options ? params.options.split(',') : ['core', 'profile', 'package'];
