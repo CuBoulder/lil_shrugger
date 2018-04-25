@@ -63,7 +63,9 @@ export default {
               element.users.email_address.site_contact,
               element.users.email_address.edit_my_content,
             );
-            item.site_contacts = element.users.email_address;
+
+            item.site_email_address = element.users.email_address;
+            item.site_username = element.users.username;
 
             // Add counts.
             if (element.users.counts) {

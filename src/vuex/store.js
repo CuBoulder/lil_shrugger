@@ -70,16 +70,20 @@ const store = new Vuex.Store({
     recordsToShow: 10,
     reportsList: [
       {
-        name: 'exportTable',
-        options: false,
-      },
-      {
-        name: 'exportSiteContactEmail',
-        options: true,
-      },
-      {
         name: 'exportBundleStats',
         options: true,
+      },
+      {
+        name: 'exportSiteEmails',
+        options: true,
+      },
+      {
+        name: 'exportSiteIdentikeys',
+        options: true,
+      },
+      {
+        name: 'exportTable',
+        options: false,
       },
     ],
     searchFilter: '',

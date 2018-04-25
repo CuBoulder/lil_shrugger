@@ -63,8 +63,13 @@
       });
 
       // Exports data in table when export button is clicked.
-      bus.$on('exportSiteContactEmail', function reportsExportSiteContactEmail(params) {
-        that.exportEmailsListener(params, that);
+      bus.$on('exportSiteEmails', function reportsExportSiteEmails(params) {
+        that.exportEmailsListener(params, 'email_address');
+      });
+
+      // Exports data in table when export button is clicked.
+      bus.$on('exportSiteIdentikeys', function reportsExportSiteIdentikeys(params) {
+        that.exportEmailsListener(params, 'username');
       });
 
       // Exports data in table when export button is clicked.
@@ -130,7 +135,7 @@
         // Export to CSV file.
         download.csv(headers, exportData, 'report');
       },
-      exportEmailsListener(params) {
+      exportEmailsListener(params, type = 'email_address') {
         // Grab the types of emails needed.
         let emailArray = params.options.split(',');
 
@@ -142,7 +147,7 @@
         // Reduce number of emails into one list.
         const allEmails = [];
         // If site contacts don't exist, then don't do anything.
-        const exportData = Object.values(store.state.filteredData).filter(item => item.site_contacts);
+        const exportData = Object.values(store.state.filteredData).filter(item => item[`site_${type}`]);
 
         exportData.map((item) => {
           // If array is empty or just contains "all", then push all emails.
@@ -150,8 +155,8 @@
           if (Array.isArray(emailArray) && emailArray.length && emailArray.indexOf('all') === -1) {
             emailArray.forEach((element) => {
               // Need to check if site has any users of this type.
-              if (item.site_contacts[element]) {
-                tempEmailArray = [].concat(tempEmailArray, item.site_contacts[element]);
+              if (item[`site_${type}`][element]) {
+                tempEmailArray = [].concat(tempEmailArray, item[`site_${type}`][element]);
               }
             });
 
@@ -159,7 +164,7 @@
           } else {
             // item.email_address will have all email addresses.
             // @see site_records.js formatStatsData().
-            allEmails.push(item.email_address);
+            allEmails.push(item[type]);
           }
         });
 
@@ -169,8 +174,8 @@
           // All items should be arrays so we need to also loop through those items.
           if (typeof el !== 'undefined' && Array.isArray(el)) {
             el.forEach((part) => {
-              // Value can be undefined or not be an email address.
-              if (!part || !part.includes('@')) {
+              // Value can be undefined.
+              if (!part || (type === 'email_address' && !part.includes('@'))) {
                 part = '';
               }
 
