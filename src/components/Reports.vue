@@ -64,12 +64,12 @@
 
       // Exports data in table when export button is clicked.
       bus.$on('exportSiteEmails', function reportsExportSiteEmails(params) {
-        that.exportEmailsListener(params, 'email_address');
+        that.exportUsersListener(params, 'email_address');
       });
 
       // Exports data in table when export button is clicked.
       bus.$on('exportSiteIdentikeys', function reportsExportSiteIdentikeys(params) {
-        that.exportEmailsListener(params, 'username');
+        that.exportUsersListener(params, 'username');
       });
 
       // Exports data in table when export button is clicked.
@@ -135,42 +135,43 @@
         // Export to CSV file.
         download.csv(headers, exportData, 'report');
       },
-      exportEmailsListener(params, type = 'email_address') {
-        // Grab the types of emails needed.
-        let emailArray = params.options.split(',');
+      exportUsersListener(params, type = 'email_address') {
+        // Grab the types of users needed.
+        let optionsArray = params.options.split(',');
 
-        // If email array is blank, then add "all" option.
-        if (emailArray[0] === '') {
-          emailArray = ['all'];
+        // If options array is blank, then add "all" option.
+        if (optionsArray[0] === '') {
+          optionsArray = ['all'];
         }
 
-        // Reduce number of emails into one list.
-        const allEmails = [];
+        // Reduce number of users into one list.
+        const allUsers = [];
         // If site contacts don't exist, then don't do anything.
         const exportData = Object.values(store.state.filteredData).filter(item => item[`site_${type}`]);
 
         exportData.map((item) => {
-          // If array is empty or just contains "all", then push all emails.
-          let tempEmailArray = [];
-          if (Array.isArray(emailArray) && emailArray.length && emailArray.indexOf('all') === -1) {
-            emailArray.forEach((element) => {
+          // If array is empty or just contains "all", then push all users.
+          let tempUsersArray = [];
+          if (Array.isArray(optionsArray) && optionsArray.length && optionsArray.indexOf('all') === -1) {
+            optionsArray.forEach((element) => {
               // Need to check if site has any users of this type.
               if (item[`site_${type}`][element]) {
-                tempEmailArray = [].concat(tempEmailArray, item[`site_${type}`][element]);
+                tempUsersArray = [].concat(tempUsersArray, item[`site_${type}`][element]);
               }
             });
 
-            allEmails.push(tempEmailArray);
+            allUsers.push(tempUsersArray);
           } else {
             // item.email_address will have all email addresses.
+            // item.username will have all identikeys.
             // @see site_records.js formatStatsData().
-            allEmails.push(item[type]);
+            allUsers.push(item[type]);
           }
         });
 
-        // The final email list will not have duplicates.
-        const finalEmails = [];
-        allEmails.forEach((el) => {
+        // The final users list will not have duplicates.
+        const finalUsers = [];
+        allUsers.forEach((el) => {
           // All items should be arrays so we need to also loop through those items.
           if (typeof el !== 'undefined' && Array.isArray(el)) {
             el.forEach((part) => {
@@ -181,15 +182,15 @@
 
               // We need to lowercase and strip text since emails are weird and can have both
               // lowercase and uppercase versions.
-              if (finalEmails.indexOf(part.toLowerCase().trim()) === -1) {
-                finalEmails.push(part.toLowerCase().trim());
+              if (finalUsers.indexOf(part.toLowerCase().trim()) === -1) {
+                finalUsers.push(part.toLowerCase().trim());
               }
             });
           }
         });
 
         // Export to text file.
-        download.text(finalEmails, 'siteContactEmails');
+        download.text(finalUsers, `site_${type}_export`);
       },
       exportBundleStatsListener(params) {
         const assetTypes = params.options ? params.options.split(',') : ['core', 'profile', 'package'];
