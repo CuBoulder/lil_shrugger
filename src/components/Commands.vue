@@ -80,7 +80,7 @@
 
         atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id)
         .then((data) => {
-          // Check and see if etags are different and update row data if so.
+          // Check and see if etags are different and emit error message.
           if (data[0]._etag !== command[0]._etag) {
             bus.$emit('onMessage', {
               text: 'The etag has changed for this record. The listing of records has been updated with the latest data.',
