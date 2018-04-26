@@ -249,7 +249,8 @@
 
         // Format dates for nicer output.
         if (key === 'created' || key === 'updated') {
-          return shrugger.toDate(value);
+          // return shrugger.toDate(value);
+          return value;
         }
 
         // Deal with empty packages arrays.

@@ -119,8 +119,11 @@ export default {
         item.commit_hash = element.commit_hash;
         item.etag = element._etag;
         item.id = element._id;
-        item.created = new Date(element._created);
-        item.updated = new Date(element._updated);
+
+        // Browsers other than Chrome can't handle the date format so it isn't formatted in a more human-readable way.
+        item.created = element._created;
+        item.updated = element._updated;
+
         formattedData.push(item);
       });
     });
