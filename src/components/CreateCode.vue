@@ -96,7 +96,7 @@
         branchReady: false,
         addCode: false,
         codeType: 'module',
-        tag: 'beta_bundle',
+        tag: '',
         codeVersion: '',
         codeLabel: '',
         isCurrent: false,
