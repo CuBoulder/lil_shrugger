@@ -78,9 +78,24 @@
         // Get command data for etag.
         const command = store.state.commands.filter(element => element._id === params.command);
 
-        bus.$emit('onMessage', {
-          text: `You are about to send the "${command[0].name}" command to ${store.state.sitesSendCommand.length} site(s): ${siteIds}.`,
-          alertType: 'alert-warning',
+        atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id)
+        .then((data) => {
+          // Check and see if etags are different and update row data if so.
+          if (data[0]._etag !== command[0]._etag) {
+            bus.$emit('onMessage', {
+              text: 'The etag has changed for this record. The listing of records has been updated with the latest data.',
+              alertType: 'alert-danger',
+            });
+            bus.$emit('etagFail', data);
+
+            // Setup commands for select list.
+            atlas.getCommands();
+          } else {
+            bus.$emit('onMessage', {
+              text: `You are about to send the "${command[0].name}" command to ${store.state.sitesSendCommand.length} site(s): ${siteIds}.`,
+              alertType: 'alert-warning',
+            });
+          }
         });
       },
       cancelCommandListener() {
