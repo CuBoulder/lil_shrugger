@@ -167,7 +167,7 @@
         }
 
         // Turn tag into array.
-        input.tag = [input.tag];
+        input.tag = input.tag.split(',');
 
         // Make body to send to Atlas.
         const codeAsset = {
