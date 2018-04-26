@@ -96,7 +96,7 @@
         branchReady: false,
         addCode: false,
         codeType: 'module',
-        tag: 'beta_bundle',
+        tag: '',
         codeVersion: '',
         codeLabel: '',
         isCurrent: false,
@@ -167,7 +167,7 @@
         }
 
         // Turn tag into array.
-        input.tag = [input.tag];
+        input.tag = input.tag.split(',');
 
         // Make body to send to Atlas.
         const codeAsset = {
