@@ -144,6 +144,7 @@ export default {
       hour: '2-digit',
       minute: '2-digit',
     };
+
     return formattedDate.toLocaleTimeString('en-us', options);
   },
 

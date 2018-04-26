@@ -50,8 +50,11 @@ export default {
         // item['id'] = element.sid;
         item.path = element.path;
         item.status = element.status;
-        item.updated = new Date(element._updated);
-        item.created = new Date(element._created);
+
+        // Browsers other than Chrome can't handle the date format so it isn't formatted in a more human-readable way.
+        item.updated = element._updated;
+        item.created = element._created;
+
         item.etag = element._etag;
         item.id = element._id;
         item.statistics = element.statistics;
