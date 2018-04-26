@@ -55,6 +55,7 @@ const store = new Vuex.Store({
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     expressEnvironments: {
       Local: 'https://express.local/',
+      NewDev: 'https://www-dev-https.colorado.edu/',
       Dev: 'https://www-dev.colorado.edu/',
       Test: 'https://www-test.colorado.edu/',
       Prod: 'https://www.colorado.edu/',
