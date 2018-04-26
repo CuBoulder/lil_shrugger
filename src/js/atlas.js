@@ -46,7 +46,13 @@ export default {
     if (method !== 'GET') {
       return fetch(requestURL, myInit)
         .then(utilities.handleErrors)
-        .then(response => response.json())
+        .then((response) => {
+          console.log(response);
+          if (response.statusText === 'NO CONTENT') {
+            return {};
+          }
+          return response.json();
+        })
         .catch((error) => {
           console.log(error);
         });
