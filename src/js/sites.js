@@ -127,6 +127,11 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+        } else {
+          bus.$emit('onMessage', {
+            text: 'Soemthing may have went wrong. Please check the browser\'s console log and network tab.',
+            alertType: 'alert-error',
+          });
         }
       });
   },
@@ -222,6 +227,11 @@ export default {
             .then((data) => {
               store.commit('addSitesGridData', { sitesData: data });
             });
+        } else {
+          bus.$emit('onMessage', {
+            text: 'Soemthing may have went wrong. Please check the browser\'s console log and network tab.',
+            alertType: 'alert-error',
+          });
         }
       })
       .catch((error) => {

@@ -167,7 +167,9 @@
         }
 
         // Turn tag into array.
-        input.tag = input.tag.split(',');
+        if (typeof input.tag === 'string') {
+          input.tag = input.tag.split(',');
+        }
 
         // Make body to send to Atlas.
         const codeAsset = {
@@ -204,6 +206,11 @@
 
                   store.commit('addSitesGridData', options);
                 });
+            } else {
+              bus.$emit('onMessage', {
+                text: 'Soemthing may have went wrong. Please check the browser\'s console log and network tab.',
+                alertType: 'alert-error',
+              });
             }
           })
           .catch(error => console.log(error));

@@ -83,10 +83,15 @@
           // Check and see if etags are different and emit error message.
           if (data[0]._etag !== command[0]._etag) {
             bus.$emit('onMessage', {
-              text: 'The etag has changed for this record. The listing of records has been updated with the latest data.',
+              text: 'The etag has changed for this command, and the list of selected sites has been reset.<br>' +
+                `Please check the command and retry: <a href="${store.state.atlasEnvironments[store.state.env]}commands/${command[0]._id}">` +
+                `${store.state.atlasEnvironments[store.state.env]}commands/${command[0]._id}</a>`,
               alertType: 'alert-danger',
             });
+
             bus.$emit('etagFail', data);
+            store.commit('addAllSitesToCommands', []);
+            bus.$emit('clearAllRows');
 
             // Setup commands for select list.
             atlas.getCommands();
@@ -123,6 +128,17 @@
             bus.$emit('onMessage', {
               text: 'Successfully sent "' + command[0].name + '" command to ' + store.state.sitesSendCommand.length + ' site(s): (' + siteIds + ').',
               alertType: 'alert-success',
+            });
+
+            store.commit('addAllSitesToCommands', []);
+            bus.$emit('clearAllRows');
+
+            // Setup commands for select list.
+            atlas.getCommands();
+          } else {
+            bus.$emit('onMessage', {
+              text: 'Soemthing may have went wrong. Please check the browser\'s console log and network tab.',
+              alertType: 'alert-error',
             });
           }
         })
