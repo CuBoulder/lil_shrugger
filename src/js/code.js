@@ -70,7 +70,7 @@ export default {
           // Wait a little (2 seconds) so the response has new entries.
           setTimeout(() => {
             bus.$emit('onMessage', {
-              text: 'You have sent a ' + method + ' request to a code record. Site ID: ' + params.current.id,
+              text: 'You have sent a ' + method + ' request to a code record. Code asset ID: ' + params.current.id,
               alertType: 'alert-success',
             });
 
@@ -83,6 +83,11 @@ export default {
                 store.commit('addSitesGridData', options);
               });
           }, 2000);
+        } else {
+          bus.$emit('onMessage', {
+            text: 'Soemthing may have went wrong. Please check the browser\'s console log and network tab.',
+            alertType: 'alert-error',
+          });
         }
       })
       .catch((error) => {
@@ -105,7 +110,7 @@ export default {
         const item = [];
 
         // Since the tag field is an array, we have to convert it back to a string.
-        let tag = 'request_bundles';
+        let tag = '';
         if (Array.isArray(element.meta.tag) && element.meta.tag.length) {
           tag = element.meta.tag.join();
         }

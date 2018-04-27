@@ -248,6 +248,11 @@
                     text: 'You have sent a request to update some code. Good luck on your journey!',
                     alertType: 'alert-success',
                   });
+                } else {
+                  bus.$emit('onMessage', {
+                    text: 'Soemthing may have went wrong. Please check the browser\'s console log and network tab.',
+                    alertType: 'alert-error',
+                  });
                 }
               })
               .catch((error) => {

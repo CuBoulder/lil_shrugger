@@ -24,10 +24,10 @@ export default {
         console.log(resp);
         bus.$emit('onMessage', {
           text: '<strong>Error in Atlas Request:</strong>' +
-            '<br/>Status Code: ' + response.status +
-            '<br/>Text: ' + response.statusText +
-            '<br/>URL: ' + response.url +
-            '<br/>Atlas Response: <pre>' + JSON.stringify(resp) + '</pre>',
+            '<br/><strong>Status Code:</strong> ' + response.status +
+            '<br/><strong>Text:</strong> ' + response.statusText +
+            '<br/><strong>URL:</strong> ' + response.url +
+            '<br/><strong>Atlas Response:</strong> <pre>' + JSON.stringify(resp) + '</pre>',
           alertType: 'alert-danger' },
         );
         return null;
