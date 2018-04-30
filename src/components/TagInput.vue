@@ -55,8 +55,15 @@ export default {
   },
   methods: {
     addTag() {
-      // Store in central place that other components can use.
+      console.log(this.tags.length);
+      console.log(this.tagsToAdd.length);
+
+      if (this.tagsToAdd.length === 0 && this.tags.length > 0) {
+        this.tagsToAdd = this.tags;
+      }
       this.tagsToAdd.push(this.tagToAdd);
+
+      // Store in central place that other components can use.
       store.commit('addTags', { key: this.autocompleteOptionKey, tags: this.tagsToAdd });
     },
     removeTag(tag) {
