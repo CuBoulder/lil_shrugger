@@ -55,9 +55,8 @@ export default {
   },
   methods: {
     addTag() {
-      console.log(this.tags.length);
-      console.log(this.tagsToAdd.length);
-
+      // Need to add the code assets that are already in the site record or else it starts out as blank.
+      // @todo Make this.tags the canonical source of truth instead of using a temporary variable.
       if (this.tagsToAdd.length === 0 && this.tags.length > 0) {
         this.tagsToAdd = this.tags;
       }
