@@ -55,8 +55,14 @@ export default {
   },
   methods: {
     addTag() {
-      // Store in central place that other components can use.
+      // Need to add the code assets that are already in the site record or else it starts out as blank.
+      // @todo Make this.tags the canonical source of truth instead of using a temporary variable.
+      if (this.tagsToAdd.length === 0 && this.tags.length > 0) {
+        this.tagsToAdd = this.tags;
+      }
       this.tagsToAdd.push(this.tagToAdd);
+
+      // Store in central place that other components can use.
       store.commit('addTags', { key: this.autocompleteOptionKey, tags: this.tagsToAdd });
     },
     removeTag(tag) {
