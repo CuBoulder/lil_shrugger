@@ -116,7 +116,7 @@ const store = new Vuex.Store({
       canEdit: ['path', 'status', 'core', 'profile', 'packages'],
       selectKeys: ['core', 'profile', 'status'],
     },
-    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created'],
+    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created', 'update_group'],
     sitesSendCommand: [],
     sortOptions: {
       Sites: {
@@ -133,7 +133,7 @@ const store = new Vuex.Store({
       'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
       'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
-      'email_address', 'bundles', 'webforms', 'update_group', 'content_editor_count', 'site_contact_count', 'edit_my_content_count'],
+      'email_address', 'bundles', 'webforms', 'content_editor_count', 'site_contact_count', 'edit_my_content_count'],
     storedSiteKeys: [],
     tagInputTags: {
       sitesAddOptions: [],
