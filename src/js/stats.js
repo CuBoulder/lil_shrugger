@@ -57,11 +57,19 @@ export default {
               element.users.username.content_editor,
               element.users.username.site_contact,
               element.users.username.edit_my_content,
+              element.users.username.site_editor,
+              element.users.username.access_manager,
+              element.users.username.campaign_manager,
+              element.users.username.forms_manager,
             );
             item.email_address = [].concat(
               element.users.email_address.content_editor,
               element.users.email_address.site_contact,
               element.users.email_address.edit_my_content,
+              element.users.email_address.site_editor,
+              element.users.email_address.access_manager,
+              element.users.email_address.campaign_manager,
+              element.users.email_address.forms_manager,
             );
 
             item.site_email_address = element.users.email_address;
@@ -72,6 +80,10 @@ export default {
               item.content_editor_count = element.users.counts.content_editor;
               item.site_contact_count = element.users.counts.site_contact;
               item.edit_my_content_count = element.users.counts.edit_my_content;
+              item.site_editor_count = element.users.counts.site_editor;
+              item.access_manager_count = element.users.counts.access_manager;
+              item.campaign_manager_count = element.users.counts.campaign_manager;
+              item.forms_manager_count = element.users.counts.forms_manager;
             }
           } else if (part === '_id') {
             item.stats_id = element[part];
