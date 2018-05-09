@@ -53,37 +53,23 @@ export default {
           // We are splitting out what is in the users section so that it can be
           // filtered by as well as exported in separate columns.
           if (part === 'users') {
-            item.username = [].concat(
-              element.users.username.content_editor,
-              element.users.username.site_contact,
-              element.users.username.edit_my_content,
-              element.users.username.site_editor,
-              element.users.username.access_manager,
-              element.users.username.campaign_manager,
-              element.users.username.forms_manager,
-            );
-            item.email_address = [].concat(
-              element.users.email_address.content_editor,
-              element.users.email_address.site_contact,
-              element.users.email_address.edit_my_content,
-              element.users.email_address.site_editor,
-              element.users.email_address.access_manager,
-              element.users.email_address.campaign_manager,
-              element.users.email_address.forms_manager,
-            );
+            // Store emails and usernames separately for reporting.
+            item.username = [];
+            item.email_address = [];
+            store.state.expressUserRoles.forEach((role) => {
+              item.username = Array.concat(item.username, element.users.username[role]);
+              item.email_address = Array.concat(item.email_address, element.users.email_address[role]);
+            });
 
+            // Include the actual stats, just in case.
             item.site_email_address = element.users.email_address;
             item.site_username = element.users.username;
 
             // Add counts.
             if (element.users.counts) {
-              item.content_editor_count = element.users.counts.content_editor;
-              item.site_contact_count = element.users.counts.site_contact;
-              item.edit_my_content_count = element.users.counts.edit_my_content;
-              item.site_editor_count = element.users.counts.site_editor;
-              item.access_manager_count = element.users.counts.access_manager;
-              item.campaign_manager_count = element.users.counts.campaign_manager;
-              item.forms_manager_count = element.users.counts.forms_manager;
+              store.state.expressUserRoles.forEach((role) => {
+                item[`${role}_count`] = element.users.counts[role];
+              });
             }
           } else if (part === '_id') {
             item.stats_id = element[part];

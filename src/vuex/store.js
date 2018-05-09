@@ -60,6 +60,7 @@ const store = new Vuex.Store({
       Test: 'https://www-test.colorado.edu/',
       Prod: 'https://www.colorado.edu/',
     },
+    expressUserRoles: ['site_owner', 'content_editor', 'edit_my_content', 'site_editor', 'access_manager', 'campaign_manager', 'forms_manager'],
     filteredData: [],
     filterKey: {
       sitesData: '',
