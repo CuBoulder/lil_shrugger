@@ -166,8 +166,12 @@
     background: green;
   }
 
-    nav.environment-NewDev:before {
+  nav.environment-NewDev:before {
     background: purple;
+  }
+
+  nav.environment-NewTest:before {
+    background: darkgoldenrod;
   }
 
   /* Environment Selector */
