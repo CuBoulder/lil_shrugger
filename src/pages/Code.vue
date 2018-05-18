@@ -48,7 +48,8 @@
               tabID: 'tab-row-edit',
               tabLabel: 'Edit',
               editKeys: store.state.codeEditKeys,
-              callback: 'updateCodeRecord',
+              updateCallback: 'updateCodeRecord',
+              deleteCallback: 'deleteCodeRecord',
               dataName: 'sitesData',
               editListener: this.editRowListener,
             },
@@ -83,14 +84,12 @@
         bus.$emit('cancelRowEdit');
       });
 
-      bus.$on('deleteRecord', function codeDeleteRecord(params) {
-        if (params.current.code_type) {
-          code.update(params, 'DELETE');
+      bus.$on('deleteCodeRecord', function codeDeleteRecord(params) {
+        code.update(params, 'DELETE');
 
-          // Cancel rowView components.
-          bus.$emit('rowHide');
-          bus.$emit('cancelRowEdit');
-        }
+        // Cancel rowView components.
+        bus.$emit('rowHide');
+        bus.$emit('cancelRowEdit');
       });
 
       // Refresh table data.
@@ -101,8 +100,8 @@
     beforeDestroy() {
       // Remove event listeners.
       bus.$off(['switchEnv', 'codeSwitchEnv']);
-      bus.$off(['updateCodeRecord', 'codeUpdateCodeRecord']);
-      bus.$off(['deleteRecord', 'codeDeleteRecord']);
+      // bus.$off(['updateCodeRecord', 'codeUpdateCodeRecord']);
+      // bus.$off(['deleteRecord', 'codeDeleteRecord']);
       bus.$off(['navbarShow', 'codeNavbarShow']);
 
       // Keep this log  for debugging.

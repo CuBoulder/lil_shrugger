@@ -44,13 +44,13 @@
         </fieldset>
         <confirm-button label="Update"
                         class="pull-left edit-button"
-                        :callback="callback"
+                        :callback="updateCallback"
                         :params="params">
         </confirm-button>
         <confirm-button label="Delete"
                         class="pull-left edit-button"
                         v-if="userAccessPerm('row:delete')"
-                        callback="deleteRecord"
+                        :callback="deleteCallback"
                         :params="params">
         </confirm-button>
       </div>
@@ -74,7 +74,8 @@
         rowData: {},
         oldData: {},
         rowKeys: this.options.editKeys.canEdit,
-        callback: this.options.callback,
+        updateCallback: this.options.updateCallback,
+        deleteCallback: this.options.deleteCallback,
         editListener: this.options.editListener,
         autocompleteOptionsKey: this.options.autocompleteOptionsKey,
       };
