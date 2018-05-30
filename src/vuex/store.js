@@ -62,6 +62,7 @@ const store = new Vuex.Store({
       Test: 'https://www-test.colorado.edu/',
       Prod: 'https://www.colorado.edu/',
     },
+    expressUserRoles: ['site_owner', 'content_editor', 'edit_my_content', 'site_editor', 'access_manager', 'campaign_manager', 'forms_manager'],
     filteredData: [],
     filterKey: {
       sitesData: '',
@@ -135,7 +136,8 @@ const store = new Vuex.Store({
       'variable_cron_last', 'variable_site_403', 'variable_site_404', 'variable_theme_default', 'variable_ga_account',
       'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
-      'email_address', 'bundles', 'webforms', 'content_editor_count', 'site_contact_count', 'edit_my_content_count'],
+      'email_address', 'bundles', 'webforms', 'content_editor_count', 'site_owner_count', 'edit_my_content_count',
+      'site_editor_count', 'access_manager_count', 'campaign_manager_count', 'forms_manager_count'],
     storedSiteKeys: [],
     tagInputTags: {
       sitesAddOptions: [],
