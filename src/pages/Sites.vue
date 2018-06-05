@@ -70,7 +70,8 @@
               tabLabel: 'Edit',
               autocompleteOptionsKey: 'sitesAddOptions',
               editKeys: store.state.sitesEditKeys,
-              callback: 'updateSiteRecord',
+              updateCallback: 'updateSiteRecord',
+              deleteCallback: 'deleteSiteRecord',
               dataName: 'sitesData',
               editListener: '',
             },
@@ -132,14 +133,12 @@
         bus.$emit('cancelRowEdit');
       });
 
-      bus.$on('deleteRecord', function sitesDeleteRecord(params) {
-        if (params.current.update_group) {
-          sites.update(params, 'DELETE');
+      bus.$on('deleteSiteRecord', function sitesDeleteRecord(params) {
+        sites.update(params, 'DELETE');
 
-          // Cancel rowView components.
-          bus.$emit('rowHide');
-          bus.$emit('cancelRowEdit');
-        }
+        // Cancel rowView components.
+        bus.$emit('rowHide');
+        bus.$emit('cancelRowEdit');
       });
 
       // Show search when icon in navbar is clicked.
@@ -156,8 +155,8 @@
       // Remove event listeners.
       bus.$off(['switchEnv', 'sitesSwitchEnv']);
       bus.$off(['editRow', 'sitesEditRow']);
-      bus.$off(['updateSiteRecord', 'sitesUpdateSiteRecord']);
-      bus.$off(['deleteRecord', 'sitesDeleteRecord']);
+      // bus.$off(['updateSiteRecord', 'sitesUpdateSiteRecord']);
+      // bus.$off(['deleteRecord', 'sitesDeleteRecord']);
       bus.$off(['navbarShow', 'sitesNavbarShow']);
       bus.$off(['createSite', 'createSite']);
 
