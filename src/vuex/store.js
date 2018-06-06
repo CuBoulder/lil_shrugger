@@ -24,10 +24,11 @@ const store = new Vuex.Store({
     },
     atlasEnvironments: {
       Local: 'https://python.local/atlas/',
-      NewDev: 'https://osr-dev-atlas01.int.colorado.edu/atlas/',
+      NewDev: 'https://osr-dev-util01.int.colorado.edu/atlas/',
       Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
-      NewTest: 'https://osr-test-atlas01.int.colorado.edu/atlas/',
+      NewTest: 'https://osr-test-util01.int.colorado.edu/atlas/',
       Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
+      NewProd: 'https://osr-prod-util01.int.colorado.edu/atlas/',
       Prod: 'https://osr-atlas03.int.colorado.edu/atlas/',
     },
     autocompleteOptions: {
@@ -60,6 +61,7 @@ const store = new Vuex.Store({
       Dev: 'https://www-dev.colorado.edu/',
       NewTest: 'https://www-test-new.colorado.edu/',
       Test: 'https://www-test.colorado.edu/',
+      NewProd: 'https://www-prod-new.colorado.edu/',
       Prod: 'https://www.colorado.edu/',
     },
     expressUserRoles: ['site_owner', 'content_editor', 'edit_my_content', 'site_editor', 'access_manager', 'campaign_manager', 'forms_manager'],

@@ -174,6 +174,10 @@
     background: darkgoldenrod;
   }
 
+  nav.environment-NewProd:before {
+    background: black;
+  }
+
   /* Environment Selector */
   .styled-select {
     overflow: hidden;
