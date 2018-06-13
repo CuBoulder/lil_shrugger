@@ -48,8 +48,8 @@
     name: 'Sites',
     data() {
       return {
-        showStatsSearch: true,
-        showCommands: false,
+        showStatsSearch: false,
+        showCommands: true,
         showReports: false,
         showDataTable: false,
         tableOptions: {

@@ -16,8 +16,8 @@
           <label for="key">{{ key }}</label>
           <div v-if="selectType(key)">
             <select :name="key" v-model="rowData[key]" class="form-control">
-              <option v-for="anOption in selectOptions[key]"
-                      :key="anOption"
+              <option v-for="(anOption, ind) in selectOptions[key]"
+                      :key="ind"
                       :value="anOption" :selected=" rowData[key] == anOption ? true : null">
                 {{anOption}}
               </option>

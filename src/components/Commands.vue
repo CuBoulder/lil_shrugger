@@ -15,9 +15,15 @@
         <option v-for="value in commands"
                 :key="value._id"
                 :value="value._id">
-          {{value.name}}
+          {{value.label}}
         </option>
       </select>
+      <div v-if="selectedCommand">
+        <strong>Command Syntax:</strong>
+        <pre>
+          {{ currentCommandSyntax }}
+        </pre>
+      </div>
       <div class="commands-button">
         <confirm-button
             label="Send Command"
@@ -69,23 +75,37 @@
       commands() {
         return store.state.commands;
       },
+      currentCommandSyntax() {
+        if (this.commands && this.selectedCommand) {
+          return this.commands.find(el => el._id === this.selectedCommand);
+        }
+        return 'Please select a command.';
+      },
     },
     methods: {
       validateCommandListener(params) {
-        // Get site Ids to send.
-        const siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';
-
         // Get command data for etag.
         const command = store.state.commands.filter(element => element._id === params.command);
 
-        atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id)
+        // Get site Ids to send.
+        const siteIds = store.state.sitesSendCommand.join('","');
+
+        // If the siteIds aren't set, then the query will be patched with whatever was there before.
+        // If there are selected sites, then show the user what sites they are about to send the command to.
+        const queryValidationText = siteIds.length === 0 ?
+        `this MongoDB query: ${command[0].query}. If you would like to send the command to specific sites, please cancel the command 
+        and select sites from the DataTable.` :
+        `${store.state.sitesSendCommand.length} site(s): "${siteIds}".<br><br><strong>WARNING: You will change the command's query to
+        only execute on these sites by clicking "Fire!" and running the command.</strong>`;
+
+        atlas.request(store.state.atlasEnvironments[store.state.env], 'drush/' + command[0]._id)
         .then((data) => {
           // Check and see if etags are different and emit error message.
           if (data[0]._etag !== command[0]._etag) {
             bus.$emit('onMessage', {
               text: 'The etag has changed for this command, and the list of selected sites has been reset.<br>' +
-                `Please check the command and retry: <a href="${store.state.atlasEnvironments[store.state.env]}commands/${command[0]._id}">` +
-                `${store.state.atlasEnvironments[store.state.env]}commands/${command[0]._id}</a>`,
+                `Please check the command and retry: <a href="${store.state.atlasEnvironments[store.state.env]}drush/${command[0]._id}">` +
+                `${store.state.atlasEnvironments[store.state.env]}drush/${command[0]._id}</a>`,
               alertType: 'alert-danger',
             });
 
@@ -97,7 +117,7 @@
             atlas.getCommands();
           } else {
             bus.$emit('onMessage', {
-              text: `You are about to send the "${command[0].name}" command to ${store.state.sitesSendCommand.length} site(s): ${siteIds}.`,
+              text: `You are about to send the "${command[0].label}" command to ${queryValidationText}`,
               alertType: 'alert-warning',
             });
           }
@@ -108,36 +128,63 @@
         bus.$emit('clearAllRows');
       },
       sendCommandListener(params) {
-        // Get site Ids to send.
-        const siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';
-        let queryToSend = '{"path":{"$in":[' + siteIds + ']}}';
+        // Get command data.
+        let command = store.state.commands.filter(element => element._id === params.command);
+
+        // Set default query to be the old one.
+        let queryToSend = command.query;
+
+        // Check to see if the query changed and modify the query and success message if so.
+        const queryChanged = store.state.sitesSendCommand.join('","').length !== 0;
+        let successText = `the following MongoDB query: ${command.query}`;
+
+        if (queryChanged) {
+          // Get site Ids to send.
+          const siteIds = '"' + store.state.sitesSendCommand.join('","') + '"';
+
+          queryToSend = '{"path":{"$in":[' + siteIds + ']}}';
+          successText = `${store.state.sitesSendCommand.length} site(s): ("${siteIds}").`;
+        }
 
         // Convert to unicode.
         queryToSend = shrugger.convertToUnicode(queryToSend);
 
         // Don't JSON encode since it escapes too much.
-        const body = '{"query": "' + queryToSend + '"}';
+        const body = `{"query": "${queryToSend}"}`;
 
-        // Get command data for etag.
-        const command = store.state.commands.filter(element => element._id === params.command);
-
-        atlas.request(store.state.atlasEnvironments[store.state.env], 'commands/' + command[0]._id, '', 'PATCH', body, command[0]._etag)
+        atlas.request(store.state.atlasEnvironments[store.state.env], 'drush/' + command[0]._id, '', 'PATCH', body, command[0]._etag)
         .then((resp) => {
           console.log(resp);
           if (typeof resp !== 'undefined') {
             bus.$emit('onMessage', {
-              text: 'Successfully sent "' + command[0].name + '" command to ' + store.state.sitesSendCommand.length + ' site(s): (' + siteIds + ').',
+              text: `Successfully patched "${command[0].label}" command to ${successText}`,
               alertType: 'alert-success',
             });
 
-            store.commit('addAllSitesToCommands', []);
-            bus.$emit('clearAllRows');
+            // Setup commands for sending POST to execute command.
+            setTimeout(function executeCommand() {
+              atlas.getCommands();
+              command = store.state.commands.filter(element => element._id === params.command);
 
-            // Setup commands for select list.
-            atlas.getCommands();
+              // Execute command.
+              atlas.request(store.state.atlasEnvironments[store.state.env], `drush/${command[0]._id}/execute`, '', 'POST', null, command[0]._etag)
+              .then((resp) => {
+                console.log(resp);
+                bus.$emit('onMessage', {
+                  text: `Successfully executed "${command[0].label}" command to ${successText}`,
+                  alertType: 'alert-success',
+                });
+              });
+
+              store.commit('addAllSitesToCommands', []);
+              bus.$emit('clearAllRows');
+
+              // Setup commands for select list.
+              atlas.getCommands();
+            }, 3000);
           } else {
             bus.$emit('onMessage', {
-              text: 'Soemthing may have went wrong. Please check the browser\'s console log and network tab.',
+              text: 'Something may have went wrong. Please check the browser\'s console log and network tab.',
               alertType: 'alert-error',
             });
           }

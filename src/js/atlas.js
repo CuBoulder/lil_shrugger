@@ -136,7 +136,7 @@ export default {
    * Adds Atlas commands to the data store.
    */
   getCommands() {
-    this.request(store.state.atlasEnvironments[store.state.env], 'commands')
+    this.request(store.state.atlasEnvironments[store.state.env], 'drush')
       .then((response) => {
         store.commit('setCommands', response);
       });
