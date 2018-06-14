@@ -100,8 +100,8 @@
     beforeDestroy() {
       // Remove event listeners.
       bus.$off(['switchEnv', 'codeSwitchEnv']);
-      // bus.$off(['updateCodeRecord', 'codeUpdateCodeRecord']);
-      // bus.$off(['deleteRecord', 'codeDeleteRecord']);
+      bus.$off(['updateCodeRecord', 'codeUpdateCodeRecord']);
+      bus.$off(['deleteRecord', 'codeDeleteRecord']);
       bus.$off(['navbarShow', 'codeNavbarShow']);
 
       // Keep this log  for debugging.
