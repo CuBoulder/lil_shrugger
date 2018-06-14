@@ -19,7 +19,7 @@
         </option>
       </select>
       <div v-if="selectedCommand">
-        <strong>Command Syntax:</strong>
+        <strong>Command Object:</strong>
         <pre>
           {{ currentCommandSyntax }}
         </pre>
@@ -128,6 +128,7 @@
         bus.$emit('clearAllRows');
       },
       sendCommandListener(params) {
+        /*eslint-disable*/
         // Get command data.
         let command = store.state.commands.filter(element => element._id === params.command);
 
@@ -144,54 +145,73 @@
 
           queryToSend = '{"path":{"$in":[' + siteIds + ']}}';
           successText = `${store.state.sitesSendCommand.length} site(s): ("${siteIds}").`;
-        }
 
-        // Convert to unicode.
-        queryToSend = shrugger.convertToUnicode(queryToSend);
+          // Convert to unicode.
+          queryToSend = shrugger.convertToUnicode(queryToSend);
 
-        // Don't JSON encode since it escapes too much.
-        const body = `{"query": "${queryToSend}"}`;
+          // Don't JSON encode since it escapes too much.
+          const body = `{"query": "${queryToSend}"}`;
 
-        atlas.request(store.state.atlasEnvironments[store.state.env], 'drush/' + command[0]._id, '', 'PATCH', body, command[0]._etag)
-        .then((resp) => {
-          console.log(resp);
-          if (typeof resp !== 'undefined') {
-            bus.$emit('onMessage', {
-              text: `Successfully patched "${command[0].label}" command to ${successText}`,
-              alertType: 'alert-success',
-            });
-
-            // Setup commands for sending POST to execute command.
-            setTimeout(function executeCommand() {
-              atlas.getCommands();
-              command = store.state.commands.filter(element => element._id === params.command);
-
-              // Execute command.
-              atlas.request(store.state.atlasEnvironments[store.state.env], `drush/${command[0]._id}/execute`, '', 'POST', null, command[0]._etag)
-              .then((resp) => {
-                console.log(resp);
-                bus.$emit('onMessage', {
-                  text: `Successfully executed "${command[0].label}" command to ${successText}`,
-                  alertType: 'alert-success',
-                });
+          atlas.request(store.state.atlasEnvironments[store.state.env], 'drush/' + command[0]._id, '', 'PATCH', body, command[0]._etag)
+          .then((resp) => {
+            console.log(resp);
+            if (typeof resp !== 'undefined') {
+              bus.$emit('onMessage', {
+                text: `Successfully patched "${command[0].label}" command to ${successText} Please wait for the successful execution message.`,
+                alertType: 'alert-success',
               });
 
-              store.commit('addAllSitesToCommands', []);
-              bus.$emit('clearAllRows');
+              // Setup commands for sending POST to execute command.
+              setTimeout(function executeCommand() {
+                atlas.getCommands();
+                command = store.state.commands.filter(element => element._id === params.command);
 
-              // Setup commands for select list.
-              atlas.getCommands();
-            }, 3000);
-          } else {
+                // Execute command.
+                atlas.request(store.state.atlasEnvironments[store.state.env], `drush/${command[0]._id}/execute`, '', 'POST', null, command[0]._etag)
+                .then((resp) => {
+                  console.log(resp);
+                  bus.$emit('onMessage', {
+                    text: `Successfully executed "${command[0].label}". Check the <a href="${store.state.kibanaLink}" target="_blank">Atlas logs</a> to see what is happening.`,
+                    alertType: 'alert-success',
+                  });
+                });
+
+                store.commit('addAllSitesToCommands', []);
+                bus.$emit('clearAllRows');
+
+                // Setup commands for select list.
+                atlas.getCommands();
+              }, 3000);
+            } else {
+              bus.$emit('onMessage', {
+                text: 'Something may have went wrong. Please check the browser\'s console log and network tab.',
+                alertType: 'alert-error',
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        } else {
+
+          // Execute command.
+          atlas.request(store.state.atlasEnvironments[store.state.env], `drush/${command[0]._id}/execute`, '', 'POST', null, command[0]._etag)
+          .then((resp) => {
+            console.log(resp);
             bus.$emit('onMessage', {
-              text: 'Something may have went wrong. Please check the browser\'s console log and network tab.',
-              alertType: 'alert-error',
+              text: `Successfully executed "${command[0].label}". Check the <a href="${store.state.kibanaLink}" target="_blank">Atlas logs</a> to see what is happening.`,
+              alertType: 'alert-success',
             });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          });
+
+          store.commit('addAllSitesToCommands', []);
+          bus.$emit('clearAllRows');
+
+          // Setup commands for select list.
+          atlas.getCommands();
+        }
+
       },
       userAccessPerm(permission) {
         return shrugger.userAccess(permission);

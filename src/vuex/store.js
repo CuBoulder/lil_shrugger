@@ -9,7 +9,7 @@ Vue.use(Vuex);
  * Centralized data store for Vue instance.
  */
 const store = new Vuex.Store({
-
+/*eslint-disable*/
   state: {
     actionIcons: {
       Sites: [
@@ -73,6 +73,7 @@ const store = new Vuex.Store({
     gitHubRepos: [],
     gitHubBranches: [],
     homepageP1: '',
+    kibanaLink: "https://osr-test-log01.int.colorado.edu/app/kibana#/discover?_g=(refreshInterval:('$$hashKey':'object:12644',display:'5%20seconds',pause:!f,section:1,value:5000),time:(from:now-2h,mode:relative,to:now))&_a=(columns:!(atlas_message),index:AWM7fAc1VHJuFq6T0ALE,interval:auto,query:(match_all:()),sort:!('@timestamp',desc))",
     recordsToShow: 10,
     reportsList: [
       {
