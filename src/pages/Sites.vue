@@ -155,8 +155,8 @@
       // Remove event listeners.
       bus.$off(['switchEnv', 'sitesSwitchEnv']);
       bus.$off(['editRow', 'sitesEditRow']);
-      // bus.$off(['updateSiteRecord', 'sitesUpdateSiteRecord']);
-      // bus.$off(['deleteRecord', 'sitesDeleteRecord']);
+      bus.$off(['updateSiteRecord', 'sitesUpdateSiteRecord']);
+      bus.$off(['deleteSiteRecord', 'sitesDeleteRecord']);
       bus.$off(['navbarShow', 'sitesNavbarShow']);
       bus.$off(['createSite', 'createSite']);
 
