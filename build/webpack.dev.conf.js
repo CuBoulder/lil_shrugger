@@ -19,7 +19,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devServer: {
     clientLogLevel: 'warning',
     historyApiFallback: true,
-    hot: true,
+    hot: false,
     compress: true,
     host: process.env.HOST || config.dev.host,
     port: process.env.PORT || config.dev.port,
@@ -39,7 +39,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': require('../config/dev.env')
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
