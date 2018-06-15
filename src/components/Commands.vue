@@ -61,9 +61,9 @@
     },
     beforeDestroy() {
       // Remove event listeners.
-      // bus.$off(['sendCommand', 'commandsSendCommand']);
-      // bus.$off(['validate--sendCommand', 'commandsValidateCommand']);
-      // bus.$off(['cancel--sendCommand', 'commandsCancelCommand']);
+      bus.$off(['sendCommand', 'commandsSendCommand']);
+      bus.$off(['validate--sendCommand', 'commandsValidateCommand']);
+      bus.$off(['cancel--sendCommand', 'commandsCancelCommand']);
     },
     computed: {
       commands() {
