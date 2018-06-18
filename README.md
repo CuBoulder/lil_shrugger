@@ -27,13 +27,8 @@ SUBDIRECTORY=shrugger EXT_ENV=pantheon npm run build
 
 Running tests will require a couple of manual steps until they are worked into the test runner command. You will need to start up the test API and load the fixture data before running any tests.
 
-```bash
-# Startup API from root of project and load fixture data.
-node_modules/.bin/json-server --watch test/fixtures/db.json --id=_id --host=atlas.testing --middlewares test/atlas-middleware.js --routes test/routes.json
+The testing documentation resides in the test folder README.md: ...link
 
-# Run the e2e tests using Nightwatch.js.
-npm run e2e
-```
 ## Notes
 
 - You will need to configure the application to your use case on the settings page. There you will see several fields you need to enter for making requests to Atlas, setting up where your app is located, and making requests to the GitHub API.  
