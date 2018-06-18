@@ -243,7 +243,7 @@ const store = new Vuex.Store({
 
 /* Insert local config here. */
 if (process.env.NODE_ENV === 'development') {
-  store.state.atlasEnvironments.Local = 'http://atlas.testing:3000/';
+  store.state.atlasEnvironments.Local = 'http://localhost:3000/';
 }
 
 // Insert Pantheon config.
