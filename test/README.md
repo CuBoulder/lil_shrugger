@@ -18,6 +18,9 @@ curl https://osr-atlas03.int.colorado.edu/atlas/site -o sites.json
 # Get 1000 site records via "max_results".
 curl https://osr-atlas03.int.colorado.edu/atlas/sites?max_results=1000 -o sites.json
 
+# Some URLs need the "-g" option for CURL to work. 
+curl 'https://osr-atlas03.int.colorado.edu/atlas/sites?where={"type":"express"}&max_results=2000' -o sites.json -g
+
 ```
 
 You should repeat the process for all of the Atlas endpoints listed at: "https://osr-atlas03.int.colorado.edu/atlas/". Each response from Atlas includes metadata that you don't need to include in the JSON Server. In each file, remove the metadata so that you have an array of objects.
