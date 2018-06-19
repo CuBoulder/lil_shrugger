@@ -6,39 +6,39 @@ module.exports = {
     // see nightwatch.conf.js
     const devServer = browser.globals.devServerURL;
 
+    // Filter the results.
     browser
       .url(devServer + '/code')
       .waitForElementVisible('.result-count', 5000)
       .assert.containsText('.result-count', '83')
-      // .saveScreenshot('test/shots/start.png');
       .setValue('#filter-records-input', 'digital')
       .assert.containsText('.result-count', 'Result Count: 1');
 
     // Make a hash update.
-    // browser
-    //   .click('.row-id-591def5f926f5b28e7361dc8 button[aria-label="Edit"]')
-    //   .waitForElementVisible('.row-id-591def5f926f5b28e7361dc8 .current-hash', 5000)
-    //   .getText('.row-id-591def5f926f5b28e7361dc8 .current-hash', (result) => {
-    //     // Remove first part of hash string.
-    //     const parts = result.value.split('Current Hash: ');
+    browser
+      .click('.row-id-591def5f926f5b28e7361dc8 button[aria-label="Edit"]')
+      .waitForElementVisible('.row-id-591def5f926f5b28e7361dc8 .current-hash', 5000)
+      .getText('.row-id-591def5f926f5b28e7361dc8 .current-hash', (result) => {
+        // Remove first part of hash string.
+        const parts = result.value.split('Current Hash: ');
 
-    //     browser.clearValue('input[name="commit_hash"]');
-    //     browser.setValue('input[name="commit_hash"]', parts[1]);
-    //     browser.click('button[aria-label="Update"].record-id-591def5f926f5b28e7361dc8');
-    //     browser.click('button[aria-label="Fire!"].record-id-591def5f926f5b28e7361dc8');
-    //     browser.waitForElementVisible('.row-id-591def5f926f5b28e7361dc8', 5000);
-    //     browser.assert.containsText('.row-id-591def5f926f5b28e7361dc8 .column-commit_hash', parts[1]);
-    //   });
+        browser.clearValue('input[name="commit_hash"]');
+        browser.setValue('input[name="commit_hash"]', parts[1]);
+        browser.click('button[aria-label="Update"].record-id-591def5f926f5b28e7361dc8');
+        browser.click('button[aria-label="Fire!"].record-id-591def5f926f5b28e7361dc8');
+        browser.waitForElementVisible('.row-id-591def5f926f5b28e7361dc8', 5000);
+        browser.assert.containsText('.row-id-591def5f926f5b28e7361dc8 .column-commit_hash', parts[1]);
+      });
 
-    // // Change a tag.
-    // browser
-    //   .click('.row-id-591def5f926f5b28e7361dc8 button[aria-label="Edit"]')
-    //   .pause(2000)
-    //   .waitForElementVisible('select[name="tag"]', 5000)
-    //   .click('select[name="tag"] option[value="beta_bundles"]')
-    //   .click('.updateCodeRecord.record-id-591def5f926f5b28e7361dc8')
-    //   .waitForElementVisible('.row-id-591def5f926f5b28e7361dc8', 5000)
-    //   .assert.containsText('.row-id-591def5f926f5b28e7361dc8 .column-tag', 'beta_bundles')
-    //   .end();
+    // Change a tag.
+    browser
+      .click('.row-id-591def5f926f5b28e7361dc8 button[aria-label="Edit"]')
+      .pause(2000)
+      .waitForElementVisible('select[name="tag"]', 5000)
+      .click('select[name="tag"] option[value="beta_bundles"]')
+      .click('.updateCodeRecord.record-id-591def5f926f5b28e7361dc8')
+      .waitForElementVisible('.row-id-591def5f926f5b28e7361dc8', 5000)
+      .assert.containsText('.row-id-591def5f926f5b28e7361dc8 .column-tag', 'beta_bundles')
+      .end();
   },
 };
