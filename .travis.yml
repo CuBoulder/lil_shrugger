@@ -11,20 +11,10 @@ install:
   # Install depedencies.
   - npm install
 
-  # Setup display for Selenium
-  # - export DISPLAY=:99.0
-  # - sh -e /etc/init.d/xvfb start
-  # - sleep 5
-
 script:
-  # Sanity check.
-  - ls -al
   
   # Startup fake API.
   - node_modules/.bin/json-server --watch test/fixtures/db.json --id=_id --middlewares test/atlas-middleware.js --routes test/routes.json > /dev/null 2>&1 &
   
-  # Test response of API.
-  # - curl http://localhost:3000/
-
   # Run tests.
   - npm run e2e
