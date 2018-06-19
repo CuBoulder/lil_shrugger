@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default">
+  <div class="panel panel-default" id="data-table-wrapper">
     <div class="panel-heading">
       <h4>
         Data Table

@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 /test/unit/coverage/
 /test/fixtures/
+!/test/fixtures/db.json
 /test/e2e/reports/
 selenium-debug.log
 

@@ -52,7 +52,7 @@ Add script to remove sensitive information?
 
 ## JSON Server Instance
 
-The Atlas URL is replaced for testing via an examination of Node processes. When in "development" mode, 
+The Atlas URL is replaced for testing via an examination of Node processes. 
 
 ```js
 /* Insert local config here. */
@@ -62,10 +62,24 @@ if (process.env.NODE_ENV === 'development') {
 
 ```
 
+When in "development" mode, the "Local" Atlas URL is changed to the default one JSON Server creates when it boots up.
+You don't have to do anything to make your "Local" environment work, but note that the local Atlas URL is changed when
+you are using `npm run dev` for development and `npm run e2e` for tests.
+
 ```bash
 # Startup API from root of project and load fixture data.
 node_modules/.bin/json-server --watch test/fixtures/db.json --id=_id --middlewares test/atlas-middleware.js --routes test/routes.json
+```
 
+After running that command, you should be able to see data in the DataTable component just as you do for all the other Atlas environments.
+Now, you can run the test suite with the commands listed below.
+
+```bash
 # Run the e2e tests using Nightwatch.js.
 npm run e2e
+
+# To get to help text, you need to specify the JS file used.
+# "npm run ..." commands don't seem to use flags.
+# Run this from the root of the project.
+node test/e2e/runner.js --help 
 ```
