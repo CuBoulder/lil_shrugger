@@ -69,6 +69,7 @@
     </transition>
     <!-- End Second dropdown -->
     <confirm-button label="Add Row"
+                    v-if="ready"
                     class="pull-left add-button"
                     callback="createCode"
                     :params="{}">
@@ -183,12 +184,8 @@
         this.ready = true;
         this.branchToAdd = {};
         this.branchToAdd = store.state.gitHubBranches[event.target.value];
-        console.log(this.branchToAdd);
       },
       validateCreateCodeListener(that) {
-        // @todo Add logic about the values needed to create code.
-        // When the ConfirmButton wasn't used, the ability to create was based on selecting a branch.
-
         const repo = that.activeRepo;
         const branch = that.branchToAdd;
         const input = that.userInput;
