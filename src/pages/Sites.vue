@@ -113,6 +113,13 @@
         that.editRowListener(row, that);
       });
 
+      bus.$on('validate--createSite', function sitesValidateCreateSite(params) {
+        // Get any tags.
+        params.row.packages = store.state.tagInputTags.sitesAddOptions;
+
+        that.validateCreateSiteListener(params);
+      });
+
       bus.$on('createSite', function sitesCreateSite(params) {
         // Get any tags.
         params.row.packages = store.state.tagInputTags.sitesAddOptions;
@@ -123,6 +130,10 @@
         bus.$emit('cancelRowAdd');
       });
 
+      bus.$on('validate--updateSiteRecord', function sitesValidateUpdateSiteRecord(params) {
+        that.validateUpdateSiteRecordListener(params);
+      });
+
       bus.$on('updateSiteRecord', function sitesUpdateSiteRecord(params) {
         // Get any tags.
         params.current.packages = store.state.tagInputTags.sitesAddOptions;
@@ -131,6 +142,10 @@
         // Cancel rowView components.
         bus.$emit('rowHide');
         bus.$emit('cancelRowEdit');
+      });
+
+      bus.$on('validate--deleteSiteRecord', function sitesValidateDeleteSiteRecord(params) {
+        that.validateDeleteSiteRecordListener(params);
       });
 
       bus.$on('deleteSiteRecord', function sitesDeleteRecord(params) {
@@ -155,7 +170,9 @@
       // Remove event listeners.
       bus.$off(['switchEnv', 'sitesSwitchEnv']);
       bus.$off(['editRow', 'sitesEditRow']);
+      bus.$off(['validate--updateSiteRecord', 'sitesValidateUpdateSiteRecord']);
       bus.$off(['updateSiteRecord', 'sitesUpdateSiteRecord']);
+      bus.$off(['validate--deleteSiteRecord', 'sitesValidateDeleteSiteRecord']);
       bus.$off(['deleteSiteRecord', 'sitesDeleteRecord']);
       bus.$off(['navbarShow', 'sitesNavbarShow']);
       bus.$off(['createSite', 'createSite']);
@@ -295,6 +312,28 @@
       sitesRowViewListener(that, row) {
         // Store in central place that other components can use.
         store.commit('addTags', { key: that.tableOptions.autocompleteOptionsKey, tags: row.rowData.packages });
+      },
+      validateDeleteSiteRecordListener(params) {
+        bus.$emit('onMessage', {
+          text: `<p>You are about to send a "DELETE" request to a site record:</p><pre>${JSON.stringify(params.previous)}</pre>` +
+          'If anything looks amiss, please refresh the application via your browser, e.g. "cmd+shift+R" on Chrome for Mac OS.',
+          alertType: 'alert-warning',
+        });
+      },
+      validateUpdateSiteRecordListener(params) {
+        bus.$emit('onMessage', {
+          text: `<p>You are about to send a "PATCH" request to a site record:</p><pre>${JSON.stringify(params.previous)}</pre>` +
+          'If anything looks amiss, please refresh the application via your browser, e.g. "cmd+shift+R" on Chrome for Mac OS.',
+          alertType: 'alert-warning',
+        });
+      },
+      validateCreateSiteListener(params) {
+        console.log(params);
+        bus.$emit('onMessage', {
+          text: `<p>You are about to create a site with the following assets:</p><pre>${JSON.stringify(params.row)}</pre>` +
+          'If anything looks amiss, please refresh the application via your browser, e.g. "cmd+shift+R" on Chrome for Mac OS.',
+          alertType: 'alert-warning',
+        });
       },
     },
   };
