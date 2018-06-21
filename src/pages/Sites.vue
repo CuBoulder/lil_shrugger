@@ -238,14 +238,14 @@
             pathHref = store.state.expressEnvironments[store.state.env];
           }
 
-          return '<a target="_blank" href="' + pathHref
-            + 'user?destination=/admin/people/invite">' + pathLabel + '</a>';
+          const destinationLink = localStorage.getItem('destination-link') ?
+            localStorage.getItem('destination-link') : store.state.defaultDestinationLink;
+          return `<a target="_blank" href="${pathHref}user?destination=${destinationLink}">${pathLabel}</a>`;
         }
 
         // Link to full code record.
         if (key === 'id') {
-          return '<a target="_blank" href="' + atlasEnvironment + 'sites/' + value + '">'
-          + '(Site)</a>';
+          return `<a target="_blank" href="${atlasEnvironment}sites/${value}">(Site)</a>`;
         }
 
         // Format dates for nicer output.
