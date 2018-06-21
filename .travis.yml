@@ -17,4 +17,5 @@ script:
   - node_modules/.bin/json-server --watch test/fixtures/db.json --id=_id --middlewares test/atlas-middleware.js --routes test/routes.json > /dev/null 2>&1 &
   
   # Run tests.
-  - GH_USER=GITHUB_USER GH_TOKEN=GITHUB_TOKEN npm run e2e
+  # - GH_USER=GITHUB_USER GH_TOKEN=GITHUB_TOKEN npm run e2e
+  - npm run e2e
