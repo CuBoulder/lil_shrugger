@@ -18,31 +18,34 @@ module.exports = {
   },
 
   test_settings: {
-    default: {
-      selenium_port: 4444,
-      selenium_host: 'localhost',
-      silent: true,
-      globals: {
-        devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port),
-      },
-    },
 
+    // For testing locally.
+    // It is much faster than using Sauce Labs.
     // default: {
+    //   selenium_port: 4444,
+    //   selenium_host: 'localhost',
     //   silent: true,
     //   globals: {
     //     devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port),
-    //     waitForConditionTimeout: 10000,
-    //   },
-    //   launch_url: 'http://ondemand.saucelabs.com:80',
-    //   selenium_port: 80,
-    //   selenium_host: 'ondemand.saucelabs.com',
-    //   username: 'osr_service_account',
-    //   access_key: '2b534cde-f699-4529-85da-b88e96e153fe',
-    //   screenshots: {
-    //     enabled: false,
-    //     path: '',
     //   },
     // },
+
+    default: {
+      silent: true,
+      globals: {
+        devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port),
+        waitForConditionTimeout: 10000,
+      },
+      launch_url: 'http://ondemand.saucelabs.com:80',
+      selenium_port: 80,
+      selenium_host: 'ondemand.saucelabs.com',
+      username: 'osr_service_account',
+      access_key: '2b534cde-f699-4529-85da-b88e96e153fe',
+      screenshots: {
+        enabled: false,
+        path: '',
+      },
+    },
 
     chrome: {
       desiredCapabilities: {
