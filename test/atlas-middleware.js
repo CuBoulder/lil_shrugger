@@ -1,5 +1,5 @@
 function createSite(num) {
-  // @todo Take random number and eturn random site.
+  // @todo Take random number and return random site.
   const site = {
     code: {
       profile: '5a4fc0b7926f5b102b06029c',

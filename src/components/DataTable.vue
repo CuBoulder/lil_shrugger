@@ -31,7 +31,7 @@
           <button v-if="expressionFilter" class="btn btn-primary" @click.prevent="expressionFilterSearch()" aria-label="Expression Search">
             Expression Search
           </button>
-          <button v-if="expressionFilter" class="btn btn-default" @click.prevent="cancelExpressionFilterSearch()" aria-label="Expression Search">
+          <button v-if="expressionFilter" class="btn btn-default" @click.prevent="cancelExpressionFilterSearch()" aria-label="Cancel Expression Search">
             Reset
           </button>
           <div class="col pull-right"
@@ -370,6 +370,7 @@
         const newData = rowData.filter((row) => {
           // Try to evaluate the expression entered into the filter.
           try {
+            this.evaluateRow = row;
             if (this.evaluateExpression(filterKey, row)) {
               return true;
             }
@@ -418,6 +419,7 @@
       evaluateExpression(filterKey, row) {
         // We can add helper functions to make it easier to query the code asset records.
         // Add a packages object to help query records.
+        let that = this;
         const packages = {
           /*
           and: (val) => {
@@ -430,14 +432,18 @@
             return match;
           }, */
           // Return true if either value is found, e.g. code = 'digital|news' and returns records with either package.
-          or: (code, row) => {
+          or: (code) => {
             const re = new RegExp('(' + code + ')', 'i');
-            return row.packages && row.packages.some((val) => {
-              if (val) {
-                return val.match(re);
-              }
-              return false;
-            });
+            // console.log(that.evaluateRow);
+            if (typeof that.evaluateRow.packages !== 'undefined') {
+              return that.evaluateRow.packages.length > 0 && that.row.packages.some((val) => {
+                if (val) {
+                  return val.match(re);
+                }
+                return false;
+              });
+            }
+            return false;
           },
         };
 

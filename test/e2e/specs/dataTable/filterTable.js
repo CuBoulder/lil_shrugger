@@ -6,20 +6,36 @@ module.exports = {
     // see nightwatch.conf.js
     const devServer = browser.globals.devServerURL;
 
+    // Filter the results for code.
+    browser
+      .url(devServer + '/code')
+      .waitForElementVisible('.result-count', 5000)
+      .assert.containsText('.result-count', 'Result Count: 83')
+      .setValue('#filter-records-input', 'digital')
+      .assert.containsText('.result-count', 'Result Count: 1')
+      .clearValue('#filter-records-input');
+
+    // Filter the results for sites.
     browser
       .url(devServer)
-      .assert.containsText('.result-count', 'Result Count: 100')
-      .setValue('input[name="query"]', 'digital')
-      .assert.containsText('.result-count', 'Result Count: 5')
-      .click('#expression-search')
-      .assert.containsText('.result-count', 'Result Count: 100')
+      .waitForElementVisible('.result-count', 5000)
+      .assert.containsText('.result-count', 'Result Count: 971')
+      .setValue('#filter-records-input', 'digital')
+      .assert.containsText('.result-count', 'Result Count: 26')
+      .clearValue('#filter-records-input')
+      // Use expression search.
+      .click('button[aria-label="Toggle Expression Search"]')
+      .assert.containsText('.result-count', 'Result Count: 971')
       .clearValue('input[name="query"]')
-      .setValue('input[name="query"]', ['row.nodes_total == 202 || row.nodes_total == 3202', browser.Keys.ENTER])
-      .assert.containsText('.result-count', 'Result Count: 2')
-      .assert.visible('.row-id-5898b090926f5b130bdde61a')
-      .assert.visible('.row-id-5898ef4b926f5b20caa7a2a6')
+      .setValue('#filter-records-input', ['row.nodes_total > 200', browser.Keys.ENTER])
+      .assert.containsText('.result-count', 'Result Count: 130')
+      .assert.visible('.row-id-589a3514926f5b45a65b733c')
+      .assert.visible('.row-id-589b39aa926f5b57367e4a04')
       .click('.navbar-action-icon.glyphicon.glyphicon-refresh')
-      .assert.containsText('.result-count', 'Result Count: 100')
+      .pause(1000)
+      .assert.containsText('.result-count', 'Result Count: 971')
+      // Use expression search DSL methods.
+      // "packages.or()" is broken...
       .end();
   },
 };

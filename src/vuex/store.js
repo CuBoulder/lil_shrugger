@@ -72,6 +72,8 @@ const store = new Vuex.Store({
     },
     gitHubRepos: [],
     gitHubBranches: [],
+    gitHubUsername: localStorage.getItem('github-username') ? localStorage.getItem('github-username') : process.env.GH_USER,
+    gitHubToken: localStorage.getItem('github-token') ? localStorage.getItem('github-token') : process.env.GH_TOKEN,
     homepageP1: '',
     recordsToShow: 10,
     reportsList: [
@@ -244,6 +246,8 @@ const store = new Vuex.Store({
 /* Insert local config here. */
 if (process.env.NODE_ENV === 'development') {
   store.state.atlasEnvironments.Local = 'http://localhost:3000/';
+  // store.state.gitHubUsername = process.env.GH_USER;
+  // store.state.gitHubToken = process.env.GH_TOKEN;
 }
 
 // Insert Pantheon config.

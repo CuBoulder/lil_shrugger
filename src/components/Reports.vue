@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default">
+  <div class="panel panel-default reports-wrapper">
     <div class="panel-heading">
       <h4>
         Reports

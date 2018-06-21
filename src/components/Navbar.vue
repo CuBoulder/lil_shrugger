@@ -62,7 +62,7 @@
   import Router from '../router/index';
   import store from '../vuex/store';
   import bus from '../js/bus';
-  import github from '../js/github';
+  // import github from '../js/github';
 
   export default {
     name: 'Navbar',
@@ -76,11 +76,11 @@
       };
     },
     created() {
-      github.getLatestReleases('lil_shrugger').then((releases) => {
-        if (releases[0]) {
-          store.commit('addLatestShruggeRelease', releases[0]);
-        }
-      });
+      // github.getLatestReleases('lil_shrugger').then((releases) => {
+      //   if (releases[0]) {
+      //     store.commit('addLatestShruggeRelease', releases[0]);
+      //   }
+      // });
     },
     computed: {
       selectedEnv() {

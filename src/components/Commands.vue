@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default">
+  <div class="panel panel-default commands-wrapper">
     <div class="panel-heading">
       <h4>
         Commands

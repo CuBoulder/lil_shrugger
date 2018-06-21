@@ -1,5 +1,5 @@
-require('babel-register')
-var config = require('../../config')
+require('babel-register');
+var config = require('../../config');
 
 // http://nightwatchjs.org/gettingstarted#settings-file
 module.exports = {
@@ -14,35 +14,44 @@ module.exports = {
     port: 4444,
     cli_args: {
       'webdriver.chrome.driver': require('chromedriver').path
-    }
+    },
   },
 
   test_settings: {
     default: {
+      selenium_port: 4444,
+      selenium_host: 'localhost',
       silent: true,
       globals: {
         devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port),
-        waitForConditionTimeout: 10000,
-      },
-      launch_url: 'http://ondemand.saucelabs.com:80',
-      selenium_port: 80,
-      selenium_host: 'ondemand.saucelabs.com',
-      username: 'osr_service_account',
-      access_key: '2b534cde-f699-4529-85da-b88e96e153fe',
-      screenshots: {
-        enabled: false,
-        path: '',
       },
     },
+
+    // default: {
+    //   silent: true,
+    //   globals: {
+    //     devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port),
+    //     waitForConditionTimeout: 10000,
+    //   },
+    //   launch_url: 'http://ondemand.saucelabs.com:80',
+    //   selenium_port: 80,
+    //   selenium_host: 'ondemand.saucelabs.com',
+    //   username: 'osr_service_account',
+    //   access_key: '2b534cde-f699-4529-85da-b88e96e153fe',
+    //   screenshots: {
+    //     enabled: false,
+    //     path: '',
+    //   },
+    // },
 
     chrome: {
       desiredCapabilities: {
         browserName: 'chrome',
         platform: 'OS X 10.11',
         version: '60',
-        // javascriptEnabled: true,
-        // acceptSslCerts: true
-      }
+        javascriptEnabled: true,
+        acceptSslCerts: true,
+      },
     },
 
     firefox: {
@@ -51,7 +60,7 @@ module.exports = {
         platform: 'OS X 10.11',
         javascriptEnabled: true,
         acceptSslCerts: true,
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};

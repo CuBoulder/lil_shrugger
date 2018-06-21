@@ -69,14 +69,18 @@ you are using `npm run dev` for development and `npm run e2e` for tests.
 ```bash
 # Startup API from root of project and load fixture data.
 node_modules/.bin/json-server --watch test/fixtures/db.json --id=_id --middlewares test/atlas-middleware.js --routes test/routes.json
+
+# To reset the state of the database that JSON Server uses, you need to reset db.json, which is checked into version control.
+# Since tests change the state of the database, you should run this after each test run while writing tests.
+git checkout HEAD -- test/fixtures/db.json 
 ```
 
 After running that command, you should be able to see data in the DataTable component just as you do for all the other Atlas environments.
 Now, you can run the test suite with the commands listed below.
 
 ```bash
-# Run the e2e tests using Nightwatch.js.
-npm run e2e
+# Run the e2e tests using Nightwatch.js after reseting the database state.
+git checkout HEAD -- test/fixtures/db.json  && npm run e2e
 
 # To get to help text, you need to specify the JS file used.
 # "npm run ..." commands don't seem to use flags.

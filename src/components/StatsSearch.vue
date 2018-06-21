@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default">
+  <div class="panel panel-default stats-search-wrapper">
     <div class="panel-heading">
       <h4>
         Stats Search

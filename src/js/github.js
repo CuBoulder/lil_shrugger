@@ -4,6 +4,7 @@
  */
 
 import shrugger from './shrugger';
+import store from '../vuex/store';
 
 export default {
 
@@ -183,7 +184,7 @@ export default {
    */
   initializeHeaders() {
     const headers = new Headers();
-    const auth = btoa(localStorage.getItem('github-username') + ':' + localStorage.getItem('github-token'));
+    const auth = btoa(store.state.gitHubUsername + ':' + store.state.gitHubToken);
     headers.set('Content-Type', 'application/json');
     headers.set('Authorization', 'Basic ' + auth);
 

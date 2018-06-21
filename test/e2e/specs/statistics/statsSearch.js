@@ -10,14 +10,15 @@ module.exports = {
 
     browser
       .url(devServer)
-      .waitForElementVisible('#app', 5000)
-      .assert.elementPresent('#statsSearch')
+      .waitForElementVisible('#data-table-wrapper', 5000)
+      .assert.elementPresent('.stats-search-wrapper')
       .setValue('#query-name input', ['1000', browser.Keys.ENTER])
+      .assert.containsText('.result-count', 'Result Count: 20')
       // IDs of sites are used here with the checkboxes as an easy way
       // to check which sites are in the list.
       // @todo Make an assertion command where site names are converted to IDs.
-      .assert.visible('.row-id-5898ef4b926f5b20caa7a2a6')
-      .assert.visible('.row-id-5899e708926f5b3a332a386b');
+      .assert.visible('.row-id-589a3514926f5b45a65b733c')
+      .assert.visible('.row-id-5951512f926f5b5050b42ddd');
 
     browser
       .click('.navbar-action-icon.glyphicon-search')

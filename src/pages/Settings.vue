@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default">
+  <div class="panel panel-default settings-wrapper">
     <message-area></message-area>
     <div class="panel-heading">
       <h4>User Settings</h4>

@@ -29,9 +29,6 @@ export default {
     // Define parts of code record that are nested in the meta field.
     const metaKeys = ['code_type', 'is_current', 'label', 'name', 'version', 'tag'];
 
-    // Turn tag into an array.
-    params.current.tag = params.current.tag.trim().split(',');
-
     // Capture and delete etag.
     const etag = params.current.etag;
     delete params.current.etag;
@@ -40,20 +37,30 @@ export default {
     // Only return values that are different.
     const formInput = {};
     Object.keys(params.previous).forEach((key) => {
-      // Check if values are different to add to PATCH.
-      // Don't need to check etag since user can't change that on form.
-      if (params.current[key] !== params.previous[key] && key !== 'etag') {
-        // Need to put meta fields in right place.
-        if (metaKeys.indexOf(key) !== -1) {
-          // Initialize meta field if it doesn't exist yet.
-          if (!formInput.meta) {
-            formInput.meta = {};
-          }
-          formInput.meta[key] = params.current[key];
-        } else {
-          formInput[key] = params.current[key];
+      // Only the information that changed was sent in the past, but it makes more sense
+      // to send the whole record.
+      // @todo Might need to remove some keys or create an array on keys that can't be updated.
+      // if (params.current[key] !== params.previous[key] && key !== 'etag') {
+
+      // Need to put meta fields in right place.
+      if (metaKeys.indexOf(key) !== -1) {
+        // Initialize meta field if it doesn't exist yet.
+        if (!formInput.meta) {
+          formInput.meta = {};
         }
+
+        // Turn tag into an array.
+        // Need to do this after comparing values since the form input is a string
+        // whereas the Atlas request needs to be an array.
+        if (key === 'tag') {
+          params.current.tag = params.current.tag.trim().split(',');
+        }
+
+        formInput.meta[key] = params.current[key];
+      } else {
+        formInput[key] = params.current[key];
       }
+      // }
     });
 
     // If deleting a record, don't send a body.
