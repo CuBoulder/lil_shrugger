@@ -49,6 +49,7 @@ const store = new Vuex.Store({
       'tag', 'updated', 'created'],
     commands: [],
     currentQuery: null,
+    defaultDestinationLink: '/admin/people/invite',
     defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
     defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
     defaultSitesQuery: '?where={"type":"express"}',
