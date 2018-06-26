@@ -55,11 +55,19 @@ To update that version:
 
 5. Copy over the files to the Pantheon Shrugger repo, e.g. `cp -R dist/* ../shrugger-8/shrugger`.
 
-6. Commit the changes and push to Pantheon.
+6. Comment out the redirect code in `settings.php`.
 
-7. Update the code on all environments clearing the caches afterwards.
+```php
+// Redirect all requests to /shrugger.
+// header('Location: http://'. $_SERVER['HTTP_HOST']. '/shrugger', TRUE, 302);
+// exit;
+```
 
-8. Optional: Add back in the redirect to `/shrugger` since the app is using browser history instead of the hash routing mode. By doing so, going to `http://ultimate-shrugger-8.pantheonsite.io/shrugger/code` still places you into the app instead of giving you a page not found.
+7. Commit the changes and push to Pantheon.
+
+8. Update the code on all environments clearing the caches afterwards.
+
+9. **Optional**: Add back in the redirect to `/shrugger` since the app is using browser history instead of the hash routing mode. By doing so, going to `http://ultimate-shrugger-8.pantheonsite.io/shrugger/code` still places you into the app instead of giving you a page not found.
 
 ```php
 // Redirect all requests to /shrugger.
