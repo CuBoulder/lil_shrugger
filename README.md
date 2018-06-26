@@ -44,19 +44,22 @@ Documentation for this codebase will [reside in the wiki](https://github.com/CuB
 There is a publically accessible version of Lil' Shrugger located at http://ultimate-shrugger-8.pantheonsite.io/shrugger/. That version is so users who cant use NPM can still read data and export reports. 
 
 To update that version:
-1. Tag a release like you normally would.
 
-2. Run `SUBDIRECTORY=shrugger EXT_ENV=pantheon npm run build ` to make the build in the `dist/` folder.
+1. Gain access to the Pantheon "Shrugger 8" project from a team member.
 
-3. Delete the `static` and `index.html` files in the `shrugger/` subdirectory.
+2. Tag a release like you normally would.
 
-4. Copy over the files to the Pantheon Shrugger repo, e.g. `cp -R dist/* ../shrugger-8/shrugger`.
+3. Run `SUBDIRECTORY=shrugger EXT_ENV=pantheon npm run build ` to make the build in the `dist/` folder.
 
-5. Commit the changes and push to Pantheon.
+4. Delete the `static` and `index.html` files in the `shrugger/` subdirectory.
 
-6. Update the code on all environments clearing the caches afterwards.
+5. Copy over the files to the Pantheon Shrugger repo, e.g. `cp -R dist/* ../shrugger-8/shrugger`.
 
-7. Optional: Add back in the redirect to `/shrugger` since the app is using browser history instead of the hash routing mode. By doing so, going to `http://ultimate-shrugger-8.pantheonsite.io/shrugger/code` still places you into the app instead of giving you a page not found.
+6. Commit the changes and push to Pantheon.
+
+7. Update the code on all environments clearing the caches afterwards.
+
+8. Optional: Add back in the redirect to `/shrugger` since the app is using browser history instead of the hash routing mode. By doing so, going to `http://ultimate-shrugger-8.pantheonsite.io/shrugger/code` still places you into the app instead of giving you a page not found.
 
 ```php
 // Redirect all requests to /shrugger.
