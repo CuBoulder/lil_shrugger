@@ -60,6 +60,7 @@ export default {
         item.statistics = element.statistics;
         item.code = element.code;
         item.update_group = element.update_group;
+        item.verification_status = element.verification.verification_status;
 
         item.core = '';
         item.profile = '';
