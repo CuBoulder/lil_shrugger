@@ -122,7 +122,7 @@ const store = new Vuex.Store({
       canEdit: ['path', 'status', 'core', 'profile', 'packages'],
       selectKeys: ['core', 'profile', 'status'],
     },
-    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created', 'update_group'],
+    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created', 'update_group', 'verification_status'],
     sitesSendCommand: [],
     sortOptions: {
       Sites: {
