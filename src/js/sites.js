@@ -66,6 +66,10 @@ export default {
           item.verification_status = element.verification.verification_status;
         }
 
+        if (typeof element.dates !== 'undefined') {
+          item.dates = element.dates;
+        }
+
         item.core = '';
         item.profile = '';
         item.packages = [];

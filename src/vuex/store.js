@@ -140,7 +140,7 @@ const store = new Vuex.Store({
       'variable_livechat_license_number', 'profile_module_manager', 'express_code_version', 'express_core_schema_version',
       'theme_is_responsive', 'overridden_features', 'drupal_system_status', 'custom_logo_settings', 'username',
       'email_address', 'bundles', 'webforms', 'content_editor_count', 'site_owner_count', 'edit_my_content_count',
-      'site_editor_count', 'access_manager_count', 'campaign_manager_count', 'forms_manager_count'],
+      'site_editor_count', 'access_manager_count', 'campaign_manager_count', 'forms_manager_count', 'dates'],
     storedSiteKeys: [],
     tagInputTags: {
       sitesAddOptions: [],
