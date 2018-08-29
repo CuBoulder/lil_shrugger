@@ -25,9 +25,7 @@ SUBDIRECTORY=shrugger EXT_ENV=pantheon npm run build
 
 ## Running Tests 
 
-Running tests will require a couple of manual steps until they are worked into the test runner command. You will need to start up the test API and load the fixture data before running any tests.
-
-The testing documentation resides in the test folder README.md: ...link
+Running tests will require a couple of manual steps until they are worked into the test runner command. You will need to start up the test API and load the fixture data before running any tests. The testing documentation is being developed currently and will reside in the wiki. For now, you can look to the [active PR for fixing automated testing](https://github.com/CuBoulder/lil_shrugger/pull/373/files#diff-c30ff793110b0960f76bb3854af6f5a8R1) to find out more.
 
 ## Notes
 
@@ -37,7 +35,7 @@ The testing documentation resides in the test folder README.md: ...link
 
 ## Documentation
 
-Documentation for this codebase will [reside in the wiki](https://github.com/CuBoulder/lil_shrugger/wiki).
+Documentation for this codebase will [reside in the wiki](https://github.com/CuBoulder/lil_shrugger/wiki). It is a work in progress at the moment but contains stubs for all the parts of the application. Please help fill it in as you develop :) 
 
 ## Updating Ultimate Shrugger
 
@@ -55,7 +53,7 @@ To update that version:
 
 5. Copy over the files to the Pantheon Shrugger repo, e.g. `cp -R dist/* ../shrugger-8/shrugger`.
 
-6. Comment out the redirect code in `settings.php`.
+6. Comment out the redirect code in `settings.php`. This part is needed in order to clear caches on Pantheon and load the new assets since Pantheon isn't built to host static sites.
 
 ```php
 // Redirect all requests to /shrugger.
