@@ -272,17 +272,17 @@ if (process.env.EXT_ENV === 'pantheon') {
 
   // Set Atlas Environment to be singular.
   if (window.location.host === 'dev-shrugger-8.pantheonsite.io') {
-    store.state.atlasEnvironments = {Dev: 'https://osr-atlas01.int.colorado.edu/atlas/'};
+    store.state.atlasEnvironments = {Dev: 'https://osr-dev-util01.int.colorado.edu/atlas/'};
     store.commit('switchEnv', 'Dev');
   }
 
   if (window.location.host === 'test-shrugger-8.pantheonsite.io') {
-    store.state.atlasEnvironments = {Test: 'https://osr-atlas02.int.colorado.edu/atlas/'};
+    store.state.atlasEnvironments = {Test: 'https://osr-test-util01.int.colorado.edu/atlas/'};
     store.commit('switchEnv', 'Test');
   }
 
   if (window.location.host === 'live-shrugger-8.pantheonsite.io') {
-    store.state.atlasEnvironments = {Prod: 'https://osr-atlas03.int.colorado.edu/atlas/'};
+    store.state.atlasEnvironments = {Prod: 'https://osr-test-util01.int.colorado.edu/atlas/'};
     store.commit('switchEnv', 'Prod');
   }
 
