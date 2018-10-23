@@ -26,6 +26,11 @@
       <fieldset class="form-group">
         <label for="sites-query">Sites Query</label>
         <input type="text" id="sites-query" class="form-control" name="sites-query" v-model="sitesQuery">
+        <label for="destination-link">Sites Destination Link</label>
+          <input type="text" id="github-token" class="form-control" name="github-token" v-model="destinationLink">
+          <p class="form-text text-muted">
+            The destination link is where the user goes after logging into the site, e.g. "admin/people/invite".
+          </p>
         <label for="code-query">Code Query</label>
         <input type="text" id="code-query" class="form-control" name="code-query" v-model="codeQuery">
       </fieldset>
@@ -105,6 +110,7 @@
         username: localStorage.getItem('atlas-username') ? localStorage.getItem('atlas-username') : '',
         password: localStorage.getItem('atlas-password') ? localStorage.getItem('atlas-password') : '',
         baseURL: localStorage.getItem('baseURL') ? localStorage.getItem('baseURL') : '/shrugger',
+        destinationLink: localStorage.getItem('destination-link') ? localStorage.getItem('destination-link') : store.state.defaultDestinationLink,
         gitHub: {
           username: localStorage.getItem('github-username') ? localStorage.getItem('github-username') : '',
           token: localStorage.getItem('github-token') ? localStorage.getItem('github-token') : '',
@@ -134,6 +140,7 @@
         localStorage.setItem('atlas-username', this.username);
         localStorage.setItem('atlas-password', this.password);
         localStorage.setItem('baseURL', this.baseURL);
+        localStorage.setItem('destination-link', this.destinationLink);
         localStorage.setItem('github-username', this.gitHub.username);
         localStorage.setItem('github-token', this.gitHub.token);
         localStorage.setItem('sites-query', this.sitesQuery);

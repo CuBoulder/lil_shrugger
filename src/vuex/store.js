@@ -24,12 +24,9 @@ const store = new Vuex.Store({
     },
     atlasEnvironments: {
       Local: 'https://python.local/atlas/',
-      NewDev: 'https://osr-dev-util01.int.colorado.edu/atlas/',
-      Dev: 'https://osr-atlas01.int.colorado.edu/atlas/',
-      NewTest: 'https://osr-test-util01.int.colorado.edu/atlas/',
-      Test: 'https://osr-atlas02.int.colorado.edu/atlas/',
-      NewProd: 'https://osr-prod-util01.int.colorado.edu/atlas/',
-      Prod: 'https://osr-atlas03.int.colorado.edu/atlas/',
+      Dev: 'https://osr-dev-util01.int.colorado.edu/atlas/',
+      Test: 'https://osr-test-util01.int.colorado.edu/atlas/',
+      Prod: 'https://osr-prod-util01.int.colorado.edu/atlas/',
     },
     autocompleteOptions: {
       statsQueryOptions: [],
@@ -49,19 +46,17 @@ const store = new Vuex.Store({
       'tag', 'updated', 'created'],
     commands: [],
     currentQuery: null,
+    defaultDestinationLink: '/admin/people/invite',
     defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
     defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
-    defaultSitesQuery: '?where={"type":"express"}',
+    defaultSitesQuery: '',
     developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode')) : false,
     editContent: 'N/A',
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     expressEnvironments: {
       Local: 'https://express.local/',
-      NewDev: 'https://www-dev-new.colorado.edu/',
-      Dev: 'https://www-dev.colorado.edu/',
-      NewTest: 'https://www-test-new.colorado.edu/',
-      Test: 'https://www-test.colorado.edu/',
-      NewProd: 'https://www-prod-new.colorado.edu/',
+      Dev: 'https://www-dev-new.colorado.edu/',
+      Test: 'https://www-test-new.colorado.edu/',
       Prod: 'https://www.colorado.edu/',
     },
     expressUserRoles: ['site_owner', 'content_editor', 'edit_my_content', 'site_editor', 'access_manager', 'campaign_manager', 'forms_manager'],
@@ -103,8 +98,8 @@ const store = new Vuex.Store({
       profile: [],
       packages: [],
     },
-    shruggerVersion: '0.6.3',
-    shruggerLatestRelease: { tag_name: '0.6.3' },
+    shruggerVersion: '0.7.0',
+    shruggerLatestRelease: { tag_name: '0.7.0' },
     sitesGridData: {
       cachedData: [],
       codeData: [],
@@ -122,7 +117,7 @@ const store = new Vuex.Store({
       canEdit: ['path', 'status', 'core', 'profile', 'packages'],
       selectKeys: ['core', 'profile', 'status'],
     },
-    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created', 'update_group'],
+    siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created', 'update_group', 'verification_status', 'dates'],
     sitesSendCommand: [],
     sortOptions: {
       Sites: {
@@ -244,7 +239,7 @@ const store = new Vuex.Store({
 
 /* Insert local config here. */
 if (process.env.NODE_ENV === 'development') {
-  store.state.atlasEnvironments.Local = 'http://atlas.testing:3000/';
+  store.state.atlasEnvironments.Local = 'http://localhost:3000/';
 }
 
 // Insert Pantheon config.
@@ -278,17 +273,17 @@ if (process.env.EXT_ENV === 'pantheon') {
 
   // Set Atlas Environment to be singular.
   if (window.location.host === 'dev-shrugger-8.pantheonsite.io') {
-    store.state.atlasEnvironments = {Dev: 'https://osr-atlas01.int.colorado.edu/atlas/'};
+    store.state.atlasEnvironments = {Dev: 'https://osr-dev-util01.int.colorado.edu/atlas/'};
     store.commit('switchEnv', 'Dev');
   }
 
   if (window.location.host === 'test-shrugger-8.pantheonsite.io') {
-    store.state.atlasEnvironments = {Test: 'https://osr-atlas02.int.colorado.edu/atlas/'};
+    store.state.atlasEnvironments = {Test: 'https://osr-test-util01.int.colorado.edu/atlas/'};
     store.commit('switchEnv', 'Test');
   }
 
   if (window.location.host === 'live-shrugger-8.pantheonsite.io') {
-    store.state.atlasEnvironments = {Prod: 'https://osr-atlas03.int.colorado.edu/atlas/'};
+    store.state.atlasEnvironments = {Prod: 'https://osr-prod-util01.int.colorado.edu/atlas/'};
     store.commit('switchEnv', 'Prod');
   }
 

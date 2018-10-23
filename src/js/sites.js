@@ -61,6 +61,15 @@ export default {
         item.code = element.code;
         item.update_group = element.update_group;
 
+        // Temporary variable.
+        if (typeof element.verification !== 'undefined') {
+          item.verification_status = element.verification.verification_status;
+        }
+
+        if (typeof element.dates !== 'undefined') {
+          item.dates = element.dates;
+        }
+
         item.core = '';
         item.profile = '';
         item.packages = [];
