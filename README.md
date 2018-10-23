@@ -45,7 +45,11 @@ To update that version:
 
 1. Gain access to the Pantheon "Shrugger 8" project from a team member.
 
-2. Tag a release like you normally would in GitHub for this project. You shuld look in the `src/vuex/pantheon.js` file and see if anything needs changed in there. The variable changes only apply to the other non-ultimate Shrugger URLs and don't effect http://ultimate-shrugger-8.pantheonsite.io/shrugger/. If you need to change those, make the change in that file and at the bottom section of `src/vuex/store.js`.
+2a. Pre-relases steps. Run the tests locally. If they don't pass, then fix the dang bugs before you continue.
+
+2b. You should look in the `src/vuex/pantheon.js` file and see if anything needs changed in there. The variable changes only apply to the other non-ultimate Shrugger URLs and don't effect http://ultimate-shrugger-8.pantheonsite.io/shrugger/. If you need to change those, make the change in that file and at the bottom section of `src/vuex/store.js`.
+
+2c. Tag a release like you normally would in GitHub for this project. You will need to up the versions in `src/vuex/store.js` before you do that. Look for `shruggerVersion` and `shruggerLatestRelease`. This feature allows users to see if they need to pull code from the dev branch or update to a new tag if they didn't hear or know about a new release.
 
 3. Run `SUBDIRECTORY=shrugger EXT_ENV=pantheon npm run build ` locally in the root of this project to make a build in the `dist/` folder. You can delete any files in that directory before you start the build process.
 
@@ -72,4 +76,6 @@ To update that version:
 header('Location: http://'. $_SERVER['HTTP_HOST']. '/shrugger', TRUE, 302);
 exit;
 ```
+
+10. Add packaged release files to the GitHub release page. Now that you are sure the release functions as expected, you can upload tar files for each type of Shrugger release. This version has environmental variables set for Pantheon hosting in the build step so you can do something like `tar -cvf ~/Downloads/shrugger_pantheon_0_7.0.tar dist/* ` from the root of this project. Attache the tar files to the GitHub release where it says "attach binaries" at the bottom of the page.
 
