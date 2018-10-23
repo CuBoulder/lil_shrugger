@@ -282,7 +282,7 @@ if (process.env.EXT_ENV === 'pantheon') {
   }
 
   if (window.location.host === 'live-shrugger-8.pantheonsite.io') {
-    store.state.atlasEnvironments = {Prod: 'https://osr-test-util01.int.colorado.edu/atlas/'};
+    store.state.atlasEnvironments = {Prod: 'https://osr-prod-util01.int.colorado.edu/atlas/'};
     store.commit('switchEnv', 'Prod');
   }
 
