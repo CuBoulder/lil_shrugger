@@ -45,15 +45,15 @@ To update that version:
 
 1. Gain access to the Pantheon "Shrugger 8" project from a team member.
 
-2. Tag a release like you normally would.
+2. Tag a release like you normally would in GitHub for this project. You shuld look in the `src/vuex/pantheon.js` file and see if anything needs changed in there. The variable changes only apply to the other non-ultimate Shrugger URLs and don't effect http://ultimate-shrugger-8.pantheonsite.io/shrugger/. If you need to change those, make the change in that file and at the bottom section of `src/vuex/store.js`.
 
-3. Run `SUBDIRECTORY=shrugger EXT_ENV=pantheon npm run build ` to make the build in the `dist/` folder.
+3. Run `SUBDIRECTORY=shrugger EXT_ENV=pantheon npm run build ` locally in the root of this project to make a build in the `dist/` folder. You can delete any files in that directory before you start the build process.
 
-4. Delete the `static` and `index.html` files in the `shrugger/` subdirectory.
+4. Delete the `static` and `index.html` files in the `shrugger/` subdirectory of the Pantheon site repo.
 
-5. Copy over the files to the Pantheon Shrugger repo, e.g. `cp -R dist/* ../shrugger-8/shrugger`.
+5. Copy over the files in `dist/` for this project over to the Pantheon Shrugger repo's `/shrugger` directory, e.g. something like `cp -R dist/* ../shrugger-8/shrugger`. You will need to add all the files via Git since they won't be tracked.
 
-6. Comment out the redirect code in `settings.php`. This part is needed in order to clear caches on Pantheon and load the new assets since Pantheon isn't built to host static sites.
+6. Comment out the redirect code in `settings.php` in the Pantheon repo. This part is needed in order to clear caches on Pantheon and load the new assets since Pantheon isn't built to host static sites.
 
 ```php
 // Redirect all requests to /shrugger.
@@ -61,7 +61,7 @@ To update that version:
 // exit;
 ```
 
-7. Commit the changes and push to Pantheon.
+7. Add and commit the changes and push to Pantheon.
 
 8. Update the code on all environments clearing the caches afterwards.
 
