@@ -1,10 +1,11 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <navbar></navbar>
+    <div class="page container">
+      <transition name="fade">
+        <router-view class="row"/>
+      </transition>
     </div>
-    <router-view/>
   </div>
 </template>
 
