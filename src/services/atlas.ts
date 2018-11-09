@@ -1,22 +1,14 @@
 
-import utilities from './shrugger.ts';
+import utilities from './shrugger';
 // import bus from './bus.ts';
-import store from '../store.ts';
+import store from '../store';
 
 export default {
 
   /**
    * Makes a request to Atlas.
-   *
-   * @param {string} baseURL
-   * @param endpoint
-   * @param query
-   * @param method
-   * @param body
-   * @param etag
-   * @returns {Promise.<TResult>}
    */
-  request(baseURL, endpoint, query = '', method = 'GET', body = null, etag = null) {
+  request(baseURL: string, endpoint: string, query: string = '', method: string = 'GET', body: string = '', etag: string = ''): Promise<any> {
     // Setup headers to send to Atlas.
     const headers = new Headers();
     const auth = btoa(`${localStorage.getItem('atlas-username')}:${localStorage.getItem('atlas-password')}`);
@@ -29,15 +21,14 @@ export default {
     }
 
     const requestURL = baseURL + endpoint + query;
-    const myInit = {
+    const myInit: RequestInit = {
       method,
       headers,
-      timeout: 15,
       cache: 'no-store',
     };
 
     // If body, then add it.
-    if (body !== null) {
+    if (body !== '') {
       myInit.body = body;
     }
 
@@ -46,24 +37,24 @@ export default {
     if (method !== 'GET') {
       return fetch(requestURL, myInit)
         .then(utilities.handleErrors)
-        .then((response) => {
+        .then((response: Response) => {
           console.log(response);
           if (response.statusText === 'NO CONTENT') {
             return {};
           }
           return response.json();
         })
-        .catch((error) => {
+        .catch((error: Function) => {
           console.log(error);
         });
     }
 
     // This function returns the data based on the current page.
-    const foo = function foo(pageLink = null) {
+    const foo = function foo(pageLink: string = '') {
       // Use paging link if it exists.
       // The paging link contains the endpoint and query.
       let url = '';
-      if (pageLink !== null) {
+      if (pageLink !== '') {
         url = baseURL + pageLink;
       } else {
         url = baseURL + endpoint + query;
@@ -98,7 +89,7 @@ export default {
     const fetchData = function fetchData() {
       // This function does the actual looping through the paging links until
       // it gets to the last page and then exits.
-      const recursiveFetch = function recursiveFetch(finalData, pageLink) {
+      const recursiveFetch = function recursiveFetch(finalData: any, pageLink: string): Promise<Response> {
         // Call Atlas with the correct page link.
         return foo(pageLink)
           .then((data) => {
@@ -121,11 +112,11 @@ export default {
             }
             return finalData;
           })
-          .catch(error => console.log(error));
+          .catch((error: Function) => console.log(error));
       };
 
       // Finally call recursive function and return a promise with the data in it.
-      return recursiveFetch([], null);
+      return recursiveFetch([], '');
     };
 
     // Pass the resolved promise along.

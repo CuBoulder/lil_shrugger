@@ -2,9 +2,9 @@
  * Contains all the functions for editing and updating Code Records.
  */
 
-import atlas from './atlas.ts';
-import store from '../store.ts';
-import bus from './bus.ts';
+import atlas from './atlas';
+import store from '../store';
+import bus from './bus';
 
 export default {
   /**

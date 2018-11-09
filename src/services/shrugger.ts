@@ -16,7 +16,7 @@ export default {
    * @param response
    * @returns {*}
    */
-  handleErrors(response) {
+  handleErrors(response: Response) {
     if (!response.ok) {
       console.log(response);
       // console.log();

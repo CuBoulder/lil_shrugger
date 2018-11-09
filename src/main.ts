@@ -7,22 +7,22 @@ import './registerServiceWorker';
 Vue.config.productionTip = false;
 
 // Import components that templates use.
-import AutocompleteInput from './components/AutocompleteInput';
-import Commands from './components/Commands';
-import ConfirmButton from './components/ConfirmButton';
-import DataTable from './components/DataTable';
-import MessageArea from './components/MessageArea';
-import Navbar from './components/Navbar';
-import Row from './components/Row';
-import StatsSearch from './components/StatsSearch';
-import CreateCode from './components/CreateCode';
-import RowAdd from './components/RowAdd';
-import RowEdit from './components/RowEdit';
-import RowView from './components/RowView';
-import RowDiff from './components/RowDiff';
-import DrilldownDiff from './components/DrilldownDiff';
-import Reports from './components/Reports';
-import TagInput from './components/TagInput';
+import AutocompleteInput from './components/AutocompleteInput.vue';
+import Commands from './components/Commands.vue';
+import ConfirmButton from './components/ConfirmButton.vue';
+import DataTable from './components/DataTable.vue';
+import MessageArea from './components/MessageArea.vue';
+import Navbar from './components/Navbar.vue';
+import Row from './components/Row.vue';
+import StatsSearch from './components/StatsSearch.vue';
+import CreateCode from './components/CreateCode.vue';
+import RowAdd from './components/RowAdd.vue';
+import RowEdit from './components/RowEdit.vue';
+import RowView from './components/RowView.vue';
+import RowDiff from './components/RowDiff.vue';
+import DrilldownDiff from './components/DrilldownDiff.vue';
+import Reports from './components/Reports.vue';
+import TagInput from './components/TagInput.vue';
 
 // We need to add the component namespace for the template to recognize it.
 Vue.component('autocomplete-input', AutocompleteInput);

@@ -50,7 +50,7 @@ const store = new Vuex.Store({
         defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
         defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
         defaultSitesQuery: '',
-        developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode')) : false,
+        developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode') || '') : false,
         editContent: 'N/A',
         env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
         expressEnvironments: {
@@ -163,14 +163,14 @@ const store = new Vuex.Store({
             localStorage.setItem('env', environment);
         },
         setQueries(state, queries) {
-            state.statsQueryOptions = [];
-            queries.forEach((element) => {
-                state.autocompleteOptions.statsQueryOptions = [].concat(state.statsQueryOptions, element);
+            state.autocompleteOptions.statsQueryOptions  = [];
+            queries.forEach((element: any) => {
+                state.autocompleteOptions.statsQueryOptions = [].concat(state.autocompleteOptions.statsQueryOptions, element);
             });
         },
         setCommands(state, sentCommands) {
             state.commands = [];
-            sentCommands.forEach((element) => {
+            sentCommands.forEach((element: any) => {
                 state.commands = [].concat(state.commands, element);
             });
         },
@@ -210,7 +210,11 @@ const store = new Vuex.Store({
             });
         },
         addCodeAssets(state, assets) {
-            state.codeAssets = {};
+            state.codeAssets = {
+                cores: {},
+                profiles: {},
+                packages: {},
+            };
             state.codeAssets = assets;
 
             // Also need to add as select options in an array.
