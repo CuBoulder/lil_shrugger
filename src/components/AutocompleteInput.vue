@@ -74,7 +74,6 @@
       options() {
         return store.state.autocompleteOptions[this.optionsKey];
       },
-
     },
     methods: {
       onInput(value) {
@@ -143,3 +142,4 @@
     background: #f8f8f8
   }
 </style>
+
