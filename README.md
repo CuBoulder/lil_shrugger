@@ -8,6 +8,10 @@ remain restriction free.
 
 Deployed at: ...
 
+## Documentation
+
+Documentation can be found in the wiki: https://github.com/CuBoulder/lil_shrugger/wiki
+
 ## Project setup
 ```
 yarn install
