@@ -25,6 +25,14 @@ yarn run serve
 ### Compiles and minifies for production
 ```
 yarn run build
+
+# There are a couple of environmental variables you can set to alter the build.
+#
+# SUBDIRECTORY is where you want the base path to exist.
+#
+# EXT_ENV is where you can specifiy a hosting environment for targeted configurations.
+# Supported environments are "netlify" and "pantheon".
+EXT_ENV=netlify yarn run build
 ```
 
 ### Run your tests

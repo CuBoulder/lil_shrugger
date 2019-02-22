@@ -81,15 +81,17 @@
             {{key}}
           </label>
         </div>
-        <h4>Developer</h4>
-        <p class="form-text text-muted">
-          These settings only apply to developers who have write access to Atlas.
-        </p>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" id="chronological" v-model="developerMode">
-            Developer Mode
-          </label>
+        <div v-if="userAccessPerm('developerMode')">
+          <h4>Developer</h4>
+          <p class="form-text text-muted">
+            These settings only apply to developers who have write access to Atlas.
+          </p>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" id="chronological" v-model="developerMode">
+              Developer Mode
+            </label>
+          </div>
         </div>
       </fieldset>
       <button @click="saveCreds()" type="button" class="btn btn-primary" aria-label="Save">Save</button>
