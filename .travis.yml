@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - 11
+cache:
+  npm: true # this cashes ~/.npm folder on Travis
+  directories:
+    # we also need to cache folder with Cypress binary
+    - ~/.cache
+    - ~/.node_modules
+install:
+  - yarn install
+script:
+  - yarn serve > /dev/null 2>&1 &
+  - nc -zvv 127.0.0.1 8080; out=$?; while [[ $out -ne 0 ]]; do echo "Retry hit port 8080..."; nc -zvv localhost 8080; out=$?; sleep 5; done
+  - yarn test:e2e --headless --record
