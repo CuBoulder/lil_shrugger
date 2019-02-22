@@ -299,6 +299,7 @@ if (process.env.NODE_ENV === 'development') {
 //     store.state.sortOptions.Sites.defaultSortDirection = '-1';
 // }
 
+// Now stored in Netlify.
 if (process.env.NETLIFY == true) {
     // Restrict user permissions to exporting reports and editing rows.
     // No developer mode.
