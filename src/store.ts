@@ -299,7 +299,6 @@ if (process.env.NODE_ENV === 'development') {
 //     store.state.sortOptions.Sites.defaultSortDirection = '-1';
 // }
 
-// Controlled from the .env.netlify file.
 if (process.env.EXT_ENV === 'netlify') {
     // Restrict user permissions to exporting reports and editing rows.
     // No developer mode.
