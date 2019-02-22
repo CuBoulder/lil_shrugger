@@ -143,7 +143,7 @@ const store = new Vuex.Store({
         userPermissions: ['Code:row:edit', 'Code:row:delete', 'Code:addRow', 'Code:createCode', 'Code:navbar:table', 'Packages',
             'Sites:row:edit', 'Sites:row:delete', 'Sites:addRow', 'Sites:createSite', 'Sites:commands:command', 'Sites:commands:export',
             'Sites:statsSearch:save', 'Sites:navbar:statsSearch', 'Sites:navbar:commands', 'Sites:navbar:reports', 'Sites:navbar:table',
-            'Settings:credentials'],
+            'Settings:credentials', 'Settings:developerMode'],
     },
     mutations: {
         addEditContent(state, options) {
@@ -292,11 +292,25 @@ if (process.env.NODE_ENV === 'development') {
 //
 //     // Restrict user permissions to exporting reports and editing rows.
 //     store.state.userPermissions = ['Code:navbar:table', 'Sites:commands:export', 'Sites:navbar:statsSearch',
-//         'Sites:navbar:reports', 'Sites:navbar:table'];
+//         'Sites:navbar:reports', 'Sites:navbar:table', 'Settings:developerMode'];
 //
 //     // Sort by the status on Pantheon to look like the Webcentral dashboard did.
 //     store.state.sortOptions.Sites.defaultSortKey = 'status';
 //     store.state.sortOptions.Sites.defaultSortDirection = '-1';
 // }
+
+if (window.location.hostname.includes('netlify')) {
+    // Restrict user permissions to exporting reports and editing rows.
+    // No developer mode.
+    store.state.userPermissions = ['Code:navbar:table', 'Sites:commands:export', 'Sites:navbar:statsSearch',
+        'Sites:navbar:reports', 'Sites:navbar:table'];
+
+    store.state.actionIcons.Sites = [
+        { name: 'search', component: 'statsSearch', title: 'Search' },
+        // { name: 'th-list', component: 'commands', title: 'Commands' },
+        { name: 'download-alt', component: 'reports', title: 'Reports' },
+        { name: 'refresh', component: 'table', title: 'Refresh' },
+    ];
+}
 
 export default store;

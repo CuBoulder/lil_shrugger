@@ -28,9 +28,10 @@
     ]
   },
   "include": [
+    "src/dummy.ts"
 //    "src/**/*.ts",
 //    "src/**/*.tsx",
-//    "src/**/*.vue",
+//    "src/**/*.vue"
 //    "tests/**/*.ts",
 //    "tests/**/*.tsx"
   ],

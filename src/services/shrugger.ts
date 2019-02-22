@@ -157,6 +157,13 @@ export default {
     window.setTimeout(() => { console.log(`Waited ${time} milliseconds`); }, time);
   },
 
+  /**
+   * Checks an etag relating to a row in the Data Table.
+   *
+   * @param row
+   * @param pageComponent
+   * @param endpoint
+   */
   etagCheck(row, pageComponent, endpoint) {
     const baseURL = store.state.atlasEnvironments[store.state.env];
 
