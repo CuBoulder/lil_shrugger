@@ -304,6 +304,13 @@ if (window.location.hostname.includes('netlify')) {
     // No developer mode.
     store.state.userPermissions = ['Code:navbar:table', 'Sites:commands:export', 'Sites:navbar:statsSearch',
         'Sites:navbar:reports', 'Sites:navbar:table'];
+
+    store.state.actionIcons.Sites = [
+        { name: 'search', component: 'statsSearch', title: 'Search' },
+        // { name: 'th-list', component: 'commands', title: 'Commands' },
+        { name: 'download-alt', component: 'reports', title: 'Reports' },
+        { name: 'refresh', component: 'table', title: 'Refresh' },
+    ];
 }
 
 export default store;
