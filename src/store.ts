@@ -299,11 +299,11 @@ if (process.env.NODE_ENV === 'development') {
 //     store.state.sortOptions.Sites.defaultSortDirection = '-1';
 // }
 
-if (process.env.EXT_ENV === 'netlify') {
+// if (process.env.EXT_ENV === 'netlify') {
     // Restrict user permissions to exporting reports and editing rows.
     // No developer mode.
     store.state.userPermissions = ['Code:navbar:table', 'Sites:commands:export', 'Sites:navbar:statsSearch',
         'Sites:navbar:reports', 'Sites:navbar:table'];
-}
+// }
 
 export default store;
