@@ -89,6 +89,11 @@
               endpoint: 'statistics',
               recordID: 'statistics',
             },
+            {
+              tagName: 'row-backup',
+              tabID: 'tab-row-backup',
+              tabLabel: 'Backups',
+            },
           ],
           defaultSortKey: store.state.sortOptions.Sites.defaultSortKey,
           defaultSortDirection: store.state.sortOptions.Sites.defaultSortDirection,

@@ -17,6 +17,9 @@ export default {
 
     // The etag is only needed when doing write operations.
     if (method === 'PATCH' || method === 'PUT' || method === 'DELETE') {
+
+      // @todo Add something for netlify deployment restrictions.
+
       headers.set('If-Match', etag);
     }
 
