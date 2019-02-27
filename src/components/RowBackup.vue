@@ -1,7 +1,13 @@
 <template>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h4>Site Backups</h4>
+      <h4>
+        Site Backups
+        <a target="_blank"
+           href="https://github.com/CuBoulder/lil_shrugger/wiki/RowBackup">
+          <span class="navbar-action-icon glyphicon glyphicon-question-sign"></span>
+        </a>
+      </h4>
     </div>
     <div class="row panel-body">
       <p v-if="backups === {}">
