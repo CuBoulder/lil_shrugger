@@ -75,6 +75,19 @@ export default {
     return store.state.userPermissions.includes(router.currentRoute.name + ':' + permission);
   },
 
+  getCreds(credentialName: string = ''): string | null {
+    let credentialValue = null;
+
+    // @todo Add check from Vuex store.
+
+    // Try to get from local storage.
+    if (localStorage.getItem(credentialName)) {
+      return localStorage.getItem(credentialName);
+    }
+
+    return credentialValue;
+  },
+
   /**
    * Converts a string to Unicode based on the Mongo DB query syntax.
    *
