@@ -7,12 +7,12 @@
         <stats-search></stats-search>
       </div>
     </transition>
-    <transition name="slide-fade">
-      <div v-if="showCommands && userAccessPerm('commands:command')"
-            class="col col-md-6">
-        <commands></commands>
-      </div>
-    </transition>
+    <!--<transition name="slide-fade">-->
+      <!--<div v-if="showCommands && userAccessPerm('commands:command')"-->
+            <!--class="col col-md-6">-->
+        <!--<commands></commands>-->
+      <!--</div>-->
+    <!--</transition>-->
     <transition name="slide-fade">
       <div class="col col-md-6"
             v-if="showReports && userAccessPerm('commands:export')">
