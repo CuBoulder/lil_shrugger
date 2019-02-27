@@ -7,12 +7,12 @@
         <stats-search></stats-search>
       </div>
     </transition>
-    <transition name="slide-fade">
-      <div v-if="showCommands && userAccessPerm('commands:command')"
-            class="col col-md-6">
-        <commands></commands>
-      </div>
-    </transition>
+    <!--<transition name="slide-fade">-->
+      <!--<div v-if="showCommands && userAccessPerm('commands:command')"-->
+            <!--class="col col-md-6">-->
+        <!--<commands></commands>-->
+      <!--</div>-->
+    <!--</transition>-->
     <transition name="slide-fade">
       <div class="col col-md-6"
             v-if="showReports && userAccessPerm('commands:export')">
@@ -88,6 +88,11 @@
               tabLabel: 'View Stats Diffs',
               endpoint: 'statistics',
               recordID: 'statistics',
+            },
+            {
+              tagName: 'row-backup',
+              tabID: 'tab-row-backup',
+              tabLabel: 'Backups',
             },
           ],
           defaultSortKey: store.state.sortOptions.Sites.defaultSortKey,
@@ -216,9 +221,6 @@
               })
               .catch(error => console.log(error));
           });
-
-        // Setup commands for select list.
-        atlas.getCommands();
 
         // Grab search queries.
         atlas.getQueries();

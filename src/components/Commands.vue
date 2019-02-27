@@ -47,6 +47,9 @@
     created() {
       const that = this;
 
+      // Setup commands for select list.
+      atlas.getCommands();
+
       bus.$on('validate--sendCommand', function commandsValidateCommand(params) {
         that.validateCommandListener(params, that);
       });
