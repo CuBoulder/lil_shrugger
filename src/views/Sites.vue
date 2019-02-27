@@ -222,9 +222,6 @@
               .catch(error => console.log(error));
           });
 
-        // Setup commands for select list.
-        atlas.getCommands();
-
         // Grab search queries.
         atlas.getQueries();
 
