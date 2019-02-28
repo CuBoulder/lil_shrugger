@@ -74,12 +74,17 @@ export default {
 
     // Check to see if permission is in permissions array.
     if (useCurrentRoute) {
-      return store.state.userPermissions.includes(router.currentRoute.name + ':' + permission);
-    } else {
       return store.state.userPermissions.includes(permission);
+    } else {
+      return store.state.userPermissions.includes(router.currentRoute.name + ':' + permission);
     }
   },
 
+  /**
+   * Checks credentials based on local storage and other storage options.
+   *
+   * @param credentialName
+   */
   getCreds(credentialName: string = ''): string | null {
     let credentialValue = null;
 

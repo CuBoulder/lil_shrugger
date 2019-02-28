@@ -88,7 +88,7 @@
           </p>
           <div class="form-check">
             <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" id="chronological" v-model="developerMode">
+              <input class="form-check-input" type="checkbox" v-model="developerMode">
               Developer Mode
             </label>
           </div>

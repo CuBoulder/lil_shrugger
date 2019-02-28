@@ -313,4 +313,8 @@ if (window.location.hostname.includes('netlify')) {
     ];
 }
 
+if (process.env.NODE_ENV === 'development') {
+    store.state.developerMode = true;
+}
+
 export default store;
