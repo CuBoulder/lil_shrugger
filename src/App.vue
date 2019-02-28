@@ -30,6 +30,7 @@
   import DrilldownDiff from './components/DrilldownDiff';
   import Reports from './components/Reports';
   import TagInput from './components/TagInput';
+  import RowBackup from './components/RowBackup';
 
   // We need to add the component namespace for the template to recognize it.
   Vue.component('autocomplete-input', AutocompleteInput);
@@ -48,6 +49,8 @@
   Vue.component('drilldown-diff', DrilldownDiff);
   Vue.component('reports', Reports);
   Vue.component('tag-input', TagInput);
+  Vue.component('row-backup', RowBackup);
+
 
   export default {
     name: 'app',
