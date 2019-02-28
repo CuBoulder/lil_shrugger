@@ -90,7 +90,7 @@ const store = new Vuex.Store({
         searchFilter: '',
         selectOptions: {
             status: ['available', 'installed', 'launching'],
-            code_type: ['module', 'core', 'profile'],
+            code_type: ['core', 'module', 'profile', 'theme'],
             is_current: [true, false],
             tag: ['addon_bundles', 'request_bundles', 'beta_bundles', 'admin_bundles'],
             core: [],
