@@ -118,6 +118,17 @@
     },
     methods: {
       initialize() {
+
+        // If credentials aren't stored, then don't make the call.
+        if (shrugger.userAccess('Settings:developerMode', true) &&
+          (!shrugger.getCreds('atlas-username') || !shrugger.getCreds('atlas-password'))) {
+          bus.$emit('onMessage', {
+            text: 'You don\'t seem to have stored your Atlas credentials. Please ' +
+              '<a href="/settings"> go to the Settings page</a> to add them.',
+            alertType: 'alert-warning',
+          });
+        }
+
         code.get(store.state.atlasEnvironments[store.state.env])
           .then((data) => {
             const options = {
@@ -138,7 +149,7 @@
           });
         } else {
           bus.$emit('onMessage', {
-            text: 'You don\'t seem to have stored your Github credentials. Please ' +
+            text: 'You don\'t seem to have stored your GitHub credentials. Please ' +
               '<a href="/settings"> go to the Settings page</a> to add them.',
             alertType: 'alert-warning',
           });

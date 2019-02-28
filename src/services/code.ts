@@ -86,7 +86,7 @@ export default {
         } else {
           bus.$emit('onMessage', {
             text: 'Something may have went wrong. Please check the browser\'s console log and network tab.',
-            alertType: 'alert-success',
+            alertType: 'alert-danger',
           });
         }
       })

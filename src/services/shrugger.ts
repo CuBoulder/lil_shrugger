@@ -60,9 +60,10 @@ export default {
    *
    * @param permission
    *
+   * @param useCurrentRoute
    * @returns {boolean}
    */
-  userAccess(permission = null) {
+  userAccess(permission: string = '', useCurrentRoute: boolean = false): boolean {
     // If developer mode is checked, always return true.
     if (store.state.developerMode) {
       return true;
@@ -72,7 +73,11 @@ export default {
     const router = Router;
 
     // Check to see if permission is in permissions array.
-    return store.state.userPermissions.includes(router.currentRoute.name + ':' + permission);
+    if (useCurrentRoute) {
+      return store.state.userPermissions.includes(router.currentRoute.name + ':' + permission);
+    } else {
+      return store.state.userPermissions.includes(permission);
+    }
   },
 
   getCreds(credentialName: string = ''): string | null {
