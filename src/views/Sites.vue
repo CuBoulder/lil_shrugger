@@ -187,6 +187,16 @@
       initialize() {
         const baseURL = store.state.atlasEnvironments[store.state.env];
 
+        // If credentials aren't stored, then warn the user.
+        if (store.state.developerMode &&
+          (!shrugger.getCreds('atlas-username') || !shrugger.getCreds('atlas-password'))) {
+          bus.$emit('onMessage', {
+            text: 'You don\'t seem to have stored your Atlas credentials. Please ' +
+              '<a href="/settings"> go to the Settings page</a> to add them.',
+            alertType: 'alert-warning',
+          });
+        }
+
         sites.get(baseURL)
           .then((data) => {
             const options = {

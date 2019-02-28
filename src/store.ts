@@ -90,7 +90,7 @@ const store = new Vuex.Store({
         searchFilter: '',
         selectOptions: {
             status: ['available', 'installed', 'launching'],
-            code_type: ['module', 'core', 'profile'],
+            code_type: ['core', 'module', 'profile', 'theme'],
             is_current: [true, false],
             tag: ['addon_bundles', 'request_bundles', 'beta_bundles', 'admin_bundles'],
             core: [],
@@ -311,6 +311,10 @@ if (window.location.hostname.includes('netlify')) {
         { name: 'download-alt', component: 'reports', title: 'Reports' },
         { name: 'refresh', component: 'table', title: 'Refresh' },
     ];
+}
+
+if (process.env.NODE_ENV === 'development') {
+    store.state.developerMode = true;
 }
 
 export default store;

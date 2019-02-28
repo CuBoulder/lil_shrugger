@@ -60,9 +60,10 @@ export default {
    *
    * @param permission
    *
+   * @param useCurrentRoute
    * @returns {boolean}
    */
-  userAccess(permission = null) {
+  userAccess(permission: string = '', useCurrentRoute: boolean = false): boolean {
     // If developer mode is checked, always return true.
     if (store.state.developerMode) {
       return true;
@@ -72,7 +73,29 @@ export default {
     const router = Router;
 
     // Check to see if permission is in permissions array.
-    return store.state.userPermissions.includes(router.currentRoute.name + ':' + permission);
+    if (useCurrentRoute) {
+      return store.state.userPermissions.includes(permission);
+    } else {
+      return store.state.userPermissions.includes(router.currentRoute.name + ':' + permission);
+    }
+  },
+
+  /**
+   * Checks credentials based on local storage and other storage options.
+   *
+   * @param credentialName
+   */
+  getCreds(credentialName: string = ''): string | null {
+    let credentialValue = null;
+
+    // @todo Add check from Vuex store.
+
+    // Try to get from local storage.
+    if (localStorage.getItem(credentialName)) {
+      return localStorage.getItem(credentialName);
+    }
+
+    return credentialValue;
   },
 
   /**

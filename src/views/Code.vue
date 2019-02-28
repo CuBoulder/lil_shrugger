@@ -118,6 +118,17 @@
     },
     methods: {
       initialize() {
+
+        // If credentials aren't stored, then don't make the call.
+        if (shrugger.userAccess('Settings:developerMode', true) &&
+          (!shrugger.getCreds('atlas-username') || !shrugger.getCreds('atlas-password'))) {
+          bus.$emit('onMessage', {
+            text: 'You don\'t seem to have stored your Atlas credentials. Please ' +
+              '<a href="/settings"> go to the Settings page</a> to add them.',
+            alertType: 'alert-warning',
+          });
+        }
+
         code.get(store.state.atlasEnvironments[store.state.env])
           .then((data) => {
             const options = {
@@ -130,10 +141,19 @@
             this.showDataTable = true;
           });
 
-        // Get GitHub data to pass in.
-        github.getRepos().then((repoList) => {
-          store.commit('addGitHubRepos', repoList);
-        });
+        // If credentials aren't stored, then don't make the call.
+        if (shrugger.getCreds('github-token') && shrugger.getCreds('github-username')) {
+          // Get GitHub data to pass in.
+          github.getRepos().then((repoList) => {
+            store.commit('addGitHubRepos', repoList);
+          });
+        } else {
+          bus.$emit('onMessage', {
+            text: 'You don\'t seem to have stored your GitHub credentials. Please ' +
+              '<a href="/settings"> go to the Settings page</a> to add them.',
+            alertType: 'alert-warning',
+          });
+        }
 
         // If there is a filter query param, then insert it.
         shrugger.setFilterFromQuery();

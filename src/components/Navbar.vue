@@ -75,13 +75,14 @@
         shruggerVersionClasses: 'shrugger-default-version',
       };
     },
-    created() {
-      github.getLatestReleases('lil_shrugger').then((releases) => {
-        if (releases[0]) {
-          store.commit('addLatestShruggeRelease', releases[0]);
-        }
-      });
-    },
+    // @todo Add back in if 2.0 versions are released.
+    // created() {
+    //   github.getLatestReleases('lil_shrugger').then((releases) => {
+    //     if (releases[0]) {
+    //       store.commit('addLatestShruggeRelease', releases[0]);
+    //     }
+    //   });
+    // },
     computed: {
       selectedEnv() {
         return store.state.atlasEnvironments[store.state.env];
