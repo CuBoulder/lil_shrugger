@@ -47,7 +47,7 @@ const store = new Vuex.Store({
         commands: [],
         currentQuery: null,
         defaultDestinationLink: '/admin/people/invite',
-        defaultSelectedSitesKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
+        defaultSelectedSitesKeys: ['id', 'sid', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
         defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
         defaultSitesQuery: '',
         developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode') || '') : false,
@@ -117,7 +117,8 @@ const store = new Vuex.Store({
             canEdit: ['path', 'status', 'core', 'profile', 'packages'],
             selectKeys: ['core', 'profile', 'status'],
         },
-        siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created', 'update_group', 'verification_status', 'dates'],
+        siteKeys: ['id', 'path', 'status', 'core', 'profile', 'packages', 'updated', 'created', 'update_group',
+            'verification_status', 'sid', 'dates'],
         sitesSendCommand: [],
         sortOptions: {
             Sites: {

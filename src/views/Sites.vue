@@ -260,6 +260,13 @@
           return `<a target="_blank" href="${atlasEnvironment}sites/${value}">(Site)</a>`;
         }
 
+        // Link to Kibana dashboard.
+        // Take from
+        if (key === 'sid') {
+          const url = "https://osr-prod-log01.int.colorado.edu/app/kibana#/dashboard/AWGbKgz-jpXOgFEqKbke?_g=(refreshInterval:(display:'1%20minute',pause:!f,section:2,value:60000),time:(from:now-36h,mode:relative,to:now))&_a=(description:'',filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:sid,negate:!f,type:phrase,value:" + value + "),query:(match:(sid:(query:" + value + ",type:phrase))))),options:(darkTheme:!f),panels:!((col:1,id:AWGbGEV0jpXOgFEqJwKN,panelIndex:1,row:1,size_x:6,size_y:5,type:visualization),(col:1,id:AWGaaTJ5jpXOgFEqDG0a,panelIndex:2,row:6,size_x:6,size_y:3,type:visualization),(col:7,columns:!(_source),id:AWGaZhn-jpXOgFEqC_c7,panelIndex:3,row:1,size_x:6,size_y:8,sort:!('@timestamp',desc),type:search)),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!t,title:'Drupal%20-%20Site',uiState:(P-2:(vis:(params:(sort:(columnIndex:!n,direction:!n))))),viewMode:view)";
+          return `<a target="_blank" href="${url}">${value}</a>`;
+        }
+
         // Format dates for nicer output.
         if (key === 'created' || key === 'updated') {
           // return shrugger.toDate(value);
