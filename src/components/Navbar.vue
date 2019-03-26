@@ -100,7 +100,6 @@
       actionIcons() {
         const icons = store.state.actionIcons[this.$route.name] ? store.state.actionIcons[this.$route.name] : [];
 
-        console.log(this, 'router');
         // If we are on Pantheon then limit the number of icons.
         // @todo Think of a better way of doing this where the exclusion is more explicit.
         if (window.location.hostname.includes('pantheonsite') && store.state.developerMode === false) {
