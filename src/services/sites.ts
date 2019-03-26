@@ -47,7 +47,7 @@ export default {
           store.commit('storeHomepageP1', element.path);
         }
 
-        // item['id'] = element.sid;
+        item.sid = element.sid;
         item.path = element.path;
         item.status = element.status;
 
