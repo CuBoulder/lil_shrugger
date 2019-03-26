@@ -27,7 +27,7 @@
         <label for="sites-query">Sites Query</label>
         <input type="text" id="sites-query" class="form-control" name="sites-query" v-model="sitesQuery">
         <label for="destination-link">Sites Destination Link</label>
-          <input type="text" id="github-token" class="form-control" name="github-token" v-model="destinationLink">
+          <input type="text" id="destination-link" class="form-control" name="destination-link" v-model="destinationLink">
           <p class="form-text text-muted">
             The destination link is where the user goes after logging into the site, e.g. "admin/people/invite".
           </p>
@@ -50,7 +50,7 @@
           Choose which keys you want to include in the site record listing.
         </p>
         <div class="form-check checkbox-inline"
-              :key="key"
+              :key="'sites' + key"
               v-for="key in siteKeys">
           <label class="form-check-label">
             <input class="form-check-input" type="checkbox" :id="'site-' + key" :value="key" v-model="saveSiteKeys">
@@ -62,7 +62,7 @@
           Choose which keys you want to include in the site record listing.
         </p>
         <div class="form-check checkbox-inline"
-              :key="key"
+              :key="'stats-' + key"
               v-for="key in statsKeys">
           <label class="form-check-label">
             <input class="form-check-input" type="checkbox" :id="'stats-' + key" :value="key" v-model="saveStatsKeys">
@@ -74,7 +74,7 @@
           Choose which keys you want to include in the code record listing.
         </p>
         <div class="form-check checkbox-inline"
-              :key="key"
+              :key="'code-' + key"
               v-for="key in codeKeys">
           <label class="form-check-label">
             <input class="form-check-input" type="checkbox" :id="'code-' + key" :value="key" v-model="saveCodeKeys">
