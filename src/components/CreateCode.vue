@@ -20,7 +20,7 @@
                 @change="changeBranch($event)"
                 class="form-control">
           <option v-for="(branch, index) in branches"
-                  :key="branch.commit.sha"
+                  :key="branch.name + '-' + branch.commit.sha"
                   :value="index">
             {{branch.name}}
           </option>
@@ -138,6 +138,7 @@
 
         // Save branches to the central store.
         response.then((branchesList) => {
+          console.log(branchesList);
           store.commit('addGitHubBranches', branchesList);
           // Add a default; otherwise user can't select first element.
           const first = {
