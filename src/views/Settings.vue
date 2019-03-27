@@ -35,6 +35,12 @@
         <input type="text" id="code-query" class="form-control" name="code-query" v-model="codeQuery">
       </fieldset>
       <fieldset class="form-group">
+        <label for="reports-delimiter">Reports Delimiter</label>
+        <input type="text" id="reports-delimiter" class="form-control" name="reports-delimiter" v-model="reportsDelimiter">
+        <p class="form-text text-muted">
+          You can choose the delimiter that is used when generating reports like emails. For example, "\n" will make each item
+          appear on a new line instead of placing a comma between items as is the default.
+        </p>
         <h4>Repositories Listing</h4>
         <p class="form-text text-muted">
           You can choose to have the repository list for creating code be chronologically by updated date instead of alphabetically.
@@ -120,6 +126,7 @@
         sitesQuery: localStorage.getItem('sites-query') ? localStorage.getItem('sites-query') : store.state.defaultSitesQuery,
         codeQuery: localStorage.getItem('code-query') ? localStorage.getItem('code-query') : '',
         repoListing: localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false,
+        reportsDelimiter: localStorage.getItem('reports-delimiter') ? localStorage.getItem('reports-delimiter') : store.state.defaultReportsDelimiter,
         developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode')) : false,
         saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys,
         saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.defaultSelectedCodeKeys,
@@ -146,6 +153,7 @@
         localStorage.setItem('github-username', this.gitHub.username);
         localStorage.setItem('github-token', this.gitHub.token);
         localStorage.setItem('sites-query', this.sitesQuery);
+        localStorage.setItem('reports-delimiter', this.reportsDelimiter);
         localStorage.setItem('code-query', this.codeQuery);
         localStorage.setItem('repo-listing', JSON.stringify(this.repoListing));
         localStorage.setItem('developer-mode', JSON.stringify(this.developerMode));
@@ -184,6 +192,7 @@
         this.sitesQuery = localStorage.getItem('sites-query') ? localStorage.getItem('sites-query') : store.state.defaultSitesQuery;
         this.codeQuery = localStorage.getItem('code-query') ? localStorage.getItem('code-query') : '';
         this.repoListing = localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false;
+        this.reportsDelimiter = localStorage.getItem('reports-delimiter') ? localStorage.getItem('reports-delimiter') : store.state.defaultReportsDelimiter;
         this.saveSiteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys;
         this.saveCodeKeys = localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.defaultSelectedCodeKeys;
         this.saveStatsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [];

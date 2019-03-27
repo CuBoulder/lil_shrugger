@@ -79,8 +79,12 @@
     },
     beforeDestroy() {
       // Remove event listeners.
-      bus.$off(['exportTable', 'reportsExportTable']);
-      bus.$off(['exportSiteContactEmail', 'reportsExportSiteContactEmail']);
+      bus.$off([
+        'exportTable',
+        'exportSiteEmails',
+        'exportSiteIdentikeys',
+        'exportBundleStats',
+      ]);
     },
     computed: {
       reportsList() {
@@ -189,8 +193,19 @@
           }
         });
 
+        // Replace with different delimiter if not comma.
+        const delimiter = localStorage.getItem('reports-delimiter') ?
+          localStorage.getItem('reports-delimiter') : store.state.defaultReportsDelimiter;
+
+        let data = '';
+        if (delimiter === '\\n') {
+          data = finalUsers.join("\n");
+        } else {
+          data = finalUsers.join(delimiter);
+        }
+
         // Export to text file.
-        download.text(finalUsers, `site_${type}_export`);
+        download.text(data, `site_${type}_export`);
       },
       exportBundleStatsListener(params) {
         const assetTypes = params.options ? params.options.split(',') : ['core', 'profile', 'package'];
