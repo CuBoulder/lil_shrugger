@@ -50,6 +50,7 @@ const store = new Vuex.Store({
         defaultSelectedSitesKeys: ['id', 'sid', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
         defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
         defaultSitesQuery: '',
+        defaultReportsDelimiter: ',',
         developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode') || '') : false,
         editContent: 'N/A',
         env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
