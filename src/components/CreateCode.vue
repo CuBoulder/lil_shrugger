@@ -1,6 +1,10 @@
 <template>
   <div class="row create-code" >
     <label for="addRepo">Select A Repo</label>
+    <a target="_blank"
+       href="https://github.com/CuBoulder/lil_shrugger/wiki/Code#create-code">&nbsp;
+      <span class="navbar-action-icon glyphicon glyphicon-question-sign"></span>
+    </a>
     <select name="addRepo"
             id="addRepo"
             @change="changeRepo($event)"

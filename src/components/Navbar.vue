@@ -62,7 +62,7 @@
   import Router from '../router.ts';
   import store from '../store.ts';
   import bus from '../services/bus.ts';
-  import github from '../services/github.ts';
+  // import github from '../services/github.ts';
 
   export default {
     name: 'Navbar',
