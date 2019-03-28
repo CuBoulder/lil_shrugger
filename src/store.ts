@@ -49,6 +49,7 @@ const store = new Vuex.Store({
         defaultDestinationLink: '/admin/people/invite',
         defaultSelectedSitesKeys: ['id', 'sid', 'path', 'status', 'core', 'profile', 'packages', 'updated'],
         defaultSelectedCodeKeys: ['id', 'name', 'label', 'version', 'code_type', 'is_current', 'commit_hash', 'tag'],
+        defaultSitesComponents: ['StatsSearch'],
         defaultSitesQuery: '',
         defaultReportsDelimiter: ',',
         developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode') || '') : false,
@@ -113,6 +114,7 @@ const store = new Vuex.Store({
             canEdit: ['core', 'profile', 'packages'],
             selectKeys: ['core', 'profile'],
         },
+        sitesComponents: ['StatsSearch', 'Reports', 'Commands'],
         sitesEditKeys: {
             autocompleteKeys: ['packages'],
             canEdit: ['path', 'status', 'core', 'profile', 'packages'],

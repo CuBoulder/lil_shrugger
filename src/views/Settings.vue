@@ -51,6 +51,18 @@
             Chronological
           </label>
         </div>
+        <h4>Default Sites Page Components</h4>
+        <p class="form-text text-muted">
+          Choose which components you want loaded on the Sites page. The default is only "StatsSearch".
+        </p>
+        <div class="form-check checkbox-inline"
+             :key="'list-' + comp"
+             v-for="comp in sitesComponents">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" :id="'list-' + comp" :value="comp" v-model="saveDefaultSitesComponents">
+            {{comp}}
+          </label>
+        </div>
         <h4>Site Record Keys</h4>
         <p class="form-text text-muted">
           Choose which keys you want to include in the site record listing.
@@ -128,6 +140,8 @@
         repoListing: localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false,
         reportsDelimiter: localStorage.getItem('reports-delimiter') ? localStorage.getItem('reports-delimiter') : store.state.defaultReportsDelimiter,
         developerMode: localStorage.getItem('developer-mode') ? JSON.parse(localStorage.getItem('developer-mode')) : false,
+        saveDefaultSitesComponents: localStorage.getItem('default-sites-components') ? JSON.parse(localStorage.getItem('default-sites-components')) :
+          store.state.defaultSitesComponents,
         saveSiteKeys: localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys,
         saveCodeKeys: localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.defaultSelectedCodeKeys,
         saveStatsKeys: localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [],
@@ -139,6 +153,9 @@
       },
       codeKeys() {
         return this.sortKeys(store.state.codeKeys);
+      },
+      sitesComponents() {
+        return this.sortKeys(store.state.sitesComponents);
       },
       statsKeys() {
         return this.sortKeys(store.state.statsKeys);
@@ -158,6 +175,7 @@
         localStorage.setItem('repo-listing', JSON.stringify(this.repoListing));
         localStorage.setItem('developer-mode', JSON.stringify(this.developerMode));
         localStorage.setItem('code-keys', JSON.stringify(this.saveCodeKeys));
+        localStorage.setItem('default-sites-components', JSON.stringify(this.saveDefaultSitesComponents));
         localStorage.setItem('site-keys', JSON.stringify(this.saveSiteKeys));
         localStorage.setItem('stats-keys', JSON.stringify(this.saveStatsKeys));
 
@@ -193,6 +211,8 @@
         this.codeQuery = localStorage.getItem('code-query') ? localStorage.getItem('code-query') : '';
         this.repoListing = localStorage.getItem('repo-listing') ? JSON.parse(localStorage.getItem('repo-listing')) : false;
         this.reportsDelimiter = localStorage.getItem('reports-delimiter') ? localStorage.getItem('reports-delimiter') : store.state.defaultReportsDelimiter;
+        this.saveDefaultSitesComponents = localStorage.getItem('default-sites-components') ? JSON.parse(localStorage.getItem('default-sites-components')) :
+          store.state.defaultSitesComponents;
         this.saveSiteKeys = localStorage.getItem('site-keys') ? JSON.parse(localStorage.getItem('site-keys')) : store.state.defaultSelectedSitesKeys;
         this.saveCodeKeys = localStorage.getItem('code-keys') ? JSON.parse(localStorage.getItem('code-keys')) : store.state.defaultSelectedCodeKeys;
         this.saveStatsKeys = localStorage.getItem('stats-keys') ? JSON.parse(localStorage.getItem('stats-keys')) : [];

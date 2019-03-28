@@ -7,12 +7,12 @@
         <stats-search></stats-search>
       </div>
     </transition>
-    <!--<transition name="slide-fade">-->
-      <!--<div v-if="showCommands && userAccessPerm('commands:command')"-->
-            <!--class="col col-md-6">-->
-        <!--<commands></commands>-->
-      <!--</div>-->
-    <!--</transition>-->
+    <transition name="slide-fade">
+      <div v-if="showCommands && userAccessPerm('commands:command')"
+            class="col col-md-6">
+        <commands></commands>
+      </div>
+    </transition>
     <transition name="slide-fade">
       <div class="col col-md-6"
             v-if="showReports && userAccessPerm('commands:export')">
@@ -44,13 +44,16 @@
   import sites from '../services/sites.ts';
   import code from '../services/code.ts';
 
+  const defaultSitesComponents = localStorage.getItem('default-sites-components') ?
+    JSON.parse(localStorage.getItem('default-sites-components')) : store.state.defaultSitesComponents;
+
   export default {
     name: 'Sites',
     data() {
       return {
-        showStatsSearch: true,
-        showCommands: false,
-        showReports: false,
+        showStatsSearch: defaultSitesComponents.includes('StatsSearch'),
+        showCommands: defaultSitesComponents.includes('Commands'),
+        showReports: defaultSitesComponents.includes('Reports'),
         showDataTable: false,
         tableOptions: {
           dataName: 'sitesData',
