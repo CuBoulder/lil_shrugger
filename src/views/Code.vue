@@ -76,12 +76,20 @@
         that.initialize();
       });
 
+      bus.$on('validate--updateCodeRecord', function codeValidateUpdateCodeRecord(params) {
+        that.validateUpdateCodeRecordListener(params);
+      });
+
       bus.$on('updateCodeRecord', function codeUpdateCodeRecord(params) {
         code.update(params);
 
         // Cancel rowView components.
         bus.$emit('rowHide');
         bus.$emit('cancelRowEdit');
+      });
+
+      bus.$on('validate--deleteCodeRecord', function codeValidateDeleteCodeRecord(params) {
+        that.validateDeleteCodeRecordListener(params);
       });
 
       bus.$on('deleteCodeRecord', function codeDeleteRecord(params) {
@@ -100,7 +108,9 @@
     beforeDestroy() {
       // Remove event listeners.
       bus.$off(['switchEnv', 'codeSwitchEnv']);
+      bus.$off(['validate--updateCodeRecord', 'codeValidateUpdateCodeRecord']);
       bus.$off(['updateCodeRecord', 'codeUpdateCodeRecord']);
+      bus.$off(['validate--deleteCodeRecord', 'codeValidateDeleteCodeRecord']);
       bus.$off(['deleteCodeRecord', 'codeDeleteRecord']);
       bus.$off(['navbarShow', 'codeNavbarShow']);
 
@@ -211,6 +221,20 @@
           default:
             break;
         }
+      },
+      validateDeleteCodeRecordListener(params) {
+        bus.$emit('onMessage', {
+          text: `<p>You are about to send a "DELETE" request to a code record:</p><pre>${JSON.stringify(params.previous)}</pre>` +
+            'If anything looks amiss, please refresh the application via your browser, e.g. "cmd+shift+R" on Chrome for Mac OS.',
+          alertType: 'alert-warning',
+        });
+      },
+      validateUpdateCodeRecordListener(params) {
+        bus.$emit('onMessage', {
+          text: `<p>You are about to send a "PATCH" request to a code record:</p><pre>${JSON.stringify(params.previous)}</pre>` +
+            'If anything looks amiss, please refresh the application via your browser, e.g. "cmd+shift+R" on Chrome for Mac OS.',
+          alertType: 'alert-warning',
+        });
       },
     },
   };

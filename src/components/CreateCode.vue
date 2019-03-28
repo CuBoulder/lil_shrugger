@@ -72,12 +72,12 @@
       </div>
     </transition>
     <!-- End Second dropdown -->
-    <button v-if="ready"
-            class="btn btn-primary"
-            @click="createCode()">
-      Create Code Asset
-    </button>
-    <button class="btn btn-default" @click.prevent="cancelAdd()">Cancel</button>
+    <confirm-button label="Add Row"
+                    v-if="ready"
+                    class="pull-left add-button"
+                    callback="createCode"
+                    :params="{}">
+    </confirm-button>
   </div>
 </template>
 
@@ -105,6 +105,27 @@
         codeLabel: '',
         isCurrent: false,
       };
+    },
+    mounted() {
+      const that = this;
+      // Create a site.
+      bus.$on('createCode', function codeCreateCode() {
+        that.createCodeListener(that);
+      });
+      // Cancel creating a site.
+      bus.$on('validate--createCode', function codeValidateCreateCode() {
+        that.validateCreateCodeListener(that);
+      });
+      // Cancel creating a site.
+      bus.$on('cancel--createCode', function codeCancelCreateCode() {
+        that.cancelCreateCodeListener(that);
+      });
+    },
+    beforeDestroy() {
+      // Remove event listeners.
+      bus.$off(['createCode', 'codeCreateCode']);
+      bus.$off(['validate--createCode', 'codeValidateCreateCode']);
+      bus.$off(['cancel--createCode', 'codeCancelCreateCode']);
     },
     computed: {
       userInput() {
@@ -159,12 +180,23 @@
         this.ready = true;
         this.branchToAdd = {};
         this.branchToAdd = store.state.gitHubBranches[event.target.value];
-        console.log(this.branchToAdd);
       },
-      createCode() {
-        const repo = this.activeRepo;
-        const branch = this.branchToAdd;
-        const input = this.userInput;
+      validateCreateCodeListener(that) {
+        const repo = that.activeRepo;
+        const branch = that.branchToAdd;
+        const input = that.userInput;
+        bus.$emit('onMessage', {
+          text: `<p>You are about to create a code record from the "${repo.name}" repository:</p>` +
+            `Branch:<pre>${JSON.stringify(branch)}</pre><br>` +
+            `User Input:<pre>${JSON.stringify(input)}</pre><br>` +
+            'If anything looks amiss, please refresh the application via your browser, e.g. "cmd+shift+R" on Chrome for Mac OS.',
+          alertType: 'alert-warning',
+        });
+      },
+      createCodeListener(that) {
+        const repo = that.activeRepo;
+        const branch = that.branchToAdd;
+        const input = that.userInput;
 
         // Need to check for special code assets (drupal/express) and set data accordingly.
         if (repo.name === 'drupal-7.x') {
@@ -220,14 +252,14 @@
           })
           .catch(error => console.log(error));
 
-        this.addCode = false;
+        that.addCode = false;
 
         // Cancel rowView components.
         bus.$emit('rowHide');
         bus.$emit('cancelRowAdd');
       },
-      cancelAdd() {
-        bus.$emit('cancelRowAdd', this);
+      cancelCreateCodeListener(that) {
+        bus.$emit('cancelRowAdd', that);
       },
     },
   };
