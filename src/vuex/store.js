@@ -55,8 +55,8 @@ const store = new Vuex.Store({
     env: localStorage.getItem('env') ? localStorage.getItem('env') : 'Local',
     expressEnvironments: {
       Local: 'https://express.local/',
-      Dev: 'https://www-dev-new.colorado.edu/',
-      Test: 'https://www-test-new.colorado.edu/',
+      Dev: 'https://www-dev.colorado.edu/',
+      Test: 'https://www-test.colorado.edu/',
       Prod: 'https://www.colorado.edu/',
     },
     expressUserRoles: ['site_owner', 'content_editor', 'edit_my_content', 'site_editor', 'access_manager', 'campaign_manager', 'forms_manager'],
@@ -97,8 +97,8 @@ const store = new Vuex.Store({
       profile: [],
       packages: [],
     },
-    shruggerVersion: '0.8.0',
-    shruggerLatestRelease: { tag_name: '0.8.0' },
+    shruggerVersion: '0.9.0',
+    shruggerLatestRelease: { tag_name: '0.9.0' },
     sitesGridData: {
       cachedData: [],
       codeData: [],
